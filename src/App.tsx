@@ -2,9 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   Box,
-  Calculator,
   Camera,
-  Car,
   Check,
   Copy,
   DraftingCompass,
@@ -80,9 +78,9 @@ const TRANSLATIONS = {
     propertySize: "Property size",
     projectNotes: "Project notes",
     projectNotesHelp:
-      "Questions by text are free. If something is unclear, write it here and send photos in WhatsApp.",
+      "Text questions are free in English or Spanish. If something is unclear, write it here and send photos in WhatsApp.",
     notesPlaceholder:
-      "Add context here. If needed, send photos, sketches, or questions in WhatsApp.",
+      "Add context here. Text questions are free. Send photos, sketches, or files in WhatsApp.",
     summary: "Summary",
     live: "Live",
     nothingSelected: "Nothing selected yet",
@@ -94,6 +92,8 @@ const TRANSLATIONS = {
     containsQuote: "Contains quote-based items.",
     copySummary: "Copy summary",
     copied: "Copied",
+    resetCart: "Reset cart",
+    cleared: "Cleared",
     sendWhatsApp: "Send to WhatsApp",
     checkTotal: "Check total and send",
     add: "Add",
@@ -120,21 +120,21 @@ const TRANSLATIONS = {
     buildSection: "Pick the structure",
     buildSectionDesc:
       "Choose the main thing you are building. Small deck and pergola packages already include HOA-ready drawings.",
-    buildSupport: "Optional support",
+    buildSupport: "Extra help",
     buildSupportDesc:
-      "Use these only if the job needs measuring, travel outside city limits, redesign time, or rush handling.",
+      "Text us in WhatsApp in English or Spanish. Paid extra help starts only when the job needs measuring, redesign time, or rush handling.",
     quickSection: "Quick concept image",
     quickSectionDesc:
       "Send one site photo in WhatsApp, get one fast concept image back, and use it to help close the sale.",
-    specialSection: "Special drawings and pricing support",
+    specialSection: "Special drawings",
     specialSectionDesc:
-      "Use these when the layout already exists and you only need the right sheet or early pricing support.",
+      "Use these when the layout already exists and you only need the right sheet.",
     irrigationSection: "Licensed irrigator drafting",
     irrigationSectionDesc:
       "Drafting support only for licensed irrigators who already know the irrigation layout and want it cleaned up on screen.",
     supportSection: "Extra help",
     supportSectionDesc:
-      "Site visits, travel outside city limits, redesign time, and rush handling.",
+      "Text us in WhatsApp in English or Spanish. Paid extra help starts only when the job needs measuring, redesign time, or rush handling.",
     summaryJump: "Check total and send",
   },
   es: {
@@ -150,9 +150,9 @@ const TRANSLATIONS = {
     propertySize: "Tamaño del lote",
     projectNotes: "Notas del proyecto",
     projectNotesHelp:
-      "Las preguntas por texto son gratis. Si algo no está claro, escríbelo aquí y manda fotos por WhatsApp.",
+      "Las preguntas por texto son gratis en inglés o español. Si algo no está claro, escríbelo aquí y manda fotos por WhatsApp.",
     notesPlaceholder:
-      "Agrega contexto aquí. Si hace falta, manda fotos, sketches o preguntas por WhatsApp.",
+      "Agrega contexto aquí. Las preguntas por texto son gratis. Manda fotos, sketches o archivos por WhatsApp.",
     summary: "Resumen",
     live: "En vivo",
     nothingSelected: "Todavía no hay servicios seleccionados",
@@ -164,6 +164,8 @@ const TRANSLATIONS = {
     containsQuote: "Incluye partidas por cotizar.",
     copySummary: "Copiar resumen",
     copied: "Copiado",
+    resetCart: "Vaciar carrito",
+    cleared: "Vacío",
     sendWhatsApp: "Enviar por WhatsApp",
     checkTotal: "Revisar total y enviar",
     add: "Agregar",
@@ -190,21 +192,21 @@ const TRANSLATIONS = {
     buildSection: "Escoge la estructura",
     buildSectionDesc:
       "Elige lo principal que vas a construir. Los paquetes pequeños de deck y pérgola ya incluyen dibujos listos para HOA.",
-    buildSupport: "Apoyo opcional",
+    buildSupport: "Ayuda extra",
     buildSupportDesc:
-      "Úsalo solo si el trabajo necesita mediciones, viaje fuera de la ciudad, rediseño o urgencia.",
+      "Escríbenos por WhatsApp en inglés o español. La ayuda pagada empieza solo cuando el trabajo necesita mediciones, rediseño o urgencia.",
     quickSection: "Imagen conceptual rápida",
     quickSectionDesc:
       "Manda una foto del sitio por WhatsApp, recibe una imagen rápida y úsala para ayudar a cerrar la venta.",
-    specialSection: "Planos especiales y apoyo de precios",
+    specialSection: "Planos especiales",
     specialSectionDesc:
-      "Úsalo cuando el layout ya existe y solo necesitas la lámina correcta o apoyo inicial de precios.",
+      "Úsalo cuando el layout ya existe y solo necesitas la lámina correcta.",
     irrigationSection: "Dibujo para irrigadores licenciados",
     irrigationSectionDesc:
       "Solo apoyo de dibujo para irrigadores licenciados que ya saben el layout de riego y quieren limpiarlo en pantalla.",
     supportSection: "Ayuda extra",
     supportSectionDesc:
-      "Visitas al sitio, viaje fuera de la ciudad, tiempo de rediseño y manejo urgente.",
+      "Escríbenos por WhatsApp en inglés o español. La ayuda pagada empieza solo cuando el trabajo necesita mediciones, rediseño o urgencia.",
     summaryJump: "Revisar total y enviar",
   },
 } as const;
@@ -269,7 +271,8 @@ const STARTING_POINT_SERVICES: Service[] = [
     youSend: "Site address, access details, and any survey or plans you already have.",
     youGet:
       "Site measurements, photos, video, a 2D base plan, and a 3D model of existing conditions.",
-    notIncluded: "Boundary survey, legal survey work, engineering, permits, or final design.",
+    notIncluded:
+      "Boundary survey, legal survey work, engineering, permits, final design, or travel outside city limits. Outside city limits, travel is quoted separately.",
   },
   {
     id: "survey-documents-start",
@@ -308,8 +311,8 @@ const STARTING_POINT_SERVICES: Service[] = [
     title: "One Quick Concept Image",
     category: "Start",
     icon: Trees,
-    pricingType: "size",
-    prices: { small: 150, medium: 150, large: 150, estate: null },
+    pricingType: "flat",
+    flatPrice: 150,
     short:
       "Send one site photo in WhatsApp, and for $150 we create one quick concept image plus a short list of suggested materials or key features.",
     bestFor:
@@ -583,11 +586,11 @@ const NEXT_PHASE_SERVICES: Service[] = [
     icon: Trees,
     pricingType: "size",
     prices: { small: 200, medium: 250, large: 300, estate: null },
-    short: "2D lighting concept with optional 3D support.",
+    short: "2D lighting concept. If we already have the design model, night views are included as a bonus.",
     bestFor: "The approved design needs a lighting layer added.",
     youSend:
       "If we already built the layout, no extra base files are needed. If the layout comes from your side, send approved plan, focal points, and lighting direction if known.",
-    youGet: "A conceptual lighting layout, ready to print and show to the crew.",
+    youGet: "A conceptual lighting layout, ready to print and show to the crew, plus bonus night views when our model already exists.",
     notIncluded: "Electrical design, wiring plans, or installation drawings.",
     sampleLabel: "See sample",
   },
@@ -601,61 +604,27 @@ const NEXT_PHASE_SERVICES: Service[] = [
     short: "Material quantities and dimensions from the approved 3D or 2D design.",
     bestFor: "The layout is locked and you are ready to price the job.",
     youSend: "Approved plan or model if it comes from your side. If we built it, no extra files are needed.",
-    youGet: "Quantities and dimensions based on the approved scope.",
+    youGet: "Quantities and dimensions based on the approved scope, delivered in Google Sheets. Tell us what format works best for your team.",
     notIncluded: "Purchasing, vendor follow-up, or field verification.",
     sampleLabel: "See sample",
   },
   {
-    id: "preliminary-estimate",
-    title: "Rough Estimate from Your Numbers",
-    category: "After layout",
-    icon: Calculator,
-    pricingType: "size",
-    prices: { small: 250, medium: 350, large: 500, estate: null },
-    short:
-      "A rough project cost built from the approved take-off using your rates, crew hours, and pricing rules.",
-    bestFor:
-      "Teams that want a working budget based on their own numbers before sending a final quote.",
-    youSend:
-      "Approved take-off, labor rates, crew hours or production assumptions, markups, equipment rates, and any material pricing you want used.",
-    youGet:
-      "A preliminary cost breakdown based on the approved scope and the pricing information you provide.",
-    notIncluded: "Final bid, vendor-confirmed pricing, purchasing, or guaranteed job cost.",
-    helper:
-      "This is a planning number only. Final pricing depends on actual contractor rates, vendor quotes, site conditions, and field verification.",
-    sampleLabel: "See sample",
-  },
-  {
-    id: "budget-range",
-    title: "Ballpark Budget Range",
-    category: "After layout",
-    icon: Calculator,
-    pricingType: "size",
-    prices: { small: 200, medium: 300, large: 450, estate: null },
-    short:
-      "A rough budget range based on the approved take-off and typical market pricing assumptions.",
-    bestFor: "Teams that need a ballpark number before building a real estimate.",
-    youSend:
-      "Approved take-off, project location, and any notes about materials, quality level, or build expectations.",
-    youGet: "A rough budget range to help with early planning and client discussion.",
-    notIncluded: "Final bid, vendor quotes, exact contractor pricing, purchasing, or guaranteed totals.",
-    helper: "This is a rough market-based budget only, not a contractor quote or bid.",
-    sampleLabel: "See sample",
-  },
-  {
     id: "watercolor-render",
-    title: "Rendered Plan Sheet",
+    title: "Artistic Rendered Sheet",
     category: "After layout",
     icon: Trees,
     pricingType: "unit",
     unitPrice: 100,
     quantityEnabled: true,
     quantityLabel: "sheets",
-    short: "Rendered presentation sheet from a provided CAD plan.",
-    bestFor: "You already have the plan and want it to look good in front of the client.",
-    youSend: "Provided CAD plan.",
-    youGet: "High-resolution rendered JPG or PDF.",
+    short: "Artistic presentation sheet from a CAD plan, master plan, or render base.",
+    bestFor: "You already have the plan or view and want an artistic sheet that looks better in front of the client.",
+    youSend:
+      "Provided CAD plan, master plan, or base render. You can also show the style you want, such as watercolor or ink sketch.",
+    youGet:
+      "One high-resolution artistic sheet in the selected style, such as watercolor or ink sketch. Price is per sheet, not for the whole project.",
     notIncluded: "Design revisions or new CAD work.",
+    helper: "This can be a master plan sheet or an artistic treatment of rendered views.",
     sampleLabel: "See sample",
   },
 ];
@@ -680,12 +649,12 @@ const RARE_TECHNICAL_SERVICES: Service[] = [
     id: "impervious",
     title: "Impervious Cover Calculation",
     category: "City",
-    icon: ShieldCheck,
+    icon: FileText,
     pricingType: "size",
     prices: { small: 300, medium: 450, large: 650, estate: null },
-    short: "City-style impervious cover calculation sheet from an approved base and layout.",
+    short: "Impervious cover calculation sheet prepared in a city-style format from an approved base and layout.",
     bestFor:
-      "Best when the jurisdiction cares how much impervious cover or hardscape is going on the lot.",
+      "Best when the jurisdiction cares how much impervious cover is already on the lot and how much is being added.",
     youSend: "Survey, existing hardscape information, and approved improvements.",
     youGet: "Impervious cover sheet and calculation summary.",
     notIncluded: "Engineering certification or approval guarantee.",
@@ -744,22 +713,7 @@ const SUPPORT_SERVICES: Service[] = [
     bestFor: "Jobs that do not have enough usable measurements, topo, or base information yet.",
     youSend: "Site address, access details, and what needs to be measured.",
     youGet: "Measured site information and field support time.",
-    notIncluded: "Travel time outside city limits unless selected separately.",
-  },
-  {
-    id: "travel-time",
-    title: "Travel Time Outside City Limits",
-    category: "Help",
-    icon: Car,
-    pricingType: "hourly",
-    hourlyRate: 70,
-    quantityEnabled: true,
-    quantityLabel: "hours",
-    short: "Travel billed separately when the property is outside city limits.",
-    bestFor: "On-site work for jobs outside the city where drive time needs to be billed separately.",
-    youSend: "Job location.",
-    youGet: "Reserved travel time.",
-    notIncluded: "On-site work time unless selected separately.",
+    notIncluded: "Travel outside city limits. Outside city limits, travel is quoted separately.",
   },
   {
     id: "revision-redesign",
@@ -774,9 +728,11 @@ const SUPPORT_SERVICES: Service[] = [
       "Extra redesign time after the included round or after the layout is already locked.",
     bestFor: "When direction changes after approval or the project needs a larger redraw.",
     youSend: "Clear revision notes and updated direction.",
-    youGet: "Additional redesign time.",
+    youGet: "Additional redesign time billed at the hourly rate after scope is discussed and approved.",
     notIncluded:
       "Unlimited revision scope. If a bigger redesign is needed, the required time will be discussed separately, for example 10 extra hours or more.",
+    helper:
+      "If redesign time starts getting close to the cost of a new layout package, it usually makes more sense to start a new design round.",
   },
   {
     id: "rush-fee",
@@ -1191,7 +1147,9 @@ function SummarySideBar({
   summary,
   onCopy,
   onSend,
+  onReset,
   copied,
+  cleared,
   lang,
 }: {
   summaryRef: React.RefObject<HTMLDivElement>;
@@ -1206,7 +1164,9 @@ function SummarySideBar({
   };
   onCopy: () => void;
   onSend: () => void;
+  onReset: () => void;
   copied: boolean;
+  cleared: boolean;
   lang: Lang;
 }) {
   const t = TRANSLATIONS[lang];
@@ -1250,7 +1210,7 @@ function SummarySideBar({
 
         <div className="rounded-3xl border border-slate-200 p-5 text-sm">
           <div className="flex items-center justify-between">
-            <span className="text-slate-500">{t.subtotal}</span>
+            <span className="text-slate-500">{t.total}</span>
             <span className="font-bold text-slate-900">{formatPrice(summary.total)}</span>
           </div>
           {!summary.needsQuote ? (
@@ -1271,11 +1231,11 @@ function SummarySideBar({
           )}
         </div>
 
-        <div className="grid gap-3">
+        <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
             onClick={onCopy}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-5 py-4 text-sm font-black text-slate-900 hover:bg-slate-50"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-4 py-4 text-sm font-black text-slate-900 hover:bg-slate-50"
           >
             <Copy className="h-4 w-4" />
             {copied ? t.copied : t.copySummary}
@@ -1283,13 +1243,22 @@ function SummarySideBar({
 
           <button
             type="button"
-            onClick={onSend}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 py-5 text-lg font-black text-white shadow-lg hover:bg-emerald-600"
+            onClick={onReset}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-4 py-4 text-sm font-black text-slate-900 hover:bg-slate-50"
           >
-            <MessageCircle className="h-5 w-5" />
-            {t.sendWhatsApp}
+            <RefreshCcw className="h-4 w-4" />
+            {cleared ? t.cleared : t.resetCart}
           </button>
         </div>
+
+        <button
+          type="button"
+          onClick={onSend}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 py-5 text-lg font-black text-white shadow-lg hover:bg-emerald-600"
+        >
+          <MessageCircle className="h-5 w-5" />
+          {t.sendWhatsApp}
+        </button>
       </div>
     </aside>
   );
@@ -1303,6 +1272,7 @@ export default function B2BPartnerConfigurator() {
   const [selectedSize, setSelectedSize] = useState<string>("small");
   const [projectNotes, setProjectNotes] = useState("");
   const [copied, setCopied] = useState(false);
+  const [cleared, setCleared] = useState(false);
   const [showIdeaHint, setShowIdeaHint] = useState(false);
   const [showStartHint, setShowStartHint] = useState(false);
 
@@ -1314,6 +1284,12 @@ export default function B2BPartnerConfigurator() {
     const timeout = window.setTimeout(() => setCopied(false), 1200);
     return () => window.clearTimeout(timeout);
   }, [copied]);
+
+  useEffect(() => {
+    if (!cleared) return;
+    const timeout = window.setTimeout(() => setCleared(false), 1400);
+    return () => window.clearTimeout(timeout);
+  }, [cleared]);
 
   const allServices = useMemo(
     () => [
@@ -1343,14 +1319,8 @@ export default function B2BPartnerConfigurator() {
       if (DESIGN_DIRECTION_SERVICES.some((item) => item.id === service.id) && !hasStart) {
         return "First choose how the project starts: site visit, remote base, or your model.";
       }
-      if ((NEXT_PHASE_SERVICES.some((item) => item.id === service.id) || RARE_TECHNICAL_SERVICES.some((item) => item.id === service.id)) && !hasLayout) {
+      if (NEXT_PHASE_SERVICES.some((item) => item.id === service.id) && !hasLayout) {
         return "First choose who owns the layout idea so the follow-up sheets have something to point to.";
-      }
-    }
-
-    if (activePath === "special-drawings") {
-      if (RARE_TECHNICAL_SERVICES.some((item) => item.id === service.id) && !hasLayout) {
-        return "These sheets work best after the layout already exists.";
       }
     }
 
@@ -1391,7 +1361,7 @@ export default function B2BPartnerConfigurator() {
     ...(requestLines.length ? requestLines : ["• Nothing selected yet"]),
     "",
     summary.rushFee ? `Rush fee: ${formatPrice(summary.rushFee)}` : null,
-    `Subtotal: ${formatPrice(summary.total)}`,
+    `Total: ${formatPrice(summary.total)}`,
     summary.needsQuote ? "Contains quote-based items." : `Deposit (70%): ${formatPrice(summary.deposit)}`,
     "",
     projectNotes ? `Notes:\n${projectNotes}` : null,
@@ -1412,8 +1382,7 @@ export default function B2BPartnerConfigurator() {
       const next = { ...prev };
       const isStarting = STARTING_POINT_SERVICES.some((s) => s.id === id);
       const isDesign = DESIGN_DIRECTION_SERVICES.some((s) => s.id === id);
-      const isLaterPhase =
-        NEXT_PHASE_SERVICES.some((s) => s.id === id) || RARE_TECHNICAL_SERVICES.some((s) => s.id === id);
+      const isLaterPhase = NEXT_PHASE_SERVICES.some((s) => s.id === id);
 
       if (activePath === "full-design" && isDesign && !hasStartingPointSelection(Object.keys(prev))) {
         setShowStartHint(true);
@@ -1421,11 +1390,6 @@ export default function B2BPartnerConfigurator() {
       }
 
       if (activePath === "full-design" && isLaterPhase && !hasLayoutSourceSelection(Object.keys(prev))) {
-        setShowIdeaHint(true);
-        return prev;
-      }
-
-      if (activePath === "special-drawings" && RARE_TECHNICAL_SERVICES.some((s) => s.id === id) && !hasLayoutSourceSelection(Object.keys(prev))) {
         setShowIdeaHint(true);
         return prev;
       }
@@ -1458,6 +1422,15 @@ export default function B2BPartnerConfigurator() {
     } catch {
       setCopied(false);
     }
+  };
+
+  const handleResetCart = () => {
+    setCart({});
+    setProjectNotes("");
+    setSelectedSize("small");
+    setShowIdeaHint(false);
+    setShowStartHint(false);
+    setCleared(true);
   };
 
   const handleWhatsApp = () => {
@@ -1564,18 +1537,6 @@ export default function B2BPartnerConfigurator() {
             />
 
             <ServiceSection
-              title={t.citySection}
-              description={t.citySectionDesc}
-              services={RARE_TECHNICAL_SERVICES}
-              selected={cart}
-              onToggle={toggleService}
-              onQuantityChange={changeQty}
-              sizeId={selectedSize}
-              lang={lang}
-              getDisabledReason={getDisabledReason}
-            />
-
-            <ServiceSection
               title={t.supportSection}
               description={t.supportSectionDesc}
               services={SUPPORT_SERVICES}
@@ -1596,13 +1557,23 @@ export default function B2BPartnerConfigurator() {
             <ServiceSection
               title={t.specialSection}
               description={t.specialSectionDesc}
-              services={[...NEXT_PHASE_SERVICES, ...RARE_TECHNICAL_SERVICES]}
+              services={NEXT_PHASE_SERVICES}
               selected={cart}
               onToggle={toggleService}
               onQuantityChange={changeQty}
               sizeId={selectedSize}
               lang={lang}
-              getDisabledReason={getDisabledReason}
+            />
+
+            <ServiceSection
+              title={t.citySection}
+              description={t.citySectionDesc}
+              services={RARE_TECHNICAL_SERVICES}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
             />
 
             <ServiceSection
@@ -1682,7 +1653,9 @@ export default function B2BPartnerConfigurator() {
             summary={summary}
             onCopy={handleCopy}
             onSend={handleWhatsApp}
+            onReset={handleResetCart}
             copied={copied}
+            cleared={cleared}
             lang={lang}
           />
         </div>
