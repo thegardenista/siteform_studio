@@ -12,7 +12,6 @@ import {
   FileText,
   Map,
   MessageCircle,
-  Phone,
   RefreshCcw,
   ShieldCheck,
   Sparkles,
@@ -74,17 +73,16 @@ const TRANSLATIONS = {
     back: "Back to menu",
     selectPath: "What do you need to do?",
     selectPathHelp:
-      "Pick one path. Once you go in, everything else disappears so the screen stays clean.",
+      "Pick one path. Once you go in, the rest disappears so the screen stays clean.",
     startPath: "Start this path",
     activePath: "Active path",
     reviewOrder: "Done, review order",
     propertySize: "Property size",
     projectNotes: "Project notes",
     projectNotesHelp:
-      "Add homeowner requests, what is still unclear, or what you want us to watch for.",
-    notesPlaceholder: "Add context here. Photos and sketches can go to WhatsApp after this.",
-    freeHelpCall: "Free help call",
-    freeHelpCallAdded: "Added a request for a call into the notes.",
+      "Questions by text are free. If something is unclear, write it here and send photos in WhatsApp.",
+    notesPlaceholder:
+      "Add context here. If needed, send photos, sketches, or questions in WhatsApp.",
     summary: "Summary",
     live: "Live",
     nothingSelected: "Nothing selected yet",
@@ -107,32 +105,36 @@ const TRANSLATIONS = {
     youSend: "You send",
     youGet: "You get",
     notIncluded: "Not included",
-    callRequest: "Please call me to review scope.",
     startSection: "Starting point",
     startSectionDesc:
       "Choose how the job starts: site visit, remote documents, or your existing model.",
     ideaSection: "Who owns the layout idea?",
     ideaSectionDesc:
-      "Choose whether you already know the layout or want us to help shape it.",
+      "Choose whether you already know the layout or want us to develop the design package with you.",
     afterLayout: "After layout",
     afterLayoutDesc:
-      "These are follow-up sheets and pricing aids after the design direction is already chosen.",
+      "These are follow-up sheets after the layout is already locked.",
     citySection: "HOA and city sheets",
     citySectionDesc:
-      "Use these when the layout exists and the project now needs supporting paperwork.",
+      "Use these when the layout already exists and the project needs support paperwork.",
     buildSection: "Pick the structure",
     buildSectionDesc:
-      "Choose the main thing you are building before adding follow-up sheets.",
-    buildSupport: "Optional support after structure",
+      "Choose the main thing you are building. Small deck and pergola packages already include HOA-ready drawings.",
+    buildSupport: "Optional support",
     buildSupportDesc:
-      "Use these only after the structure or feature is already selected.",
+      "Use these only if the job needs measuring, travel outside city limits, redesign time, or rush handling.",
     quickSection: "Quick concept image",
-    quickSectionDesc: "Send the photo, get one fast concept image, and use it to help close the sale.",
-    specialSection: "Special drawings and estimating support",
+    quickSectionDesc:
+      "Send one site photo in WhatsApp, get one fast concept image back, and use it to help close the sale.",
+    specialSection: "Special drawings and pricing support",
     specialSectionDesc:
-      "Use these when the layout already exists and you only need the right sheet or pricing support.",
+      "Use these when the layout already exists and you only need the right sheet or early pricing support.",
+    irrigationSection: "Licensed irrigator drafting",
+    irrigationSectionDesc:
+      "Drafting support only for licensed irrigators who already know the irrigation layout and want it cleaned up on screen.",
     supportSection: "Extra help",
-    supportSectionDesc: "Calls, travel, revisions, and rush handling.",
+    supportSectionDesc:
+      "Site visits, travel outside city limits, redesign time, and rush handling.",
     summaryJump: "Check total and send",
   },
   es: {
@@ -148,10 +150,9 @@ const TRANSLATIONS = {
     propertySize: "Tamaño del lote",
     projectNotes: "Notas del proyecto",
     projectNotesHelp:
-      "Agrega pedidos del cliente, dudas pendientes o cosas que debamos vigilar.",
-    notesPlaceholder: "Agrega contexto aquí. Luego puedes mandar fotos y sketches por WhatsApp.",
-    freeHelpCall: "Llamada gratis",
-    freeHelpCallAdded: "Se agregó una solicitud de llamada en las notas.",
+      "Las preguntas por texto son gratis. Si algo no está claro, escríbelo aquí y manda fotos por WhatsApp.",
+    notesPlaceholder:
+      "Agrega contexto aquí. Si hace falta, manda fotos, sketches o preguntas por WhatsApp.",
     summary: "Resumen",
     live: "En vivo",
     nothingSelected: "Todavía no hay servicios seleccionados",
@@ -174,32 +175,36 @@ const TRANSLATIONS = {
     youSend: "Tú mandas",
     youGet: "Recibes",
     notIncluded: "No incluido",
-    callRequest: "Por favor llámame para revisar el alcance.",
     startSection: "Punto de inicio",
     startSectionDesc:
-      "Elige cómo empieza el trabajo: visita, documentos remotos o tu modelo existente.",
+      "Elige cómo empieza el trabajo: visita al sitio, documentos remotos o tu modelo existente.",
     ideaSection: "¿Quién define la idea del layout?",
     ideaSectionDesc:
-      "Elige si ya conoces el layout o si quieres que te ayudemos a formarlo.",
+      "Elige si ya conoces el layout o si quieres que desarrollemos el paquete de diseño contigo.",
     afterLayout: "Después del layout",
     afterLayoutDesc:
-      "Estas son láminas de seguimiento y apoyo de precios cuando la dirección del diseño ya está elegida.",
+      "Estas son láminas de seguimiento cuando el layout ya está cerrado.",
     citySection: "Láminas HOA y ciudad",
     citySectionDesc:
       "Úsalas cuando el layout ya existe y el proyecto necesita papeles de apoyo.",
     buildSection: "Escoge la estructura",
     buildSectionDesc:
-      "Elige la estructura principal antes de agregar láminas de seguimiento.",
-    buildSupport: "Apoyo opcional después de la estructura",
+      "Elige lo principal que vas a construir. Los paquetes pequeños de deck y pérgola ya incluyen dibujos listos para HOA.",
+    buildSupport: "Apoyo opcional",
     buildSupportDesc:
-      "Úsalo solo después de elegir la estructura o el feature.",
+      "Úsalo solo si el trabajo necesita mediciones, viaje fuera de la ciudad, rediseño o urgencia.",
     quickSection: "Imagen conceptual rápida",
-    quickSectionDesc: "Manda la foto, recibe una imagen rápida y úsala para ayudar a cerrar la venta.",
-    specialSection: "Planos especiales y apoyo de estimación",
+    quickSectionDesc:
+      "Manda una foto del sitio por WhatsApp, recibe una imagen rápida y úsala para ayudar a cerrar la venta.",
+    specialSection: "Planos especiales y apoyo de precios",
     specialSectionDesc:
-      "Úsalo cuando el layout ya existe y solo necesitas la lámina correcta o apoyo de precios.",
+      "Úsalo cuando el layout ya existe y solo necesitas la lámina correcta o apoyo inicial de precios.",
+    irrigationSection: "Dibujo para irrigadores licenciados",
+    irrigationSectionDesc:
+      "Solo apoyo de dibujo para irrigadores licenciados que ya saben el layout de riego y quieren limpiarlo en pantalla.",
     supportSection: "Ayuda extra",
-    supportSectionDesc: "Llamadas, viajes, revisiones y manejo urgente.",
+    supportSectionDesc:
+      "Visitas al sitio, viaje fuera de la ciudad, tiempo de rediseño y manejo urgente.",
     summaryJump: "Revisar total y enviar",
   },
 } as const;
@@ -243,8 +248,8 @@ const ENTRY_PATHS = [
     id: "special-drawings",
     title: "Special drawings",
     titleEs: "Planos especiales",
-    description: "Planting plan, hardscape plan, irrigation drawing, take-off, HOA / city sheets.",
-    descriptionEs: "Planting plan, hardscape, riego, take-off, HOA o láminas para ciudad.",
+    description: "Planting plans, paving patterns, drainage concepts, take-off, HOA and city sheets.",
+    descriptionEs: "Planting plans, patrones de pavimento, drenaje conceptual, take-off, HOA o ciudad.",
     helper: "Best when the layout already exists and you only need the right sheet.",
     helperEs: "Ideal cuando el layout ya existe y solo falta la lámina correcta.",
   },
@@ -306,15 +311,17 @@ const STARTING_POINT_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 150, medium: 150, large: 150, estate: null },
     short:
-      "Take a site photo, send it to us, and for $150 we create one quick concept image plus a short list of suggested materials or key features.",
+      "Send one site photo in WhatsApp, and for $150 we create one quick concept image plus a short list of suggested materials or key features.",
     bestFor:
       "Fast sales. This is the easiest way to show a homeowner an idea before full design work starts.",
     youSend:
-      "Site photos, rough dimensions if you have them, and a few notes about what you want to show.",
+      "One site photo, rough dimensions if you have them, and a short text about what you want to show.",
     youGet:
       "One concept image and a short list of suggested materials or main features used in the concept.",
     notIncluded:
-      "Accurate site model, construction-ready drawings, engineering, permits, or final design documentation.",
+      "Site visit, calls, accurate site model, construction-ready drawings, engineering, permits, or final design documentation.",
+    helper:
+      "If something is unclear, send a text question in WhatsApp together with the photo. That is the whole point of this option.",
     sampleLabel: "See sample",
     badgeLabel: "Best seller",
   },
@@ -436,16 +443,16 @@ const DESIGN_DIRECTION_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 500, medium: 800, large: 1300, estate: null },
     short:
-      "You already know what you want. We turn your idea, sketch, or markup into a clean model and presentation.",
+      "You already know what you want. We turn your idea, sketch, or markup into a designed model with a locked layout and clear presentation.",
     bestFor:
-      "Contractors who already have the idea but need help making it look clear and sellable.",
+      "Contractors who already have the idea but need help making it clear, sellable, and ready for the next phase.",
     youSend:
       "Markups, sketches, references, dimensions, material list, revisions, or even a hand-drawn sketch on a napkin.",
     youGet:
-      "A developed 3D model, review visuals, and layout support so the idea is clear before the next step.",
+      "A developed design model, locked layout, and review visuals so the design direction is clear before the next step.",
     notIncluded:
       "Engineering, permit drawings, detailed production sheets, or takeoffs unless added later.",
-    helper: "This is the right choice when you are the one driving the layout.",
+    helper: "This is the right choice when you already know the layout direction and want us to formalize it.",
   },
   {
     id: "we-handle-the-design",
@@ -455,14 +462,16 @@ const DESIGN_DIRECTION_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 1000, medium: 1500, large: 2200, estate: null },
     short:
-      "You send the site information and goals, and we help figure out the layout, model it, and show it clearly.",
-    bestFor: "Contractors who have the lead but do not want to solve the layout alone.",
+      "You send the site information and goals, and we develop the design brief, gather references, test intermediate sketch options, and move the job toward the final rendered direction.",
+    bestFor:
+      "Contractors who have the lead but do not want to solve the design process alone.",
     youSend:
       "Survey, measurements, photos, style references, must-haves, rough budget level, and site constraints.",
-    youGet: "Layout help, 3D design modeling, and review visuals.",
+    youGet:
+      "Design brief work, reference selection, intermediate sketch options, design development, and final direction ready for rendering.",
     notIncluded:
       "Engineering, permit package, stamped drawings, planting plans, takeoffs, or detailed production sheets unless added later.",
-    helper: "This is the right choice when you want us to help shape the idea, not just draft it.",
+    helper: "This is the right choice when you want us to work through the design process, not just draft a fixed idea.",
   },
 ];
 
@@ -474,11 +483,14 @@ const NEXT_PHASE_SERVICES: Service[] = [
     icon: DraftingCompass,
     pricingType: "size",
     prices: { small: 200, medium: 350, large: 700, estate: null },
-    short: "Clean 2D plan drafted from an approved layout or approved model.",
+    short: "Clean 2D plan drafted from a locked layout.",
     bestFor: "The layout is locked and now you need the drawing package started.",
-    youSend: "Approved model, approved layout, redlines, or sketches.",
+    youSend:
+      "If we already created the layout, no extra files are needed. If the layout comes from your side, send the approved plan, model, or redlines.",
     youGet: "A clean 2D master plan ready to print and show to the crew.",
     notIncluded: "New concept design, engineering, or permit approval.",
+    helper:
+      "If the source layout comes from outside our process and needs cleanup before drafting, that may need added time or a separate quote.",
     sampleLabel: "See sample",
   },
   {
@@ -488,25 +500,29 @@ const NEXT_PHASE_SERVICES: Service[] = [
     icon: Trees,
     pricingType: "size",
     prices: { small: 200, medium: 350, large: 550, estate: null },
-    short: "Technical planting sheet for the approved layout.",
+    short: "Technical planting sheet for a locked layout.",
     bestFor: "Planting is moving forward and the crew needs a clean sheet.",
-    youSend: "Approved plan or model plus any plant direction or list if already chosen.",
+    youSend:
+      "If we already built the layout, no extra base files are needed. If the layout comes from your side, send the approved plan and plant direction or list.",
     youGet: "A planting plan with schedule and quantities, ready to print and show to the crew.",
     notIncluded: "Nursery sourcing, irrigation design, or new layout exploration.",
+    helper:
+      "If the base layout was not created by us and needs cleanup before planting documentation, that may need added time or a separate quote.",
     sampleLabel: "See sample",
   },
   {
     id: "paving-plan",
-    title: "Patio / Hardscape Plan",
+    title: "Hardscape Layout / Paving Pattern Plan",
     category: "After layout",
     icon: DraftingCompass,
     pricingType: "size",
     prices: { small: 200, medium: 350, large: 550, estate: null },
-    short: "A clean hardscape layout based on the approved design.",
-    bestFor: "Patio, paving, or hardscape is approved and now needs a dedicated sheet.",
-    youSend: "Approved plan or model, material notes, and edge details if known.",
+    short: "A clean hardscape sheet showing paving layout, material zones, and pattern logic if needed.",
+    bestFor: "Hardscape is approved and now needs a dedicated sheet for layout and paving pattern direction.",
+    youSend:
+      "If we already built the layout, no extra base files are needed. If the layout comes from your side, send the approved plan, materials, and any pattern notes.",
     youGet:
-      "A hardscape plan showing layout, materials, and main paved areas, ready to print and show to the crew.",
+      "A hardscape plan showing layout, materials, paving patterns, and tile or paver direction where needed.",
     notIncluded:
       "Engineering, structural base design, drainage engineering, or construction details unless added separately.",
     sampleLabel: "See sample",
@@ -521,7 +537,8 @@ const NEXT_PHASE_SERVICES: Service[] = [
     short: "Alignment plan for the approved fence and gate layout.",
     bestFor:
       "Fence and gate locations are known and just need to be documented clearly.",
-    youSend: "Survey, approved locations, and gate notes.",
+    youSend:
+      "If we already built the layout, no extra base files are needed. If the layout comes from your side, send survey, approved locations, and gate notes.",
     youGet: "A fence and gate alignment plan, ready to print and show to the crew.",
     notIncluded: "Structural details, fabrication drawings, or engineering.",
     sampleLabel: "See sample",
@@ -533,44 +550,30 @@ const NEXT_PHASE_SERVICES: Service[] = [
     icon: DraftingCompass,
     pricingType: "size",
     prices: { small: 500, medium: 700, large: 1000, estate: null },
-    short: "Non-engineered grading and drainage concept for the approved layout.",
+    short: "Non-engineered grading and drainage concept for a locked layout, based on topo or measured elevations.",
     bestFor: "The site needs slope or drainage thinking after the layout is locked.",
-    youSend: "Survey, grades if available, approved design, and scope of improvements.",
-    youGet: "A conceptual grading and drainage sheet, ready to print and show to the crew.",
-    notIncluded: "Civil engineering, stamped grading plans, or drainage calculations.",
-    sampleLabel: "See sample",
-  },
-  {
-    id: "irrigation-drafting",
-    title: "Irrigation Drawing from Your Markups",
-    category: "After layout",
-    icon: Droplets,
-    pricingType: "tiered-unit",
-    unitPrices: { small: 100, medium: 200, large: 400, estate: null },
-    quantityEnabled: true,
-    quantityLabel: "sheets",
-    short: "Drafting only from irrigation markups or paper layout.",
-    bestFor:
-      "Guys who already know the irrigation layout and just need it cleaned up on screen.",
-    youSend: "Field markups, hand sketches, redlines, and any base files.",
-    youGet: "Clean computer-drafted irrigation sheets, ready to print and show to the crew.",
+    youSend:
+      "Topo survey or measured elevations, approved design, and scope of improvements. If no topo exists yet, request a site visit or bring measured data first.",
+    youGet: "A conceptual grading and drainage sheet, ready to print and discuss with the crew.",
     notIncluded:
-      "Irrigation design, engineering, hydraulic calculations, or installation specifications.",
+      "Civil engineering, stamped grading plans, drainage calculations, or grading concept made without usable elevation information.",
     sampleLabel: "See sample",
   },
   {
     id: "watering-concept",
-    title: "Basic Watering Layout",
+    title: "Basic Watering Strategy",
     category: "After layout",
     icon: Droplets,
     pricingType: "size",
     prices: { small: 200, medium: 250, large: 300, estate: null },
-    short: "A simple non-engineered watering approach for the approved layout.",
+    short: "A simple non-engineered plant watering strategy for the approved layout.",
     bestFor:
-      "You want a simple watering strategy shown before full irrigation work happens.",
-    youSend: "Approved plan and planting direction.",
-    youGet: "General watering zones, head placement strategy, and coverage notes.",
-    notIncluded: "Pipe sizing, specs, hydraulic design, or installation diagrams.",
+      "You want clear understanding of sun zones, shade zones, and plant watering needs before detailed irrigation work happens.",
+    youSend:
+      "Approved plan, planting direction, and any known site notes about shade, sun exposure, or difficult areas.",
+    youGet:
+      "Sun and shade zone notes, watering logic by area, and recommendations such as drip or other basic watering approach where appropriate.",
+    notIncluded: "Pipe sizing, head layout, irrigation specs, hydraulic design, or installation diagrams.",
     sampleLabel: "See sample",
   },
   {
@@ -582,7 +585,8 @@ const NEXT_PHASE_SERVICES: Service[] = [
     prices: { small: 200, medium: 250, large: 300, estate: null },
     short: "2D lighting concept with optional 3D support.",
     bestFor: "The approved design needs a lighting layer added.",
-    youSend: "Approved plan, focal points, and lighting direction if known.",
+    youSend:
+      "If we already built the layout, no extra base files are needed. If the layout comes from your side, send approved plan, focal points, and lighting direction if known.",
     youGet: "A conceptual lighting layout, ready to print and show to the crew.",
     notIncluded: "Electrical design, wiring plans, or installation drawings.",
     sampleLabel: "See sample",
@@ -596,7 +600,7 @@ const NEXT_PHASE_SERVICES: Service[] = [
     prices: { small: 200, medium: 350, large: 700, estate: null },
     short: "Material quantities and dimensions from the approved 3D or 2D design.",
     bestFor: "The layout is locked and you are ready to price the job.",
-    youSend: "Approved plan or model.",
+    youSend: "Approved plan or model if it comes from your side. If we built it, no extra files are needed.",
     youGet: "Quantities and dimensions based on the approved scope.",
     notIncluded: "Purchasing, vendor follow-up, or field verification.",
     sampleLabel: "See sample",
@@ -674,15 +678,16 @@ const RARE_TECHNICAL_SERVICES: Service[] = [
   },
   {
     id: "impervious",
-    title: "City Coverage Calculation",
+    title: "Impervious Cover Calculation",
     category: "City",
     icon: ShieldCheck,
     pricingType: "size",
     prices: { small: 300, medium: 450, large: 650, estate: null },
-    short: "Add-on coverage calculation sheet from an approved base and layout.",
-    bestFor: "Best when the city cares how much hardscape or coverage is going on the lot.",
+    short: "City-style impervious cover calculation sheet from an approved base and layout.",
+    bestFor:
+      "Best when the jurisdiction cares how much impervious cover or hardscape is going on the lot.",
     youSend: "Survey, existing hardscape information, and approved improvements.",
-    youGet: "Coverage sheet and calculation summary.",
+    youGet: "Impervious cover sheet and calculation summary.",
     notIncluded: "Engineering certification or approval guarantee.",
     sampleLabel: "See sample",
   },
@@ -696,7 +701,7 @@ const RARE_TECHNICAL_SERVICES: Service[] = [
     short:
       "Add-on tree / CRZ overlay based on certified tree data and an approved layout.",
     bestFor:
-      "Best when protected trees now need to be shown clearly on top of the job.",
+      "Best when protected trees need to be shown clearly on top of the project for review.",
     youSend: "Certified tree survey or tree inventory plus approved design references.",
     youGet: "A tree preservation or CRZ overlay sheet.",
     notIncluded: "Arborist report or legal determination by the jurisdiction.",
@@ -704,55 +709,61 @@ const RARE_TECHNICAL_SERVICES: Service[] = [
   },
 ];
 
-const HOURLY_SERVICES: Service[] = [
+const IRRIGATION_DRAFTING_SERVICES: Service[] = [
   {
-    id: "phone-consult",
-    title: "Video / Phone Consultation",
-    category: "Help",
-    icon: Phone,
-    pricingType: "hourly",
-    hourlyRate: 70,
+    id: "irrigation-drafting",
+    title: "Irrigation Drawing from Your Markups",
+    category: "Irrigation",
+    icon: Droplets,
+    pricingType: "tiered-unit",
+    unitPrices: { small: 100, medium: 200, large: 400, estate: null },
     quantityEnabled: true,
-    quantityLabel: "hours",
-    short: "Talk through scope, layout questions, options, or handoff needs.",
-    bestFor: "Short planning calls before work starts or between phases.",
-    youSend: "Your questions, files, and topic list.",
-    youGet: "Live consultation time.",
-    notIncluded: "Design deliverables unless purchased separately.",
+    quantityLabel: "sheets",
+    short: "Drafting only from irrigation markups or paper layout.",
+    bestFor:
+      "Licensed irrigators who already know the irrigation layout and just need it cleaned up on screen.",
+    youSend: "Field markups, hand sketches, redlines, and any base files.",
+    youGet: "Clean computer-drafted irrigation sheets, ready to print and show to the crew.",
+    notIncluded:
+      "Irrigation design, engineering, hydraulic calculations, or installation specifications.",
+    sampleLabel: "See sample",
   },
+];
+
+const SUPPORT_SERVICES: Service[] = [
   {
-    id: "additional-site-visit",
-    title: "Additional Site Visit",
+    id: "site-visit-support",
+    title: "Site Visit for Measurements",
     category: "Help",
     icon: Camera,
     pricingType: "hourly",
     hourlyRate: 70,
     quantityEnabled: true,
     quantityLabel: "hours",
-    short: "Extra on-site time beyond the standard visit or for a follow-up visit.",
-    bestFor: "Jobs that need another field check after the first round.",
-    youSend: "Site address, access details, and what needs to be checked.",
-    youGet: "Additional on-site support time.",
-    notIncluded: "Travel time unless selected separately.",
+    short: "On-site measuring time when the job needs field data before drafting or redesign.",
+    bestFor: "Jobs that do not have enough usable measurements, topo, or base information yet.",
+    youSend: "Site address, access details, and what needs to be measured.",
+    youGet: "Measured site information and field support time.",
+    notIncluded: "Travel time outside city limits unless selected separately.",
   },
   {
     id: "travel-time",
-    title: "Travel Time",
+    title: "Travel Time Outside City Limits",
     category: "Help",
     icon: Car,
     pricingType: "hourly",
     hourlyRate: 70,
     quantityEnabled: true,
     quantityLabel: "hours",
-    short: "Travel billed separately when applicable.",
-    bestFor: "On-site work outside the normal local range or longer field days.",
+    short: "Travel billed separately when the property is outside city limits.",
+    bestFor: "On-site work for jobs outside the city where drive time needs to be billed separately.",
     youSend: "Job location.",
     youGet: "Reserved travel time.",
     notIncluded: "On-site work time unless selected separately.",
   },
   {
     id: "revision-redesign",
-    title: "Additional Revision / Redesign",
+    title: "Additional Revision / Redesign Time",
     category: "Help",
     icon: RefreshCcw,
     pricingType: "hourly",
@@ -760,12 +771,12 @@ const HOURLY_SERVICES: Service[] = [
     quantityEnabled: true,
     quantityLabel: "hours",
     short:
-      "Extra changes after the included round or after the layout is already locked.",
-    bestFor: "When someone changes direction after approval or wants a new version.",
+      "Extra redesign time after the included round or after the layout is already locked.",
+    bestFor: "When direction changes after approval or the project needs a larger redraw.",
     youSend: "Clear revision notes and updated direction.",
     youGet: "Additional redesign time.",
     notIncluded:
-      "A full new package unless enough hours are purchased or separately quoted.",
+      "Unlimited revision scope. If a bigger redesign is needed, the required time will be discussed separately, for example 10 extra hours or more.",
   },
   {
     id: "rush-fee",
@@ -1149,39 +1160,20 @@ function ServiceSection({
 function ProjectNotesSection({
   notes,
   setNotes,
-  addCall,
   lang,
-  freeCallAdded,
 }: {
   notes: string;
   setNotes: (value: string) => void;
-  addCall: () => void;
   lang: Lang;
-  freeCallAdded: boolean;
 }) {
   const t = TRANSLATIONS[lang];
 
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h3 className="text-2xl font-black tracking-tight text-slate-900">{t.projectNotes}</h3>
-          <p className="mt-2 text-sm leading-6 text-slate-600">{t.projectNotesHelp}</p>
-        </div>
-        <button
-          type="button"
-          onClick={addCall}
-          className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
-          {t.freeHelpCall}
-        </button>
+      <div>
+        <h3 className="text-2xl font-black tracking-tight text-slate-900">{t.projectNotes}</h3>
+        <p className="mt-2 text-sm leading-6 text-slate-600">{t.projectNotesHelp}</p>
       </div>
-
-      {freeCallAdded ? (
-        <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-          {t.freeHelpCallAdded}
-        </div>
-      ) : null}
 
       <textarea
         value={notes}
@@ -1311,7 +1303,6 @@ export default function B2BPartnerConfigurator() {
   const [selectedSize, setSelectedSize] = useState<string>("small");
   const [projectNotes, setProjectNotes] = useState("");
   const [copied, setCopied] = useState(false);
-  const [freeCallAdded, setFreeCallAdded] = useState(false);
   const [showIdeaHint, setShowIdeaHint] = useState(false);
   const [showStartHint, setShowStartHint] = useState(false);
 
@@ -1331,7 +1322,8 @@ export default function B2BPartnerConfigurator() {
       ...DESIGN_DIRECTION_SERVICES,
       ...NEXT_PHASE_SERVICES,
       ...RARE_TECHNICAL_SERVICES,
-      ...HOURLY_SERVICES,
+      ...IRRIGATION_DRAFTING_SERVICES,
+      ...SUPPORT_SERVICES,
     ],
     [],
   );
@@ -1353,12 +1345,6 @@ export default function B2BPartnerConfigurator() {
       }
       if ((NEXT_PHASE_SERVICES.some((item) => item.id === service.id) || RARE_TECHNICAL_SERVICES.some((item) => item.id === service.id)) && !hasLayout) {
         return "First choose who owns the layout idea so the follow-up sheets have something to point to.";
-      }
-    }
-
-    if (activePath === "build-one") {
-      if (RARE_TECHNICAL_SERVICES.some((item) => item.id === service.id) && !hasLayout) {
-        return "First choose the structure or feature you are building.";
       }
     }
 
@@ -1439,7 +1425,7 @@ export default function B2BPartnerConfigurator() {
         return prev;
       }
 
-      if ((activePath === "build-one" || activePath === "special-drawings") && RARE_TECHNICAL_SERVICES.some((s) => s.id === id) && !hasLayoutSourceSelection(Object.keys(prev))) {
+      if (activePath === "special-drawings" && RARE_TECHNICAL_SERVICES.some((s) => s.id === id) && !hasLayoutSourceSelection(Object.keys(prev))) {
         setShowIdeaHint(true);
         return prev;
       }
@@ -1465,12 +1451,6 @@ export default function B2BPartnerConfigurator() {
     summaryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handleFreeCall = () => {
-    const line = t.callRequest;
-    setProjectNotes((prev) => (prev.trim() ? `${prev}\n\n${line}` : line));
-    setFreeCallAdded(true);
-  };
-
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(requestBody);
@@ -1489,29 +1469,17 @@ export default function B2BPartnerConfigurator() {
     switch (activePath) {
       case "quick-sale":
         return (
-          <div className="space-y-8">
-            <ServiceSection
-              title={t.quickSection}
-              description={t.quickSectionDesc}
-              services={STARTING_POINT_SERVICES.filter((s) => s.id === "photo-concept-start")}
-              selected={cart}
-              onToggle={toggleService}
-              onQuantityChange={changeQty}
-              sizeId={selectedSize}
-              lang={lang}
-              tone="green"
-            />
-            <ServiceSection
-              title={t.supportSection}
-              description={t.supportSectionDesc}
-              services={HOURLY_SERVICES}
-              selected={cart}
-              onToggle={toggleService}
-              onQuantityChange={changeQty}
-              sizeId={selectedSize}
-              lang={lang}
-            />
-          </div>
+          <ServiceSection
+            title={t.quickSection}
+            description={t.quickSectionDesc}
+            services={STARTING_POINT_SERVICES.filter((s) => s.id === "photo-concept-start")}
+            selected={cart}
+            onToggle={toggleService}
+            onQuantityChange={changeQty}
+            sizeId={selectedSize}
+            lang={lang}
+            tone="green"
+          />
         );
 
       case "build-one":
@@ -1526,26 +1494,18 @@ export default function B2BPartnerConfigurator() {
               onQuantityChange={changeQty}
               sizeId={selectedSize}
               lang={lang}
-              getDisabledReason={getDisabledReason}
               tone="amber"
             />
-
-            {showIdeaHint ? (
-              <div className="rounded-[2rem] border border-amber-200 bg-amber-50 px-6 py-5 text-sm text-amber-900">
-                First choose the main structure or feature. After that, the extra sheets will make sense.
-              </div>
-            ) : null}
 
             <ServiceSection
               title={t.buildSupport}
               description={t.buildSupportDesc}
-              services={[...RARE_TECHNICAL_SERVICES, ...HOURLY_SERVICES]}
+              services={SUPPORT_SERVICES}
               selected={cart}
               onToggle={toggleService}
               onQuantityChange={changeQty}
               sizeId={selectedSize}
               lang={lang}
-              getDisabledReason={getDisabledReason}
             />
           </div>
         );
@@ -1618,7 +1578,7 @@ export default function B2BPartnerConfigurator() {
             <ServiceSection
               title={t.supportSection}
               description={t.supportSectionDesc}
-              services={HOURLY_SERVICES}
+              services={SUPPORT_SERVICES}
               selected={cart}
               onToggle={toggleService}
               onQuantityChange={changeQty}
@@ -1646,9 +1606,20 @@ export default function B2BPartnerConfigurator() {
             />
 
             <ServiceSection
+              title={t.irrigationSection}
+              description={t.irrigationSectionDesc}
+              services={IRRIGATION_DRAFTING_SERVICES}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+            />
+
+            <ServiceSection
               title={t.supportSection}
               description={t.supportSectionDesc}
-              services={HOURLY_SERVICES}
+              services={SUPPORT_SERVICES}
               selected={cart}
               onToggle={toggleService}
               onQuantityChange={changeQty}
@@ -1700,9 +1671,7 @@ export default function B2BPartnerConfigurator() {
                 <ProjectNotesSection
                   notes={projectNotes}
                   setNotes={setProjectNotes}
-                  addCall={handleFreeCall}
                   lang={lang}
-                  freeCallAdded={freeCallAdded}
                 />
               </>
             )}
