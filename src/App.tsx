@@ -1061,3 +1061,676 @@ function ServiceSection({
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3">
+                  <div className={`rounded-2xl p-3 ${isSelected ? "bg-white/10" : "bg-slate-100"}`}>
+                    <Icon className={`h-5 w-5 ${isSelected ? "text-white" : "text-slate-700"}`} />
+                  </div>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h4 className="text-lg font-black leading-tight">{service.title}</h4>
+                      {service.badgeLabel ? <Pill tone="green">{service.badgeLabel}</Pill> : null}
+                      {service.sampleLabel ? <Pill>{service.sampleLabel}</Pill> : null}
+                    </div>
+                    <p className={`mt-2 text-sm leading-6 ${isSelected ? "text-slate-200" : "text-slate-600"}`}>{service.short}</p>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className={`text-lg font-black ${isSelected ? "text-white" : "text-slate-900"}`}>{priceLabel}</div>
+                  <div className={`text-xs ${isSelected ? "text-slate-300" : "text-slate-500"}`}>{service.category}</div>
+                </div>
+              </div>
+
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                <div className={`rounded-2xl p-4 ${isSelected ? "bg-white/10" : "bg-slate-50"}`}>
+                  <div className="text-xs font-bold uppercase tracking-wide opacity-70">{t.bestFor}</div>
+                  <p className="mt-2 text-sm leading-6">{service.bestFor}</p>
+                </div>
+                <div className={`rounded-2xl p-4 ${isSelected ? "bg-white/10" : "bg-slate-50"}`}>
+                  <div className="text-xs font-bold uppercase tracking-wide opacity-70">{t.youSend}</div>
+                  <p className="mt-2 text-sm leading-6">{service.youSend}</p>
+                </div>
+                <div className={`rounded-2xl p-4 ${isSelected ? "bg-white/10" : "bg-slate-50"}`}>
+                  <div className="text-xs font-bold uppercase tracking-wide opacity-70">{t.youGet}</div>
+                  <p className="mt-2 text-sm leading-6">{service.youGet}</p>
+                </div>
+                <div className={`rounded-2xl p-4 ${isSelected ? "bg-white/10" : "bg-slate-50"}`}>
+                  <div className="text-xs font-bold uppercase tracking-wide opacity-70">{t.notIncluded}</div>
+                  <p className="mt-2 text-sm leading-6">{service.notIncluded}</p>
+                </div>
+              </div>
+
+              {service.helper ? (
+                <div className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${isSelected ? "border-white/15 bg-white/5 text-slate-200" : "border-slate-200 bg-slate-50 text-slate-600"}`}>
+                  {service.helper}
+                </div>
+              ) : null}
+
+              {disabledReason ? (
+                <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  {disabledReason}
+                </div>
+              ) : null}
+
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+                {service.quantityEnabled && isSelected ? (
+                  <QtyControl
+                    value={selected[service.id] ?? 1}
+                    onChange={(qty) => onQuantityChange(service.id, qty)}
+                    label={service.quantityLabel ?? t.qty.toLowerCase()}
+                  />
+                ) : (
+                  <div className="text-sm text-slate-500">{isSelected ? `${t.qty}: ${selected[service.id]}` : ""}</div>
+                )}
+
+                <button
+                  type="button"
+                  disabled={Boolean(disabledReason)}
+                  onClick={() => onToggle(service.id)}
+                  className={`inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-black transition ${
+                    isSelected
+                      ? "bg-white text-slate-900 hover:bg-slate-100"
+                      : disabledReason
+                        ? "cursor-not-allowed bg-slate-200 text-slate-400"
+                        : "bg-slate-900 text-white hover:bg-slate-800"
+                  }`}
+                >
+                  {isSelected ? <Check className="h-4 w-4" /> : null}
+                  {isSelected ? t.remove : disabledReason ? t.chooseFirst : t.add}
+                </button>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function ProjectNotesSection({
+  notes,
+  setNotes,
+  addCall,
+  lang,
+  freeCallAdded,
+}: {
+  notes: string;
+  setNotes: (value: string) => void;
+  addCall: () => void;
+  lang: Lang;
+  freeCallAdded: boolean;
+}) {
+  const t = TRANSLATIONS[lang];
+
+  return (
+    <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h3 className="text-2xl font-black tracking-tight text-slate-900">{t.projectNotes}</h3>
+          <p className="mt-2 text-sm leading-6 text-slate-600">{t.projectNotesHelp}</p>
+        </div>
+        <button
+          type="button"
+          onClick={addCall}
+          className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
+        >
+          {t.freeHelpCall}
+        </button>
+      </div>
+
+      {freeCallAdded ? (
+        <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          {t.freeHelpCallAdded}
+        </div>
+      ) : null}
+
+      <textarea
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+        rows={6}
+        placeholder={t.notesPlaceholder}
+        className="mt-5 w-full rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-slate-400"
+      />
+    </section>
+  );
+}
+
+function SummarySideBar({
+  summaryRef,
+  summary,
+  onCopy,
+  onSend,
+  copied,
+  lang,
+}: {
+  summaryRef: React.RefObject<HTMLDivElement>;
+  summary: {
+    items: { title: string; price: number | null; qty: number; needsQuote: boolean }[];
+    pricedSubtotal: number;
+    rushFee: number;
+    total: number;
+    deposit: number;
+    remaining: number;
+    needsQuote: boolean;
+  };
+  onCopy: () => void;
+  onSend: () => void;
+  copied: boolean;
+  lang: Lang;
+}) {
+  const t = TRANSLATIONS[lang];
+
+  return (
+    <aside ref={summaryRef} className="h-fit lg:sticky lg:top-24">
+      <div className="space-y-6 rounded-[2.5rem] border-2 border-slate-900 bg-white p-8 shadow-2xl">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-xl font-black">{t.summary}</h2>
+          <Pill tone="green">{t.live}</Pill>
+        </div>
+
+        <div className="space-y-3 rounded-3xl bg-slate-50 p-5">
+          {summary.items.length === 0 ? (
+            <p className="text-center text-sm text-slate-400">{t.nothingSelected}</p>
+          ) : (
+            summary.items.map((item, index) => (
+              <div
+                key={`${item.title}-${index}`}
+                className="flex items-start justify-between gap-3 border-b border-slate-200 pb-3 last:border-0 last:pb-0"
+              >
+                <div>
+                  <div className="text-sm font-medium text-slate-900">{item.title}</div>
+                  <div className="text-xs text-slate-500">
+                    {t.qty}: {item.qty}
+                  </div>
+                </div>
+                <div className="text-right text-sm font-bold text-slate-900">
+                  {item.needsQuote ? t.quote : formatPrice(item.price)}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {summary.rushFee ? (
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            {t.rushFee}: {formatPrice(summary.rushFee)}
+          </div>
+        ) : null}
+
+        <div className="rounded-3xl border border-slate-200 p-5 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-slate-500">{t.subtotal}</span>
+            <span className="font-bold text-slate-900">{formatPrice(summary.total)}</span>
+          </div>
+          {!summary.needsQuote ? (
+            <>
+              <div className="mt-3 flex items-center justify-between">
+                <span className="text-slate-500">{t.deposit}</span>
+                <span className="font-bold text-slate-900">{formatPrice(summary.deposit)}</span>
+              </div>
+              <div className="mt-3 flex items-center justify-between">
+                <span className="text-slate-500">{t.remaining}</span>
+                <span className="font-bold text-slate-900">{formatPrice(summary.remaining)}</span>
+              </div>
+            </>
+          ) : (
+            <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900">
+              {t.containsQuote}
+            </div>
+          )}
+        </div>
+
+        <div className="grid gap-3">
+          <button
+            type="button"
+            onClick={onCopy}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-5 py-4 text-sm font-black text-slate-900 hover:bg-slate-50"
+          >
+            <Copy className="h-4 w-4" />
+            {copied ? t.copied : t.copySummary}
+          </button>
+
+          <button
+            type="button"
+            onClick={onSend}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 py-5 text-lg font-black text-white shadow-lg hover:bg-emerald-600"
+          >
+            <MessageCircle className="h-5 w-5" />
+            {t.sendWhatsApp}
+          </button>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+export default function B2BPartnerConfigurator() {
+  const [view, setView] = useState<ViewState>("MENU");
+  const [lang, setLang] = useState<Lang>("en");
+  const [activePath, setActivePath] = useState<string>("quick-sale");
+  const [cart, setCart] = useState<Record<string, number>>({});
+  const [selectedSize, setSelectedSize] = useState<string>("small");
+  const [projectNotes, setProjectNotes] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [freeCallAdded, setFreeCallAdded] = useState(false);
+  const [showIdeaHint, setShowIdeaHint] = useState(false);
+  const [showStartHint, setShowStartHint] = useState(false);
+
+  const t = TRANSLATIONS[lang];
+  const summaryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!copied) return;
+    const timeout = window.setTimeout(() => setCopied(false), 1200);
+    return () => window.clearTimeout(timeout);
+  }, [copied]);
+
+  const allServices = useMemo(
+    () => [
+      ...STARTING_POINT_SERVICES,
+      ...STRUCTURE_SERVICES,
+      ...DESIGN_DIRECTION_SERVICES,
+      ...NEXT_PHASE_SERVICES,
+      ...RARE_TECHNICAL_SERVICES,
+      ...HOURLY_SERVICES,
+    ],
+    [],
+  );
+
+  const hasStart = hasStartingPointSelection(Object.keys(cart));
+  const hasLayout = hasLayoutSourceSelection(Object.keys(cart));
+
+  const selectedPath = useMemo(
+    () => ENTRY_PATHS.find((path) => path.id === activePath) ?? ENTRY_PATHS[0],
+    [activePath],
+  );
+
+  const getDisabledReason = (service: Service): string | null => {
+    if (view !== "CONFIG") return null;
+
+    if (activePath === "full-design") {
+      if (DESIGN_DIRECTION_SERVICES.some((item) => item.id === service.id) && !hasStart) {
+        return "First choose how the project starts: site visit, remote base, or your model.";
+      }
+      if ((NEXT_PHASE_SERVICES.some((item) => item.id === service.id) || RARE_TECHNICAL_SERVICES.some((item) => item.id === service.id)) && !hasLayout) {
+        return "First choose who owns the layout idea so the follow-up sheets have something to point to.";
+      }
+    }
+
+    if (activePath === "build-one") {
+      if (RARE_TECHNICAL_SERVICES.some((item) => item.id === service.id) && !hasLayout) {
+        return "First choose the structure or feature you are building.";
+      }
+    }
+
+    if (activePath === "special-drawings") {
+      if (RARE_TECHNICAL_SERVICES.some((item) => item.id === service.id) && !hasLayout) {
+        return "These sheets work best after the layout already exists.";
+      }
+    }
+
+    return null;
+  };
+
+  const summary = useMemo(() => {
+    const items = allServices
+      .filter((service) => cart[service.id])
+      .map((service) => ({
+        title: service.title,
+        price: getLinePrice(service, selectedSize, cart[service.id]),
+        qty: cart[service.id],
+        needsQuote: service.pricingType === "quote",
+      }));
+
+    const pricedSubtotal = items.reduce((sum, item) => sum + (item.price ?? 0), 0);
+    const hasRush = Boolean(cart["rush-fee"]);
+    const rushFee = hasRush ? Math.round(pricedSubtotal * 0.25) : 0;
+    const total = pricedSubtotal + rushFee;
+    const deposit = Math.round(total * 0.7);
+    const remaining = total - deposit;
+    const needsQuote = items.some((item) => item.needsQuote);
+
+    return { items, pricedSubtotal, rushFee, total, deposit, remaining, needsQuote };
+  }, [allServices, cart, selectedSize]);
+
+  const requestLines = summary.items.map(
+    (item) => `• ${item.title} x${item.qty} — ${item.needsQuote ? t.quote : formatPrice(item.price)}`,
+  );
+
+  const requestBody = [
+    "--------- NEW REQUEST ---------",
+    `Path: ${selectedPath.title}`,
+    `Property size: ${SIZES.find((size) => size.id === selectedSize)?.label ?? selectedSize}`,
+    "",
+    "Selected services:",
+    ...(requestLines.length ? requestLines : ["• Nothing selected yet"]),
+    "",
+    summary.rushFee ? `Rush fee: ${formatPrice(summary.rushFee)}` : null,
+    `Subtotal: ${formatPrice(summary.total)}`,
+    summary.needsQuote ? "Contains quote-based items." : `Deposit (70%): ${formatPrice(summary.deposit)}`,
+    "",
+    projectNotes ? `Notes:\n${projectNotes}` : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const handlePathSelect = (id: string) => {
+    setActivePath(id);
+    setView("CONFIG");
+    setShowIdeaHint(false);
+    setShowStartHint(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const toggleService = (id: string) => {
+    setCart((prev) => {
+      const next = { ...prev };
+      const isStarting = STARTING_POINT_SERVICES.some((s) => s.id === id);
+      const isDesign = DESIGN_DIRECTION_SERVICES.some((s) => s.id === id);
+      const isLaterPhase =
+        NEXT_PHASE_SERVICES.some((s) => s.id === id) || RARE_TECHNICAL_SERVICES.some((s) => s.id === id);
+
+      if (activePath === "full-design" && isDesign && !hasStartingPointSelection(Object.keys(prev))) {
+        setShowStartHint(true);
+        return prev;
+      }
+
+      if (activePath === "full-design" && isLaterPhase && !hasLayoutSourceSelection(Object.keys(prev))) {
+        setShowIdeaHint(true);
+        return prev;
+      }
+
+      if ((activePath === "build-one" || activePath === "special-drawings") && RARE_TECHNICAL_SERVICES.some((s) => s.id === id) && !hasLayoutSourceSelection(Object.keys(prev))) {
+        setShowIdeaHint(true);
+        return prev;
+      }
+
+      setShowIdeaHint(false);
+      setShowStartHint(false);
+
+      if (isStarting) STARTING_POINT_SERVICES.forEach((s) => delete next[s.id]);
+      if (isDesign) DESIGN_DIRECTION_SERVICES.forEach((s) => delete next[s.id]);
+
+      if (next[id]) delete next[id];
+      else next[id] = 1;
+
+      return next;
+    });
+  };
+
+  const changeQty = (id: string, qty: number) => {
+    setCart((prev) => ({ ...prev, [id]: Math.max(1, qty) }));
+  };
+
+  const scrollToSummary = () => {
+    summaryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleFreeCall = () => {
+    const line = t.callRequest;
+    setProjectNotes((prev) => (prev.trim() ? `${prev}\n\n${line}` : line));
+    setFreeCallAdded(true);
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(requestBody);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  const handleWhatsApp = () => {
+    const encoded = encodeURIComponent(requestBody);
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`, "_blank", "noopener,noreferrer");
+  };
+
+  const renderConfigurator = () => {
+    switch (activePath) {
+      case "quick-sale":
+        return (
+          <div className="space-y-8">
+            <ServiceSection
+              title={t.quickSection}
+              description={t.quickSectionDesc}
+              services={STARTING_POINT_SERVICES.filter((s) => s.id === "photo-concept-start")}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+              tone="green"
+            />
+            <ServiceSection
+              title={t.supportSection}
+              description={t.supportSectionDesc}
+              services={HOURLY_SERVICES}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+            />
+          </div>
+        );
+
+      case "build-one":
+        return (
+          <div className="space-y-8">
+            <ServiceSection
+              title={t.buildSection}
+              description={t.buildSectionDesc}
+              services={STRUCTURE_SERVICES}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+              getDisabledReason={getDisabledReason}
+              tone="amber"
+            />
+
+            {showIdeaHint ? (
+              <div className="rounded-[2rem] border border-amber-200 bg-amber-50 px-6 py-5 text-sm text-amber-900">
+                First choose the main structure or feature. After that, the extra sheets will make sense.
+              </div>
+            ) : null}
+
+            <ServiceSection
+              title={t.buildSupport}
+              description={t.buildSupportDesc}
+              services={[...RARE_TECHNICAL_SERVICES, ...HOURLY_SERVICES]}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+              getDisabledReason={getDisabledReason}
+            />
+          </div>
+        );
+
+      case "full-design":
+        return (
+          <div className="space-y-8">
+            <SizeSelectionSection selectedSize={selectedSize} setSelectedSize={setSelectedSize} lang={lang} />
+
+            <ServiceSection
+              title={t.startSection}
+              description={t.startSectionDesc}
+              services={STARTING_POINT_SERVICES.filter((s) => s.id !== "photo-concept-start")}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+            />
+
+            {showStartHint ? (
+              <div className="rounded-[2rem] border border-amber-200 bg-amber-50 px-6 py-5 text-sm text-amber-900">
+                First choose how the project starts. The design direction section depends on that.
+              </div>
+            ) : null}
+
+            <ServiceSection
+              title={t.ideaSection}
+              description={t.ideaSectionDesc}
+              services={DESIGN_DIRECTION_SERVICES}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+              getDisabledReason={getDisabledReason}
+              tone="green"
+            />
+
+            {showIdeaHint ? (
+              <div className="rounded-[2rem] border border-amber-200 bg-amber-50 px-6 py-5 text-sm text-amber-900">
+                First choose who owns the layout idea. After that, the follow-up sheets will have something to point to.
+              </div>
+            ) : null}
+
+            <ServiceSection
+              title={t.afterLayout}
+              description={t.afterLayoutDesc}
+              services={NEXT_PHASE_SERVICES}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+              getDisabledReason={getDisabledReason}
+            />
+
+            <ServiceSection
+              title={t.citySection}
+              description={t.citySectionDesc}
+              services={RARE_TECHNICAL_SERVICES}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+              getDisabledReason={getDisabledReason}
+            />
+
+            <ServiceSection
+              title={t.supportSection}
+              description={t.supportSectionDesc}
+              services={HOURLY_SERVICES}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+            />
+          </div>
+        );
+
+      case "special-drawings":
+        return (
+          <div className="space-y-8">
+            <SizeSelectionSection selectedSize={selectedSize} setSelectedSize={setSelectedSize} lang={lang} />
+
+            <ServiceSection
+              title={t.specialSection}
+              description={t.specialSectionDesc}
+              services={[...NEXT_PHASE_SERVICES, ...RARE_TECHNICAL_SERVICES]}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+              getDisabledReason={getDisabledReason}
+            />
+
+            <ServiceSection
+              title={t.supportSection}
+              description={t.supportSectionDesc}
+              services={HOURLY_SERVICES}
+              selected={cart}
+              onToggle={toggleService}
+              onQuantityChange={changeQty}
+              sizeId={selectedSize}
+              lang={lang}
+            />
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-100 pb-20 text-slate-900">
+      <Header view={view} setView={setView} lang={lang} setLang={setLang} />
+
+      <main className="mx-auto max-w-7xl px-4 pt-8 md:px-10">
+        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+          <div className="min-w-0 space-y-8">
+            {view === "MENU" ? (
+              <MainMenu onSelect={handlePathSelect} lang={lang} />
+            ) : (
+              <>
+                <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <div className="mb-2 inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                        {t.activePath}
+                      </div>
+                      <h2 className="text-2xl font-black">{lang === "en" ? selectedPath.title : selectedPath.titleEs}</h2>
+                      <p className="mt-2 text-sm leading-6 text-slate-600">
+                        {lang === "en" ? selectedPath.description : selectedPath.descriptionEs}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={scrollToSummary}
+                      className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50"
+                    >
+                      {t.reviewOrder}
+                    </button>
+                  </div>
+                </section>
+
+                <div className="space-y-8 animate-in slide-in-from-right-10 duration-300">{renderConfigurator()}</div>
+
+                <ProjectNotesSection
+                  notes={projectNotes}
+                  setNotes={setProjectNotes}
+                  addCall={handleFreeCall}
+                  lang={lang}
+                  freeCallAdded={freeCallAdded}
+                />
+              </>
+            )}
+          </div>
+
+          <SummarySideBar
+            summaryRef={summaryRef}
+            summary={summary}
+            onCopy={handleCopy}
+            onSend={handleWhatsApp}
+            copied={copied}
+            lang={lang}
+          />
+        </div>
+      </main>
+
+      {view === "CONFIG" ? (
+        <div className="fixed bottom-6 left-4 right-4 lg:hidden">
+          <button
+            type="button"
+            onClick={scrollToSummary}
+            className="flex w-full items-center justify-between rounded-2xl bg-slate-900 p-5 text-white shadow-2xl"
+          >
+            <span className="font-black">{t.summaryJump}</span>
+            <span className="text-lg font-black">{formatPrice(summary.total)}</span>
+          </button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
