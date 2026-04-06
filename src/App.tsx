@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 
 type Lang = "en" | "es";
-type Step = "menu" | "configurator";
+type ViewState = "MENU" | "CONFIG";
 type PricingType =
   | "size"
   | "unit"
@@ -38,16 +38,6 @@ interface Size {
   label: string;
   sublabel: string;
   visual: string;
-}
-
-interface EntryPath {
-  id: string;
-  title: string;
-  titleEs?: string;
-  description: string;
-  descriptionEs?: string;
-  helper: string;
-  helperEs?: string;
 }
 
 interface Service {
@@ -75,16 +65,9 @@ interface Service {
   badgeLabel?: string;
 }
 
-interface SummaryItem {
-  title: string;
-  price: number | null;
-  qty: number;
-  needsQuote: boolean;
-}
-
 const WHATSAPP_NUMBER = "15551234567";
 
-const UI = {
+const TRANSLATIONS = {
   en: {
     header: "Partner Configurator",
     subheader: "White-label drafting and production support",
@@ -92,8 +75,9 @@ const UI = {
     selectPath: "What do you need to do?",
     selectPathHelp:
       "Pick one path. Once you go in, everything else disappears so the screen stays clean.",
+    startPath: "Start this path",
     activePath: "Active path",
-    doneReview: "Done, review order",
+    reviewOrder: "Done, review order",
     propertySize: "Property size",
     projectNotes: "Project notes",
     projectNotesHelp:
@@ -104,34 +88,52 @@ const UI = {
     summary: "Summary",
     live: "Live",
     nothingSelected: "Nothing selected yet",
-    total: "Total",
     subtotal: "Subtotal",
+    total: "Total",
     deposit: "Deposit (70%)",
     remaining: "Remaining later",
     rushFee: "Rush fee",
     containsQuote: "Contains quote-based items.",
-    checkTotal: "Check total and send",
-    sendWhatsApp: "Send to WhatsApp",
     copySummary: "Copy summary",
     copied: "Copied",
-    startThisPath: "Start this path",
-    chooseFirst: "Choose this first",
-    selected: "Selected",
+    sendWhatsApp: "Send to WhatsApp",
+    checkTotal: "Check total and send",
     add: "Add",
     remove: "Remove",
-    qty: "Qty",
+    chooseFirst: "Choose this first",
     quote: "Quote",
+    qty: "Qty",
     bestFor: "Best for",
     youSend: "You send",
     youGet: "You get",
     notIncluded: "Not included",
-    needCallRequest: "Please call me to review scope.",
-    mobileJump: "Check total and send",
-    noPriceYet: "No price yet",
-    pathQuick: "Quick idea to help close the sale",
-    pathBuild: "Build one specific thing",
-    pathDesign: "Landscape design",
-    pathSpecial: "Special drawings",
+    callRequest: "Please call me to review scope.",
+    startSection: "Starting point",
+    startSectionDesc:
+      "Choose how the job starts: site visit, remote documents, or your existing model.",
+    ideaSection: "Who owns the layout idea?",
+    ideaSectionDesc:
+      "Choose whether you already know the layout or want us to help shape it.",
+    afterLayout: "After layout",
+    afterLayoutDesc:
+      "These are follow-up sheets and pricing aids after the design direction is already chosen.",
+    citySection: "HOA and city sheets",
+    citySectionDesc:
+      "Use these when the layout exists and the project now needs supporting paperwork.",
+    buildSection: "Pick the structure",
+    buildSectionDesc:
+      "Choose the main thing you are building before adding follow-up sheets.",
+    buildSupport: "Optional support after structure",
+    buildSupportDesc:
+      "Use these only after the structure or feature is already selected.",
+    quickSection: "Quick concept image",
+    quickSectionDesc: "Send the photo, get one fast concept image, and use it to help close the sale.",
+    specialSection: "Special drawings and estimating support",
+    specialSectionDesc:
+      "Use these when the layout already exists and you only need the right sheet or pricing support.",
+    supportSection: "Extra help",
+    supportSectionDesc: "Calls, travel, revisions, and rush handling.",
+    summaryJump: "Check total and send",
   },
   es: {
     header: "Configurador para socios",
@@ -139,47 +141,66 @@ const UI = {
     back: "Volver al menú",
     selectPath: "¿Qué necesitas hacer?",
     selectPathHelp:
-      "Elige una ruta. Cuando entras, lo demás desaparece para mantener la pantalla limpia.",
+      "Elige una ruta. Cuando entras, lo demás desaparece para que la pantalla quede limpia.",
+    startPath: "Empezar esta ruta",
     activePath: "Ruta activa",
-    doneReview: "Listo, revisar pedido",
+    reviewOrder: "Listo, revisar pedido",
     propertySize: "Tamaño del lote",
     projectNotes: "Notas del proyecto",
     projectNotesHelp:
-      "Agrega pedidos del cliente, dudas pendientes o puntos a vigilar.",
+      "Agrega pedidos del cliente, dudas pendientes o cosas que debamos vigilar.",
     notesPlaceholder: "Agrega contexto aquí. Luego puedes mandar fotos y sketches por WhatsApp.",
     freeHelpCall: "Llamada gratis",
     freeHelpCallAdded: "Se agregó una solicitud de llamada en las notas.",
     summary: "Resumen",
     live: "En vivo",
-    nothingSelected: "Aún no hay servicios seleccionados",
-    total: "Total",
+    nothingSelected: "Todavía no hay servicios seleccionados",
     subtotal: "Subtotal",
+    total: "Total",
     deposit: "Depósito (70%)",
     remaining: "Restante después",
     rushFee: "Cargo urgente",
     containsQuote: "Incluye partidas por cotizar.",
-    checkTotal: "Revisar total y enviar",
-    sendWhatsApp: "Enviar por WhatsApp",
     copySummary: "Copiar resumen",
     copied: "Copiado",
-    startThisPath: "Empezar esta ruta",
-    chooseFirst: "Elige esto primero",
-    selected: "Seleccionado",
+    sendWhatsApp: "Enviar por WhatsApp",
+    checkTotal: "Revisar total y enviar",
     add: "Agregar",
     remove: "Quitar",
-    qty: "Cant.",
+    chooseFirst: "Elige esto primero",
     quote: "Cotizar",
+    qty: "Cant.",
     bestFor: "Ideal para",
     youSend: "Tú mandas",
     youGet: "Recibes",
     notIncluded: "No incluido",
-    needCallRequest: "Por favor llámame para revisar el alcance.",
-    mobileJump: "Revisar total y enviar",
-    noPriceYet: "Sin precio todavía",
-    pathQuick: "Idea rápida para cerrar la venta",
-    pathBuild: "Construir una sola cosa",
-    pathDesign: "Diseño de landscape",
-    pathSpecial: "Planos especiales",
+    callRequest: "Por favor llámame para revisar el alcance.",
+    startSection: "Punto de inicio",
+    startSectionDesc:
+      "Elige cómo empieza el trabajo: visita, documentos remotos o tu modelo existente.",
+    ideaSection: "¿Quién define la idea del layout?",
+    ideaSectionDesc:
+      "Elige si ya conoces el layout o si quieres que te ayudemos a formarlo.",
+    afterLayout: "Después del layout",
+    afterLayoutDesc:
+      "Estas son láminas de seguimiento y apoyo de precios cuando la dirección del diseño ya está elegida.",
+    citySection: "Láminas HOA y ciudad",
+    citySectionDesc:
+      "Úsalas cuando el layout ya existe y el proyecto necesita papeles de apoyo.",
+    buildSection: "Escoge la estructura",
+    buildSectionDesc:
+      "Elige la estructura principal antes de agregar láminas de seguimiento.",
+    buildSupport: "Apoyo opcional después de la estructura",
+    buildSupportDesc:
+      "Úsalo solo después de elegir la estructura o el feature.",
+    quickSection: "Imagen conceptual rápida",
+    quickSectionDesc: "Manda la foto, recibe una imagen rápida y úsala para ayudar a cerrar la venta.",
+    specialSection: "Planos especiales y apoyo de estimación",
+    specialSectionDesc:
+      "Úsalo cuando el layout ya existe y solo necesitas la lámina correcta o apoyo de precios.",
+    supportSection: "Ayuda extra",
+    supportSectionDesc: "Llamadas, viajes, revisiones y manejo urgente.",
+    summaryJump: "Revisar total y enviar",
   },
 } as const;
 
@@ -190,7 +211,7 @@ const SIZES: Size[] = [
   { id: "estate", label: "Estate", sublabel: "1-2 ac", visual: "🌳" },
 ];
 
-const ENTRY_PATHS: EntryPath[] = [
+const ENTRY_PATHS = [
   {
     id: "quick-sale",
     title: "Quick idea to help close the sale",
@@ -214,7 +235,7 @@ const ENTRY_PATHS: EntryPath[] = [
     title: "Landscape design",
     titleEs: "Diseño de landscape",
     description: "Choose lot size, starting point, and who owns the layout idea.",
-    descriptionEs: "Elige el tamaño del lote, el punto de inicio y quién define la idea del layout.",
+    descriptionEs: "Elige tamaño del lote, punto de inicio y quién define la idea del layout.",
     helper: "Best when the whole yard needs planning, not just one structure.",
     helperEs: "Ideal cuando todo el patio necesita planeación, no solo una estructura.",
   },
@@ -223,11 +244,11 @@ const ENTRY_PATHS: EntryPath[] = [
     title: "Special drawings",
     titleEs: "Planos especiales",
     description: "Planting plan, hardscape plan, irrigation drawing, take-off, HOA / city sheets.",
-    descriptionEs: "Planting plan, hardscape plan, riego, take-off, HOA o láminas para ciudad.",
+    descriptionEs: "Planting plan, hardscape, riego, take-off, HOA o láminas para ciudad.",
     helper: "Best when the layout already exists and you only need the right sheet.",
-    helperEs: "Ideal cuando el layout ya existe y solo hace falta la lámina correcta.",
+    helperEs: "Ideal cuando el layout ya existe y solo falta la lámina correcta.",
   },
-];
+] as const;
 
 const STARTING_POINT_SERVICES: Service[] = [
   {
@@ -498,7 +519,8 @@ const NEXT_PHASE_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 200, medium: 250, large: 300, estate: null },
     short: "Alignment plan for the approved fence and gate layout.",
-    bestFor: "Fence and gate locations are known and just need to be documented clearly.",
+    bestFor:
+      "Fence and gate locations are known and just need to be documented clearly.",
     youSend: "Survey, approved locations, and gate notes.",
     youGet: "A fence and gate alignment plan, ready to print and show to the crew.",
     notIncluded: "Structural details, fabrication drawings, or engineering.",
@@ -761,7 +783,7 @@ const HOURLY_SERVICES: Service[] = [
   },
 ];
 
-const formatPrice = (value: number | null | undefined) => {
+const formatPrice = (value: number | null | undefined): string => {
   if (value === null || value === undefined) return "Quote";
   return `$${value.toLocaleString("en-US")}`;
 };
@@ -789,22 +811,40 @@ const hasLayoutSourceSelection = (selectedIds: string[]) =>
   );
 
 const hasStartingPointSelection = (selectedIds: string[]) =>
-  selectedIds.some((id) =>
-    STARTING_POINT_SERVICES.some((service) => service.id === id && service.id !== "photo-concept-start"),
+  selectedIds.some(
+    (id) => STARTING_POINT_SERVICES.some((service) => service.id === id && service.id !== "photo-concept-start"),
   );
 
 function runSelfTests() {
   console.assert(formatPrice(1200) === "$1,200", "formatPrice failed");
-  console.assert(getBaseUnitPrice({ pricingType: "unit", unitPrice: 120 } as Service, "small") === 120, "unit pricing failed");
-  console.assert(getBaseUnitPrice({ pricingType: "hourly", hourlyRate: 70 } as Service, "small") === 70, "hourly pricing failed");
-  console.assert(getBaseUnitPrice({ pricingType: "tiered-unit", unitPrices: { small: 100 } } as Service, "small") === 100, "tiered-unit pricing failed");
-  console.assert(getLinePrice({ pricingType: "flat", flatPrice: 500 } as Service, "small", 2) === 1000, "flat line pricing failed");
+  console.assert(
+    getBaseUnitPrice({ pricingType: "unit", unitPrice: 120 } as Service, "small") === 120,
+    "unit pricing failed",
+  );
+  console.assert(
+    getBaseUnitPrice({ pricingType: "hourly", hourlyRate: 70 } as Service, "small") === 70,
+    "hourly pricing failed",
+  );
+  console.assert(
+    getBaseUnitPrice({ pricingType: "tiered-unit", unitPrices: { small: 100 } } as Service, "small") === 100,
+    "tiered-unit pricing failed",
+  );
+  console.assert(
+    getLinePrice({ pricingType: "flat", flatPrice: 500 } as Service, "small", 2) === 1000,
+    "flat line pricing failed",
+  );
   console.assert(getLinePrice({ pricingType: "quote" } as Service, "small", 1) === null, "quote pricing failed");
   console.assert(Math.round(1000 * 0.7) === 700, "deposit math failed");
   console.assert(Math.round(1000 * 0.25) === 250, "rush fee math failed");
   console.assert(hasLayoutSourceSelection(["deck-small"]) === true, "structure should count as layout source");
-  console.assert(hasLayoutSourceSelection(["design-execution-under-your-direction"]) === true, "design path should count as layout source");
-  console.assert(hasLayoutSourceSelection(["on-site-start"]) === false, "start service alone should not count as layout source");
+  console.assert(
+    hasLayoutSourceSelection(["design-execution-under-your-direction"]) === true,
+    "design path should count as layout source",
+  );
+  console.assert(
+    hasLayoutSourceSelection(["on-site-start"]) === false,
+    "start service alone should not count as layout source",
+  );
 }
 
 try {
@@ -815,9 +855,9 @@ try {
 
 function Pill({ children, tone = "slate" }: { children: React.ReactNode; tone?: "slate" | "green" | "amber" }) {
   const tones = {
-    slate: "border-slate-200 bg-slate-100 text-slate-700",
-    green: "border-emerald-200 bg-emerald-50 text-emerald-700",
-    amber: "border-amber-200 bg-amber-50 text-amber-800",
+    slate: "bg-slate-100 text-slate-700 border-slate-200",
+    green: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    amber: "bg-amber-50 text-amber-800 border-amber-200",
   } as const;
 
   return <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${tones[tone]}`}>{children}</span>;
@@ -847,282 +887,177 @@ function QtyControl({ value, onChange, label }: { value: number; onChange: (q: n
   );
 }
 
-function SectionCard({
-  title,
-  description,
-  children,
+function Header({
+  view,
+  setView,
+  lang,
+  setLang,
 }: {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
+  view: ViewState;
+  setView: (view: ViewState) => void;
+  lang: Lang;
+  setLang: (lang: Lang) => void;
 }) {
+  const t = TRANSLATIONS[lang];
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/85 px-4 py-4 backdrop-blur-md md:px-10">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-black md:text-2xl">{t.header}</h1>
+          <p className="hidden text-xs text-slate-500 md:block">{t.subheader}</p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setLang(lang === "en" ? "es" : "en")}
+            className="rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-900 hover:border-slate-900"
+          >
+            {lang === "en" ? "Español 🇲🇽" : "English 🇺🇸"}
+          </button>
+
+          {view === "CONFIG" ? (
+            <button
+              type="button"
+              onClick={() => setView("MENU")}
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-bold text-white hover:bg-slate-800"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {t.back}
+            </button>
+          ) : null}
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function MainMenu({ onSelect, lang }: { onSelect: (id: string) => void; lang: Lang }) {
+  const t = TRANSLATIONS[lang];
+
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-      <div className="mb-6">
-        <h3 className="text-2xl font-black tracking-tight text-slate-900">{title}</h3>
-        {description ? <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{description}</p> : null}
+      <div className="mb-6 text-center">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 md:text-3xl">{t.selectPath}</h2>
+        <p className="mt-2 text-sm text-slate-500">{t.selectPathHelp}</p>
       </div>
-      {children}
+
+      <div className="grid gap-4 md:grid-cols-2">
+        {ENTRY_PATHS.map((path) => (
+          <button
+            key={path.id}
+            type="button"
+            onClick={() => onSelect(path.id)}
+            className="group rounded-[2rem] border-2 border-slate-100 bg-white p-6 text-left transition-all hover:border-slate-900 hover:shadow-sm"
+          >
+            <div className="text-xl font-black text-slate-900">{lang === "en" ? path.title : path.titleEs}</div>
+            <p className="mt-2 text-sm text-slate-500">{lang === "en" ? path.description : path.descriptionEs}</p>
+            <div className="mt-4 rounded-2xl bg-slate-50 p-3 text-sm text-slate-600">
+              {lang === "en" ? path.helper : path.helperEs}
+            </div>
+            <div className="mt-4 inline-flex items-center text-sm font-black text-slate-900">{t.startPath} →</div>
+          </button>
+        ))}
+      </div>
     </section>
   );
 }
 
-function ServiceCard({
-  service,
-  selected,
-  sizeId,
-  qty,
-  disabledReason,
-  ui,
-  onToggle,
-  onQtyChange,
+function SizeSelectionSection({
+  selectedSize,
+  setSelectedSize,
+  lang,
 }: {
-  service: Service;
-  selected: boolean;
-  sizeId: string;
-  qty: number;
-  disabledReason: string | null;
-  ui: (typeof UI)["en"];
-  onToggle: () => void;
-  onQtyChange: (qty: number) => void;
+  selectedSize: string;
+  setSelectedSize: (id: string) => void;
+  lang: Lang;
 }) {
-  const Icon = service.icon;
-  const basePrice =
-    service.pricingType === "percentage"
-      ? service.displayPriceLabel ?? "+25%"
-      : formatPrice(getBaseUnitPrice(service, sizeId));
+  const t = TRANSLATIONS[lang];
 
   return (
-    <article
-      className={`rounded-[1.75rem] border p-5 transition-all ${
-        selected
-          ? "border-slate-900 bg-slate-900 text-white shadow-lg"
-          : disabledReason
-            ? "border-slate-200 bg-slate-50 opacity-80"
-            : "border-slate-200 bg-white hover:border-slate-900 hover:shadow-sm"
-      }`}
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-start gap-3">
-          <div className={`rounded-2xl p-3 ${selected ? "bg-white/10" : "bg-slate-100"}`}>
-            <Icon className={`h-5 w-5 ${selected ? "text-white" : "text-slate-700"}`} />
-          </div>
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <h4 className="text-lg font-black leading-tight">{service.title}</h4>
-              {service.badgeLabel ? <Pill tone="green">{service.badgeLabel}</Pill> : null}
-              {service.sampleLabel ? <Pill>{service.sampleLabel}</Pill> : null}
-            </div>
-            <p className={`mt-2 text-sm leading-6 ${selected ? "text-slate-200" : "text-slate-600"}`}>{service.short}</p>
-          </div>
-        </div>
-
-        <div className="text-right">
-          <div className={`text-lg font-black ${selected ? "text-white" : "text-slate-900"}`}>{basePrice}</div>
-          <div className={`text-xs ${selected ? "text-slate-300" : "text-slate-500"}`}>{service.category}</div>
-        </div>
+    <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+      <div className="mb-5">
+        <h3 className="text-2xl font-black tracking-tight text-slate-900">{t.propertySize}</h3>
       </div>
-
-      <div className="mt-5 grid gap-4 md:grid-cols-2">
-        <div className={`rounded-2xl p-4 ${selected ? "bg-white/10" : "bg-slate-50"}`}>
-          <div className="text-xs font-bold uppercase tracking-wide opacity-70">{ui.bestFor}</div>
-          <p className="mt-2 text-sm leading-6">{service.bestFor}</p>
-        </div>
-        <div className={`rounded-2xl p-4 ${selected ? "bg-white/10" : "bg-slate-50"}`}>
-          <div className="text-xs font-bold uppercase tracking-wide opacity-70">{ui.youSend}</div>
-          <p className="mt-2 text-sm leading-6">{service.youSend}</p>
-        </div>
-        <div className={`rounded-2xl p-4 ${selected ? "bg-white/10" : "bg-slate-50"}`}>
-          <div className="text-xs font-bold uppercase tracking-wide opacity-70">{ui.youGet}</div>
-          <p className="mt-2 text-sm leading-6">{service.youGet}</p>
-        </div>
-        <div className={`rounded-2xl p-4 ${selected ? "bg-white/10" : "bg-slate-50"}`}>
-          <div className="text-xs font-bold uppercase tracking-wide opacity-70">{ui.notIncluded}</div>
-          <p className="mt-2 text-sm leading-6">{service.notIncluded}</p>
-        </div>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {SIZES.map((size) => {
+          const active = size.id === selectedSize;
+          return (
+            <button
+              key={size.id}
+              type="button"
+              onClick={() => setSelectedSize(size.id)}
+              className={`rounded-[1.75rem] border-2 p-5 text-left transition-all ${
+                active ? "border-slate-900 bg-slate-900 text-white shadow-lg" : "border-slate-200 bg-white hover:border-slate-900"
+              }`}
+            >
+              <div className="text-3xl">{size.visual}</div>
+              <div className="mt-4 text-lg font-black">{size.label}</div>
+              <div className={`text-sm ${active ? "text-slate-200" : "text-slate-500"}`}>{size.sublabel}</div>
+            </button>
+          );
+        })}
       </div>
-
-      {service.helper ? (
-        <div className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${selected ? "border-white/15 bg-white/5 text-slate-200" : "border-slate-200 bg-slate-50 text-slate-600"}`}>
-          {service.helper}
-        </div>
-      ) : null}
-
-      {disabledReason ? (
-        <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          {disabledReason}
-        </div>
-      ) : null}
-
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-        {service.quantityEnabled && selected ? (
-          <QtyControl value={qty} onChange={onQtyChange} label={service.quantityLabel ?? ui.qty.toLowerCase()} />
-        ) : (
-          <div className="text-sm text-slate-500">{selected ? `${ui.qty}: ${qty}` : ""}</div>
-        )}
-
-        <button
-          type="button"
-          disabled={Boolean(disabledReason)}
-          onClick={onToggle}
-          className={`inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-black transition ${
-            selected
-              ? "bg-white text-slate-900 hover:bg-slate-100"
-              : disabledReason
-                ? "cursor-not-allowed bg-slate-200 text-slate-400"
-                : "bg-slate-900 text-white hover:bg-slate-800"
-          }`}
-        >
-          {selected ? <Check className="h-4 w-4" /> : null}
-          {selected ? ui.remove : disabledReason ? ui.chooseFirst : ui.add}
-        </button>
-      </div>
-    </article>
+    </section>
   );
 }
 
-export default function SiteformPartnerConfiguratorMerged() {
-  const [step, setStep] = useState<Step>("menu");
-  const [lang, setLang] = useState<Lang>("en");
-  const [activePath, setActivePath] = useState<string>("quick-sale");
-  const [selectedSize, setSelectedSize] = useState<string>("small");
-  const [cart, setCart] = useState<Record<string, number>>({});
-  const [projectNotes, setProjectNotes] = useState("");
-  const [copied, setCopied] = useState(false);
-  const [freeCallAdded, setFreeCallAdded] = useState(false);
-  const [showIdeaHint, setShowIdeaHint] = useState(false);
-  const [showStartHint, setShowStartHint] = useState(false);
-  const summaryRef = useRef<HTMLDivElement>(null);
-  const ui = UI[lang];
+function ServiceSection({
+  title,
+  description,
+  services,
+  selected,
+  onToggle,
+  onQuantityChange,
+  sizeId,
+  lang,
+  getDisabledReason,
+  tone = "slate",
+}: {
+  title: string;
+  description?: string;
+  services: Service[];
+  selected: Record<string, number>;
+  onToggle: (id: string) => void;
+  onQuantityChange: (id: string, qty: number) => void;
+  sizeId: string;
+  lang: Lang;
+  getDisabledReason?: (service: Service) => string | null;
+  tone?: "slate" | "green" | "amber";
+}) {
+  const t = TRANSLATIONS[lang];
 
-  useEffect(() => {
-    if (!copied) return;
-    const timeout = window.setTimeout(() => setCopied(false), 1200);
-    return () => window.clearTimeout(timeout);
-  }, [copied]);
+  return (
+    <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+      <div className="mb-6 flex items-center justify-between gap-4">
+        <div>
+          <h3 className="text-2xl font-black tracking-tight text-slate-900">{title}</h3>
+          {description ? <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p> : null}
+        </div>
+        <Pill tone={tone}>{services.length} items</Pill>
+      </div>
 
-  const allServices = useMemo(
-    () => [
-      ...STARTING_POINT_SERVICES,
-      ...STRUCTURE_SERVICES,
-      ...DESIGN_DIRECTION_SERVICES,
-      ...NEXT_PHASE_SERVICES,
-      ...RARE_TECHNICAL_SERVICES,
-      ...HOURLY_SERVICES,
-    ],
-    [],
-  );
+      <div className="grid gap-5">
+        {services.map((service) => {
+          const Icon = service.icon;
+          const isSelected = Boolean(selected[service.id]);
+          const disabledReason = getDisabledReason?.(service) ?? null;
+          const priceLabel =
+            service.pricingType === "percentage"
+              ? service.displayPriceLabel ?? "+25%"
+              : formatPrice(getBaseUnitPrice(service, sizeId));
 
-  const hasStart = hasStartingPointSelection(Object.keys(cart));
-  const hasLayout = hasLayoutSourceSelection(Object.keys(cart));
-
-  const selectedPath = useMemo(
-    () => ENTRY_PATHS.find((path) => path.id === activePath) ?? ENTRY_PATHS[0],
-    [activePath],
-  );
-
-  const summary = useMemo(() => {
-    const items: SummaryItem[] = allServices
-      .filter((service) => cart[service.id])
-      .map((service) => ({
-        title: service.title,
-        price: getLinePrice(service, selectedSize, cart[service.id]),
-        qty: cart[service.id],
-        needsQuote: service.pricingType === "quote",
-      }));
-
-    const pricedSubtotal = items.reduce((sum, item) => sum + (item.price ?? 0), 0);
-    const hasRush = Boolean(cart["rush-fee"]);
-    const rushFee = hasRush ? Math.round(pricedSubtotal * 0.25) : 0;
-    const total = pricedSubtotal + rushFee;
-    const deposit = Math.round(total * 0.7);
-    const remaining = total - deposit;
-    const needsQuote = items.some((item) => item.needsQuote);
-
-    return { items, pricedSubtotal, rushFee, total, deposit, remaining, needsQuote };
-  }, [allServices, cart, selectedSize]);
-
-  const requestLines = summary.items.map(
-    (item) => `• ${item.title} x${item.qty} — ${item.needsQuote ? ui.quote : formatPrice(item.price)}`,
-  );
-
-  const requestBody = [
-    "--------- NEW REQUEST ---------",
-    `Path: ${selectedPath.title}`,
-    `Property size: ${SIZES.find((size) => size.id === selectedSize)?.label ?? selectedSize}`,
-    "",
-    "Selected services:",
-    ...(requestLines.length ? requestLines : ["• Nothing selected yet"]),
-    "",
-    summary.rushFee ? `Rush fee: ${formatPrice(summary.rushFee)}` : null,
-    `Subtotal: ${formatPrice(summary.total)}`,
-    summary.needsQuote ? "Contains quote-based items." : `Deposit (70%): ${formatPrice(summary.deposit)}`,
-    "",
-    projectNotes ? `Notes:\n${projectNotes}` : null,
-  ]
-    .filter(Boolean)
-    .join("\n");
-
-  const handlePathSelect = (pathId: string) => {
-    setActivePath(pathId);
-    setStep("configurator");
-    setShowIdeaHint(false);
-    setShowStartHint(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const handleBackToMenu = () => {
-    setStep("menu");
-    setShowIdeaHint(false);
-    setShowStartHint(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const handleQtyChange = (id: string, qty: number) => {
-    setCart((prev) => ({ ...prev, [id]: Math.max(1, qty) }));
-  };
-
-  const toggleService = (id: string) => {
-    setCart((prev) => {
-      const next = { ...prev };
-      const isStarting = STARTING_POINT_SERVICES.some((s) => s.id === id);
-      const isDesign = DESIGN_DIRECTION_SERVICES.some((s) => s.id === id);
-      const isLaterPhase =
-        NEXT_PHASE_SERVICES.some((s) => s.id === id) || RARE_TECHNICAL_SERVICES.some((s) => s.id === id);
-
-      if (activePath === "full-design" && isDesign && !hasStartingPointSelection(Object.keys(prev))) {
-        setShowStartHint(true);
-        return prev;
-      }
-
-      if (activePath === "full-design" && isLaterPhase && !hasLayoutSourceSelection(Object.keys(prev))) {
-        setShowIdeaHint(true);
-        return prev;
-      }
-
-      if (activePath === "build-one" && RARE_TECHNICAL_SERVICES.some((s) => s.id === id) && !hasLayoutSourceSelection(Object.keys(prev))) {
-        setShowIdeaHint(true);
-        return prev;
-      }
-
-      setShowIdeaHint(false);
-      setShowStartHint(false);
-
-      if (isStarting) STARTING_POINT_SERVICES.forEach((s) => delete next[s.id]);
-      if (isDesign) DESIGN_DIRECTION_SERVICES.forEach((s) => delete next[s.id]);
-
-      if (next[id]) delete next[id];
-      else next[id] = 1;
-
-      return next;
-    });
-  };
-
-  const getDisabledReason = (service: Service): string | null => {
-    if (step !== "configurator") return null;
-
-    if (activePath === "full-design") {
-      if (DESIGN_DIRECTION_SERVICES.some((item) => item.id === service.id) && !hasStart) {
-        return "First choose how the project starts: site visit, remote base, or your model.";
-      }
-      if ((NEXT_PHASE_SERVICES.some((item) => item.id === service.id) || RARE_TECHNIC
+          return (
+            <article
+              key={service.id}
+              className={`rounded-[1.75rem] border p-5 transition-all ${
+                isSelected
+                  ? "border-slate-900 bg-slate-900 text-white shadow-lg"
+                  : disabledReason
+                    ? "border-slate-200 bg-slate-50 opacity-80"
+                    : "border-slate-200 bg-white hover:border-slate-900 hover:shadow-sm"
+              }`}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-3">
