@@ -230,6 +230,16 @@ const T = {
       "Preview mode: checkout endpoint is not connected, showing local success screen.",
     uploadWidgetNote:
       "Replace these file fields with Uploadcare or Cloudinary widget when backend is connected.",
+    showcaseBadge: "Try it on a real job",
+    showcaseTitle: "Visuals that help close the job.",
+    showcaseDesc:
+      "Send one site photo. Get a photorealistic concept adjusted to the project, not just blindly generated. If the client moves forward, add takeoffs, plans, or specialty sheets next.",
+    showcaseStep1: "Use one photo to test the idea before committing to full scope.",
+    showcaseStep2: "Show the concept to the homeowner and move the sale forward faster.",
+    showcaseStep3: "Need more depth? Add layout support, takeoffs, grading, HOA, or CRZ sheets.",
+    showcaseCta: "Try 1 Quick Concept",
+    showcaseBrowse: "Browse all service paths",
+    showcaseNote: "Best first step for builders who want to test the workflow on one real job.",
   },
   es: {
     header: "Scope Builder",
@@ -351,6 +361,16 @@ const T = {
       "Modo preview: el endpoint de checkout no está conectado, mostrando pantalla local de éxito.",
     uploadWidgetNote:
       "Sustituye estos campos por Uploadcare o Cloudinary widget cuando conectes el backend.",
+    showcaseBadge: "Pruébalo en un trabajo real",
+    showcaseTitle: "Visuales que ayudan a cerrar el trabajo.",
+    showcaseDesc:
+      "Manda una foto del sitio. Recibe un concepto fotorrealista ajustado al proyecto, no generado a ciegas. Si el cliente avanza, agrega takeoffs, planos o láminas especiales.",
+    showcaseStep1: "Usa una foto para probar la idea antes de comprometerte con el alcance completo.",
+    showcaseStep2: "Muestra el concepto al dueño y avanza la venta más rápido.",
+    showcaseStep3: "¿Necesitas más detalle? Agrega layout, takeoffs, grading, HOA o láminas CRZ.",
+    showcaseCta: "Probar 1 Concepto Rápido",
+    showcaseBrowse: "Ver todos los servicios",
+    showcaseNote: "El mejor primer paso para constructores que quieren probar el flujo en un trabajo real.",
   },
 } as const;
 
@@ -1125,51 +1145,44 @@ function BeforeAfterSlider({
 // ─── Landing Showcase ───────────────────────────────────────────────────────
 
 function LandingShowcase({
+  lang,
   onTryQuickConcept,
 }: {
+  lang: Lang;
   onTryQuickConcept: () => void;
 }) {
+  const t = T[lang];
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
       <div className="grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-center">
         <div>
           <div className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-            Try it on a real job
+            {t.showcaseBadge}
           </div>
           <h2 className="mt-4 text-4xl font-black tracking-tight text-slate-900 md:text-5xl">
-            Visuals that help close the job.
+            {t.showcaseTitle}
           </h2>
           <p className="mt-4 max-w-xl text-base leading-8 text-slate-600 md:text-lg">
-            Send one site photo. Get a photorealistic concept adjusted to the
-            project, not just blindly generated. If the client moves forward,
-            add takeoffs, plans, or specialty sheets next.
+            {t.showcaseDesc}
           </p>
           <div className="mt-6 grid gap-3 text-sm text-slate-700">
             <div className="flex items-start gap-3">
               <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 font-black text-emerald-700">
                 1
               </span>
-              <span>
-                Use one photo to test the idea before committing to full scope.
-              </span>
+              <span>{t.showcaseStep1}</span>
             </div>
             <div className="flex items-start gap-3">
               <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 font-black text-emerald-700">
                 2
               </span>
-              <span>
-                Show the concept to the homeowner and move the sale forward
-                faster.
-              </span>
+              <span>{t.showcaseStep2}</span>
             </div>
             <div className="flex items-start gap-3">
               <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 font-black text-emerald-700">
                 3
               </span>
-              <span>
-                Need more depth? Add layout support, takeoffs, grading, HOA, or
-                CRZ sheets.
-              </span>
+              <span>{t.showcaseStep3}</span>
             </div>
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -1178,18 +1191,17 @@ function LandingShowcase({
               onClick={onTryQuickConcept}
               className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-6 py-4 text-base font-black text-white shadow-lg transition hover:bg-emerald-700"
             >
-              Try 1 Quick Concept
+              {t.showcaseCta}
             </button>
             <a
               href="#service-groups"
               className="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-6 py-4 text-base font-black text-slate-900 hover:bg-slate-50"
             >
-              Browse all service paths
+              {t.showcaseBrowse}
             </a>
           </div>
           <p className="mt-3 text-xs leading-6 text-slate-500">
-            Best first step for builders who want to test the workflow on one
-            real job.
+            {t.showcaseNote}
           </p>
         </div>
         <BeforeAfterSlider
@@ -2592,6 +2604,7 @@ export default function App() {
         {view === "MENU" ? (
           <div className="space-y-8">
             <LandingShowcase
+              lang={lang}
               onTryQuickConcept={() => {
                 setActivePath("quick-sale");
                 setView("CONFIG");
