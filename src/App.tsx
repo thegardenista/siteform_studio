@@ -25,7 +25,6 @@ import {
 type Lang = "en" | "es";
 type ViewState = "MENU" | "CONFIG" | "SUCCESS";
 type PricingType = "size" | "flat" | "unit" | "hourly" | "quote" | "percentage";
-
 type NoticeKind = "hard" | "soft" | null;
 
 interface Size {
@@ -108,7 +107,7 @@ interface SummaryLine {
 
 const DEMO_MODE = true;
 const NOTES_LIMIT = 2000;
-const WHATSAPP_NUMBER = "15551234567"; // replace with your real WhatsApp number
+const WHATSAPP_NUMBER = "15551234567";
 
 const T = {
   en: {
@@ -121,9 +120,7 @@ const T = {
     activeGroup: "Active group",
     back: "Back to menu",
     reviewOrder: "Review order",
-
     propertySize: "Property size",
-
     projectInfo: "Billing and project info",
     clientName: "Client name",
     clientEmail: "Client email",
@@ -133,11 +130,10 @@ const T = {
       "Use this for a short but useful project description before checkout. Full project intake happens after payment.",
     notesPlaceholder:
       "Example: Front yard only, xeriscape preferred, gate stays, retaining wall may be needed near driveway.",
-
     quickHelp: "Need help with the service?",
     quickHelpTitle: "Questions?",
     quickHelpText:
-      "Submit your project details or questions below. Leave your email or phone number, and we’ll get back to you if it's a fit for our current workflow.",
+      "Submit your project details or questions below. Leave your email or phone number, and we'll get back to you if it's a fit for our current workflow.",
     helpContact: "Email or Phone",
     helpContactPlaceholder: "How should we reach you?",
     helpQuestion: "Your question or project address",
@@ -150,7 +146,6 @@ const T = {
     helpSending: "Sending...",
     helpSent: "Sent",
     close: "Close",
-
     summary: "Summary",
     nothingSelected: "Nothing selected yet",
     qty: "Qty",
@@ -175,61 +170,48 @@ const T = {
       "Add client name, client email, and at least one payable service.",
     quoteBlocksCheckout:
       "Quote-based or estate items need manual follow-up before payment.",
-
     add: "Add",
     remove: "Remove",
     chooseFirst: "Choose this first",
     discussInHelp: "Discuss first",
-
     bestFor: "Best for",
     youSend: "You send",
     youGet: "You get",
     notIncluded: "Not included",
     warning: "Important",
-
     startSection: "Starting point",
     startSectionDesc:
       "Choose how the project base is prepared. On-site base modeling requires a site visit first.",
-
     ideaSection: "Who owns the layout idea?",
     ideaSectionDesc:
       "You already know the layout, or you want us to help develop it into a render-ready direction.",
-
     afterLayout: "After layout",
     afterLayoutDesc:
       "At this point the layout is approved and treated as locked. From here you can order detailed plans and follow-up sheets.",
-
     buildSection: "Pick the structure",
     buildSectionDesc:
       "Choose the main thing you are building. These packages are without site visit unless you add one separately.",
-
     supportSection: "Support and add-ons",
     supportSectionDesc:
       "Site visit, outside-city travel, rush handling, or scoped redesign discussion after the main service is chosen.",
-
     quickSection: "Quick concept image",
     quickSectionDesc:
       "This is the fastest paid visual to help close the sale.",
-
     specialSection: "Special drawings",
     specialSectionDesc:
       "Use these when documents already exist and you need one clean deliverable.",
-
     citySection: "HOA and city sheets",
     citySectionDesc:
       "These use an existing base, usually a clean master plan. You can still check the price now, but the price assumes that base already exists.",
-
     irrigationSection: "Licensed irrigator drafting",
     irrigationSectionDesc:
       "Drafting support only for licensed irrigators who already know the irrigation layout and want it cleaned up on screen.",
-
     softDependencyMasterPlan:
       "Price assumes there is already a clean master plan or other usable base. If not, extra setup may be needed.",
     softDependencyLayout:
       "Price assumes the main layout is already approved. If layout work is still missing, this may need a different package first.",
     hardDependencySiteVisit: "Choose Site Visit first.",
     hardDependencyOutsideCity: "Add Site Visit first.",
-
     successTitle: "Payment received",
     successText:
       "Now the real intake starts. Upload photos, survey files, and the full scope here.",
@@ -259,9 +241,7 @@ const T = {
     activeGroup: "Grupo activo",
     back: "Volver al menú",
     reviewOrder: "Revisar pedido",
-
     propertySize: "Tamaño del lote",
-
     projectInfo: "Datos para factura y proyecto",
     clientName: "Nombre del cliente",
     clientEmail: "Email del cliente",
@@ -271,11 +251,10 @@ const T = {
       "Usa esto para una descripción corta pero útil antes del checkout. El intake completo viene después del pago.",
     notesPlaceholder:
       "Ejemplo: Solo frente, xeriscape preferido, la puerta se queda, puede hacer falta retaining wall cerca del driveway.",
-
     quickHelp: "Need help with the service?",
     quickHelpTitle: "Questions?",
     quickHelpText:
-      "Submit your project details or questions below. Leave your email or phone number, and we’ll get back to you if it's a fit for our current workflow.",
+      "Submit your project details or questions below. Leave your email or phone number, and we'll get back to you if it's a fit for our current workflow.",
     helpContact: "Email or Phone",
     helpContactPlaceholder: "How should we reach you?",
     helpQuestion: "Your question or project address",
@@ -288,7 +267,6 @@ const T = {
     helpSending: "Sending...",
     helpSent: "Sent",
     close: "Close",
-
     summary: "Resumen",
     nothingSelected: "Todavía no hay servicios seleccionados",
     qty: "Cant.",
@@ -313,61 +291,48 @@ const T = {
       "Agrega nombre del cliente, email del cliente y al menos un servicio pagable.",
     quoteBlocksCheckout:
       "Las partidas por cotizar o estate necesitan seguimiento manual antes del pago.",
-
     add: "Agregar",
     remove: "Quitar",
     chooseFirst: "Elige esto primero",
     discussInHelp: "Hablar primero",
-
     bestFor: "Ideal para",
     youSend: "Tú mandas",
     youGet: "Recibes",
     notIncluded: "No incluido",
     warning: "Importante",
-
     startSection: "Punto de inicio",
     startSectionDesc:
       "Elige cómo se prepara la base del proyecto. El modelado en sitio requiere primero una visita.",
-
     ideaSection: "¿Quién define la idea del layout?",
     ideaSectionDesc:
       "Ya conoces el layout o quieres que te ayudemos a llevarlo hasta una dirección lista para render.",
-
     afterLayout: "Después del layout",
     afterLayoutDesc:
       "En este punto el layout ya está aprobado y se trata como cerrado. Desde aquí puedes pedir planos detallados y láminas de seguimiento.",
-
     buildSection: "Escoge la estructura",
     buildSectionDesc:
       "Elige lo principal que vas a construir. Estos paquetes son sin visita al sitio, a menos que la agregues por separado.",
-
     supportSection: "Apoyo y add-ons",
     supportSectionDesc:
       "Visita al sitio, viaje fuera de la ciudad, urgencia o discusión de rediseño después de elegir el servicio principal.",
-
     quickSection: "Imagen conceptual rápida",
     quickSectionDesc:
       "Es la visual pagada más rápida para ayudar a cerrar la venta.",
-
     specialSection: "Planos especiales",
     specialSectionDesc:
       "Úsalo cuando ya existen documentos y necesitas una entrega limpia.",
-
     citySection: "Láminas HOA y ciudad",
     citySectionDesc:
       "Estas usan una base existente, normalmente un master plan limpio. Puedes revisar el precio ahora, pero el precio asume que esa base ya existe.",
-
     irrigationSection: "Dibujo para irrigadores licenciados",
     irrigationSectionDesc:
       "Solo apoyo de dibujo para irrigadores licenciados que ya saben el layout de riego y quieren limpiarlo en pantalla.",
-
     softDependencyMasterPlan:
       "El precio asume que ya existe un master plan limpio u otra base utilizable. Si no, puede hacer falta trabajo extra.",
     softDependencyLayout:
       "El precio asume que el layout principal ya está aprobado. Si todavía falta ese trabajo, primero puede necesitar otro paquete.",
     hardDependencySiteVisit: "Elige primero Site Visit.",
     hardDependencyOutsideCity: "Primero agrega Site Visit.",
-
     successTitle: "Pago recibido",
     successText:
       "Ahora empieza el intake real. Sube fotos, survey y el alcance completo aquí.",
@@ -402,36 +367,49 @@ const ENTRY_PATHS: EntryPath[] = [
     title: "Quick idea to help close the sale",
     titleEs: "Idea rápida para cerrar la venta",
     description: "One fast concept image from a site photo.",
-    descriptionEs: "Una imagen conceptual rápida a partir de una foto del sitio.",
+    descriptionEs:
+      "Una imagen conceptual rápida a partir de una foto del sitio.",
     helper: "Best when you just need one fast visual to move the sale forward.",
-    helperEs: "Ideal cuando solo necesitas una imagen rápida para mover la venta.",
+    helperEs:
+      "Ideal cuando solo necesitas una imagen rápida para mover la venta.",
   },
   {
     id: "build-one",
     title: "Build one specific thing",
     titleEs: "Construir una sola cosa",
-    description: "Deck, pergola, carport, kitchen, retaining wall, or one feature.",
-    descriptionEs: "Deck, pérgola, carport, cocina exterior, muro o una sola pieza.",
+    description:
+      "Deck, pergola, carport, kitchen, retaining wall, or one feature.",
+    descriptionEs:
+      "Deck, pérgola, carport, cocina exterior, muro o una sola pieza.",
     helper: "Best when the job is one clear structure, not the whole yard.",
-    helperEs: "Ideal cuando el trabajo es una sola estructura, no todo el patio.",
+    helperEs:
+      "Ideal cuando el trabajo es una sola estructura, no todo el patio.",
   },
   {
     id: "full-design",
     title: "Landscape design",
     titleEs: "Diseño de landscape",
-    description: "Choose lot size, base setup, and who owns the layout idea.",
-    descriptionEs: "Elige tamaño del lote, preparación de base y quién define la idea del layout.",
-    helper: "Best when the whole yard needs design work, not just one structure.",
-    helperEs: "Ideal cuando todo el patio necesita diseño, no solo una estructura.",
+    description:
+      "Choose lot size, base setup, and who owns the layout idea.",
+    descriptionEs:
+      "Elige tamaño del lote, preparación de base y quién define la idea del layout.",
+    helper:
+      "Best when the whole yard needs design work, not just one structure.",
+    helperEs:
+      "Ideal cuando todo el patio necesita diseño, no solo una estructura.",
   },
   {
     id: "special-drawings",
     title: "Special drawings",
     titleEs: "Planos especiales",
-    description: "Master plans, planting sheets, paving patterns, drainage concepts, HOA and city sheets.",
-    descriptionEs: "Master plans, planting sheets, patrones de pavimento, drenaje conceptual, HOA o ciudad.",
-    helper: "Best when documents already exist and you need one clean deliverable.",
-    helperEs: "Ideal cuando ya existen documentos y necesitas una entrega limpia.",
+    description:
+      "Master plans, planting sheets, paving patterns, drainage concepts, HOA and city sheets.",
+    descriptionEs:
+      "Master plans, planting sheets, patrones de pavimento, drenaje conceptual, HOA o ciudad.",
+    helper:
+      "Best when documents already exist and you need one clean deliverable.",
+    helperEs:
+      "Ideal cuando ya existen documentos y necesitas una entrega limpia.",
   },
 ];
 
@@ -444,12 +422,17 @@ const STARTING_POINT_SERVICES: Service[] = [
     pricingType: "flat",
     flatPrice: 200,
     stripePriceId: "price_sitevisit_200",
-    short: "Basic local site visit time for travel, time on site, and measurement setup.",
+    short:
+      "Basic local site visit time for travel, time on site, and measurement setup.",
     bestFor: "Local jobs that do not have enough usable measurements yet.",
-    youSend: "Site address, access details, and anything already known about the property.",
-    youGet: "Site visit time, raw measurements, photos, and field notes.",
-    notIncluded: "Base plan, 3D model, design work, or travel outside city limits.",
-    helper: "Choose this together with Base Plan + 3D Model if you want us to build the existing-conditions model from the site visit.",
+    youSend:
+      "Site address, access details, and anything already known about the property.",
+    youGet:
+      "Site visit time, raw measurements, photos, and field notes.",
+    notIncluded:
+      "Base plan, 3D model, design work, or travel outside city limits.",
+    helper:
+      "Choose this together with Base Plan + 3D Model if you want us to build the existing-conditions model from the site visit.",
   },
   {
     id: "onsite-base-model",
@@ -459,11 +442,15 @@ const STARTING_POINT_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 100, medium: 200, large: 350, estate: null },
     stripePriceId: null,
-    short: "We build a basic 2D base plan and a 3D model of existing conditions with no design added.",
-    bestFor: "Jobs where we already visited the site and now need the existing yard modeled cleanly.",
+    short:
+      "We build a basic 2D base plan and a 3D model of existing conditions with no design added.",
+    bestFor:
+      "Jobs where we already visited the site and now need the existing yard modeled cleanly.",
     youSend: "Choose Site Visit first so we have usable field data.",
-    youGet: "A base 2D plan and a 3D existing-conditions model, without design work.",
-    notIncluded: "Site visit time, design layout, rendering package, or engineering.",
+    youGet:
+      "A base 2D plan and a 3D existing-conditions model, without design work.",
+    notIncluded:
+      "Site visit time, design layout, rendering package, or engineering.",
     helper: "This service is only available together with Site Visit.",
     hardDependency: ["site-visit-start"],
   },
@@ -475,11 +462,16 @@ const STARTING_POINT_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 200, medium: 300, large: 450, estate: null },
     stripePriceId: null,
-    short: "No site visit. You send survey, photos, PDFs, sketches, or measurements, and we build the basic 2D and 3D model remotely.",
-    bestFor: "Out-of-town jobs or jobs where enough information already exists.",
-    youSend: "Survey, photos, PDFs, redlines, dimensions, or even a hand-drawn sketch.",
-    youGet: "A base 2D plan and a 3D existing-conditions model built from your documents.",
-    notIncluded: "Site visit, legal survey work, engineering, permits, or final design.",
+    short:
+      "No site visit. You send survey, photos, PDFs, sketches, or measurements, and we build the basic 2D and 3D model remotely.",
+    bestFor:
+      "Out-of-town jobs or jobs where enough information already exists.",
+    youSend:
+      "Survey, photos, PDFs, redlines, dimensions, or even a hand-drawn sketch.",
+    youGet:
+      "A base 2D plan and a 3D existing-conditions model built from your documents.",
+    notIncluded:
+      "Site visit, legal survey work, engineering, permits, or final design.",
   },
   {
     id: "client-model-start",
@@ -489,12 +481,18 @@ const STARTING_POINT_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 350, medium: 500, large: 750, estate: null },
     stripePriceId: null,
-    short: "You send your model already built, and we review it, prep it for rendering, and use it for visuals.",
-    bestFor: "Jobs where the model already exists and mainly needs rendering setup, material application, and presentation work.",
-    youSend: "A render-ready 3D model, material links or JPEG references, notes, and any survey or PDFs that help us review it.",
-    youGet: "Model review, render setup, material application from your references, and rendered views. Once the model is ready, material looks can be tested without a fixed limit.",
-    notIncluded: "Heavy model cleanup, rebuilding missing geometry, creating materials from scratch, or design work not already present in the model.",
-    helper: "After review, extra cleanup hours may be discussed and billed only after approval. If we have to create or rebuild materials for you, that is extra hourly work.",
+    short:
+      "You send your model already built, and we review it, prep it for rendering, and use it for visuals.",
+    bestFor:
+      "Jobs where the model already exists and mainly needs rendering setup, material application, and presentation work.",
+    youSend:
+      "A render-ready 3D model, material links or JPEG references, notes, and any survey or PDFs that help us review it.",
+    youGet:
+      "Model review, render setup, material application from your references, and rendered views. Once the model is ready, material looks can be tested without a fixed limit.",
+    notIncluded:
+      "Heavy model cleanup, rebuilding missing geometry, creating materials from scratch, or design work not already present in the model.",
+    helper:
+      "After review, extra cleanup hours may be discussed and billed only after approval. If we have to create or rebuild materials for you, that is extra hourly work.",
   },
   {
     id: "photo-concept-start",
@@ -506,9 +504,12 @@ const STARTING_POINT_SERVICES: Service[] = [
     stripePriceId: "price_quickconcept_150",
     short: "Fast paid concept image to help close the sale.",
     bestFor: "Fast sales before full design work starts.",
-    youSend: "One site photo after payment, rough dimensions if you have them, and a short text about what you want to show.",
-    youGet: "One concept image and a short list of suggested materials or main features used in the concept.",
-    notIncluded: "Site visit, accurate site model, construction-ready drawings, engineering, permits, or final design documentation.",
+    youSend:
+      "One site photo after payment, rough dimensions if you have them, and a short text about what you want to show.",
+    youGet:
+      "One concept image and a short list of suggested materials or main features used in the concept.",
+    notIncluded:
+      "Site visit, accurate site model, construction-ready drawings, engineering, permits, or final design documentation.",
     sampleLabel: "See sample",
     badgeLabel: "Best seller",
   },
@@ -525,10 +526,14 @@ const STRUCTURE_SERVICES: Service[] = [
     stripePriceId: "price_decksmall_1000",
     short: "Layout, AutoCAD plan set, and 3D visuals for a small deck.",
     bestFor: "Smaller deck jobs that need a clean package by default.",
-    youSend: "Site plan, preferred location, dimensions, and reference ideas if any.",
-    youGet: "Deck layout, AutoCAD plans, and 3D visuals. HOA-ready plan set by default.",
-    notIncluded: "Site visit, structural engineering, stamped drawings, or permit filing by us.",
-    helper: "This package is without site visit. Add Site Visit if field measuring is needed.",
+    youSend:
+      "Site plan, preferred location, dimensions, and reference ideas if any.",
+    youGet:
+      "Deck layout, AutoCAD plans, and 3D visuals. HOA-ready plan set by default.",
+    notIncluded:
+      "Site visit, structural engineering, stamped drawings, or permit filing by us.",
+    helper:
+      "This package is without site visit. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
   },
   {
@@ -541,10 +546,14 @@ const STRUCTURE_SERVICES: Service[] = [
     stripePriceId: "price_pergolasmall_1000",
     short: "Layout, AutoCAD plan set, and 3D visuals for a small pergola.",
     bestFor: "Smaller pergola jobs that need a clean package by default.",
-    youSend: "Site plan, preferred location, dimensions, and reference ideas if any.",
-    youGet: "Pergola layout, AutoCAD plans, and 3D visuals. HOA-ready plan set by default.",
-    notIncluded: "Site visit, structural engineering, stamped drawings, or permit filing by us.",
-    helper: "This package is without site visit. Add Site Visit if field measuring is needed.",
+    youSend:
+      "Site plan, preferred location, dimensions, and reference ideas if any.",
+    youGet:
+      "Pergola layout, AutoCAD plans, and 3D visuals. HOA-ready plan set by default.",
+    notIncluded:
+      "Site visit, structural engineering, stamped drawings, or permit filing by us.",
+    helper:
+      "This package is without site visit. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
   },
   {
@@ -554,12 +563,17 @@ const STRUCTURE_SERVICES: Service[] = [
     icon: Box,
     pricingType: "quote",
     stripePriceId: null,
-    short: "Concept layout, plan support, and 3D visuals for a carport or covered parking structure.",
-    bestFor: "Carport or covered parking ideas that need a clear concept before engineering or permit work.",
-    youSend: "Site plan, dimensions, clearance notes, parking needs, and reference images if you have them.",
+    short:
+      "Concept layout, plan support, and 3D visuals for a carport or covered parking structure.",
+    bestFor:
+      "Carport or covered parking ideas that need a clear concept before engineering or permit work.",
+    youSend:
+      "Site plan, dimensions, clearance notes, parking needs, and reference images if you have them.",
     youGet: "A conceptual carport layout with plan support and 3D visuals.",
-    notIncluded: "Site visit, structural engineering, stamped permit drawings, utility coordination, or permit filing by us.",
-    helper: "This package is without site visit. Add Site Visit if field measuring is needed.",
+    notIncluded:
+      "Site visit, structural engineering, stamped permit drawings, utility coordination, or permit filing by us.",
+    helper:
+      "This package is without site visit. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
   },
   {
@@ -569,12 +583,18 @@ const STRUCTURE_SERVICES: Service[] = [
     icon: ShieldCheck,
     pricingType: "quote",
     stripePriceId: null,
-    short: "3D visuals and plan set prepared so an engineer can understand the job and take it from there.",
-    bestFor: "Larger structure jobs that need a clearer package before engineering.",
-    youSend: "Survey, dimensions, preferred layout, and any requirements you already have.",
-    youGet: "3D visuals and plans prepared for engineer review and structural follow-up.",
-    notIncluded: "Site visit, structural engineering, stamped permit drawings, permit fees, or permit filing by us.",
-    helper: "This package is without site visit. Add Site Visit if field measuring is needed.",
+    short:
+      "3D visuals and plan set prepared so an engineer can understand the job and take it from there.",
+    bestFor:
+      "Larger structure jobs that need a clearer package before engineering.",
+    youSend:
+      "Survey, dimensions, preferred layout, and any requirements you already have.",
+    youGet:
+      "3D visuals and plans prepared for engineer review and structural follow-up.",
+    notIncluded:
+      "Site visit, structural engineering, stamped permit drawings, permit fees, or permit filing by us.",
+    helper:
+      "This package is without site visit. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
   },
   {
@@ -585,12 +605,18 @@ const STRUCTURE_SERVICES: Service[] = [
     pricingType: "flat",
     flatPrice: 750,
     stripePriceId: "price_outdoorkitchen_750",
-    short: "Concept layout, AutoCAD plan support, appliance zones, clearances, and 3D visuals.",
-    bestFor: "You need a clean concept package before detailed utility or shop work.",
-    youSend: "Site plan, rough wish list, preferred appliance notes, and size limits.",
-    youGet: "A conceptual outdoor kitchen layout with plan support and 3D visuals.",
-    notIncluded: "Site visit, utility design, permit documents, appliance specification package, or construction drawings.",
-    helper: "This package is without site visit. Add Site Visit if field measuring is needed.",
+    short:
+      "Concept layout, AutoCAD plan support, appliance zones, clearances, and 3D visuals.",
+    bestFor:
+      "You need a clean concept package before detailed utility or shop work.",
+    youSend:
+      "Site plan, rough wish list, preferred appliance notes, and size limits.",
+    youGet:
+      "A conceptual outdoor kitchen layout with plan support and 3D visuals.",
+    notIncluded:
+      "Site visit, utility design, permit documents, appliance specification package, or construction drawings.",
+    helper:
+      "This package is without site visit. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
   },
   {
@@ -600,12 +626,17 @@ const STRUCTURE_SERVICES: Service[] = [
     icon: ShieldCheck,
     pricingType: "quote",
     stripePriceId: null,
-    short: "Non-engineered retaining wall layout with visuals and plan support.",
-    bestFor: "You need early retaining wall direction before engineering is brought in.",
+    short:
+      "Non-engineered retaining wall layout with visuals and plan support.",
+    bestFor:
+      "You need early retaining wall direction before engineering is brought in.",
     youSend: "Survey, grades if available, photos, and wall intent.",
-    youGet: "A conceptual retaining wall layout with visuals and plan support.",
-    notIncluded: "Site visit, structural design, stamped engineering, or final construction drawings.",
-    helper: "This package is without site visit. Add Site Visit if field measuring is needed.",
+    youGet:
+      "A conceptual retaining wall layout with visuals and plan support.",
+    notIncluded:
+      "Site visit, structural design, stamped engineering, or final construction drawings.",
+    helper:
+      "This package is without site visit. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
   },
 ];
@@ -619,12 +650,18 @@ const DESIGN_DIRECTION_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 500, medium: 800, large: 1300, estate: null },
     stripePriceId: null,
-    short: "You decide where elements, levels, features, decor, and transitions go, and we turn that into a render-ready model with a locked layout.",
-    bestFor: "Contractors who already understand the layout and need it formalized into a clean model and presentation package.",
-    youSend: "Your layout thinking, markups, sketches, reference images, dimensions, material links, and pictures that show the elements you want built into the model.",
-    youGet: "A designed model with a locked layout, applied material direction, and review visuals ready to move toward rendering.",
-    notIncluded: "Engineering, permit drawings, detailed production sheets, or takeoffs unless added later.",
-    helper: "Support your ideas with images and material links so we can model the right elements and textures cleanly.",
+    short:
+      "You decide where elements, levels, features, decor, and transitions go, and we turn that into a render-ready model with a locked layout.",
+    bestFor:
+      "Contractors who already understand the layout and need it formalized into a clean model and presentation package.",
+    youSend:
+      "Your layout thinking, markups, sketches, reference images, dimensions, material links, and pictures that show the elements you want built into the model.",
+    youGet:
+      "A designed model with a locked layout, applied material direction, and review visuals ready to move toward rendering.",
+    notIncluded:
+      "Engineering, permit drawings, detailed production sheets, or takeoffs unless added later.",
+    helper:
+      "Support your ideas with images and material links so we can model the right elements and textures cleanly.",
   },
   {
     id: "help-design-it",
@@ -634,12 +671,18 @@ const DESIGN_DIRECTION_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 1000, medium: 1500, large: 2200, estate: null },
     stripePriceId: null,
-    short: "We help shape the design brief, select references, test sketch options, and move the job toward the final rendered direction.",
-    bestFor: "Contractors who have the lead but do not want to solve the design process alone.",
-    youSend: "Survey, measurements, photos, style references, must-haves, rough budget level, and site constraints.",
-    youGet: "Design brief work, reference selection, intermediate sketch options, design development, and final direction ready for rendering.",
-    notIncluded: "Engineering, permit package, stamped drawings, planting plans, takeoffs, or detailed production sheets unless added later.",
-    helper: "This is design development before final rendering, not just drafting a fixed idea.",
+    short:
+      "We help shape the design brief, select references, test sketch options, and move the job toward the final rendered direction.",
+    bestFor:
+      "Contractors who have the lead but do not want to solve the design process alone.",
+    youSend:
+      "Survey, measurements, photos, style references, must-haves, rough budget level, and site constraints.",
+    youGet:
+      "Design brief work, reference selection, intermediate sketch options, design development, and final direction ready for rendering.",
+    notIncluded:
+      "Engineering, permit package, stamped drawings, planting plans, takeoffs, or detailed production sheets unless added later.",
+    helper:
+      "This is design development before final rendering, not just drafting a fixed idea.",
   },
 ];
 
@@ -652,12 +695,15 @@ const NEXT_PHASE_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 200, medium: 350, large: 700, estate: null },
     stripePriceId: null,
-    short: "A clean 2D master plan from your documents or from a layout we already produced.",
+    short:
+      "A clean 2D master plan from your documents or from a layout we already produced.",
     bestFor: "You need one clear main plan sheet the crew can read.",
-    youSend: "If we already created the layout, no extra files are needed. If not, send your approved plan, model, redlines, or source documents.",
+    youSend:
+      "If we already created the layout, no extra files are needed. If not, send your approved plan, model, redlines, or source documents.",
     youGet: "A clean 2D master plan ready to print and show to the crew.",
     notIncluded: "New concept design, engineering, or permit approval.",
-    helper: "If the source documents come from outside our process and need cleanup first, that may need added time or a separate quote.",
+    helper:
+      "If the source documents come from outside our process and need cleanup first, that may need added time or a separate quote.",
     sampleLabel: "See sample",
   },
   {
@@ -668,12 +714,17 @@ const NEXT_PHASE_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 200, medium: 350, large: 550, estate: null },
     stripePriceId: null,
-    short: "Technical planting sheet from your documents or from a layout we already produced.",
+    short:
+      "Technical planting sheet from your documents or from a layout we already produced.",
     bestFor: "Planting is moving forward and the crew needs a clean sheet.",
-    youSend: "If we already built the layout, no extra base files are needed. If not, send the approved plan and plant direction or list.",
-    youGet: "A planting plan with schedule and quantities, ready to print and show to the crew.",
-    notIncluded: "Nursery sourcing, irrigation design, or new layout exploration.",
-    helper: "If the base documents were not created by us and need cleanup before planting documentation, that may need added time or a separate quote.",
+    youSend:
+      "If we already built the layout, no extra base files are needed. If not, send the approved plan and plant direction or list.",
+    youGet:
+      "A planting plan with schedule and quantities, ready to print and show to the crew.",
+    notIncluded:
+      "Nursery sourcing, irrigation design, or new layout exploration.",
+    helper:
+      "If the base documents were not created by us and need cleanup before planting documentation, that may need added time or a separate quote.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -686,11 +737,16 @@ const NEXT_PHASE_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 200, medium: 350, large: 550, estate: null },
     stripePriceId: null,
-    short: "A clean hardscape sheet showing paving layout, material zones, and pattern logic where needed.",
-    bestFor: "Hardscape is approved and now needs one dedicated paving and material sheet.",
-    youSend: "If we already built the layout, no extra base files are needed. If not, send the approved plan, materials, and any paving pattern notes.",
-    youGet: "A hardscape plan showing layout, materials, paving patterns, and tile or paver direction where needed.",
-    notIncluded: "Engineering, structural base design, drainage engineering, or construction details unless added separately.",
+    short:
+      "A clean hardscape sheet showing paving layout, material zones, and pattern logic where needed.",
+    bestFor:
+      "Hardscape is approved and now needs one dedicated paving and material sheet.",
+    youSend:
+      "If we already built the layout, no extra base files are needed. If not, send the approved plan, materials, and any paving pattern notes.",
+    youGet:
+      "A hardscape plan showing layout, materials, paving patterns, and tile or paver direction where needed.",
+    notIncluded:
+      "Engineering, structural base design, drainage engineering, or construction details unless added separately.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -703,12 +759,18 @@ const NEXT_PHASE_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 500, medium: 700, large: 1000, estate: null },
     stripePriceId: null,
-    short: "Non-engineered grading and drainage concept based on topo or measured elevations.",
-    bestFor: "The site needs slope or drainage thinking after the main layout is approved.",
-    youSend: "Topo survey or measured elevations, approved design, and scope of improvements. If no topo exists yet, request a site visit or bring measured data first.",
-    youGet: "A conceptual grading and drainage sheet, ready to print and discuss with the crew.",
-    notIncluded: "Civil engineering, stamped grading plans, drainage calculations, or grading work made without usable elevation information.",
-    helper: "We cannot guess slopes. This service needs topo or real measured elevations.",
+    short:
+      "Non-engineered grading and drainage concept based on topo or measured elevations.",
+    bestFor:
+      "The site needs slope or drainage thinking after the main layout is approved.",
+    youSend:
+      "Topo survey or measured elevations, approved design, and scope of improvements. If no topo exists yet, request a site visit or bring measured data first.",
+    youGet:
+      "A conceptual grading and drainage sheet, ready to print and discuss with the crew.",
+    notIncluded:
+      "Civil engineering, stamped grading plans, drainage calculations, or grading work made without usable elevation information.",
+    helper:
+      "We cannot guess slopes. This service needs topo or real measured elevations.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -721,11 +783,16 @@ const NEXT_PHASE_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 200, medium: 250, large: 300, estate: null },
     stripePriceId: null,
-    short: "A simple non-engineered plant watering strategy for the approved planting areas.",
-    bestFor: "You want clear understanding of sun zones, shade zones, and plant watering needs before detailed irrigation work happens.",
-    youSend: "Approved plan, planting direction, and any known notes about shade, sun exposure, or difficult areas.",
-    youGet: "Sun and shade zone notes, watering logic by area, and recommendations such as drip or other basic watering approach where appropriate.",
-    notIncluded: "Pipe sizing, head layout, irrigation specs, hydraulic design, or installation diagrams.",
+    short:
+      "A simple non-engineered plant watering strategy for the approved planting areas.",
+    bestFor:
+      "You want clear understanding of sun zones, shade zones, and plant watering needs before detailed irrigation work happens.",
+    youSend:
+      "Approved plan, planting direction, and any known notes about shade, sun exposure, or difficult areas.",
+    youGet:
+      "Sun and shade zone notes, watering logic by area, and recommendations such as drip or other basic watering approach where appropriate.",
+    notIncluded:
+      "Pipe sizing, head layout, irrigation specs, hydraulic design, or installation diagrams.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -738,11 +805,15 @@ const NEXT_PHASE_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 200, medium: 250, large: 300, estate: null },
     stripePriceId: null,
-    short: "2D lighting concept. If we already have the design model, night views are included as a bonus.",
+    short:
+      "2D lighting concept. If we already have the design model, night views are included as a bonus.",
     bestFor: "The approved design needs a lighting layer added.",
-    youSend: "If we already built the layout, no extra base files are needed. If not, send approved plan, focal points, and lighting direction if known.",
-    youGet: "A conceptual lighting layout, ready to print and show to the crew, plus bonus night views when our model already exists.",
-    notIncluded: "Electrical design, wiring plans, or installation drawings.",
+    youSend:
+      "If we already built the layout, no extra base files are needed. If not, send approved plan, focal points, and lighting direction if known.",
+    youGet:
+      "A conceptual lighting layout, ready to print and show to the crew, plus bonus night views when our model already exists.",
+    notIncluded:
+      "Electrical design, wiring plans, or installation drawings.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -755,10 +826,13 @@ const NEXT_PHASE_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 200, medium: 350, large: 700, estate: null },
     stripePriceId: null,
-    short: "Material quantities and dimensions from an approved 3D or 2D design.",
+    short:
+      "Material quantities and dimensions from an approved 3D or 2D design.",
     bestFor: "The scope is clear and you are ready to price the job.",
-    youSend: "Approved plan or model if it comes from your side. If we built it, no extra files are needed.",
-    youGet: "Quantities and dimensions based on the approved scope, delivered in Google Sheets. Tell us what format works best for your team.",
+    youSend:
+      "Approved plan or model if it comes from your side. If we built it, no extra files are needed.",
+    youGet:
+      "Quantities and dimensions based on the approved scope, delivered in Google Sheets. Tell us what format works best for your team.",
     notIncluded: "Purchasing, vendor follow-up, or field verification.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
@@ -774,12 +848,17 @@ const NEXT_PHASE_SERVICES: Service[] = [
     stripePriceId: "price_artisticsheet_100",
     quantityEnabled: true,
     quantityLabel: "sheets",
-    short: "Artistic presentation sheet from a CAD plan, master plan, or render base.",
-    bestFor: "You already have a plan or view and want an artistic sheet that looks better in front of the client.",
-    youSend: "Provided CAD plan, master plan, or base render. You can also show the style you want, such as watercolor or ink sketch.",
-    youGet: "One high-resolution artistic sheet in the selected style, such as watercolor or ink sketch. Price is per sheet, not for the whole project.",
+    short:
+      "Artistic presentation sheet from a CAD plan, master plan, or render base.",
+    bestFor:
+      "You already have a plan or view and want an artistic sheet that looks better in front of the client.",
+    youSend:
+      "Provided CAD plan, master plan, or base render. You can also show the style you want, such as watercolor or ink sketch.",
+    youGet:
+      "One high-resolution artistic sheet in the selected style, such as watercolor or ink sketch. Price is per sheet, not for the whole project.",
     notIncluded: "Design revisions or new CAD work.",
-    helper: "This can be a master plan sheet or an artistic treatment of rendered views.",
+    helper:
+      "This can be a master plan sheet or an artistic treatment of rendered views.",
     sampleLabel: "See sample",
   },
 ];
@@ -794,10 +873,14 @@ const CITY_SERVICES: Service[] = [
     prices: { small: 300, medium: 400, large: 600, estate: null },
     stripePriceId: null,
     short: "Add-on submittal sheet from an approved master plan and survey.",
-    bestFor: "Jobs that already have a clean master plan and now need a submittal sheet.",
-    youSend: "Approved master plan, survey, and any checklist or notes you already have.",
-    youGet: "A design-intent submittal sheet, ready to print and show if needed.",
-    notIncluded: "Approval guarantee, engineering, or legal survey work.",
+    bestFor:
+      "Jobs that already have a clean master plan and now need a submittal sheet.",
+    youSend:
+      "Approved master plan, survey, and any checklist or notes you already have.",
+    youGet:
+      "A design-intent submittal sheet, ready to print and show if needed.",
+    notIncluded:
+      "Approval guarantee, engineering, or legal survey work.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -810,9 +893,12 @@ const CITY_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 300, medium: 450, large: 650, estate: null },
     stripePriceId: null,
-    short: "Impervious cover calculation sheet prepared in a city-style format from a master plan and survey.",
-    bestFor: "Jobs where the jurisdiction cares how much impervious cover is already on the lot and how much is being added.",
-    youSend: "Survey, existing hardscape information, and approved master plan or improvements.",
+    short:
+      "Impervious cover calculation sheet prepared in a city-style format from a master plan and survey.",
+    bestFor:
+      "Jobs where the jurisdiction cares how much impervious cover is already on the lot and how much is being added.",
+    youSend:
+      "Survey, existing hardscape information, and approved master plan or improvements.",
     youGet: "Impervious cover sheet and calculation summary.",
     notIncluded: "Engineering certification or approval guarantee.",
     sampleLabel: "See sample",
@@ -827,11 +913,15 @@ const CITY_SERVICES: Service[] = [
     pricingType: "size",
     prices: { small: 500, medium: 700, large: 1000, estate: null },
     stripePriceId: null,
-    short: "Add-on tree / CRZ overlay based on certified tree data and a clean master plan.",
-    bestFor: "Projects where protected trees need to be shown clearly for review.",
-    youSend: "Certified tree survey or tree inventory plus approved master plan references.",
+    short:
+      "Add-on tree / CRZ overlay based on certified tree data and a clean master plan.",
+    bestFor:
+      "Projects where protected trees need to be shown clearly for review.",
+    youSend:
+      "Certified tree survey or tree inventory plus approved master plan references.",
     youGet: "A tree preservation or CRZ overlay sheet.",
-    notIncluded: "Arborist report or legal determination by the jurisdiction.",
+    notIncluded:
+      "Arborist report or legal determination by the jurisdiction.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -850,10 +940,13 @@ const IRRIGATION_SERVICES: Service[] = [
     quantityEnabled: true,
     quantityLabel: "sheets",
     short: "Drafting only from irrigation markups or paper layout.",
-    bestFor: "Licensed irrigators who already know the irrigation layout and just need it cleaned up on screen.",
+    bestFor:
+      "Licensed irrigators who already know the irrigation layout and just need it cleaned up on screen.",
     youSend: "Field markups, hand sketches, redlines, and any base files.",
-    youGet: "Clean computer-drafted irrigation sheets, ready to print and show to the crew.",
-    notIncluded: "Irrigation design, engineering, hydraulic calculations, or installation specifications.",
+    youGet:
+      "Clean computer-drafted irrigation sheets, ready to print and show to the crew.",
+    notIncluded:
+      "Irrigation design, engineering, hydraulic calculations, or installation specifications.",
     sampleLabel: "See sample",
   },
 ];
@@ -867,11 +960,16 @@ const SUPPORT_SERVICES: Service[] = [
     pricingType: "flat",
     flatPrice: 200,
     stripePriceId: "price_sitevisit_200",
-    short: "Basic local site visit time for travel, time on site, and measurement setup.",
-    bestFor: "Jobs that need field measuring before structure work or special drawings.",
-    youSend: "Site address, access details, and what needs to be checked.",
-    youGet: "Site visit time, raw measurements, photos, and field notes.",
-    notIncluded: "Base plan, 3D model, design work, or travel outside city limits.",
+    short:
+      "Basic local site visit time for travel, time on site, and measurement setup.",
+    bestFor:
+      "Jobs that need field measuring before structure work or special drawings.",
+    youSend:
+      "Site address, access details, and what needs to be checked.",
+    youGet:
+      "Site visit time, raw measurements, photos, and field notes.",
+    notIncluded:
+      "Base plan, 3D model, design work, or travel outside city limits.",
   },
   {
     id: "travel-outside-city",
@@ -899,12 +997,17 @@ const SUPPORT_SERVICES: Service[] = [
     pricingType: "hourly",
     hourlyRate: 70,
     stripePriceId: null,
-    short: "Used only when revision time is still smaller than starting a new design round.",
-    bestFor: "Changes after approval that are too big for a normal revision but still smaller than a full restart.",
+    short:
+      "Used only when revision time is still smaller than starting a new design round.",
+    bestFor:
+      "Changes after approval that are too big for a normal revision but still smaller than a full restart.",
     youSend: "Clear revision notes and updated direction.",
-    youGet: "A scoped redesign discussion and approved hourly estimate in writing.",
-    notIncluded: "Unlimited revision scope or a hidden redesign without approval.",
-    helper: "If the redraw gets too large, it usually makes more sense to buy a new layout package instead.",
+    youGet:
+      "A scoped redesign discussion and approved hourly estimate in writing.",
+    notIncluded:
+      "Unlimited revision scope or a hidden redesign without approval.",
+    helper:
+      "If the redraw gets too large, it usually makes more sense to buy a new layout package instead.",
     contactOnly: true,
   },
   {
@@ -954,6 +1057,154 @@ function translateServiceTitle(service: Service, _lang: Lang) {
   return service.title;
 }
 
+// ─── Before/After Slider ────────────────────────────────────────────────────
+
+function BeforeAfterSlider({
+  beforeImage,
+  afterImage,
+  beforeLabel = "ORIGINAL",
+  afterLabel = "ADAPTED CONCEPT",
+}: {
+  beforeImage: string;
+  afterImage: string;
+  beforeLabel?: string;
+  afterLabel?: string;
+}) {
+  const [position, setPosition] = useState(46);
+
+  return (
+    <div className="rounded-[2rem] bg-[#071833] p-4 md:p-6">
+      <div className="relative mx-auto overflow-hidden rounded-[1.75rem] border-4 border-white/90 bg-white shadow-2xl">
+        <div className="relative aspect-[1/1] w-full md:aspect-[16/10]">
+          <img
+            src={beforeImage}
+            alt={beforeLabel}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div
+            className="absolute inset-0 overflow-hidden"
+            style={{ width: `${position}%` }}
+          >
+            <img
+              src={afterImage}
+              alt={afterLabel}
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <div className="pointer-events-none absolute left-4 top-4 z-20 rounded-full bg-black/70 px-3 py-1 text-xs font-black tracking-wide text-white shadow">
+            {afterLabel}
+          </div>
+          <div className="pointer-events-none absolute right-4 top-4 z-20 rounded-full bg-emerald-500 px-3 py-1 text-xs font-black tracking-wide text-white shadow">
+            {beforeLabel}
+          </div>
+          <div
+            className="pointer-events-none absolute top-0 bottom-0 z-10 w-1 bg-white shadow-[0_0_0_1px_rgba(255,255,255,0.5)]"
+            style={{ left: `calc(${position}% - 2px)` }}
+          />
+          <div
+            className="pointer-events-none absolute top-1/2 z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white bg-emerald-50 text-xl font-black text-emerald-700 shadow-lg"
+            style={{ left: `calc(${position}% - 24px)` }}
+          >
+            ↔
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={position}
+            onChange={(e) => setPosition(Number(e.target.value))}
+            className="absolute inset-0 z-30 h-full w-full cursor-ew-resize opacity-0"
+            aria-label="Compare before and after"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Landing Showcase ───────────────────────────────────────────────────────
+
+function LandingShowcase({
+  onTryQuickConcept,
+}: {
+  onTryQuickConcept: () => void;
+}) {
+  return (
+    <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+      <div className="grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-center">
+        <div>
+          <div className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            Try it on a real job
+          </div>
+          <h2 className="mt-4 text-4xl font-black tracking-tight text-slate-900 md:text-5xl">
+            Visuals that help close the job.
+          </h2>
+          <p className="mt-4 max-w-xl text-base leading-8 text-slate-600 md:text-lg">
+            Send one site photo. Get a photorealistic concept adjusted to the
+            project, not just blindly generated. If the client moves forward,
+            add takeoffs, plans, or specialty sheets next.
+          </p>
+          <div className="mt-6 grid gap-3 text-sm text-slate-700">
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 font-black text-emerald-700">
+                1
+              </span>
+              <span>
+                Use one photo to test the idea before committing to full scope.
+              </span>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 font-black text-emerald-700">
+                2
+              </span>
+              <span>
+                Show the concept to the homeowner and move the sale forward
+                faster.
+              </span>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 font-black text-emerald-700">
+                3
+              </span>
+              <span>
+                Need more depth? Add layout support, takeoffs, grading, HOA, or
+                CRZ sheets.
+              </span>
+            </div>
+          </div>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={onTryQuickConcept}
+              className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-6 py-4 text-base font-black text-white shadow-lg transition hover:bg-emerald-700"
+            >
+              Try 1 Quick Concept
+            </button>
+            <a
+              href="#service-groups"
+              className="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-6 py-4 text-base font-black text-slate-900 hover:bg-slate-50"
+            >
+              Browse all service paths
+            </a>
+          </div>
+          <p className="mt-3 text-xs leading-6 text-slate-500">
+            Best first step for builders who want to test the workflow on one
+            real job.
+          </p>
+        </div>
+        <BeforeAfterSlider
+          beforeImage="/images/showcase-original.jpg"
+          afterImage="/images/showcase-concept.jpg"
+          beforeLabel="ORIGINAL"
+          afterLabel="ADAPTED CONCEPT"
+        />
+      </div>
+    </section>
+  );
+}
+
+// ─── QtyControl ─────────────────────────────────────────────────────────────
+
 function QtyControl({
   value,
   onChange,
@@ -986,6 +1237,8 @@ function QtyControl({
   );
 }
 
+// ─── Header ─────────────────────────────────────────────────────────────────
+
 function Header({
   view,
   lang,
@@ -1000,15 +1253,15 @@ function Header({
   onOpenHelp: () => void;
 }) {
   const t = T[lang];
-
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 px-4 py-4 backdrop-blur md:px-10">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-black md:text-2xl">{t.header}</h1>
-          <p className="hidden text-xs text-slate-500 md:block">{t.subheader}</p>
+          <p className="hidden text-xs text-slate-500 md:block">
+            {t.subheader}
+          </p>
         </div>
-
         <div className="flex items-center gap-2">
           {view !== "SUCCESS" ? (
             <button
@@ -1019,7 +1272,6 @@ function Header({
               {t.quickHelp}
             </button>
           ) : null}
-
           <button
             type="button"
             onClick={() => setLang(lang === "en" ? "es" : "en")}
@@ -1027,7 +1279,6 @@ function Header({
           >
             {lang === "en" ? "Español 🇲🇽" : "English 🇺🇸"}
           </button>
-
           {view !== "MENU" ? (
             <button
               type="button"
@@ -1043,6 +1294,8 @@ function Header({
     </header>
   );
 }
+
+// ─── MenuCard ────────────────────────────────────────────────────────────────
 
 function MenuCard({
   lang,
@@ -1075,6 +1328,8 @@ function MenuCard({
   );
 }
 
+// ─── SizeSelector ────────────────────────────────────────────────────────────
+
 function SizeSelector({
   value,
   onChange,
@@ -1085,17 +1340,14 @@ function SizeSelector({
   lang: Lang;
 }) {
   const t = T[lang];
-
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
       <h3 className="text-2xl font-black tracking-tight text-slate-900">
         {t.propertySize}
       </h3>
-
       <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {SIZES.map((size) => {
           const active = size.id === value;
-
           return (
             <button
               key={size.id}
@@ -1124,6 +1376,8 @@ function SizeSelector({
   );
 }
 
+// ─── ServiceSection ──────────────────────────────────────────────────────────
+
 function ServiceSection({
   title,
   description,
@@ -1148,7 +1402,6 @@ function ServiceSection({
   onDiscuss: (service: Service) => void;
 }) {
   const t = T[lang];
-
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
       <div className="mb-6 flex items-center justify-between gap-4">
@@ -1162,7 +1415,6 @@ function ServiceSection({
           {services.length} items
         </div>
       </div>
-
       <div className="grid gap-5">
         {services.map((service) => {
           const Icon = service.icon;
@@ -1172,7 +1424,6 @@ function ServiceSection({
             service.pricingType === "percentage"
               ? service.displayPriceLabel ?? "+25%"
               : formatPrice(getBasePrice(service, selectedSize));
-
           return (
             <article
               key={service.id}
@@ -1195,26 +1446,22 @@ function ServiceSection({
                       }`}
                     />
                   </div>
-
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
                       <h4 className="text-lg font-black leading-tight">
                         {translateServiceTitle(service, lang)}
                       </h4>
-
                       {service.badgeLabel ? (
                         <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                           {service.badgeLabel}
                         </span>
                       ) : null}
-
                       {service.sampleLabel ? (
                         <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
                           {service.sampleLabel}
                         </span>
                       ) : null}
                     </div>
-
                     <p
                       className={`mt-2 text-sm leading-6 ${
                         selected ? "text-slate-200" : "text-slate-600"
@@ -1224,7 +1471,6 @@ function ServiceSection({
                     </p>
                   </div>
                 </div>
-
                 <div className="text-right">
                   <div
                     className={`text-lg font-black ${
@@ -1242,7 +1488,6 @@ function ServiceSection({
                   </div>
                 </div>
               </div>
-
               <div className="mt-5 grid gap-4 md:grid-cols-2">
                 <div
                   className={`rounded-2xl p-4 ${
@@ -1254,7 +1499,6 @@ function ServiceSection({
                   </div>
                   <p className="mt-2 text-sm leading-6">{service.bestFor}</p>
                 </div>
-
                 <div
                   className={`rounded-2xl p-4 ${
                     selected ? "bg-white/10" : "bg-slate-50"
@@ -1265,7 +1509,6 @@ function ServiceSection({
                   </div>
                   <p className="mt-2 text-sm leading-6">{service.youSend}</p>
                 </div>
-
                 <div
                   className={`rounded-2xl p-4 ${
                     selected ? "bg-white/10" : "bg-slate-50"
@@ -1276,7 +1519,6 @@ function ServiceSection({
                   </div>
                   <p className="mt-2 text-sm leading-6">{service.youGet}</p>
                 </div>
-
                 <div
                   className={`rounded-2xl p-4 ${
                     selected ? "bg-white/10" : "bg-slate-50"
@@ -1285,10 +1527,11 @@ function ServiceSection({
                   <div className="text-xs font-bold uppercase tracking-wide opacity-70">
                     {t.notIncluded}
                   </div>
-                  <p className="mt-2 text-sm leading-6">{service.notIncluded}</p>
+                  <p className="mt-2 text-sm leading-6">
+                    {service.notIncluded}
+                  </p>
                 </div>
               </div>
-
               {service.helper ? (
                 <div
                   className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${
@@ -1300,7 +1543,6 @@ function ServiceSection({
                   {service.helper}
                 </div>
               ) : null}
-
               {notice.text ? (
                 <div
                   className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${
@@ -1313,7 +1555,6 @@ function ServiceSection({
                   {notice.text}
                 </div>
               ) : null}
-
               <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
                 {service.quantityEnabled && selected ? (
                   <QtyControl
@@ -1326,7 +1567,6 @@ function ServiceSection({
                     {selected ? `${t.qty}: ${cart[service.id]}` : ""}
                   </div>
                 )}
-
                 {service.contactOnly ? (
                   <button
                     type="button"
@@ -1365,6 +1605,8 @@ function ServiceSection({
   );
 }
 
+// ─── ProjectInfoCard ─────────────────────────────────────────────────────────
+
 function ProjectInfoCard({
   contact,
   onChange,
@@ -1375,13 +1617,11 @@ function ProjectInfoCard({
   lang: Lang;
 }) {
   const t = T[lang];
-
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
       <h3 className="text-2xl font-black tracking-tight text-slate-900">
         {t.projectInfo}
       </h3>
-
       <div className="mt-5 grid gap-4 md:grid-cols-2">
         <label className="grid gap-2">
           <span className="text-sm font-semibold text-slate-700">
@@ -1393,7 +1633,6 @@ function ProjectInfoCard({
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
           />
         </label>
-
         <label className="grid gap-2">
           <span className="text-sm font-semibold text-slate-700">
             {t.clientEmail}
@@ -1405,7 +1644,6 @@ function ProjectInfoCard({
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
           />
         </label>
-
         <label className="grid gap-2 md:col-span-2">
           <span className="text-sm font-semibold text-slate-700">
             {t.projectAddress}
@@ -1416,7 +1654,6 @@ function ProjectInfoCard({
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
           />
         </label>
-
         <label className="grid gap-2 md:col-span-2">
           <span className="text-sm font-semibold text-slate-700">
             {t.notes}
@@ -1438,6 +1675,8 @@ function ProjectInfoCard({
     </section>
   );
 }
+
+// ─── SummarySidebar ──────────────────────────────────────────────────────────
 
 function SummarySidebar({
   lang,
@@ -1471,7 +1710,6 @@ function SummarySidebar({
   cleared: boolean;
 }) {
   const t = T[lang];
-
   return (
     <aside className="h-fit lg:sticky lg:top-24">
       <div className="space-y-6 rounded-[2.5rem] border-2 border-slate-900 bg-white p-8 shadow-2xl">
@@ -1481,7 +1719,6 @@ function SummarySidebar({
             Live
           </span>
         </div>
-
         <div className="space-y-3 rounded-3xl bg-slate-50 p-5">
           {items.length === 0 ? (
             <p className="text-center text-sm text-slate-400">
@@ -1501,7 +1738,6 @@ function SummarySidebar({
                     {t.qty}: {item.qty}
                   </div>
                 </div>
-
                 <div className="text-right text-sm font-bold text-slate-900">
                   {item.isQuote || item.price === null
                     ? t.tbd
@@ -1511,18 +1747,18 @@ function SummarySidebar({
             ))
           )}
         </div>
-
         {rushFee ? (
           <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
             {t.rushFee}: {formatPrice(rushFee)}
           </div>
         ) : null}
-
         <div className="rounded-3xl border border-slate-200 p-5 text-sm">
           {hasTbd ? (
             <>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">{t.currentPricedSubtotal}</span>
+                <span className="text-slate-500">
+                  {t.currentPricedSubtotal}
+                </span>
                 <span className="font-bold text-slate-900">
                   {formatPrice(total)}
                 </span>
@@ -1554,7 +1790,6 @@ function SummarySidebar({
             </>
           )}
         </div>
-
         <div className="grid gap-3">
           <button
             type="button"
@@ -1564,7 +1799,6 @@ function SummarySidebar({
             <Copy className="h-4 w-4" />
             {copied ? t.copied : t.copySummary}
           </button>
-
           <button
             type="button"
             onClick={onReset}
@@ -1574,7 +1808,6 @@ function SummarySidebar({
             {cleared ? t.cleared : t.resetCart}
           </button>
         </div>
-
         <button
           type="button"
           disabled={!canCheckout || isCreating}
@@ -1592,12 +1825,13 @@ function SummarySidebar({
           )}
           {isCreating ? t.generating : t.generateInvoice}
         </button>
-
         <div className="text-xs leading-6 text-slate-500">{t.termsLine}</div>
       </div>
     </aside>
   );
 }
+
+// ─── QuickHelpModal ──────────────────────────────────────────────────────────
 
 function QuickHelpModal({
   lang,
@@ -1617,7 +1851,6 @@ function QuickHelpModal({
   sent: boolean;
 }) {
   const t = T[lang];
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
       <div className="w-full max-w-xl rounded-[2rem] bg-white p-6 shadow-2xl md:p-8">
@@ -1630,7 +1863,6 @@ function QuickHelpModal({
               {t.quickHelpText}
             </p>
           </div>
-
           <button
             type="button"
             onClick={onClose}
@@ -1639,7 +1871,6 @@ function QuickHelpModal({
             <X className="h-4 w-4" />
           </button>
         </div>
-
         <div className="mt-5 grid gap-4">
           <label className="grid gap-2">
             <span className="text-sm font-semibold text-slate-700">
@@ -1652,7 +1883,6 @@ function QuickHelpModal({
               className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-400"
             />
           </label>
-
           <label className="grid gap-2">
             <span className="text-sm font-semibold text-slate-700">
               {t.helpQuestion}
@@ -1666,7 +1896,6 @@ function QuickHelpModal({
               className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-slate-400"
             />
           </label>
-
           <label className="grid gap-2">
             <span className="text-sm font-semibold text-slate-700">
               {t.helpBudgetTimeline}
@@ -1678,13 +1907,11 @@ function QuickHelpModal({
               className="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-slate-400"
             />
           </label>
-
           {sent ? (
             <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
               {t.helpSent}
             </div>
           ) : null}
-
           <div className="flex flex-wrap items-center justify-end gap-3">
             <button
               type="button"
@@ -1693,7 +1920,6 @@ function QuickHelpModal({
             >
               {t.close}
             </button>
-
             <button
               type="button"
               onClick={onSend}
@@ -1707,6 +1933,8 @@ function QuickHelpModal({
     </div>
   );
 }
+
+// ─── SuccessIntake ───────────────────────────────────────────────────────────
 
 function SuccessIntake({
   lang,
@@ -1727,24 +1955,21 @@ function SuccessIntake({
       formData.append("order_id", order.orderId);
       formData.append("session_id", order.sessionId);
       formData.append("brief", brief);
-
       if (photos) {
-        Array.from(photos).forEach((file) => formData.append("photos", file as File));
+        Array.from(photos).forEach((file) =>
+          formData.append("photos", file as File)
+        );
       }
-
       if (docs) {
-        Array.from(docs).forEach((file) => formData.append("docs", file as File));
+        Array.from(docs).forEach((file) =>
+          formData.append("docs", file as File)
+        );
       }
-
       try {
-        await fetch("/api/intake-upload", {
-          method: "POST",
-          body: formData,
-        });
+        await fetch("/api/intake-upload", { method: "POST", body: formData });
       } catch {
         // preview fallback
       }
-
       setSaved(true);
     } catch {
       setSaved(false);
@@ -1753,12 +1978,12 @@ function SuccessIntake({
 
   function openProjectChat() {
     const text = encodeURIComponent(
-      `Hi Olya, I just paid for ${order.pathTitle} at ${order.projectAddress}. Order ID: ${order.orderId}.`,
+      `Hi Olya, I just paid for ${order.pathTitle} at ${order.projectAddress}. Order ID: ${order.orderId}.`
     );
     window.open(
       `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`,
       "_blank",
-      "noopener,noreferrer",
+      "noopener,noreferrer"
     );
   }
 
@@ -1767,16 +1992,13 @@ function SuccessIntake({
       <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
         {t.successTitle}
       </div>
-
       <h2 className="mt-5 text-3xl font-black text-slate-900">
         {t.successTitle}
       </h2>
       <p className="mt-2 text-sm leading-6 text-slate-600">{t.successText}</p>
-
       <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
         {t.uploadWidgetNote}
       </div>
-
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <label className="grid gap-2 rounded-3xl border border-slate-200 p-4">
           <span className="text-sm font-semibold text-slate-700">
@@ -1792,7 +2014,6 @@ function SuccessIntake({
             />
           </div>
         </label>
-
         <label className="grid gap-2 rounded-3xl border border-slate-200 p-4">
           <span className="text-sm font-semibold text-slate-700">
             {t.uploadSurvey}
@@ -1808,7 +2029,6 @@ function SuccessIntake({
           </div>
         </label>
       </div>
-
       <label className="mt-5 grid gap-2">
         <span className="text-sm font-semibold text-slate-700">
           {t.detailedBrief}
@@ -1821,13 +2041,11 @@ function SuccessIntake({
           className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-slate-400"
         />
       </label>
-
       {saved ? (
         <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
           {t.intakeSaved}
         </div>
       ) : null}
-
       <div className="mt-6 flex flex-wrap gap-3">
         <button
           type="button"
@@ -1836,7 +2054,6 @@ function SuccessIntake({
         >
           {t.saveIntake}
         </button>
-
         <button
           type="button"
           onClick={openProjectChat}
@@ -1846,13 +2063,14 @@ function SuccessIntake({
           {t.openProjectChat}
         </button>
       </div>
-
       <div className="mt-5 text-xs leading-6 text-slate-500">
         {t.successNote}
       </div>
     </section>
   );
 }
+
+// ─── App ─────────────────────────────────────────────────────────────────────
 
 export default function App() {
   const [lang, setLang] = useState<Lang>("en");
@@ -1866,10 +2084,8 @@ export default function App() {
     projectAddress: "",
     notes: "",
   });
-
   const [copied, setCopied] = useState(false);
   const [cleared, setCleared] = useState(false);
-
   const [showHelp, setShowHelp] = useState(false);
   const [sendingHelp, setSendingHelp] = useState(false);
   const [helpSent, setHelpSent] = useState(false);
@@ -1878,7 +2094,6 @@ export default function App() {
     question: "",
     budgetTimeline: "",
   });
-
   const [creatingCheckout, setCreatingCheckout] = useState(false);
   const [checkoutNotice, setCheckoutNotice] = useState<string | null>(null);
   const [verifying, setVerifying] = useState(false);
@@ -1902,27 +2117,21 @@ export default function App() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-
     const path = window.location.pathname;
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get("session_id");
-
     if (path === "/success") {
       setView("SUCCESS");
       setVerifying(true);
-
       const verify = async () => {
         try {
           const response = await fetch(
             `/api/checkout-session-status?session_id=${encodeURIComponent(
-              sessionId ?? "",
-            )}`,
+              sessionId ?? ""
+            )}`
           );
-
           if (!response.ok) throw new Error("verify failed");
-
           const data = await response.json();
-
           setPaidOrder({
             sessionId: sessionId ?? "",
             orderId: data.orderId ?? `order_${Date.now()}`,
@@ -1955,7 +2164,6 @@ export default function App() {
           setVerifying(false);
         }
       };
-
       void verify();
     }
   }, [t.previewMode]);
@@ -1963,17 +2171,19 @@ export default function App() {
   const hasLayout = Object.keys(cart).some(
     (id) =>
       DESIGN_DIRECTION_SERVICES.some((service) => service.id === id) ||
-      STRUCTURE_SERVICES.some((service) => service.id === id),
+      STRUCTURE_SERVICES.some((service) => service.id === id)
   );
 
-  function getNotice(service: Service): { kind: NoticeKind; text: string | null } {
+  function getNotice(service: Service): {
+    kind: NoticeKind;
+    text: string | null;
+  } {
     if (
       service.hardDependency?.includes("site-visit-start") &&
       !cart["site-visit-start"]
     ) {
       return { kind: "hard", text: t.hardDependencySiteVisit };
     }
-
     if (
       service.hardDependency?.includes("site-visit-addon") &&
       !cart["site-visit-addon"] &&
@@ -1981,7 +2191,6 @@ export default function App() {
     ) {
       return { kind: "hard", text: t.hardDependencyOutsideCity };
     }
-
     if (
       service.softDependency?.includes("master-plan") &&
       !cart["master-plan"] &&
@@ -1989,7 +2198,6 @@ export default function App() {
     ) {
       return { kind: "soft", text: t.softDependencyMasterPlan };
     }
-
     if (
       NEXT_PHASE_SERVICES.some((item) => item.id === service.id) &&
       service.id !== "artistic-sheet" &&
@@ -1998,7 +2206,6 @@ export default function App() {
     ) {
       return { kind: "soft", text: t.softDependencyLayout };
     }
-
     return { kind: null, text: null };
   }
 
@@ -2007,33 +2214,26 @@ export default function App() {
       const qty = cart[service.id];
       const base = getBasePrice(service, selectedSize);
       const price =
-        service.pricingType === "quote" || base === null ? null : base * qty;
+        service.pricingType === "quote" || base === null
+          ? null
+          : base * qty;
       const isQuote = service.pricingType === "quote" || base === null;
-
-      return {
-        service,
-        qty,
-        price,
-        isQuote,
-      };
+      return { service, qty, price, isQuote };
     });
   }, [cart, selectedSize]);
 
   const pricedSubtotal = pricedItems.reduce(
     (sum, item) => sum + (item.price ?? 0),
-    0,
+    0
   );
-
   const rushFee = cart["rush-fee"] ? Math.round(pricedSubtotal * 0.25) : 0;
   const total = pricedSubtotal + rushFee;
   const deposit = Math.round(total * 0.7);
   const remaining = total - deposit;
-
   const hasTbd = pricedItems.some((item) => item.isQuote);
   const hasPayableService = pricedItems.some(
-    (item) => item.service.stripePriceId && !item.isQuote,
+    (item) => item.service.stripePriceId && !item.isQuote
   );
-
   const canCheckout =
     Boolean(contact.clientName.trim()) &&
     Boolean(contact.customerEmail.trim()) &&
@@ -2055,7 +2255,7 @@ export default function App() {
       (item) =>
         `• ${translateServiceTitle(item.service, lang)} x${item.qty} — ${
           item.isQuote ? t.tbd : formatPrice(item.price)
-        }`,
+        }`
     ),
     "",
     `Client: ${contact.clientName || "-"}`,
@@ -2077,7 +2277,6 @@ export default function App() {
   function toggleService(service: Service) {
     const notice = getNotice(service);
     if (notice.kind === "hard") return;
-
     setCart((prev) => {
       const next = { ...prev };
       if (next[service.id]) delete next[service.id];
@@ -2092,15 +2291,9 @@ export default function App() {
 
   function resetCart() {
     if (!window.confirm(t.confirmReset)) return;
-
     setCart({});
     setSelectedSize("small");
-    setContact({
-      clientName: "",
-      customerEmail: "",
-      projectAddress: "",
-      notes: "",
-    });
+    setContact({ clientName: "", customerEmail: "", projectAddress: "", notes: "" });
     setCleared(true);
   }
 
@@ -2119,18 +2312,14 @@ export default function App() {
       question: sanitizeText(helpForm.question),
       budgetTimeline: sanitizeText(helpForm.budgetTimeline),
     };
-
     if (!payload.contact || !payload.question) return;
-
     setSendingHelp(true);
-
     try {
       await fetch("/api/quick-help", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       }).catch(() => undefined);
-
       setHelpSent(true);
     } finally {
       setSendingHelp(false);
@@ -2142,12 +2331,9 @@ export default function App() {
       setCheckoutNotice(hasTbd ? t.quoteBlocksCheckout : t.fillRequired);
       return;
     }
-
     setCreatingCheckout(true);
     setCheckoutNotice(null);
-
     const orderId = `order_${Date.now()}`;
-
     const orderDraftPayload = {
       order_id: orderId,
       path_id: activePath,
@@ -2167,14 +2353,12 @@ export default function App() {
         pricing_type: item.service.pricingType,
       })),
     };
-
     try {
       await fetch("/api/order-draft", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderDraftPayload),
       }).catch(() => undefined);
-
       const payload = {
         customer_email: sanitizeText(contact.customerEmail),
         client_name: sanitizeText(contact.clientName),
@@ -2195,19 +2379,14 @@ export default function App() {
         },
         full_notes: contact.notes,
       };
-
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
       if (!response.ok) throw new Error("checkout failed");
-
       const data = await response.json();
-
       if (!data?.url) throw new Error("missing url");
-
       window.location.href = data.url;
     } catch {
       if (DEMO_MODE) {
@@ -2246,7 +2425,7 @@ export default function App() {
             title={t.quickSection}
             description={t.quickSectionDesc}
             services={STARTING_POINT_SERVICES.filter(
-              (service) => service.id === "photo-concept-start",
+              (service) => service.id === "photo-concept-start"
             )}
             selectedSize={selectedSize}
             cart={cart}
@@ -2257,7 +2436,6 @@ export default function App() {
             onDiscuss={openHelpWithService}
           />
         );
-
       case "build-one":
         return (
           <div className="space-y-8">
@@ -2273,7 +2451,6 @@ export default function App() {
               onQty={updateQty}
               onDiscuss={openHelpWithService}
             />
-
             <ServiceSection
               title={t.supportSection}
               description={t.supportSectionDesc}
@@ -2288,7 +2465,6 @@ export default function App() {
             />
           </div>
         );
-
       case "full-design":
         return (
           <div className="space-y-8">
@@ -2297,12 +2473,11 @@ export default function App() {
               onChange={setSelectedSize}
               lang={lang}
             />
-
             <ServiceSection
               title={t.startSection}
               description={t.startSectionDesc}
               services={STARTING_POINT_SERVICES.filter(
-                (service) => service.id !== "photo-concept-start",
+                (service) => service.id !== "photo-concept-start"
               )}
               selectedSize={selectedSize}
               cart={cart}
@@ -2312,7 +2487,6 @@ export default function App() {
               onQty={updateQty}
               onDiscuss={openHelpWithService}
             />
-
             <ServiceSection
               title={t.ideaSection}
               description={t.ideaSectionDesc}
@@ -2325,7 +2499,6 @@ export default function App() {
               onQty={updateQty}
               onDiscuss={openHelpWithService}
             />
-
             <ServiceSection
               title={t.afterLayout}
               description={t.afterLayoutDesc}
@@ -2340,7 +2513,6 @@ export default function App() {
             />
           </div>
         );
-
       case "special-drawings":
         return (
           <div className="space-y-8">
@@ -2349,7 +2521,6 @@ export default function App() {
               onChange={setSelectedSize}
               lang={lang}
             />
-
             <ServiceSection
               title={t.specialSection}
               description={t.specialSectionDesc}
@@ -2362,7 +2533,6 @@ export default function App() {
               onQty={updateQty}
               onDiscuss={openHelpWithService}
             />
-
             <ServiceSection
               title={t.citySection}
               description={t.citySectionDesc}
@@ -2375,7 +2545,6 @@ export default function App() {
               onQty={updateQty}
               onDiscuss={openHelpWithService}
             />
-
             <ServiceSection
               title={t.irrigationSection}
               description={t.irrigationSectionDesc}
@@ -2388,7 +2557,6 @@ export default function App() {
               onQty={updateQty}
               onDiscuss={openHelpWithService}
             />
-
             <ServiceSection
               title={t.supportSection}
               description={t.supportSectionDesc}
@@ -2403,7 +2571,6 @@ export default function App() {
             />
           </div>
         );
-
       default:
         return null;
     }
@@ -2421,31 +2588,42 @@ export default function App() {
         }}
         onOpenHelp={() => setShowHelp(true)}
       />
-
       <main className="mx-auto max-w-7xl px-4 pt-8 md:px-10">
         {view === "MENU" ? (
-          <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="mb-6 text-center">
-              <h2 className="text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
-                {t.selectPath}
-              </h2>
-              <p className="mt-2 text-sm text-slate-500">{t.selectPathHelp}</p>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              {ENTRY_PATHS.map((path) => (
-                <MenuCard
-                  key={path.id}
-                  lang={lang}
-                  path={path}
-                  onSelect={(id) => {
-                    setActivePath(id);
-                    setView("CONFIG");
-                  }}
-                />
-              ))}
-            </div>
-          </section>
+          <div className="space-y-8">
+            <LandingShowcase
+              onTryQuickConcept={() => {
+                setActivePath("quick-sale");
+                setView("CONFIG");
+              }}
+            />
+            <section
+              id="service-groups"
+              className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
+            >
+              <div className="mb-6 text-center">
+                <h2 className="text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
+                  {t.selectPath}
+                </h2>
+                <p className="mt-2 text-sm text-slate-500">
+                  {t.selectPathHelp}
+                </p>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                {ENTRY_PATHS.map((path) => (
+                  <MenuCard
+                    key={path.id}
+                    lang={lang}
+                    path={path}
+                    onSelect={(id) => {
+                      setActivePath(id);
+                      setView("CONFIG");
+                    }}
+                  />
+                ))}
+              </div>
+            </section>
+          </div>
         ) : view === "SUCCESS" ? (
           <div className="space-y-6">
             {checkoutNotice ? (
@@ -2453,7 +2631,6 @@ export default function App() {
                 {checkoutNotice}
               </div>
             ) : null}
-
             {verifying ? (
               <div className="rounded-[2rem] border border-slate-200 bg-white p-10 shadow-sm">
                 <div className="flex items-center gap-3 text-slate-700">
@@ -2477,7 +2654,9 @@ export default function App() {
                       {t.activeGroup}
                     </div>
                     <h2 className="text-2xl font-black">
-                      {lang === "en" ? selectedPath.title : selectedPath.titleEs}
+                      {lang === "en"
+                        ? selectedPath.title
+                        : selectedPath.titleEs}
                     </h2>
                     <p className="mt-2 text-sm leading-6 text-slate-600">
                       {lang === "en"
@@ -2485,19 +2664,18 @@ export default function App() {
                         : selectedPath.descriptionEs}
                     </p>
                   </div>
-
                   <button
                     type="button"
-                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: "smooth" })
+                    }
                     className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50"
                   >
                     {t.reviewOrder}
                   </button>
                 </div>
               </section>
-
               {renderConfig()}
-
               <ProjectInfoCard
                 contact={contact}
                 onChange={(patch) =>
@@ -2505,14 +2683,12 @@ export default function App() {
                 }
                 lang={lang}
               />
-
               {checkoutNotice ? (
                 <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
                   {checkoutNotice}
                 </div>
               ) : null}
             </div>
-
             <SummarySidebar
               lang={lang}
               items={summaryLines}
@@ -2532,12 +2708,13 @@ export default function App() {
           </div>
         )}
       </main>
-
       {showHelp ? (
         <QuickHelpModal
           lang={lang}
           form={helpForm}
-          setForm={(patch) => setHelpForm((prev) => ({ ...prev, ...patch }))}
+          setForm={(patch) =>
+            setHelpForm((prev) => ({ ...prev, ...patch }))
+          }
           onClose={() => setShowHelp(false)}
           onSend={sendQuickHelp}
           sending={sendingHelp}
