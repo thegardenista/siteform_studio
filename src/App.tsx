@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 type Lang = "en" | "es";
-type ViewState = "MENU" | "CONFIG" | "SUCCESS";
+type ViewState = "LANDING" | "MENU" | "CONFIG" | "SUCCESS";
 type PricingType = "size" | "flat" | "unit" | "hourly" | "quote" | "percentage";
 type NoticeKind = "hard" | "soft" | null;
 
@@ -117,6 +117,7 @@ const T = {
       "Choose the service group for this job. After you enter, you will only see the options for that category.",
     openThisGroup: "Open this group",
     back: "Back to menu",
+    backHome: "Back to home",
     reviewOrder: "Review order",
     propertySize: "Property size",
     projectInfo: "Contact and project details",
@@ -236,15 +237,15 @@ const T = {
     uploadWidgetNote:
       "Replace these file fields with Uploadcare or Cloudinary widget when backend is connected.",
     showcaseBadge: "Try it on a real job",
-    showcaseTitle: "White-label design support for outdoor pros.",
+    showcaseTitle: "White-label support for outdoor pros.",
     showcaseDesc:
-      "SiteForm Studio helps builders, landscape companies, and designers turn rough site info into clear visuals, simple plan sheets, and presentation support — under your brand, behind the scenes.",
-    showcaseStep1: "Quick photo concepts when you need one fast visual to move a client forward.",
-    showcaseStep2: "Drafting and 3D support for decks, pergolas, kitchens, yard layouts, and outdoor features.",
-    showcaseStep3: "Specialty sheets for HOA, client review, takeoffs, planting, hardscape, lighting, or drainage discussion.",
-    showcaseCta: "Try Quick Photo Concept",
-    showcaseBrowse: "See services",
-    showcaseNote: "Start with one quick concept, or choose the service path that fits the job.",
+      "SiteForm Studio helps builders, landscape companies, and designers turn rough site info into concepts, simple plan sheets, and presentation visuals — under your brand.",
+    showcaseStep1: "Quick photo concepts",
+    showcaseStep2: "Drafting + 3D support",
+    showcaseStep3: "HOA, takeoffs, planting, hardscape, lighting",
+    showcaseCta: "Explore popular services",
+    showcaseBrowse: "See all services",
+    showcaseNote: "",
   },
   es: {
     header: "Scope Builder",
@@ -254,6 +255,7 @@ const T = {
       "Elige el grupo de servicios para este trabajo. Cuando entras, solo verás las opciones de esa categoría.",
     openThisGroup: "Abrir este grupo",
     back: "Volver al menú",
+    backHome: "Volver al inicio",
     reviewOrder: "Revisar pedido",
     propertySize: "Tamaño del lote",
     projectInfo: "Contacto y detalles del proyecto",
@@ -373,14 +375,14 @@ const T = {
     uploadWidgetNote:
       "Sustituye estos campos por un widget de Uploadcare o Cloudinary cuando conectes el backend.",
     showcaseBadge: "Pruébalo en un trabajo real",
-    showcaseTitle: "Apoyo de diseño white-label para profesionales de exterior.",
+    showcaseTitle: "Apoyo white-label para profesionales de exterior.",
     showcaseDesc:
       "SiteForm Studio ayuda a constructores, compañías de landscape y diseñadores a convertir información básica del sitio en visuales claras, planos simples y apoyo de presentación — bajo tu marca y detrás de escena.",
-    showcaseStep1: "Conceptos rápidos desde foto cuando necesitas una visual para avanzar con el cliente.",
-    showcaseStep2: "Apoyo de dibujo y 3D para decks, pérgolas, cocinas, layouts de patio y piezas exteriores.",
-    showcaseStep3: "Láminas especiales para HOA, revisión del cliente, cómputos, plantación, hardscape, iluminación o drenaje conceptual.",
-    showcaseCta: "Probar concepto desde foto",
-    showcaseBrowse: "Ver servicios",
+    showcaseStep1: "Conceptos rápidos desde foto",
+    showcaseStep2: "Dibujo + apoyo 3D",
+    showcaseStep3: "HOA, cómputos, plantación, hardscape, iluminación",
+    showcaseCta: "Ver servicios populares",
+    showcaseBrowse: "Ver todos los servicios",
     showcaseNote: "Empieza con un concepto rápido o elige el servicio que encaja con el trabajo.",
   },
 } as const;
@@ -1546,59 +1548,59 @@ function BeforeAfterSlider({
 
 function LandingShowcase({
   lang,
-  onTryQuickConcept,
+  onExploreServices,
+  onSeeAllServices,
 }: {
   lang: Lang;
-  onTryQuickConcept: () => void;
+  onExploreServices: () => void;
+  onSeeAllServices: () => void;
 }) {
   const t = T[lang];
   return (
-    <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+    <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm md:rounded-[2rem] md:p-8">
       <div className="mx-auto max-w-4xl">
-        <h2 className="text-4xl font-black tracking-tight text-slate-900 md:text-6xl">
+        <h2 className="text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-6xl">
           {t.showcaseTitle}
         </h2>
-        <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 md:text-lg">
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 md:text-lg md:leading-8">
           {t.showcaseDesc}
         </p>
-        <div className="mt-6 grid gap-3 text-sm text-slate-700 md:grid-cols-3">
-          <div className="rounded-2xl bg-slate-50 p-4 leading-6">
-            <div className="mb-2 text-xs font-black uppercase tracking-wide text-slate-500">
+        <div className="mt-4 grid gap-2 text-sm text-slate-700 md:grid-cols-3">
+          <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-3 py-2 leading-5 md:block md:p-4 md:leading-6">
+            <span className="text-xs font-black uppercase tracking-wide text-slate-500 md:mb-2 md:block">
               01
-            </div>
-            {t.showcaseStep1}
+            </span>
+            <span>{t.showcaseStep1}</span>
           </div>
-          <div className="rounded-2xl bg-slate-50 p-4 leading-6">
-            <div className="mb-2 text-xs font-black uppercase tracking-wide text-slate-500">
+          <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-3 py-2 leading-5 md:block md:p-4 md:leading-6">
+            <span className="text-xs font-black uppercase tracking-wide text-slate-500 md:mb-2 md:block">
               02
-            </div>
-            {t.showcaseStep2}
+            </span>
+            <span>{t.showcaseStep2}</span>
           </div>
-          <div className="rounded-2xl bg-slate-50 p-4 leading-6">
-            <div className="mb-2 text-xs font-black uppercase tracking-wide text-slate-500">
+          <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-3 py-2 leading-5 md:block md:p-4 md:leading-6">
+            <span className="text-xs font-black uppercase tracking-wide text-slate-500 md:mb-2 md:block">
               03
-            </div>
-            {t.showcaseStep3}
+            </span>
+            <span>{t.showcaseStep3}</span>
           </div>
         </div>
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row md:mt-8">
           <button
             type="button"
-            onClick={onTryQuickConcept}
-            className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-6 py-4 text-base font-black text-white shadow-lg transition hover:bg-emerald-700"
+            onClick={onExploreServices}
+            className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white shadow-lg transition hover:bg-emerald-700 md:px-6 md:py-4 md:text-base"
           >
             {t.showcaseCta}
           </button>
-          <a
-            href="#service-groups"
-            className="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-6 py-4 text-base font-black text-slate-900 hover:bg-slate-50"
+          <button
+            type="button"
+            onClick={onSeeAllServices}
+            className="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-5 py-3 text-sm font-black text-slate-900 hover:bg-slate-50 md:px-6 md:py-4 md:text-base"
           >
             {t.showcaseBrowse}
-          </a>
+          </button>
         </div>
-        <p className="mt-3 text-xs leading-6 text-slate-500">
-          {t.showcaseNote}
-        </p>
       </div>
     </section>
   );
@@ -1655,10 +1657,10 @@ function Header({
 }) {
   const t = T[lang];
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 px-4 py-4 backdrop-blur md:px-10">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
+    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 px-4 py-3 backdrop-blur md:px-10 md:py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2">
         <div>
-          <h1 className="text-xl font-black md:text-2xl">{t.header}</h1>
+          <h1 className="whitespace-nowrap text-xl font-black md:text-2xl">{t.header}</h1>
           <p className="hidden text-xs text-slate-500 md:block">
             {t.subheader}
           </p>
@@ -1668,7 +1670,7 @@ function Header({
             <button
               type="button"
               onClick={onOpenHelp}
-              className="rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-900 hover:border-slate-900"
+              className="hidden rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-900 hover:border-slate-900 md:inline-flex"
             >
               {t.quickHelp}
             </button>
@@ -1680,14 +1682,14 @@ function Header({
           >
             {lang === "en" ? "Español" : "English"}
           </button>
-          {view !== "MENU" ? (
+          {view !== "LANDING" ? (
             <button
               type="button"
               onClick={onBack}
               className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-bold text-white hover:bg-slate-800"
             >
               <ArrowLeft className="h-4 w-4" />
-              {t.back}
+              {view === "MENU" ? t.backHome : t.back}
             </button>
           ) : null}
         </div>
@@ -2473,7 +2475,7 @@ function SuccessIntake({
 
 export default function App() {
   const [lang, setLang] = useState<Lang>("en");
-  const [view, setView] = useState<ViewState>("MENU");
+  const [view, setView] = useState<ViewState>("LANDING");
   const [activePath, setActivePath] = useState<string>("quick-sale");
   const [selectedSize, setSelectedSize] = useState<string>("small");
   const [cart, setCart] = useState<Record<string, number>>({});
@@ -2852,7 +2854,7 @@ export default function App() {
         );
       case "build-one":
         return (
-          <div className="space-y-8">
+          <div className="space-y-5 md:space-y-8">
             <ServiceSection
               title={t.buildSection}
               description={t.buildSectionDesc}
@@ -2998,20 +3000,22 @@ export default function App() {
         setLang={setLang}
         onBack={() => {
           if (view === "SUCCESS") setView("CONFIG");
-          else setView("MENU");
+          else if (view === "CONFIG") setView("MENU");
+          else setView("LANDING");
         }}
         onOpenHelp={() => setShowHelp(true)}
       />
-      <main className="mx-auto max-w-7xl px-4 pt-8 md:px-10">
-        {view === "MENU" ? (
+      <main className="mx-auto max-w-7xl px-4 pt-4 md:px-10 md:pt-8">
+        {view === "LANDING" ? (
           <div className="space-y-8">
             <LandingShowcase
               lang={lang}
-              onTryQuickConcept={() => {
-                setActivePath("quick-sale");
-                setView("CONFIG");
-              }}
+              onExploreServices={() => setView("MENU")}
+              onSeeAllServices={() => setView("MENU")}
             />
+          </div>
+        ) : view === "MENU" ? (
+          <div className="space-y-8">
             <section
               id="service-groups"
               className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
