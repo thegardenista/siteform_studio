@@ -22,6 +22,10 @@ import {
 } from "lucide-react";
 
 type Lang = "en" | "es";
+type PartnerProfileMode = "new" | "existing";
+type ClientNameDisplay = "show" | "hide";
+type AddressDisplay = "full" | "street" | "project" | "hide";
+type LogoOption = "upload" | "on-file" | "text-only";
 type ViewState = "LANDING" | "MENU" | "CONFIG" | "SUCCESS";
 type PricingType = "size" | "flat" | "unit" | "hourly" | "quote" | "percentage";
 type NoticeKind = "hard" | "soft" | null;
@@ -79,6 +83,18 @@ interface OrderContact {
   customerPhone: string;
   projectAddress: string;
   notes: string;
+  partnerProfileMode: PartnerProfileMode;
+  whiteLabelCompany: string;
+  whiteLabelPhone: string;
+  whiteLabelEmail: string;
+  whiteLabelWebsite: string;
+  desiredDeliveryDate: string;
+  clientNameDisplay: ClientNameDisplay;
+  addressDisplay: AddressDisplay;
+  logoOption: LogoOption;
+  brandingNotes: string;
+  sameProjectConfirmed: boolean;
+  rememberPartnerInfo: boolean;
 }
 
 interface QuickHelpForm {
@@ -138,11 +154,52 @@ const T = {
     clientEmailPlaceholder: "Email for this order",
     clientPhone: "Your phone number",
     clientPhonePlaceholder: "Phone or WhatsApp number",
-    projectAddress: "Project name or address (optional)",
-    projectAddressPlaceholder: "Example: Addison backyard, Oak St project, or full address",
+    projectAddress: "Project / client label",
+    projectAddressPlaceholder: "Example: Garcia backyard, Oak St deck, Project 24-018, or full address",
+    projectLabelHelp:
+      "Required. Use a client name, street name, project nickname, or internal job number. Everything selected in this order must belong to this one client/project.",
     notes: "Project details",
     notesHelp:
       "Required. Add what you need, what the feature or yard is, what files/photos you have, and any location notes. Full address is optional at this stage.",
+    partnerProfileTitle: "Partner / white-label profile",
+    partnerProfileHelp:
+      "Tell us how your company info should appear on white-label PDFs and sheets. Repeat partners can ask us to use details already on file.",
+    partnerProfileQuestion: "Is this your first order with us?",
+    partnerProfileNew: "Yes, set up my white-label info",
+    partnerProfileExisting: "No, use my company info already on file",
+    whiteLabelCompany: "Company name to show on deliverables",
+    whiteLabelCompanyPlaceholder: "Example: Martinez Decks & Outdoor Living",
+    whiteLabelPhone: "Phone to show on sheets",
+    whiteLabelPhonePlaceholder: "Leave blank if you do not want a phone shown",
+    whiteLabelEmail: "Email to show on sheets",
+    whiteLabelEmailPlaceholder: "Leave blank if you do not want an email shown",
+    whiteLabelWebsite: "Website / social handle",
+    whiteLabelWebsitePlaceholder: "Website, Instagram, Facebook, or other public contact",
+    desiredDeliveryDate: "Desired delivery date (optional)",
+    desiredDeliveryDateHelp: "Rush timing still depends on our schedule.",
+    clientNameDisplay: "Client name display",
+    showClientName: "Show client name",
+    hideClientName: "Do not show client name",
+    addressDisplay: "Project/address display",
+    addressFull: "Full address",
+    addressStreet: "Street only",
+    addressProject: "Project name only",
+    addressHide: "Do not show address",
+    logoOption: "Logo option",
+    logoUpload: "Upload a new logo with this order",
+    logoOnFile: "Use logo already on file",
+    logoTextOnly: "Text-only company name, no logo",
+    brandingNotes: "Branding notes",
+    brandingNotesPlaceholder:
+      "Example: Use my company name only. Do not show my phone. Show client street only.",
+    sameProjectConfirm: "I confirm all selected services in this order are for the same client/project.",
+    sameProjectHelp:
+      "If you have different clients, properties, or unrelated jobs, please submit separate orders.",
+    oneProjectSummary:
+      "One order = one client/project and one white-label setup. For different clients or properties, submit separate orders.",
+    rememberPartnerInfo: "Remember my company info on this device",
+    rememberHelp:
+      "This is not an account. It only saves these fields in this browser.",
     notesPlaceholder:
       "Example: Addison backyard. Need quick concept from one photo. Client wants a patio cover. Exact address can be shared later if needed.",
     quickHelp: "Need help choosing?",
@@ -186,7 +243,7 @@ const T = {
     termsLine:
       "Stripe checkout should include Terms of Service consent and the Terms & Rules link.",
     fillRequired:
-      "Add your name/company, email, phone number, project details, and at least one service.",
+      "Add your name/company, email, phone number, project/client label, project details, confirm this is one client/project, and select at least one service.",
     quoteBlocksCheckout:
       "Quote-based or estate items need manual follow-up before payment.",
     add: "Add",
@@ -212,7 +269,7 @@ const T = {
       "At this point the layout is approved and treated as locked. From here you can order detailed plans and follow-up sheets.",
     buildSection: "Choose outdoor structure",
     buildSectionDesc:
-      "Pick the main structure or custom outdoor feature you want us to visualize or document.",
+      "You can combine a deck, pergola / cover, and outdoor kitchen when they belong to the same build. Choose only one size per structure type. Carports are handled as a separate structure package.",
     supportSection: "Site visit and rush timing",
     supportSectionDesc:
       "Add a local site visit if field measurements are needed. If the site is outside city limits, extra travel time may be added to the final invoice at $70/hour. Rush turnaround may be available when the schedule allows.",
@@ -286,11 +343,52 @@ const T = {
     clientEmailPlaceholder: "Email para este pedido",
     clientPhone: "Tu teléfono",
     clientPhonePlaceholder: "Teléfono o WhatsApp",
-    projectAddress: "Nombre del proyecto o dirección (opcional)",
-    projectAddressPlaceholder: "Ejemplo: patio Addison, proyecto Oak St o dirección completa",
+    projectAddress: "Etiqueta de proyecto / cliente",
+    projectAddressPlaceholder: "Ejemplo: patio Garcia, deck Oak St, Proyecto 24-018 o dirección completa",
+    projectLabelHelp:
+      "Requerido. Usa nombre del cliente, calle, apodo del proyecto o número interno. Todo lo seleccionado en este pedido debe pertenecer a este mismo cliente/proyecto.",
     notes: "Detalles del proyecto",
     notesHelp:
       "Requerido. Agrega qué necesitas, qué elemento o área es, qué archivos/fotos tienes y cualquier nota de ubicación. La dirección completa es opcional en esta etapa.",
+    partnerProfileTitle: "Perfil de partner / white-label",
+    partnerProfileHelp:
+      "Dinos cómo debe aparecer la información de tu compañía en PDFs y láminas white-label. Partners repetidos pueden pedir que usemos los datos ya guardados.",
+    partnerProfileQuestion: "¿Es tu primer pedido con nosotros?",
+    partnerProfileNew: "Sí, configurar mi información white-label",
+    partnerProfileExisting: "No, usar mi información de compañía ya guardada",
+    whiteLabelCompany: "Nombre de compañía para mostrar en entregables",
+    whiteLabelCompanyPlaceholder: "Ejemplo: Martinez Decks & Outdoor Living",
+    whiteLabelPhone: "Teléfono para mostrar en láminas",
+    whiteLabelPhonePlaceholder: "Déjalo vacío si no quieres mostrar teléfono",
+    whiteLabelEmail: "Email para mostrar en láminas",
+    whiteLabelEmailPlaceholder: "Déjalo vacío si no quieres mostrar email",
+    whiteLabelWebsite: "Website / usuario social",
+    whiteLabelWebsitePlaceholder: "Website, Instagram, Facebook u otro contacto público",
+    desiredDeliveryDate: "Fecha deseada de entrega (opcional)",
+    desiredDeliveryDateHelp: "La entrega urgente todavía depende de nuestra agenda.",
+    clientNameDisplay: "Mostrar nombre del cliente",
+    showClientName: "Mostrar nombre del cliente",
+    hideClientName: "No mostrar nombre del cliente",
+    addressDisplay: "Mostrar proyecto / dirección",
+    addressFull: "Dirección completa",
+    addressStreet: "Solo calle",
+    addressProject: "Solo nombre del proyecto",
+    addressHide: "No mostrar dirección",
+    logoOption: "Opción de logo",
+    logoUpload: "Subir un logo nuevo con este pedido",
+    logoOnFile: "Usar logo ya guardado",
+    logoTextOnly: "Solo nombre de compañía, sin logo",
+    brandingNotes: "Notas de branding",
+    brandingNotesPlaceholder:
+      "Ejemplo: Usar solo mi nombre de compañía. No mostrar mi teléfono. Mostrar solo la calle del cliente.",
+    sameProjectConfirm: "Confirmo que todos los servicios seleccionados en este pedido son para el mismo cliente/proyecto.",
+    sameProjectHelp:
+      "Si tienes clientes, propiedades o trabajos no relacionados, manda pedidos separados.",
+    oneProjectSummary:
+      "Un pedido = un cliente/proyecto y una configuración white-label. Para diferentes clientes o propiedades, manda pedidos separados.",
+    rememberPartnerInfo: "Recordar mi información de compañía en este dispositivo",
+    rememberHelp:
+      "Esto no es una cuenta. Solo guarda estos campos en este navegador.",
     notesPlaceholder:
       "Ejemplo: Patio trasero Addison. Necesito concepto rápido desde una foto. El cliente quiere una cubierta de patio. La dirección exacta se puede compartir después si hace falta.",
     quickHelp: "¿Necesitas ayuda para elegir?",
@@ -334,7 +432,7 @@ const T = {
     termsLine:
       "El pago por Stripe debe incluir aceptación de los Términos de Servicio y enlace a Terms & Rules.",
     fillRequired:
-      "Agrega tu nombre/compañía, email, teléfono, detalles del proyecto y al menos un servicio.",
+      "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, confirma que es un solo cliente/proyecto y elige al menos un servicio.",
     quoteBlocksCheckout:
       "Las partidas por cotizar o estate necesitan seguimiento manual antes del pago.",
     add: "Agregar",
@@ -360,7 +458,7 @@ const T = {
       "En este punto el layout ya está aprobado y se trata como cerrado. Desde aquí puedes pedir planos detallados y láminas de seguimiento.",
     buildSection: "Elige estructura exterior",
     buildSectionDesc:
-      "Elige la estructura principal o elemento exterior personalizado que quieres visualizar o documentar.",
+      "Puedes combinar deck, pérgola / cubierta y cocina exterior cuando pertenecen a la misma obra. Elige solo un tamaño por tipo de estructura. Los carports se manejan como paquete separado.",
     supportSection: "Visita al sitio y urgencia",
     supportSectionDesc:
       "Agrega una visita local si se necesitan medidas de campo. Si el sitio está fuera de los límites de la ciudad, el tiempo extra de traslado puede agregarse a la factura final a $70/hora. La entrega urgente puede estar disponible según agenda.",
@@ -1198,6 +1296,88 @@ function getBasePrice(service: Service, sizeId: string): number | null {
 
 function sanitizeText(value?: string) {
   return (value ?? "").replace(/\s+/g, " ").trim();
+}
+
+const PARTNER_STORAGE_KEY = "scopebuilder_partner_profile_v1";
+
+function emptyContact(): OrderContact {
+  return {
+    clientName: "",
+    customerEmail: "",
+    customerPhone: "",
+    projectAddress: "",
+    notes: "",
+    partnerProfileMode: "new",
+    whiteLabelCompany: "",
+    whiteLabelPhone: "",
+    whiteLabelEmail: "",
+    whiteLabelWebsite: "",
+    desiredDeliveryDate: "",
+    clientNameDisplay: "show",
+    addressDisplay: "street",
+    logoOption: "upload",
+    brandingNotes: "",
+    sameProjectConfirmed: false,
+    rememberPartnerInfo: false,
+  };
+}
+
+function getInitialContact(): OrderContact {
+  const base = emptyContact();
+  if (typeof window === "undefined") return base;
+  try {
+    const raw = window.localStorage.getItem(PARTNER_STORAGE_KEY);
+    if (!raw) return base;
+    const saved = JSON.parse(raw) as Partial<OrderContact>;
+    return {
+      ...base,
+      ...saved,
+      projectAddress: "",
+      notes: "",
+      desiredDeliveryDate: "",
+      sameProjectConfirmed: false,
+      partnerProfileMode: "existing",
+      logoOption: saved.logoOption ?? "on-file",
+      rememberPartnerInfo: true,
+    };
+  } catch {
+    return base;
+  }
+}
+
+function savePartnerInfo(contact: OrderContact) {
+  if (typeof window === "undefined") return;
+  const saved: Partial<OrderContact> = {
+    clientName: contact.clientName,
+    customerEmail: contact.customerEmail,
+    customerPhone: contact.customerPhone,
+    whiteLabelCompany: contact.whiteLabelCompany,
+    whiteLabelPhone: contact.whiteLabelPhone,
+    whiteLabelEmail: contact.whiteLabelEmail,
+    whiteLabelWebsite: contact.whiteLabelWebsite,
+    clientNameDisplay: contact.clientNameDisplay,
+    addressDisplay: contact.addressDisplay,
+    logoOption: contact.logoOption,
+    brandingNotes: contact.brandingNotes,
+  };
+  window.localStorage.setItem(PARTNER_STORAGE_KEY, JSON.stringify(saved));
+}
+
+function buildWhiteLabelPayload(contact: OrderContact) {
+  return {
+    profile_mode: contact.partnerProfileMode,
+    company_name: sanitizeText(contact.whiteLabelCompany || contact.clientName),
+    phone_on_sheets: sanitizeText(contact.whiteLabelPhone),
+    email_on_sheets: sanitizeText(contact.whiteLabelEmail),
+    website_or_social: sanitizeText(contact.whiteLabelWebsite),
+    desired_delivery_date: sanitizeText(contact.desiredDeliveryDate),
+    client_name_display: contact.clientNameDisplay,
+    address_display: contact.addressDisplay,
+    logo_option: contact.logoOption,
+    branding_notes: sanitizeText(contact.brandingNotes),
+    same_client_project_confirmed: contact.sameProjectConfirmed,
+    remembered_on_device: contact.rememberPartnerInfo,
+  };
 }
 
 type ServiceCopyField =
@@ -2270,11 +2450,13 @@ function ProjectInfoCard({
             {t.projectAddress}
           </span>
           <input
+            required
             value={contact.projectAddress}
             onChange={(e) => onChange({ projectAddress: e.target.value })}
             placeholder={t.projectAddressPlaceholder}
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
           />
+          <div className="text-xs leading-5 text-slate-500">{t.projectLabelHelp}</div>
         </label>
         <label className="grid gap-2 md:col-span-2">
           <span className="text-sm font-semibold text-slate-700">
@@ -2293,6 +2475,262 @@ function ProjectInfoCard({
             {contact.notes.length} / {NOTES_LIMIT}
           </div>
           <div className="text-xs text-slate-500">{t.notesHelp}</div>
+        </label>
+      </div>
+
+      <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm">
+        <input
+          type="checkbox"
+          required
+          checked={contact.sameProjectConfirmed}
+          onChange={(e) => onChange({ sameProjectConfirmed: e.target.checked })}
+          className="mt-1"
+        />
+        <span>
+          <span className="block font-black text-slate-900">
+            {t.sameProjectConfirm}
+          </span>
+          <span className="mt-1 block text-xs leading-5 text-slate-600">
+            {t.sameProjectHelp}
+          </span>
+        </span>
+      </label>
+
+      <div className="mt-8 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 md:p-6">
+        <div className="flex flex-col gap-2">
+          <h4 className="text-lg font-black text-slate-900">
+            {t.partnerProfileTitle}
+          </h4>
+          <p className="text-sm leading-6 text-slate-600">
+            {t.partnerProfileHelp}
+          </p>
+        </div>
+
+        <div className="mt-5 grid gap-3">
+          <div className="text-sm font-semibold text-slate-700">
+            {t.partnerProfileQuestion}
+          </div>
+          <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+            <input
+              type="radio"
+              name="partnerProfileMode"
+              checked={contact.partnerProfileMode === "new"}
+              onChange={() => onChange({ partnerProfileMode: "new", logoOption: "upload" })}
+              className="mt-1"
+            />
+            <span>{t.partnerProfileNew}</span>
+          </label>
+          <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+            <input
+              type="radio"
+              name="partnerProfileMode"
+              checked={contact.partnerProfileMode === "existing"}
+              onChange={() => onChange({ partnerProfileMode: "existing", logoOption: "on-file" })}
+              className="mt-1"
+            />
+            <span>{t.partnerProfileExisting}</span>
+          </label>
+        </div>
+
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <label className="grid gap-2 md:col-span-2">
+            <span className="text-sm font-semibold text-slate-700">
+              {t.whiteLabelCompany}
+            </span>
+            <input
+              value={contact.whiteLabelCompany}
+              onChange={(e) => onChange({ whiteLabelCompany: e.target.value })}
+              placeholder={t.whiteLabelCompanyPlaceholder}
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+            />
+          </label>
+
+          <label className="grid gap-2">
+            <span className="text-sm font-semibold text-slate-700">
+              {t.whiteLabelPhone}
+            </span>
+            <input
+              value={contact.whiteLabelPhone}
+              onChange={(e) => onChange({ whiteLabelPhone: e.target.value })}
+              placeholder={t.whiteLabelPhonePlaceholder}
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+            />
+          </label>
+
+          <label className="grid gap-2">
+            <span className="text-sm font-semibold text-slate-700">
+              {t.whiteLabelEmail}
+            </span>
+            <input
+              type="email"
+              value={contact.whiteLabelEmail}
+              onChange={(e) => onChange({ whiteLabelEmail: e.target.value })}
+              placeholder={t.whiteLabelEmailPlaceholder}
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+            />
+          </label>
+
+          <label className="grid gap-2">
+            <span className="text-sm font-semibold text-slate-700">
+              {t.whiteLabelWebsite}
+            </span>
+            <input
+              value={contact.whiteLabelWebsite}
+              onChange={(e) => onChange({ whiteLabelWebsite: e.target.value })}
+              placeholder={t.whiteLabelWebsitePlaceholder}
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+            />
+          </label>
+
+          <label className="grid gap-2">
+            <span className="text-sm font-semibold text-slate-700">
+              {t.desiredDeliveryDate}
+            </span>
+            <input
+              type="date"
+              value={contact.desiredDeliveryDate}
+              onChange={(e) => onChange({ desiredDeliveryDate: e.target.value })}
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+            />
+            <span className="text-xs text-slate-500">{t.desiredDeliveryDateHelp}</span>
+          </label>
+        </div>
+
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="text-sm font-semibold text-slate-700">
+              {t.clientNameDisplay}
+            </div>
+            <div className="mt-3 grid gap-2 text-sm">
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="clientNameDisplay"
+                  checked={contact.clientNameDisplay === "show"}
+                  onChange={() => onChange({ clientNameDisplay: "show" })}
+                />
+                <span>{t.showClientName}</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="clientNameDisplay"
+                  checked={contact.clientNameDisplay === "hide"}
+                  onChange={() => onChange({ clientNameDisplay: "hide" })}
+                />
+                <span>{t.hideClientName}</span>
+              </label>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="text-sm font-semibold text-slate-700">
+              {t.addressDisplay}
+            </div>
+            <div className="mt-3 grid gap-2 text-sm">
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="addressDisplay"
+                  checked={contact.addressDisplay === "full"}
+                  onChange={() => onChange({ addressDisplay: "full" })}
+                />
+                <span>{t.addressFull}</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="addressDisplay"
+                  checked={contact.addressDisplay === "street"}
+                  onChange={() => onChange({ addressDisplay: "street" })}
+                />
+                <span>{t.addressStreet}</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="addressDisplay"
+                  checked={contact.addressDisplay === "project"}
+                  onChange={() => onChange({ addressDisplay: "project" })}
+                />
+                <span>{t.addressProject}</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="addressDisplay"
+                  checked={contact.addressDisplay === "hide"}
+                  onChange={() => onChange({ addressDisplay: "hide" })}
+                />
+                <span>{t.addressHide}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="text-sm font-semibold text-slate-700">
+            {t.logoOption}
+          </div>
+          <div className="mt-3 grid gap-2 text-sm">
+            <label className="flex cursor-pointer items-center gap-2">
+              <input
+                type="radio"
+                name="logoOption"
+                checked={contact.logoOption === "upload"}
+                onChange={() => onChange({ logoOption: "upload" })}
+              />
+              <span>{t.logoUpload}</span>
+            </label>
+            <label className="flex cursor-pointer items-center gap-2">
+              <input
+                type="radio"
+                name="logoOption"
+                checked={contact.logoOption === "on-file"}
+                onChange={() => onChange({ logoOption: "on-file" })}
+              />
+              <span>{t.logoOnFile}</span>
+            </label>
+            <label className="flex cursor-pointer items-center gap-2">
+              <input
+                type="radio"
+                name="logoOption"
+                checked={contact.logoOption === "text-only"}
+                onChange={() => onChange({ logoOption: "text-only" })}
+              />
+              <span>{t.logoTextOnly}</span>
+            </label>
+          </div>
+        </div>
+
+        <label className="mt-5 grid gap-2">
+          <span className="text-sm font-semibold text-slate-700">
+            {t.brandingNotes}
+          </span>
+          <textarea
+            value={contact.brandingNotes}
+            onChange={(e) => onChange({ brandingNotes: e.target.value })}
+            rows={3}
+            placeholder={t.brandingNotesPlaceholder}
+            className="rounded-3xl border border-slate-200 bg-white p-4 text-sm outline-none focus:border-slate-400"
+          />
+        </label>
+
+        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+          <input
+            type="checkbox"
+            checked={contact.rememberPartnerInfo}
+            onChange={(e) => onChange({ rememberPartnerInfo: e.target.checked })}
+            className="mt-1"
+          />
+          <span>
+            <span className="block font-semibold text-slate-800">
+              {t.rememberPartnerInfo}
+            </span>
+            <span className="mt-1 block text-xs leading-5 text-slate-500">
+              {t.rememberHelp}
+            </span>
+          </span>
         </label>
       </div>
     </section>
@@ -2338,6 +2776,9 @@ function SummarySidebar({
       <div className="space-y-6 rounded-[2.5rem] border-2 border-slate-900 bg-white p-8 shadow-2xl">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-xl font-black">{t.summary}</h2>
+        </div>
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-950">
+          {t.oneProjectSummary}
         </div>
         <div className="space-y-3 rounded-3xl bg-slate-50 p-5">
           {items.length === 0 ? (
@@ -2699,19 +3140,22 @@ const FULL_DESIGN_PACKAGE_IDS = ["yard-design-package"];
 const FULL_DESIGN_STARTING_POINT_IDS = ["onsite-base-model", "survey-documents-start", "client-model-start"];
 const FULL_DESIGN_IDEA_IDS = ["draw-your-idea", "help-design-it"];
 
+const STRUCTURE_DECK_IDS = ["deck-small", "deck-large"];
+const STRUCTURE_COVER_IDS = ["pergola-small", "shade-large"];
+const STRUCTURE_CARPORT_IDS = ["carport-small", "carport-large"];
+const STRUCTURE_MAIN_BUILD_IDS = [
+  ...STRUCTURE_DECK_IDS,
+  ...STRUCTURE_COVER_IDS,
+  "outdoor-kitchen",
+];
+
 export default function App() {
   const [lang, setLang] = useState<Lang>("en");
   const [view, setView] = useState<ViewState>("LANDING");
   const [activePath, setActivePath] = useState<string>("quick-sale");
   const [selectedSize, setSelectedSize] = useState<string>("small");
   const [cart, setCart] = useState<Record<string, number>>({});
-  const [contact, setContact] = useState<OrderContact>({
-    clientName: "",
-    customerEmail: "",
-    customerPhone: "",
-    projectAddress: "",
-    notes: "",
-  });
+  const [contact, setContact] = useState<OrderContact>(() => getInitialContact());
   const [cleared, setCleared] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [sendingHelp, setSendingHelp] = useState(false);
@@ -2734,6 +3178,15 @@ export default function App() {
   const selectedSizeObj = SIZES.find((size) => size.id === selectedSize);
   const selectedSizeLabel =
     translateSizeLabel(selectedSizeObj, lang) || selectedSize;
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (contact.rememberPartnerInfo) {
+      savePartnerInfo(contact);
+    } else {
+      window.localStorage.removeItem(PARTNER_STORAGE_KEY);
+    }
+  }, [contact]);
 
   function navigateTo(nextView: ViewState, nextPath = activePath, historyMode: "push" | "replace" = "push") {
     setActivePath(nextPath);
@@ -2904,7 +3357,9 @@ export default function App() {
     Boolean(contact.clientName.trim()) &&
     Boolean(contact.customerEmail.trim()) &&
     Boolean(contact.customerPhone.trim()) &&
-    Boolean(contact.notes.trim());
+    Boolean(contact.projectAddress.trim()) &&
+    Boolean(contact.notes.trim()) &&
+    contact.sameProjectConfirmed;
   const canSubmitReview = hasRequiredContact && pricedItems.length > 0 && hasTbd;
   const canCheckout = hasRequiredContact && hasPayableService && !hasTbd;
   const canProceed = canCheckout || canSubmitReview;
@@ -2949,6 +3404,25 @@ export default function App() {
         FULL_DESIGN_IDEA_IDS.forEach((id) => delete next[id]);
       }
 
+      if (STRUCTURE_DECK_IDS.includes(service.id)) {
+        STRUCTURE_DECK_IDS.forEach((id) => delete next[id]);
+        STRUCTURE_CARPORT_IDS.forEach((id) => delete next[id]);
+      }
+
+      if (STRUCTURE_COVER_IDS.includes(service.id)) {
+        STRUCTURE_COVER_IDS.forEach((id) => delete next[id]);
+        STRUCTURE_CARPORT_IDS.forEach((id) => delete next[id]);
+      }
+
+      if (service.id === "outdoor-kitchen") {
+        STRUCTURE_CARPORT_IDS.forEach((id) => delete next[id]);
+      }
+
+      if (STRUCTURE_CARPORT_IDS.includes(service.id)) {
+        STRUCTURE_CARPORT_IDS.forEach((id) => delete next[id]);
+        STRUCTURE_MAIN_BUILD_IDS.forEach((id) => delete next[id]);
+      }
+
       next[service.id] = 1;
       return next;
     });
@@ -2962,7 +3436,7 @@ export default function App() {
     if (!window.confirm(t.confirmReset)) return;
     setCart({});
     setSelectedSize("small");
-    setContact({ clientName: "", customerEmail: "", customerPhone: "", projectAddress: "", notes: "" });
+    setContact(getInitialContact());
     setCleared(true);
   }
 
@@ -3005,7 +3479,10 @@ export default function App() {
         customer_email: sanitizeText(contact.customerEmail),
         customer_phone: sanitizeText(contact.customerPhone),
         project_address: sanitizeText(contact.projectAddress),
+        project_client_label: sanitizeText(contact.projectAddress),
+        same_client_project_confirmed: contact.sameProjectConfirmed,
         full_notes: contact.notes,
+        white_label_delivery: buildWhiteLabelPayload(contact),
         payment_status: "needs_manual_review",
         items: pricedItems.map((item) => ({
           id: item.service.id,
@@ -3045,7 +3522,10 @@ export default function App() {
       customer_email: sanitizeText(contact.customerEmail),
       customer_phone: sanitizeText(contact.customerPhone),
       project_address: sanitizeText(contact.projectAddress),
+      project_client_label: sanitizeText(contact.projectAddress),
+      same_client_project_confirmed: contact.sameProjectConfirmed,
       full_notes: contact.notes,
+      white_label_delivery: buildWhiteLabelPayload(contact),
       payment_status: "pending_payment",
       items: pricedItems.map((item) => ({
         id: item.service.id,
@@ -3067,6 +3547,8 @@ export default function App() {
         customer_phone: sanitizeText(contact.customerPhone),
         client_name: sanitizeText(contact.clientName),
         project_address: sanitizeText(contact.projectAddress),
+        project_client_label: sanitizeText(contact.projectAddress),
+        same_client_project_confirmed: contact.sameProjectConfirmed,
         path_id: activePath,
         size_id: selectedSize,
         items: pricedItems
@@ -3079,9 +3561,14 @@ export default function App() {
         metadata: {
           internal_id: orderId,
           project_address: sanitizeText(contact.projectAddress),
+          project_client_label: sanitizeText(contact.projectAddress),
+          same_client_project_confirmed: String(contact.sameProjectConfirmed),
           short_notes: contact.notes.slice(0, 250),
+          logo_option: contact.logoOption,
+          white_label_company: sanitizeText(contact.whiteLabelCompany || contact.clientName),
         },
         full_notes: contact.notes,
+        white_label_delivery: buildWhiteLabelPayload(contact),
       };
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
