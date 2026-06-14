@@ -136,6 +136,31 @@ const SOCIAL_LINKS = {
   email: "",
 };
 
+type SampleImages = {
+  before: string;
+  after: string;
+};
+
+function makeSampleSvg(label: string, bg: string, fg: string) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760"><rect width="1200" height="760" fill="${bg}"/><rect x="70" y="70" width="1060" height="620" rx="42" fill="white" opacity="0.58"/><text x="600" y="352" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="800" fill="${fg}">${label}</text><text x="600" y="420" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="600" fill="${fg}" opacity="0.72">Replace with your project sample image</text></svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+const DEFAULT_SAMPLE_IMAGES: SampleImages = {
+  before: makeSampleSvg("Before / input", "#e5e7eb", "#334155"),
+  after: makeSampleSvg("Sample result", "#dff4e7", "#166534"),
+};
+
+const SAMPLE_IMAGES: Record<string, SampleImages> = {
+  // Replace these paths after you add real files to /public/samples/.
+  // Example: before: "/samples/quick-photo-before.jpg", after: "/samples/quick-photo-after.jpg"
+  "photo-concept-start": DEFAULT_SAMPLE_IMAGES,
+};
+
+function getSampleImages(serviceId: string): SampleImages {
+  return SAMPLE_IMAGES[serviceId] ?? DEFAULT_SAMPLE_IMAGES;
+}
+
 const T = {
   en: {
     header: "Scope Builder",
@@ -244,7 +269,10 @@ const T = {
     reviewSubmitted: "Request submitted. We will review the scope and follow up with pricing.",
     generating: "Generating...",
     termsLine:
-      "Stripe checkout should include Terms of Service consent and the Terms & Rules link.",
+      "All deliverables are design-intent / visualization / coordination support only. They are not sealed, stamped, permit-ready, construction-control, engineering, surveying, or code-compliance documents.",
+    safetyTitle: "Scope safety note",
+    safetyText:
+      "We provide design-intent visuals, concept sheets, drafting cleanup, and white-label presentation support. We do not provide engineering, legal surveying, code review, permit filing, permit approval guarantees, sealed/stamped drawings, structural calculations, utility design, or construction-control documents.",
     fillRequired:
       "Add your name/company, email, phone number, project/client label, project details, confirm this is one client/project, and select at least one service.",
     quoteBlocksCheckout:
@@ -260,19 +288,19 @@ const T = {
     warning: "Important",
     designPackageSection: "Yard design package",
     designPackageSectionDesc:
-      "Simple yard design package: main plan, planting plan, and presentation renders for one design area. Built structures, extra specialty sheets, and professional 3D workflow live in separate sections.",
+      "Design-intent yard package: concept plan, planting direction, and presentation visuals for one design area. Built structures, specialty sheets, and professional 3D workflow live in separate sections.",
     startSection: "3D / rendering support",
     startSectionDesc:
-      "Choose the base/model path first. Site Visit is an optional add-on if you want us to collect field photos, notes, and rough measurements ourselves.",
+      "Choose the base/model path first. Site Visit is an optional add-on if you want us to collect field photos, notes, and rough measurements ourselves. This is existing-conditions setup for design and visualization, not survey or engineering.",
     ideaSection: "Design role",
     ideaSectionDesc:
       "Choose only one: we produce your design direction, or we lead the design brief before modeling/rendering.",
     afterLayout: "After layout",
     afterLayoutDesc:
-      "At this point the layout is approved and treated as locked. From here you can order detailed plans and follow-up sheets.",
+      "Use these after the design direction is selected and no longer changing. These are design-intent follow-up sheets, not sealed construction documents.",
     buildSection: "Choose outdoor structure",
     buildSectionDesc:
-      "You can combine a deck, pergola / cover, and outdoor kitchen when they belong to the same build. Choose only one size per structure type. Carports are handled as a separate structure package.",
+      "You can combine a deck, pergola / cover, and outdoor kitchen when they belong to the same client/project. Choose only one size per structure type. These are concept and presentation packages; structural engineering, code checks, and permits stay with the licensed/local professionals.",
     supportSection: "Site visit and rush timing",
     supportSectionDesc:
       "Add a local site visit if field measurements are needed. If the site is outside city limits, extra travel time may be added to the final invoice at $70/hour. Rush turnaround may be available when the schedule allows.",
@@ -281,13 +309,13 @@ const T = {
       "One fast paid visual to help close the sale.",
     specialSection: "Plans & Sheets",
     specialSectionDesc:
-      "Use these when the layout already exists and you need a specific clean plan or sheet.",
-    citySection: "HOA and city sheets",
+      "Use these when the design already exists and you need a specific clean design-intent sheet for presentation, pricing, or crew discussion.",
+    citySection: "HOA / jurisdiction review support",
     citySectionDesc:
-      "These use an existing base, usually a clean master plan. You can still check the price now, but the price assumes that base already exists.",
+      "These use an existing base, usually a clean master plan. They are support exhibits only: we do not file permits, guarantee approvals, or replace licensed professionals.",
     irrigationSection: "Licensed irrigator drafting",
     irrigationSectionDesc:
-      "Drafting support only for licensed irrigators who already know the irrigation layout and want it cleaned up on screen.",
+      "Drafting cleanup only from a licensed irrigator's markups. We do not design irrigation systems, calculate hydraulics, or issue installation specifications.",
     softDependencyMasterPlan:
       "Price assumes there is already a clean master plan or other usable base. If not, extra setup may be needed.",
     softDependencyLayout:
@@ -436,7 +464,10 @@ const T = {
     reviewSubmitted: "Solicitud enviada. Revisaremos el alcance y responderemos con precio.",
     generating: "Generando...",
     termsLine:
-      "El pago por Stripe debe incluir aceptación de los Términos de Servicio y enlace a Terms & Rules.",
+      "Todos los entregables son solo apoyo de intención de diseño, visualización y coordinación. No son documentos sellados, estampados, listos para permiso, control de construcción, ingeniería, survey legal o cumplimiento de código.",
+    safetyTitle: "Nota de alcance",
+    safetyText:
+      "Ofrecemos visuales de intención de diseño, láminas conceptuales, cleanup de drafting y apoyo de presentación white-label. No ofrecemos ingeniería, survey legal, revisión de código, trámite de permisos, garantía de aprobación, planos sellados/estampados, cálculos estructurales, diseño de utilities o documentos de control de construcción.",
     fillRequired:
       "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, confirma que es un solo cliente/proyecto y elige al menos un servicio.",
     quoteBlocksCheckout:
@@ -452,19 +483,19 @@ const T = {
     warning: "Importante",
     designPackageSection: "Paquete de diseño de patio",
     designPackageSectionDesc:
-      "Paquete simple de diseño de patio: plano principal, plano de plantación y renders de presentación para un área de diseño. Estructuras, láminas especiales extra y workflow profesional 3D van en secciones separadas.",
+      "Paquete de intención de diseño para yard: plano conceptual, dirección de plantación y visuales de presentación para un área de diseño. Estructuras, láminas especiales y workflow profesional 3D están en secciones separadas.",
     startSection: "Apoyo 3D / renders",
     startSectionDesc:
-      "Primero elige la ruta de base/modelo. La visita al sitio es un add-on opcional si quieres que nosotros recojamos fotos, notas y medidas aproximadas en campo.",
+      "Elige primero el camino de base/modelo. Site Visit es un add-on opcional si quieres que recolectemos fotos, notas y medidas aproximadas en sitio. Esto es setup de condiciones existentes para diseño y visualización, no survey ni ingeniería.",
     ideaSection: "Rol de diseño",
     ideaSectionDesc:
       "Elige solo una opción: producimos tu dirección de diseño o lideramos el brief de diseño antes de modelar/renderizar.",
     afterLayout: "Después del layout",
     afterLayoutDesc:
-      "En este punto el layout ya está aprobado y se trata como cerrado. Desde aquí puedes pedir planos detallados y láminas de seguimiento.",
+      "Usa esto después de seleccionar la dirección de diseño y cuando ya no esté cambiando. Son láminas de intención de diseño, no planos sellados de construcción.",
     buildSection: "Elige estructura exterior",
     buildSectionDesc:
-      "Puedes combinar deck, pérgola / cubierta y cocina exterior cuando pertenecen a la misma obra. Elige solo un tamaño por tipo de estructura. Los carports se manejan como paquete separado.",
+      "Puedes combinar deck, pérgola / cubierta y cocina exterior cuando pertenecen al mismo cliente/proyecto. Elige solo un tamaño por tipo de estructura. Son paquetes conceptuales y de presentación; ingeniería estructural, revisión de código y permisos quedan con profesionales licenciados/locales.",
     supportSection: "Visita al sitio y urgencia",
     supportSectionDesc:
       "Agrega una visita local si se necesitan medidas de campo. Si el sitio está fuera de los límites de la ciudad, el tiempo extra de traslado puede agregarse a la factura final a $70/hora. La entrega urgente puede estar disponible según agenda.",
@@ -473,13 +504,13 @@ const T = {
       "Una visual pagada rápida para ayudar a cerrar la venta.",
     specialSection: "Planos y láminas",
     specialSectionDesc:
-      "Úsalo cuando el layout ya existe y necesitas un plano o una lámina limpia específica.",
-    citySection: "Láminas HOA y ciudad",
+      "Usa esto cuando el diseño ya existe y necesitas una lámina limpia de intención de diseño para presentación, pricing o conversación con la cuadrilla.",
+    citySection: "Apoyo para revisión HOA / jurisdicción",
     citySectionDesc:
-      "Estas usan una base existente, normalmente un master plan limpio. Puedes revisar el precio ahora, pero el precio asume que esa base ya existe.",
+      "Usan una base existente, normalmente un master plan limpio. Son exhibits de apoyo solamente: no tramitamos permisos, no garantizamos aprobaciones y no reemplazamos profesionales licenciados.",
     irrigationSection: "Dibujo para irrigadores licenciados",
     irrigationSectionDesc:
-      "Solo apoyo de dibujo para irrigadores licenciados que ya saben el layout de riego y quieren limpiarlo en pantalla.",
+      "Cleanup de drafting solo desde markups de un irrigador licenciado. No diseñamos sistemas de irrigación, no calculamos hidráulica y no emitimos especificaciones de instalación.",
     softDependencyMasterPlan:
       "El precio asume que ya existe un master plan limpio u otra base utilizable. Si no, puede hacer falta trabajo extra.",
     softDependencyLayout:
@@ -614,15 +645,15 @@ const STARTING_POINT_SERVICES: Service[] = [
     youSend:
       "Site address, access details, and anything already known about the property.",
     youGet:
-      "Site visit time, raw measurements, photos, and field notes.",
+      "Site visit time, field photos, raw measurements, and field notes for design-intent work.",
     notIncluded:
-      "Base plan, 3D model, design work, or travel outside city limits.",
+      "Base plan, 3D model, design work, legal survey, engineering, code review, or travel outside city limits.",
     helper:
       "Choose this together with Base Plan + 3D Model if you want us to build the existing-conditions model from the site visit.",
   },
   {
     id: "onsite-base-model",
-    title: "Site Visit + Base Plan + 3D Model",
+    title: "Base Plan + 3D Existing Model with Site Visit",
     category: "Start",
     icon: Map,
     pricingType: "size",
@@ -636,7 +667,7 @@ const STARTING_POINT_SERVICES: Service[] = [
     youGet:
       "Local site visit, field photos/notes, a base 2D plan, and a 3D existing-conditions model.",
     notIncluded:
-      "Design layout, planting plan, rendering package, engineering, or travel outside city limits.",
+      "Design layout, planting plan, rendering package, legal survey, engineering, code review, permits, or travel outside city limits.",
     helper: "Choose this OR remote base/model OR existing 3D model. It is one starting point, not an add-on.",
   },
   {
@@ -656,7 +687,7 @@ const STARTING_POINT_SERVICES: Service[] = [
     youGet:
       "A basic AutoCAD/DWG-style 2D base plan and a simple 3D existing-conditions model. This is geometry and scale setup, not final materials or detailed render textures.",
     notIncluded:
-      "Site visit unless added separately, legal survey work, engineering, permits, final design, planting plan, detailed render materials, or final presentation renders.",
+      "Site visit unless added separately, legal survey work, engineering, code review, permit work, final design, planting plan, detailed render materials, final presentation renders, or construction-control documents.",
     helper: "Choose this OR Your 3D Model, We Render It. Add Site Visit separately if we need to collect the site information.",
   },
   {
@@ -695,7 +726,7 @@ const STARTING_POINT_SERVICES: Service[] = [
     youGet:
       "One concept image and a short list of suggested materials or main features used in the concept.",
     notIncluded:
-      "Site visit, accurate site model, construction-ready drawings, engineering, permits, or final design documentation.",
+      "Site visit, accurate site model, construction-ready drawings, engineering, code review, permits, or final design documentation.",
     sampleLabel: "See sample",
     badgeLabel: "Best seller",
   },
@@ -710,12 +741,12 @@ const STRUCTURE_SERVICES: Service[] = [
     pricingType: "flat",
     flatPrice: 1000,
     stripePriceId: "price_decksmall_1000",
-    short: "Layout, AutoCAD plan set, and 3D visuals for a small deck.",
+    short: "Design-intent plan sheets and 3D visuals for a small deck.",
     bestFor: "Decks under 200 sq.ft that need a clean visual and plan package.",
     youSend:
       "Site plan, preferred location, dimensions, photos, and reference ideas if any.",
     youGet:
-      "Deck layout, AutoCAD plans, and 3D visuals. HOA-ready plan set by default.",
+      "Deck concept layout, design-intent plan sheets, and 3D visuals for client / HOA discussion.",
     notIncluded:
       "Site visit, structural engineering, stamped drawings, or permit filing by us.",
     helper:
@@ -730,13 +761,13 @@ const STRUCTURE_SERVICES: Service[] = [
     pricingType: "quote",
     stripePriceId: null,
     short:
-      "Concept layout, plan support, and 3D visuals for a larger deck before engineering or permit work.",
+      "Concept layout, design-intent sheet support, and 3D visuals for a larger deck before licensed engineering or permit work, if required.",
     bestFor:
       "Decks over 200 sq.ft, elevated decks, multi-level decks, or deck scopes that need review before pricing.",
     youSend:
       "Survey, dimensions, preferred layout, photos, and any requirements you already have.",
     youGet:
-      "Deck visuals and plans prepared for client, HOA, or engineer review.",
+      "Deck visuals and concept sheets for client, HOA, or licensed professional discussion.",
     notIncluded:
       "Site visit, structural engineering, stamped permit drawings, permit fees, or permit filing by us.",
     helper:
@@ -751,12 +782,12 @@ const STRUCTURE_SERVICES: Service[] = [
     pricingType: "flat",
     flatPrice: 1000,
     stripePriceId: "price_pergolasmall_1000",
-    short: "Layout, AutoCAD plan set, and 3D visuals for a small pergola or simple patio cover.",
+    short: "Design-intent plan sheets and 3D visuals for a small pergola or simple patio cover.",
     bestFor: "Pergolas, patio covers, or shade structures under 200 sq.ft.",
     youSend:
       "Site plan, preferred location, dimensions, roof or shade preference, photos, and reference ideas if any.",
     youGet:
-      "Pergola or patio cover layout, AutoCAD plans, and 3D visuals. HOA-ready plan set by default.",
+      "Pergola or patio cover concept layout, design-intent plan sheets, and 3D visuals for client / HOA discussion.",
     notIncluded:
       "Site visit, structural engineering, stamped drawings, roof tie-in details, or permit filing by us.",
     helper:
@@ -771,13 +802,13 @@ const STRUCTURE_SERVICES: Service[] = [
     pricingType: "quote",
     stripePriceId: null,
     short:
-      "Concept layout, plan support, and 3D visuals for a larger shade or roofed outdoor structure.",
+      "Concept layout, design-intent sheet support, and 3D visuals for a larger shade or roofed outdoor structure.",
     bestFor:
       "Pergolas, patio covers, attached covers, or larger shade structures over 200 sq.ft that need review before pricing.",
     youSend:
       "Survey, dimensions, photos, roof or cover preferences, attachment notes, and reference images if you have them.",
     youGet:
-      "Shade-structure visuals and plans prepared for client, HOA, or engineer review.",
+      "Shade-structure visuals and concept sheets for client, HOA, or licensed professional discussion.",
     notIncluded:
       "Site visit, structural engineering, stamped permit drawings, roof tie-in details, permit fees, or permit filing by us.",
     helper:
@@ -792,13 +823,13 @@ const STRUCTURE_SERVICES: Service[] = [
     pricingType: "quote",
     stripePriceId: null,
     short:
-      "Concept layout, plan support, and 3D visuals for a small covered parking structure.",
+      "Concept layout, design-intent sheet support, and 3D visuals for a small covered parking structure.",
     bestFor:
-      "Carports under 200 sq.ft that need a clear concept before engineering or permit work.",
+      "Carports under 200 sq.ft that need a clear concept before licensed engineering or permit work, if required.",
     youSend:
       "Site plan, dimensions, clearance notes, parking needs, photos, and reference images if you have them.",
     youGet:
-      "A conceptual carport layout with plan support and 3D visuals for review.",
+      "A conceptual carport layout with design-intent sheet support and 3D visuals for review.",
     notIncluded:
       "Site visit, structural engineering, stamped permit drawings, utility coordination, or permit filing by us.",
     helper:
@@ -813,13 +844,13 @@ const STRUCTURE_SERVICES: Service[] = [
     pricingType: "quote",
     stripePriceId: null,
     short:
-      "Concept layout, plan support, and 3D visuals for a larger covered parking structure.",
+      "Concept layout, design-intent sheet support, and 3D visuals for a larger covered parking structure.",
     bestFor:
       "Carports over 200 sq.ft, multi-car covers, attached carports, or scopes that need review before pricing.",
     youSend:
       "Site plan, dimensions, clearance notes, parking needs, photos, and reference images if you have them.",
     youGet:
-      "Carport visuals and plans prepared for client, HOA, or engineer review.",
+      "Carport visuals and concept sheets for client, HOA, or licensed professional discussion.",
     notIncluded:
       "Site visit, structural engineering, stamped permit drawings, utility coordination, permit fees, or permit filing by us.",
     helper:
@@ -835,15 +866,15 @@ const STRUCTURE_SERVICES: Service[] = [
     flatPrice: 750,
     stripePriceId: "price_outdoorkitchen_750",
     short:
-      "Concept layout, AutoCAD plan support, appliance zones, clearances, and 3D visuals.",
+      "Concept layout, design-intent sheet support, approximate appliance zones, working clearances, and 3D visuals.",
     bestFor:
       "You need a clean concept package before detailed utility or shop work.",
     youSend:
       "Site plan, rough wish list, preferred appliance notes, and size limits.",
     youGet:
-      "A conceptual outdoor kitchen layout with plan support and 3D visuals.",
+      "A conceptual outdoor kitchen layout with design-intent sheet support and 3D visuals.",
     notIncluded:
-      "Site visit, utility design, permit documents, appliance specification package, or construction drawings.",
+      "Site visit, utility design, gas/electrical/plumbing design, code review, permit documents, appliance specification package, or construction drawings.",
     helper:
       "This package is without site visit. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
@@ -862,9 +893,9 @@ const STRUCTURE_SERVICES: Service[] = [
     youSend:
       "Photos, a short description, rough size, location, and reference links or inspiration images.",
     youGet:
-      "A manual review and feedback on whether we can help, what package fits, and what the likely next step or price range should be.",
+      "A manual review and feedback on whether we can help, what design-intent package fits, and what the likely next step or price range should be.",
     notIncluded:
-      "Retaining walls, slope support, engineering, code research, permit filing, fabrication details, or final construction documents.",
+      "Retaining walls, slope-support walls, engineering, code research, permit filing, fabrication details, or final construction documents.",
     helper:
       "Choose this when the feature is unusual. Retaining walls and real slope-support walls belong in a separate design/review process, not here.",
   },
@@ -880,15 +911,15 @@ const FULL_YARD_PACKAGE_SERVICES: Service[] = [
     prices: { small: 1000, medium: 1500, large: 2200, estate: null },
     stripePriceId: null,
     short:
-      "Yard design package with a main plan, planting plan, and presentation renders for the selected design area.",
+      "Design-intent yard package with a concept plan, planting direction/planting sheet, and presentation visuals for the selected design area.",
     bestFor:
-      "Builders or landscape crews who need a clear yard design under their brand for a real client budget, without dealing with 3D/model workflow details.",
+      "Builders or landscape crews who need a clear yard design direction under their brand for a real client budget, without dealing with professional 3D/model workflow details.",
     youSend:
       "Survey or site plan if available, clear photos, marked measurements, budget level, style references, client must-haves, and site constraints. If there is no site visit, dimensions are required: widths, depths, heights, roof/eave-to-ground, house-to-fence distances, and important level changes.",
     youGet:
-      "Main concept plan for the selected design area, planting plan/direction, simple dimensions where needed, presentation renders, and a client-ready PDF.",
+      "Design-intent concept plan for the selected design area, planting direction / planting sheet, general dimensions where helpful, presentation visuals, and a client-ready PDF.",
     notIncluded:
-      "Separate outdoor structures such as decks, pergolas, carports, outdoor kitchens; detailed specialty sheets; lighting plan; irrigation design; grading/drainage engineering; permit-ready drawings; stamped documents.",
+      "Separate outdoor structures such as decks, pergolas, carports, outdoor kitchens; detailed specialty sheets; lighting design; irrigation design; grading/drainage engineering; permit-ready drawings; sealed/stamped documents; code review; or construction-control drawings.",
     helper:
       "For decks, pergolas, patio covers, carports, kitchens, or custom built structures, use Decks, Covers & Outdoor Structures. For extra sheets after the design, use Plans & Sheets. If you are a designer and want 3D/model/render workflow support, use 3D & Rendering Support.",
   },
@@ -910,7 +941,7 @@ const DESIGN_DIRECTION_SERVICES: Service[] = [
     youSend:
       "Your layout idea, sketches, marked photos, reference images, links, notes about what to model, material direction, dimensions, and examples of the look or planning logic you want us to follow.",
     youGet:
-      "A clean production model / visual direction based on your instructions, with review visuals ready to move toward final rendering.",
+      "A clean production model / visual direction based on your instructions, with review visuals ready to move toward presentation rendering.",
     notIncluded:
       "Leading the design from scratch, client design meetings, engineering, permit drawings, detailed production sheets, takeoffs, or separate structure packages unless ordered separately.",
     helper:
@@ -933,7 +964,7 @@ const DESIGN_DIRECTION_SERVICES: Service[] = [
     youGet:
       "Design brief work, reference selection, sketch options, design development, final design direction, and a clear path into modeling/rendering.",
     notIncluded:
-      "Engineering, permit package, stamped drawings, planting plans, takeoffs, detailed production sheets, or acting as the direct client-facing designer unless agreed separately.",
+      "Engineering, permit packages, sealed/stamped drawings, planting plans, takeoffs, detailed production sheets, code review, or acting as the direct client-facing designer unless agreed separately.",
     helper:
       "A partner or client-side contact must attend the remote design brief so the client discussion does not turn into a broken telephone. We can lead design, but the white-label partner stays connected to the client conversation.",
   },
@@ -949,12 +980,12 @@ const NEXT_PHASE_SERVICES: Service[] = [
     prices: { small: 200, medium: 350, large: 700, estate: null },
     stripePriceId: null,
     short:
-      "A clean 2D master plan from your documents or from a layout we already produced.",
-    bestFor: "You need one clear main plan sheet the crew can read.",
+      "A clean 2D design-intent master plan from your documents or from a layout we already produced.",
+    bestFor: "You need one clear main plan sheet for presentation, pricing, or crew coordination.",
     youSend:
       "If we already created the layout, no extra files are needed. If not, send your approved plan, model, redlines, or source documents.",
-    youGet: "A clean 2D master plan ready to print and show to the crew.",
-    notIncluded: "New concept design, engineering, or permit approval.",
+    youGet: "A clean 2D design-intent master plan ready to print and share for coordination.",
+    notIncluded: "New concept design, engineering, code review, permit filing, or approval guarantee.",
     helper:
       "If the source documents come from outside our process and need cleanup first, that may need added time or a separate quote.",
     sampleLabel: "See sample",
@@ -968,12 +999,12 @@ const NEXT_PHASE_SERVICES: Service[] = [
     prices: { small: 200, medium: 350, large: 550, estate: null },
     stripePriceId: null,
     short:
-      "Technical planting sheet from your documents or from a layout we already produced.",
+      "Planting design-intent sheet from your documents or from a layout we already produced.",
     bestFor: "Planting is moving forward and the crew needs a clean sheet.",
     youSend:
       "If we already built the layout, no extra base files are needed. If not, send the approved plan and plant direction or list.",
     youGet:
-      "A planting plan with schedule and quantities, ready to print and show to the crew.",
+      "A planting plan with schedule and quantities, ready to print and share for coordination.",
     notIncluded:
       "Nursery sourcing, irrigation design, or new layout exploration.",
     helper:
@@ -991,37 +1022,37 @@ const NEXT_PHASE_SERVICES: Service[] = [
     prices: { small: 200, medium: 350, large: 550, estate: null },
     stripePriceId: null,
     short:
-      "A clean hardscape sheet showing paving layout, material zones, and pattern logic where needed.",
+      "A clean hardscape design-intent sheet showing paving layout, material zones, and pattern logic where needed.",
     bestFor:
       "Hardscape is approved and now needs one dedicated paving and material sheet.",
     youSend:
       "If we already built the layout, no extra base files are needed. If not, send the approved plan, materials, and any paving pattern notes.",
     youGet:
-      "A hardscape plan showing layout, materials, paving patterns, and tile or paver direction where needed.",
+      "A hardscape design-intent sheet showing layout, materials, paving patterns, and tile or paver direction where needed.",
     notIncluded:
-      "Engineering, structural base design, drainage engineering, or construction details unless added separately.",
+      "Engineering, structural base design, drainage engineering, code review, installation details, or construction-control documents.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
   },
   {
     id: "grading",
-    title: "Grading + Drainage Concept",
+    title: "Slope / Drainage Concept Notes",
     category: "After layout",
     icon: DraftingCompass,
     pricingType: "size",
     prices: { small: 500, medium: 700, large: 1000, estate: null },
     stripePriceId: null,
     short:
-      "Non-engineered grading and drainage concept based on topo or measured elevations.",
+      "Non-engineered slope and drainage concept notes based on topo or measured elevations.",
     bestFor:
       "The site needs slope or drainage thinking after the main layout is approved.",
     youSend:
       "Topo survey or measured elevations, approved design, and scope of improvements. If no topo exists yet, request a site visit or bring measured data first.",
     youGet:
-      "A conceptual grading and drainage sheet, ready to print and discuss with the crew.",
+      "A design-intent slope / drainage concept sheet, ready to discuss with the crew or hand off to a licensed professional if needed.",
     notIncluded:
-      "Civil engineering, stamped grading plans, drainage calculations, or grading work made without usable elevation information.",
+      "Civil engineering, sealed/stamped grading plans, drainage calculations, final grading design, code review, or work made without usable elevation information.",
     helper:
       "We cannot guess slopes. This service needs topo or real measured elevations.",
     sampleLabel: "See sample",
@@ -1037,15 +1068,15 @@ const NEXT_PHASE_SERVICES: Service[] = [
     prices: { small: 200, medium: 250, large: 300, estate: null },
     stripePriceId: null,
     short:
-      "A simple non-engineered plant watering strategy for the approved planting areas.",
+      "A simple plant watering approach for approved planting areas, for planning discussion only.",
     bestFor:
-      "You want clear understanding of sun zones, shade zones, and plant watering needs before detailed irrigation work happens.",
+      "You want clear understanding of sun zones, shade zones, and plant watering needs before a licensed irrigation professional designs the system.",
     youSend:
       "Approved plan, planting direction, and any known notes about shade, sun exposure, or difficult areas.",
     youGet:
-      "Sun and shade zone notes, watering logic by area, and recommendations such as drip or other basic watering approach where appropriate.",
+      "Sun and shade zone notes, watering logic by area, and general recommendations such as drip or other basic approach where appropriate.",
     notIncluded:
-      "Pipe sizing, head layout, irrigation specs, hydraulic design, or installation diagrams.",
+      "Pipe sizing, head layout, irrigation specifications, hydraulic design, installation diagrams, or replacement of a licensed irrigator's work.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -1064,9 +1095,9 @@ const NEXT_PHASE_SERVICES: Service[] = [
     youSend:
       "If we already built the layout, no extra base files are needed. If not, send approved plan, focal points, and lighting direction if known.",
     youGet:
-      "A conceptual lighting layout, ready to print and show to the crew, plus bonus night views when our model already exists.",
+      "A conceptual lighting layer for discussion, plus bonus night views when our model already exists.",
     notIncluded:
-      "Electrical design, wiring plans, or installation drawings.",
+      "Electrical design, wiring plans, code review, fixture specifications, or installation drawings.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -1080,13 +1111,13 @@ const NEXT_PHASE_SERVICES: Service[] = [
     prices: { small: 200, medium: 350, large: 700, estate: null },
     stripePriceId: null,
     short:
-      "Material quantities and dimensions from an approved 3D or 2D design.",
+      "Estimated material quantities and dimensions from an approved 3D or 2D design.",
     bestFor: "The scope is clear and you are ready to price the job.",
     youSend:
       "Approved plan or model if it comes from your side. If we built it, no extra files are needed.",
     youGet:
-      "Quantities and dimensions based on the approved scope, delivered in Google Sheets. Tell us what format works best for your team.",
-    notIncluded: "Purchasing, vendor follow-up, or field verification.",
+      "Estimated quantities and dimensions based on the approved scope, delivered in Google Sheets. Tell us what format works best for your team.",
+    notIncluded: "Purchasing, vendor follow-up, field verification, waste factors, or guarantee that quantities match final field installation.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -1119,62 +1150,62 @@ const NEXT_PHASE_SERVICES: Service[] = [
 const CITY_SERVICES: Service[] = [
   {
     id: "hoa-city",
-    title: "HOA / City Submittal Sheet",
+    title: "HOA / Jurisdiction Review Support Sheet",
     category: "City",
     icon: ShieldCheck,
     pricingType: "size",
     prices: { small: 300, medium: 400, large: 600, estate: null },
     stripePriceId: null,
-    short: "Add-on submittal sheet from an approved master plan and survey.",
+    short: "Add-on review-support sheet from an approved master plan and survey.",
     bestFor:
-      "Jobs that already have a clean master plan and now need a submittal sheet.",
+      "Jobs that already have a clean master plan and need a design-intent exhibit for HOA or jurisdiction review.",
     youSend:
-      "Approved master plan, survey, and any checklist or notes you already have.",
+      "Approved master plan, survey, and any HOA/jurisdiction checklist or notes you already have.",
     youGet:
-      "A design-intent submittal sheet, ready to print and show if needed.",
+      "A design-intent review-support sheet, ready to print and include in your own submission package if appropriate.",
     notIncluded:
-      "Approval guarantee, engineering, or legal survey work.",
+      "Approval guarantee, permit filing by us, code review, engineering, architecture, landscape-architecture stamp, or legal survey work.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
   },
   {
     id: "impervious",
-    title: "Impervious Cover Calculation",
+    title: "Impervious Cover Exhibit / Estimate",
     category: "City",
     icon: FileText,
     pricingType: "size",
     prices: { small: 300, medium: 450, large: 650, estate: null },
     stripePriceId: null,
     short:
-      "Impervious cover calculation sheet prepared in a city-style format from a master plan and survey.",
+      "Impervious cover exhibit / estimate prepared from a master plan and survey information provided to us.",
     bestFor:
-      "Jobs where the jurisdiction cares how much impervious cover is already on the lot and how much is being added.",
+      "Jobs where the team needs a design-support estimate of existing and proposed impervious cover for review.",
     youSend:
       "Survey, existing hardscape information, and approved master plan or improvements.",
-    youGet: "Impervious cover sheet and calculation summary.",
-    notIncluded: "Engineering certification or approval guarantee.",
+    youGet: "Impervious cover exhibit and estimate summary.",
+    notIncluded: "Engineering certification, legal survey verification, code determination, permit filing, or approval guarantee.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
   },
   {
     id: "tree-overlay",
-    title: "Tree / CRZ Overlay",
+    title: "Tree / CRZ Visual Overlay",
     category: "City",
     icon: Trees,
     pricingType: "size",
     prices: { small: 500, medium: 700, large: 1000, estate: null },
     stripePriceId: null,
     short:
-      "Add-on tree / CRZ overlay based on certified tree data and a clean master plan.",
+      "Add-on tree / CRZ visual overlay based on certified tree data and a clean master plan.",
     bestFor:
-      "Projects where protected trees need to be shown clearly for review.",
+      "Projects where protected trees need to be shown clearly for discussion or review.",
     youSend:
       "Certified tree survey or tree inventory plus approved master plan references.",
-    youGet: "A tree preservation or CRZ overlay sheet.",
+    youGet: "A tree preservation / CRZ visual overlay sheet.",
     notIncluded:
-      "Arborist report or legal determination by the jurisdiction.",
+      "Arborist report, tree measurements by us, code determination, or legal determination by the jurisdiction.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -1184,7 +1215,7 @@ const CITY_SERVICES: Service[] = [
 const IRRIGATION_SERVICES: Service[] = [
   {
     id: "irrigation-drafting",
-    title: "Irrigation Drawing from Your Markups",
+    title: "Irrigation Drafting Cleanup from Your Markups",
     category: "Irrigation",
     icon: Droplets,
     pricingType: "size",
@@ -1192,14 +1223,14 @@ const IRRIGATION_SERVICES: Service[] = [
     stripePriceId: null,
     quantityEnabled: true,
     quantityLabel: "sheets",
-    short: "Drafting only from irrigation markups or paper layout.",
+    short: "Drafting cleanup only from irrigation markups or paper layout provided by a licensed irrigator.",
     bestFor:
       "Licensed irrigators who already know the irrigation layout and just need it cleaned up on screen.",
     youSend: "Field markups, hand sketches, redlines, and any base files.",
     youGet:
-      "Clean computer-drafted irrigation sheets, ready to print and show to the crew.",
+      "Clean computer-drafted irrigation sheets from your markups, ready to share for coordination.",
     notIncluded:
-      "Irrigation design, engineering, hydraulic calculations, or installation specifications.",
+      "Irrigation design, engineering, hydraulic calculations, code review, installation specifications, or replacement of a licensed irrigator's design work.",
     sampleLabel: "See sample",
   },
 ];
@@ -1216,13 +1247,13 @@ const SUPPORT_SERVICES: Service[] = [
     short:
       "Basic local site visit time for travel, time on site, and measurement setup.",
     bestFor:
-      "Jobs that need field measuring before structure work or special drawings.",
+      "Jobs that need field photos and rough measurements before concept, structure, or specialty sheet work.",
     youSend:
       "Site address, access details, and what needs to be checked.",
     youGet:
-      "Site visit time, raw measurements, photos, and field notes.",
+      "Site visit time, field photos, raw measurements, and field notes for design-intent work.",
     notIncluded:
-      "Base plan, 3D model, design work, or travel outside city limits.",
+      "Base plan, 3D model, design work, legal survey, engineering, code review, or travel outside city limits.",
     helper:
       "If the site is outside city limits, extra travel time may be added to the final invoice at $70/hour after we review the address.",
   },
@@ -1406,8 +1437,8 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     short: "Visita local básica para traslado, tiempo en el sitio y preparación de mediciones.",
     bestFor: "Trabajos locales que todavía no tienen medidas útiles suficientes.",
     youSend: "Dirección del sitio, detalles de acceso y cualquier información que ya tengas sobre la propiedad.",
-    youGet: "Tiempo de visita, medidas en bruto, fotos y notas de campo.",
-    notIncluded: "Plano base, modelo 3D, trabajo de diseño o traslado fuera de los límites de la ciudad.",
+    youGet: "Tiempo de visita, fotos de campo, medidas en bruto y notas de campo para trabajo de intención de diseño.",
+    notIncluded: "Plano base, modelo 3D, trabajo de diseño, survey legal, ingeniería, revisión de código o traslado fuera de los límites de la ciudad.",
     helper: "Elige esto junto con Plano base + modelo 3D si quieres que construyamos el modelo de condiciones existentes a partir de la visita.",
   },
   "onsite-base-model": {
@@ -1417,7 +1448,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     bestFor: "Flujos profesionales donde se necesitan mediciones en campo antes del diseño, render o láminas de seguimiento.",
     youSend: "Dirección o punto de reunión, detalles de acceso y cualquier información ya conocida sobre la propiedad.",
     youGet: "Visita local, fotos/notas de campo, plano base 2D y modelo 3D de condiciones existentes.",
-    notIncluded: "Diseño de layout, planting plan, paquete de renders, ingeniería o traslado fuera de los límites de la ciudad.",
+    notIncluded: "Diseño de layout, planting plan, paquete de renders, survey legal, ingeniería, revisión de código, permisos o traslado fuera de los límites de la ciudad.",
     helper: "Elige esto O base remota/modelo O modelo 3D existente. Es un punto de inicio, no un add-on.",
   },
   "survey-documents-start": {
@@ -1427,7 +1458,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     bestFor: "Diseñadores y builders que necesitan una base limpia del sitio antes de diseño, render o láminas de seguimiento.",
     youSend: "Survey o site plan si existe, PDFs, redlines, fotos claras y medidas marcadas en fotos: ancho, profundidad, altura, altura de techo/eave al piso, distancias de casa a fence y cambios de nivel importantes. Si agregas visita al sitio, nosotros recogemos fotos, notas y medidas aproximadas en campo.",
     youGet: "Un plano base 2D estilo AutoCAD/DWG y un modelo 3D simple de condiciones existentes. Esto es geometría y escala, no materiales finales ni texturas detalladas para render.",
-    notIncluded: "Visita al sitio salvo que se agregue aparte, survey legal, ingeniería, permisos, diseño final, planting plan, materiales detallados de render o renders finales de presentación.",
+    notIncluded: "Visita al sitio salvo que se agregue aparte, survey legal, ingeniería, revisión de código, permisos, diseño final, planting plan, materiales detallados de render, renders finales de presentación o documentos de control de construcción.",
     helper: "Elige esto O Tú mandas el modelo 3D, nosotros lo renderizamos. Agrega visita al sitio aparte si necesitamos recoger la información del sitio.",
   },
   "client-model-start": {
@@ -1447,17 +1478,17 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     bestFor: "Ventas rápidas antes de empezar un diseño completo.",
     youSend: "Una foto clara del sitio después del pago, medidas aproximadas marcadas en la foto si es posible y un texto corto sobre lo que quieres mostrar.",
     youGet: "Una imagen conceptual y una lista corta de materiales sugeridos o elementos principales usados en el concepto.",
-    notIncluded: "Visita al sitio, modelo exacto del sitio, planos listos para construcción, ingeniería, permisos o documentación final de diseño.",
+    notIncluded: "Visita al sitio, modelo exacto del sitio, planos listos para construcción, ingeniería, revisión de código, permisos o documentación final de diseño.",
     sampleLabel: "Ver ejemplo",
     badgeLabel: "Más pedido",
   },
   "deck-small": {
     title: "Paquete de deck pequeño, menos de 200 pies²",
     category: "Construcción",
-    short: "Layout, set de planos en AutoCAD y visuales 3D para un deck pequeño.",
+    short: "Láminas de intención de diseño y visuales 3D para un deck pequeño.",
     bestFor: "Decks de menos de 200 pies² que necesitan un paquete visual y de planos limpio.",
     youSend: "Site plan, ubicación preferida, dimensiones e ideas de referencia si las tienes.",
-    youGet: "Layout del deck, planos en AutoCAD y visuales 3D. Set listo para HOA por defecto.",
+    youGet: "Layout conceptual del deck, láminas de intención de diseño y visuales 3D para conversación con cliente / HOA.",
     notIncluded: "Visita al sitio, ingeniería estructural, planos sellados o trámite de permisos por nuestra parte.",
     helper: "Este paquete no incluye visita al sitio. Agrega Visita al sitio si se necesitan mediciones en campo.",
     sampleLabel: "Ver ejemplo",
@@ -1465,10 +1496,10 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
   "pergola-small": {
     title: "Paquete de pérgola / cubierta pequeña, menos de 200 pies²",
     category: "Construcción",
-    short: "Layout, set de planos en AutoCAD y visuales 3D para una pérgola pequeña o cubierta sencilla.",
+    short: "Láminas de intención de diseño y visuales 3D para una pérgola pequeña o cubierta sencilla.",
     bestFor: "Pérgolas, patio covers o estructuras de sombra de menos de 200 pies².",
     youSend: "Site plan, ubicación preferida, dimensiones, preferencia de techo o sombra, fotos e ideas de referencia si las tienes.",
-    youGet: "Layout de pérgola o cubierta, planos en AutoCAD y visuales 3D. Set listo para HOA por defecto.",
+    youGet: "Layout conceptual de pérgola o cubierta, láminas de intención de diseño y visuales 3D para conversación con cliente / HOA.",
     notIncluded: "Visita al sitio, ingeniería estructural, planos sellados, detalles de conexión de techo o trámite de permisos por nuestra parte.",
     helper: "Este paquete no incluye visita al sitio. Agrega Visita al sitio si se necesitan mediciones en campo.",
     sampleLabel: "Ver ejemplo",
@@ -1476,10 +1507,10 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
   "carport-small": {
     title: "Carport pequeño, menos de 200 pies² — revisar primero",
     category: "Construcción",
-    short: "Layout conceptual, apoyo de planos y visuales 3D para una estructura pequeña de estacionamiento cubierto.",
+    short: "Layout conceptual, apoyo de láminas de intención de diseño y visuales 3D para una estructura pequeña de estacionamiento cubierto.",
     bestFor: "Carports de menos de 200 pies² que necesitan un concepto claro antes de ingeniería o permisos.",
     youSend: "Site plan, dimensiones, notas de altura libre, necesidades de estacionamiento, fotos e imágenes de referencia si las tienes.",
-    youGet: "Un layout conceptual de carport con apoyo de planos y visuales 3D para revisión.",
+    youGet: "Un layout conceptual de carport con apoyo de láminas de intención de diseño y visuales 3D para revisión.",
     notIncluded: "Visita al sitio, ingeniería estructural, planos sellados para permiso, coordinación de utilities o trámite de permisos por nuestra parte.",
     helper: "Revisar primero. Agrega Visita al sitio si se necesitan mediciones en campo.",
     sampleLabel: "Ver ejemplo",
@@ -1487,7 +1518,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
   "carport-large": {
     title: "Carport grande, más de 200 pies² — cotización",
     category: "Construcción",
-    short: "Layout conceptual, apoyo de planos y visuales 3D para una estructura grande de estacionamiento cubierto.",
+    short: "Layout conceptual, apoyo de láminas de intención de diseño y visuales 3D para una estructura grande de estacionamiento cubierto.",
     bestFor: "Carports de más de 200 pies², cubiertas para varios autos, carports adjuntos o alcances que necesitan revisión antes de precio.",
     youSend: "Site plan, dimensiones, notas de altura libre, necesidades de estacionamiento, fotos e imágenes de referencia si las tienes.",
     youGet: "Visuales y planos de carport preparados para revisión del cliente, HOA o ingeniero.",
@@ -1498,7 +1529,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
   "deck-large": {
     title: "Paquete de deck grande, más de 200 pies² — cotización",
     category: "Construcción",
-    short: "Layout conceptual, apoyo de planos y visuales 3D para un deck grande antes de ingeniería o permisos.",
+    short: "Layout conceptual, apoyo de láminas de intención de diseño y visuales 3D para un deck grande antes de ingeniería licenciada o permisos, si hacen falta.",
     bestFor: "Decks de más de 200 pies², decks elevados o alcances que necesitan revisión antes de precio.",
     youSend: "Survey, dimensiones, layout preferido, fotos y cualquier requisito que ya tengas.",
     youGet: "Visuales y planos del deck preparados para revisión del cliente, HOA o ingeniero.",
@@ -1509,7 +1540,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
   "shade-large": {
     title: "Paquete de pérgola / cubierta grande, más de 200 pies² — cotización",
     category: "Construcción",
-    short: "Layout conceptual, apoyo de planos y visuales 3D para una estructura grande de sombra o cubierta exterior.",
+    short: "Layout conceptual, apoyo de láminas de intención de diseño y visuales 3D para una estructura grande de sombra o cubierta exterior.",
     bestFor: "Pérgolas, patio covers, cubiertas adjuntas o estructuras de sombra de más de 200 pies² que necesitan revisión antes de precio.",
     youSend: "Survey, dimensiones, fotos, preferencias de techo o cubierta, notas de conexión a la casa e imágenes de referencia si las tienes.",
     youGet: "Visuales y planos de la estructura de sombra preparados para revisión del cliente, HOA o ingeniero.",
@@ -1520,11 +1551,11 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
   "outdoor-kitchen": {
     title: "Paquete de cocina exterior",
     category: "Construcción",
-    short: "Layout conceptual, apoyo de plano en AutoCAD, zonas de appliances, clearances y visuales 3D.",
+    short: "Layout conceptual, apoyo de lámina de intención de diseño, zonas aproximadas de appliances, clearances de trabajo y visuales 3D.",
     bestFor: "Cuando necesitas un paquete conceptual limpio antes del trabajo detallado de utilities o shop drawings.",
     youSend: "Site plan, lista general de deseos, notas de appliances preferidos y límites de tamaño.",
-    youGet: "Un layout conceptual de cocina exterior con apoyo de plano y visuales 3D.",
-    notIncluded: "Visita al sitio, diseño de utilities, documentos de permiso, paquete de especificaciones de appliances o planos de construcción.",
+    youGet: "Un layout conceptual de cocina exterior con apoyo de lámina de intención de diseño y visuales 3D.",
+    notIncluded: "Visita al sitio, diseño de utilities, diseño de gas/electric/plumbing, revisión de código, documentos de permiso, paquete de especificaciones de appliances o planos de construcción.",
     helper: "Este paquete no incluye visita al sitio. Agrega Visita al sitio si se necesitan mediciones en campo.",
     sampleLabel: "Ver ejemplo",
   },
@@ -1535,14 +1566,14 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     bestFor: "Ponds, maceteros especiales, columpios, sombras pequeñas personalizadas, pantallas decorativas, divisores bajos decorativos de menos de 3 pies u otros elementos únicos que necesitan revisión antes de precio.",
     youSend: "Fotos, descripción corta, tamaño aproximado, ubicación y links de referencia o imágenes de inspiración.",
     youGet: "Una revisión manual y feedback sobre si podemos ayudar, qué paquete encaja y cuál sería el siguiente paso o rango de precio probable.",
-    notIncluded: "Muros de contención, soporte de pendientes, ingeniería, investigación de código, trámites de permiso, detalles de fabricación o planos finales de construcción.",
+    notIncluded: "Muros de contención, muros de soporte de pendiente, ingeniería, investigación de código, trámites de permiso, detalles de fabricación o planos finales de construcción.",
     helper: "Elige esto cuando el feature es inusual. Los muros de contención y muros reales de soporte de pendiente pertenecen a un proceso separado de diseño/revisión, no aquí.",
   },
   "full-yard-concept-site": {
     title: "Concepto de landscape para todo el patio — con visita",
     category: "Paquete",
     short: "Paquete inicial sencillo cuando quieres que revisemos el sitio, entendamos el patio y propongamos un concepto de landscape.",
-    bestFor: "Constructores, compañías de landscape o clientes que no quieren elegir piezas técnicas como modelo base, dirección de layout y setup de render.",
+    bestFor: "Constructores o crews de landscape que necesitan dirección clara de diseño bajo su marca para un presupuesto real de cliente, sin meterse en workflow profesional de 3D/modelo.",
     youSend: "Nombre o dirección del proyecto, fotos si las tienes, must-haves, referencias de estilo, nivel aproximado de presupuesto y restricciones de HOA o del sitio.",
     youGet: "Revisión manual del alcance, recomendación del camino de diseño, dirección conceptual basada en visita y una cotización personalizada para el paquete correcto.",
     notIncluded: "Ingeniería, trámite de permisos, planos sellados, documentos finales de construcción o rondas ilimitadas de rediseño.",
@@ -1565,7 +1596,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     bestFor: "Constructores o crews de landscape que necesitan un diseño claro bajo su marca para un presupuesto real del cliente, sin elegir pasos técnicos de modelo 3D.",
     youSend: "Survey o site plan si existe, fotos claras, medidas marcadas, nivel de presupuesto, referencias de estilo, must-haves del cliente y restricciones del sitio. Si no hay visita, las dimensiones son requeridas: anchos, profundidades, alturas, altura de techo/eave al piso, distancias de casa a fence y cambios de nivel importantes.",
     youGet: "Plano conceptual principal para el área seleccionada, plano/dirección de plantación, dimensiones simples donde hagan falta, renders de presentación y PDF listo para cliente.",
-    notIncluded: "Estructuras separadas como decks, pérgolas, cubiertas, carports o cocinas exteriores; láminas especiales detalladas; plano de iluminación; diseño de riego; ingeniería de grading/drainage; planos listos para permiso; documentos sellados.",
+    notIncluded: "Estructuras separadas como decks, pérgolas, cubiertas, carports o cocinas exteriores; láminas especiales detalladas; diseño de iluminación; diseño de riego; ingeniería de grading/drainage; planos listos para permiso; documentos sellados/estampados; revisión de código; o planos de control de construcción.",
     helper: "Para decks, pérgolas, cubiertas, carports, cocinas o estructuras construidas, usa Decks, cubiertas y estructuras exteriores. Para láminas extra después del diseño, usa Planos y láminas. Si eres diseñador y quieres apoyo de modelo/render/3D, usa Apoyo 3D y renders.",
   },
   "draw-your-idea": {
@@ -1585,27 +1616,27 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     bestFor: "Contratistas que quieren que resolvamos la dirección de diseño, pero manteniendo el trabajo bajo su marca.",
     youSend: "Survey, medidas, fotos, referencias de estilo, must-haves, nivel aproximado de presupuesto, restricciones del sitio y un brief remoto por video con el partner o contacto del cliente presente.",
     youGet: "Trabajo de brief, selección de referencias, opciones de sketch, desarrollo de diseño, dirección final y camino claro hacia modelado/render.",
-    notIncluded: "Ingeniería, paquete de permisos, planos sellados, planting plans, takeoffs, láminas detalladas o actuar como diseñador directo frente al cliente salvo acuerdo separado.",
+    notIncluded: "Ingeniería, paquete de permisos, planos sellados/estampados, planting plans, takeoffs, láminas detalladas, revisión de código o actuar como diseñador directo frente al cliente salvo acuerdo separado.",
     helper: "Un partner o contacto del cliente debe estar presente en el brief remoto para evitar teléfono descompuesto. Podemos liderar el diseño, pero el partner white-label sigue conectado a la conversación con el cliente.",
   },
   "master-plan": {
     title: "Master plan limpio 2D",
     category: "Después del layout",
-    short: "Un master plan 2D limpio desde tus documentos o desde un layout que ya produjimos.",
-    bestFor: "Cuando necesitas una lámina principal clara que la cuadrilla pueda leer.",
+    short: "Un master plan 2D limpio de intención de diseño desde tus documentos o desde un layout que ya produjimos.",
+    bestFor: "Cuando necesitas una lámina principal clara para presentación, pricing o coordinación con la cuadrilla.",
     youSend: "Si ya creamos el layout, no hacen falta archivos extra. Si no, manda tu plano aprobado, modelo, redlines o documentos fuente.",
-    youGet: "Un master plan 2D limpio, listo para imprimir y mostrar a la cuadrilla.",
-    notIncluded: "Nuevo diseño conceptual, ingeniería o aprobación de permisos.",
+    youGet: "Un master plan 2D limpio de intención de diseño, listo para imprimir y compartir para coordinación.",
+    notIncluded: "Nuevo diseño conceptual, ingeniería, revisión de código, trámite de permisos o garantía de aprobación.",
     helper: "Si los documentos fuente vienen de fuera de nuestro proceso y necesitan limpieza primero, puede hacer falta tiempo adicional o una cotización aparte.",
     sampleLabel: "Ver ejemplo",
   },
   "planting-plan": {
     title: "Plano de plantación + lista de plantas",
     category: "Después del layout",
-    short: "Lámina técnica de plantación desde tus documentos o desde un layout que ya produjimos.",
-    bestFor: "Cuando la plantación va a avanzar y la cuadrilla necesita una lámina limpia.",
+    short: "Lámina de intención de diseño de plantación desde tus documentos o desde un layout que ya produjimos.",
+    bestFor: "Cuando la plantación va a avanzar y la cuadrilla necesita una lámina limpia de coordinación.",
     youSend: "Si ya construimos el layout, no hacen falta archivos base extra. Si no, manda el plano aprobado y la dirección o lista de plantas.",
-    youGet: "Un plano de plantación con schedule y cantidades, listo para imprimir y mostrar a la cuadrilla.",
+    youGet: "Un plano de plantación con schedule y cantidades, listo para imprimir y compartir para coordinación.",
     notIncluded: "Búsqueda en viveros, diseño de irrigación o exploración de un nuevo layout.",
     helper: "Si los documentos base no fueron creados por nosotros y necesitan limpieza antes de documentar la plantación, puede hacer falta tiempo adicional o una cotización aparte.",
     sampleLabel: "Ver ejemplo",
@@ -1613,32 +1644,32 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
   "paving-plan": {
     title: "Plano de hardscape / patrón de pavimento",
     category: "Después del layout",
-    short: "Una lámina limpia de hardscape que muestra layout de pavimento, zonas de materiales y lógica de patrón donde haga falta.",
+    short: "Una lámina limpia de intención de diseño de hardscape que muestra layout de pavimento, zonas de materiales y lógica de patrón donde haga falta.",
     bestFor: "Cuando el hardscape ya está aprobado y ahora necesita una lámina dedicada de pavimento y materiales.",
     youSend: "Si ya construimos el layout, no hacen falta archivos base extra. Si no, manda el plano aprobado, materiales y notas de patrón de pavimento.",
-    youGet: "Un plano de hardscape con layout, materiales, patrones de pavimento y dirección de tile o pavers donde haga falta.",
-    notIncluded: "Ingeniería, diseño de base estructural, ingeniería de drenaje o detalles constructivos, salvo que se agreguen aparte.",
+    youGet: "Una lámina de intención de diseño de hardscape con layout, materiales, patrones de pavimento y dirección de tile o pavers donde haga falta.",
+    notIncluded: "Ingeniería, diseño de base estructural, ingeniería de drenaje, revisión de código, detalles de instalación o documentos de control de construcción.",
     sampleLabel: "Ver ejemplo",
   },
   "grading": {
-    title: "Concepto de nivelación + drenaje",
+    title: "Notas conceptuales de pendiente / drenaje",
     category: "Después del layout",
-    short: "Concepto no ingenieril de nivelación y drenaje basado en topo o elevaciones medidas.",
+    short: "Notas conceptuales no ingenieriles de pendiente y drenaje basadas en topo o elevaciones medidas.",
     bestFor: "Cuando el sitio necesita pensar pendiente o drenaje después de aprobar el layout principal.",
     youSend: "Topographic survey o elevaciones medidas, diseño aprobado y alcance de mejoras. Si todavía no hay topo, pide una visita o trae datos medidos primero.",
-    youGet: "Una lámina conceptual de nivelación y drenaje, lista para imprimir y discutir con la cuadrilla.",
-    notIncluded: "Ingeniería civil, planos sellados de grading, cálculos de drenaje o grading hecho sin información útil de elevaciones.",
+    youGet: "Una lámina conceptual de intención de diseño de pendiente / drenaje, lista para conversar con la cuadrilla o entregar a un profesional licenciado si hace falta.",
+    notIncluded: "Ingeniería civil, planos sellados/estampados de grading, cálculos de drenaje, diseño final de grading, revisión de código o trabajo sin información útil de elevaciones.",
     helper: "No podemos adivinar pendientes. Este servicio necesita topo o elevaciones reales medidas.",
     sampleLabel: "Ver ejemplo",
   },
   "watering-strategy": {
     title: "Estrategia básica de riego",
     category: "Después del layout",
-    short: "Estrategia sencilla no ingenieril de riego para las áreas de plantación aprobadas.",
-    bestFor: "Cuando quieres entender zonas de sol, sombra y necesidades de agua de las plantas antes del trabajo detallado de irrigación.",
+    short: "Enfoque básico de riego de plantas para áreas de plantación aprobadas, solo para discusión de planificación.",
+    bestFor: "Cuando quieres entender zonas de sol, sombra y necesidades de agua antes de que un profesional licenciado de irrigación diseñe el sistema.",
     youSend: "Plano aprobado, dirección de plantación y notas conocidas sobre sombra, sol o áreas difíciles.",
-    youGet: "Notas de zonas de sol y sombra, lógica de riego por área y recomendaciones como drip u otro enfoque básico donde aplique.",
-    notIncluded: "Dimensionamiento de tubería, layout de heads, specs de irrigación, diseño hidráulico o diagramas de instalación.",
+    youGet: "Notas de zonas de sol y sombra, lógica general de riego por área y recomendaciones generales como drip u otro enfoque básico donde aplique.",
+    notIncluded: "Dimensionamiento de tubería, layout de heads, specs de irrigación, diseño hidráulico, diagramas de instalación o reemplazo del trabajo de un irrigador licenciado.",
     sampleLabel: "Ver ejemplo",
   },
   "lighting": {
@@ -1647,18 +1678,18 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     short: "Concepto 2D de iluminación. Si ya tenemos el modelo de diseño, las vistas nocturnas van como bonus.",
     bestFor: "Cuando el diseño aprobado necesita agregar una capa de iluminación.",
     youSend: "Si ya construimos el layout, no hacen falta archivos base extra. Si no, manda el plano aprobado, puntos focales y dirección de iluminación si la tienes.",
-    youGet: "Un layout conceptual de iluminación, listo para imprimir y mostrar a la cuadrilla, más vistas nocturnas bonus cuando ya existe nuestro modelo.",
-    notIncluded: "Diseño eléctrico, planos de cableado o planos de instalación.",
+    youGet: "Una capa conceptual de iluminación para discusión, más vistas nocturnas bonus cuando ya existe nuestro modelo.",
+    notIncluded: "Diseño eléctrico, planos de cableado, revisión de código, especificaciones de fixtures o planos de instalación.",
     sampleLabel: "Ver ejemplo",
   },
   "takeoff": {
     title: "Cantidades de materiales / take-off",
     category: "Después del layout",
-    short: "Cantidades y dimensiones de materiales desde un diseño 3D o 2D aprobado.",
+    short: "Estimado de cantidades y dimensiones de materiales desde un diseño 3D o 2D aprobado.",
     bestFor: "Cuando el alcance está claro y estás listo para poner precio al trabajo.",
     youSend: "Plano o modelo aprobado si viene de tu lado. Si lo construimos nosotros, no hacen falta archivos extra.",
-    youGet: "Cantidades y dimensiones basadas en el alcance aprobado, entregadas en Google Sheets. Dinos qué formato le funciona mejor a tu equipo.",
-    notIncluded: "Compras, seguimiento con proveedores o verificación en campo.",
+    youGet: "Cantidades y dimensiones estimadas basadas en el alcance aprobado, entregadas en Google Sheets. Dinos qué formato le funciona mejor a tu equipo.",
+    notIncluded: "Compras, seguimiento con proveedores, verificación en campo, waste factors o garantía de que las cantidades coinciden con la instalación final.",
     sampleLabel: "Ver ejemplo",
   },
   "artistic-sheet": {
@@ -1674,54 +1705,54 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     sampleLabel: "Ver ejemplo",
   },
   "hoa-city": {
-    title: "Lámina para HOA / ciudad",
+    title: "Lámina de apoyo para revisión HOA / jurisdicción",
     category: "Ciudad",
-    short: "Lámina add-on de submittal desde un master plan aprobado y survey.",
-    bestFor: "Trabajos que ya tienen un master plan limpio y ahora necesitan una lámina de submittal.",
-    youSend: "Master plan aprobado, survey y cualquier checklist o nota que ya tengas.",
-    youGet: "Una lámina de submittal de intención de diseño, lista para imprimir y mostrar si hace falta.",
-    notIncluded: "Garantía de aprobación, ingeniería o survey legal.",
+    short: "Lámina add-on de apoyo para revisión desde un master plan aprobado y survey.",
+    bestFor: "Trabajos que ya tienen un master plan limpio y necesitan un exhibit de intención de diseño para revisión HOA o jurisdicción.",
+    youSend: "Master plan aprobado, survey y cualquier checklist o nota de HOA/jurisdicción que ya tengas.",
+    youGet: "Una lámina de apoyo para revisión de intención de diseño, lista para imprimir e incluir en tu propio paquete de submission si aplica.",
+    notIncluded: "Garantía de aprobación, trámite de permisos por nuestra parte, revisión de código, ingeniería, arquitectura, sello de landscape architecture o survey legal.",
     sampleLabel: "Ver ejemplo",
   },
   "impervious": {
-    title: "Cálculo de cobertura impermeable",
+    title: "Exhibit / estimado de cobertura impermeable",
     category: "Ciudad",
-    short: "Lámina de cálculo de cobertura impermeable en formato tipo ciudad, desde un master plan y survey.",
-    bestFor: "Trabajos donde la jurisdicción revisa cuánta cobertura impermeable existe y cuánto se agrega.",
+    short: "Exhibit / estimado de cobertura impermeable preparado desde master plan y datos de survey proporcionados.",
+    bestFor: "Trabajos donde el equipo necesita un estimado de apoyo de cobertura impermeable existente y propuesta para revisión.",
     youSend: "Survey, información de hardscape existente y master plan o mejoras aprobadas.",
-    youGet: "Lámina de cobertura impermeable y resumen de cálculo.",
-    notIncluded: "Certificación de ingeniería o garantía de aprobación.",
+    youGet: "Exhibit de cobertura impermeable y resumen estimado.",
+    notIncluded: "Certificación de ingeniería, verificación de survey legal, determinación de código, trámite de permisos o garantía de aprobación.",
     sampleLabel: "Ver ejemplo",
   },
   "tree-overlay": {
-    title: "Overlay de árboles / CRZ",
+    title: "Overlay visual de árboles / CRZ",
     category: "Ciudad",
-    short: "Overlay add-on de árboles / CRZ basado en datos certificados de árboles y un master plan limpio.",
-    bestFor: "Proyectos donde árboles protegidos deben mostrarse claramente para revisión.",
+    short: "Overlay visual add-on de árboles / CRZ basado en datos certificados de árboles y un master plan limpio.",
+    bestFor: "Proyectos donde árboles protegidos deben mostrarse claramente para conversación o revisión.",
     youSend: "Survey certificado de árboles o inventario de árboles, más referencias de master plan aprobado.",
-    youGet: "Una lámina de preservación de árboles o overlay de CRZ.",
-    notIncluded: "Reporte de arborista o determinación legal de la jurisdicción.",
+    youGet: "Una lámina visual de preservación de árboles / overlay de CRZ.",
+    notIncluded: "Reporte de arborista, medición de árboles por nuestra parte, determinación de código o determinación legal de la jurisdicción.",
     sampleLabel: "Ver ejemplo",
   },
   "irrigation-drafting": {
-    title: "Dibujo de irrigación desde tus markups",
+    title: "Cleanup de drafting de irrigación desde tus markups",
     category: "Irrigación",
     quantityLabel: "láminas",
-    short: "Solo drafting desde markups de irrigación o layout en papel.",
+    short: "Cleanup de drafting solo desde markups de irrigación o layout en papel proporcionado por un irrigador licenciado.",
     bestFor: "Irrigadores licenciados que ya conocen el layout de irrigación y solo necesitan limpiarlo en pantalla.",
     youSend: "Markups de campo, sketches hechos a mano, redlines y cualquier archivo base.",
-    youGet: "Láminas de irrigación limpias dibujadas en computadora, listas para imprimir y mostrar a la cuadrilla.",
-    notIncluded: "Diseño de irrigación, ingeniería, cálculos hidráulicos o especificaciones de instalación.",
+    youGet: "Láminas de irrigación limpias dibujadas en computadora desde tus markups, listas para compartir para coordinación.",
+    notIncluded: "Diseño de irrigación, ingeniería, cálculos hidráulicos, revisión de código, especificaciones de instalación o reemplazo del trabajo de diseño de un irrigador licenciado.",
     sampleLabel: "Ver ejemplo",
   },
   "site-visit-addon": {
     title: "Visita al sitio",
     category: "Apoyo",
     short: "Visita local básica para traslado, tiempo en el sitio y preparación de mediciones.",
-    bestFor: "Trabajos que necesitan medición en campo antes de estructuras o planos especiales.",
+    bestFor: "Trabajos que necesitan fotos de campo y medidas aproximadas antes de conceptos, estructuras o láminas especiales.",
     youSend: "Dirección del sitio, detalles de acceso y qué hay que revisar.",
-    youGet: "Tiempo de visita, medidas en bruto, fotos y notas de campo.",
-    notIncluded: "Plano base, modelo 3D, trabajo de diseño o traslado fuera de los límites de la ciudad.",
+    youGet: "Tiempo de visita, fotos de campo, medidas en bruto y notas de campo para trabajo de intención de diseño.",
+    notIncluded: "Plano base, modelo 3D, trabajo de diseño, survey legal, ingeniería, revisión de código o traslado fuera de los límites de la ciudad.",
     helper: "Si el sitio está fuera de los límites de la ciudad, el tiempo extra de traslado puede agregarse a la factura final a $70/hora después de revisar la dirección.",
   },
   "travel-outside-city": {
@@ -1864,6 +1895,70 @@ function BeforeAfterSlider({
             className="absolute inset-0 z-30 h-full w-full cursor-ew-resize opacity-0"
             aria-label="Compare before and after"
           />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SampleModal({
+  service,
+  lang,
+  onClose,
+}: {
+  service: Service;
+  lang: Lang;
+  onClose: () => void;
+}) {
+  const sample = getSampleImages(service.id);
+  const title = translateServiceTitle(service, lang);
+  const beforeLabel = lang === "es" ? "ANTES / INPUT" : "BEFORE / INPUT";
+  const afterLabel = lang === "es" ? "EJEMPLO" : "SAMPLE OUTPUT";
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+      <div className="max-h-[92vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] bg-white p-4 shadow-2xl md:p-6">
+        <div className="mb-4 flex items-start justify-between gap-4">
+          <div>
+            <div className="text-xs font-black uppercase tracking-[0.2em] text-emerald-700">
+              {lang === "es" ? "Ejemplo" : "Sample"}
+            </div>
+            <h3 className="mt-1 text-xl font-black tracking-tight text-slate-900 md:text-2xl">
+              {title}
+            </h3>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+              {lang === "es"
+                ? "Mueve el control para comparar el input inicial con un ejemplo de resultado. Ejemplo solamente; cada proyecto se revisa por separado."
+                : "Drag the handle to compare the starting input with a sample result. Sample only; every project is reviewed separately."}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-slate-200 bg-white p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            aria-label={lang === "es" ? "Cerrar ejemplo" : "Close sample"}
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <BeforeAfterSlider
+          beforeImage={sample.before}
+          afterImage={sample.after}
+          beforeLabel={beforeLabel}
+          afterLabel={afterLabel}
+        />
+        <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
+          {lang === "es"
+            ? "Ejemplo solamente. Design-intent / presentation support. No es para construcción, permiso, ingeniería ni submittal sellado."
+            : "Sample only. Design-intent / presentation support. Not for construction, permit, engineering, or stamped submittal."}
         </div>
       </div>
     </div>
@@ -2208,6 +2303,7 @@ function ServiceSection({
   onToggle,
   onQty,
   onDiscuss,
+  onSample,
 }: {
   title: string;
   description: string;
@@ -2219,6 +2315,7 @@ function ServiceSection({
   onToggle: (service: Service) => void;
   onQty: (serviceId: string, qty: number) => void;
   onDiscuss: (service: Service) => void;
+  onSample: (service: Service) => void;
 }) {
   const t = T[lang];
   return (
@@ -2257,9 +2354,17 @@ function ServiceSection({
                         {translateServiceTitle(service, lang)}
                       </h4>
                       {translateServiceField(service, "sampleLabel", lang) ? (
-                        <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                        <button
+                          type="button"
+                          onClick={() => onSample(service)}
+                          className={`rounded-full border px-3 py-1 text-xs font-black transition ${
+                            selected
+                              ? "border-emerald-100 bg-emerald-50 text-emerald-900 hover:bg-emerald-100"
+                              : "border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+                          }`}
+                        >
                           {translateServiceField(service, "sampleLabel", lang)}
-                        </span>
+                        </button>
                       ) : null}
                     </div>
                     <p
@@ -2497,6 +2602,11 @@ function ProjectInfoCard({
       <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
         <div className="font-black">{t.remoteInfoTitle}</div>
         <p className="mt-1 leading-6">{t.remoteInfoText}</p>
+      </div>
+
+      <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+        <div className="font-black text-slate-900">{t.safetyTitle}</div>
+        <p className="mt-1 leading-6">{t.safetyText}</p>
       </div>
 
       <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm">
@@ -2800,6 +2910,10 @@ function SummarySidebar({
         </div>
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-950">
           {t.oneProjectSummary}
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-600">
+          <span className="font-black text-slate-800">{t.safetyTitle}: </span>
+          {t.termsLine}
         </div>
         <div className="space-y-3 rounded-3xl bg-slate-50 p-5">
           {items.length === 0 ? (
@@ -3190,6 +3304,7 @@ export default function App() {
   const [checkoutNotice, setCheckoutNotice] = useState<string | null>(null);
   const [verifying, setVerifying] = useState(false);
   const [paidOrder, setPaidOrder] = useState<PaidOrderSnapshot | null>(null);
+  const [sampleService, setSampleService] = useState<Service | null>(null);
 
   const t = T[lang];
   const selectedPath =
@@ -3399,6 +3514,10 @@ export default function App() {
       question: `${lang === "es" ? "Pregunta sobre" : "Question about"} ${translateServiceTitle(service, lang)}: `,
     }));
     setShowHelp(true);
+  }
+
+  function openSample(service: Service) {
+    setSampleService(service);
   }
 
   function toggleService(service: Service) {
@@ -3662,6 +3781,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
             <ServiceSection
               title={t.supportSection}
@@ -3676,6 +3796,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
           </div>
         );
@@ -3698,6 +3819,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
             <ServiceSection
               title={t.supportSection}
@@ -3712,6 +3834,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
           </div>
         );
@@ -3736,6 +3859,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
             <ServiceSection
               title={t.ideaSection}
@@ -3748,6 +3872,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
             <ServiceSection
               title={t.supportSection}
@@ -3762,6 +3887,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
           </div>
         );
@@ -3784,6 +3910,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
             <ServiceSection
               title={t.citySection}
@@ -3796,6 +3923,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
             <ServiceSection
               title={t.irrigationSection}
@@ -3808,6 +3936,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
             <ServiceSection
               title={t.supportSection}
@@ -3820,6 +3949,7 @@ export default function App() {
               onToggle={toggleService}
               onQty={updateQty}
               onDiscuss={openHelpWithService}
+              onSample={openSample}
             />
           </div>
         );
@@ -3960,6 +4090,13 @@ export default function App() {
           onSend={sendQuickHelp}
           sending={sendingHelp}
           sent={helpSent}
+        />
+      ) : null}
+      {sampleService ? (
+        <SampleModal
+          service={sampleService}
+          lang={lang}
+          onClose={() => setSampleService(null)}
         />
       ) : null}
     </div>
