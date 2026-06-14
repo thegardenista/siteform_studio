@@ -162,8 +162,8 @@ function makeSampleSvg(label: string, bg: string, fg: string) {
 }
 
 const DEFAULT_SAMPLE_IMAGES: SampleImages = {
-  before: makeSampleSvg("Before / input", "#e5e7eb", "#334155"),
-  after: makeSampleSvg("Sample result", "#dff4e7", "#166534"),
+  before: makeSampleSvg("Before", "#e5e7eb", "#334155"),
+  after: makeSampleSvg("After", "#dff4e7", "#166534"),
 };
 
 const SAMPLE_IMAGES: Record<string, SampleImages> = {
@@ -2023,15 +2023,17 @@ function BeforeAfterSlider({
             src={beforeImage}
             alt={beforeLabel}
             className="absolute inset-0 h-full w-full object-cover"
+            draggable={false}
           />
           <div
             className="absolute inset-0 overflow-hidden"
-            style={{ width: `${position}%` }}
+            style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
           >
             <img
               src={afterImage}
               alt={afterLabel}
-              className="h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover"
+              draggable={false}
             />
           </div>
           <div className="pointer-events-none absolute left-4 top-4 z-20 rounded-full bg-black/70 px-3 py-1 text-xs font-black tracking-wide text-white shadow">
@@ -2076,8 +2078,8 @@ function SampleModal({
 }) {
   const sample = getSampleImages(service.id);
   const title = translateServiceTitle(service, lang);
-  const beforeLabel = lang === "es" ? "ANTES / INPUT" : "BEFORE / INPUT";
-  const afterLabel = lang === "es" ? "EJEMPLO" : "SAMPLE OUTPUT";
+  const beforeLabel = lang === "es" ? "Antes" : "Before";
+  const afterLabel = lang === "es" ? "Después" : "After";
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
