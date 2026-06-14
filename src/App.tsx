@@ -250,7 +250,7 @@ const T = {
     projectFilesHelp:
       "Upload files for this one client/project. References/markups/measurement notes are required. A survey/site plan/measured base is required for all services except Quick Photo Concept. Project photos are required for Quick Photo Concept and helpful for other orders. For a different client, start a separate order.",
     uploadPhotosHelp:
-      "Required for Quick Photo Concept; optional but helpful for other services. Clear photos of the project area, facade, patio, yard, problem spots, slope, roof/eaves, fence lines, or existing conditions. Up to 10 files per upload.",
+      "Required for Quick Photo Concept; optional but helpful for other services. You may upload up to 10 photos for context, but Quick Photo Concept includes work on one selected photo only. Clear photos of the project area, facade, patio, yard, problem spots, slope, roof/eaves, fence lines, or existing conditions.",
     uploadSurveyHelp:
       "Required for all services except Quick Photo Concept. Upload a survey, site plan, measured sketch, marked base plan, PDF, or drawing that gives us the project geometry. Up to 10 files per upload.",
     titleBlockOption: "Title block / sheet template",
@@ -506,7 +506,7 @@ const T = {
     projectFilesHelp:
       "Sube archivos para este cliente/proyecto. Referencias/markups son obligatorios. Survey/site plan/base medida es obligatorio para todos los servicios excepto Quick Photo Concept. Las fotos son útiles para la mayoría de pedidos y obligatorias para Quick Photo Concept. Para otro cliente, inicia un pedido separado.",
     uploadPhotosHelp:
-      "Obligatorio para Quick Photo Concept; opcional pero útil para otros servicios. Fotos claras del área, fachada, patio, yard, problemas, pendiente, roof/eaves, fence lines o condiciones existentes. Hasta 10 archivos por carga.",
+      "Obligatorio para Quick Photo Concept; opcional pero útil para otros servicios. Puedes subir hasta 10 fotos como contexto, pero Quick Photo Concept incluye trabajo en una sola foto seleccionada. Fotos claras del área, fachada, patio, yard, problemas, pendiente, roof/eaves, fence lines o condiciones existentes.",
     uploadSurveyHelp:
       "Obligatorio para todos los servicios excepto Quick Photo Concept. Sube survey, site plan, sketch medido, base marcada, PDF o dibujo que nos dé la geometría del proyecto. Hasta 10 archivos por carga.",
     titleBlockOption: "Title block / plantilla de lámina",
