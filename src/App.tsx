@@ -28,6 +28,23 @@ type AddressDisplay = "full" | "street" | "project" | "hide";
 type LogoOption = "upload" | "on-file" | "text-only";
 type TitleBlockOption = "standard-landscape" | "standard-portrait" | "upload";
 type TitleBlockSampleOption = "standard-landscape" | "standard-portrait";
+
+interface StructurePreference {
+  material: string;
+  roofType: string;
+  roofMaterial: string;
+  finish: string;
+  countertop: string;
+  shape: string;
+  size: string;
+  backPanel: string;
+  appliances: string;
+  featureType: string;
+  notes: string;
+}
+
+type StructurePreferences = Record<string, StructurePreference>;
+
 type MissingRequirementKey =
   | "selectedService"
   | "partnerName"
@@ -39,7 +56,8 @@ type MissingRequirementKey =
   | "projectPhotos"
   | "surveyDocs"
   | "references"
-  | "sameProject";
+  | "sameProject"
+  | "structureDetails";
 type ViewState = "LANDING" | "MENU" | "CONFIG" | "SUCCESS";
 type PricingType = "size" | "flat" | "unit" | "hourly" | "quote" | "percentage";
 type NoticeKind = "hard" | "soft" | null;
@@ -105,6 +123,7 @@ interface OrderContact {
   measurementHeight: string;
   measurementsNotes: string;
   referenceLinks: string;
+  structurePreferences: StructurePreferences;
   partnerProfileMode: PartnerProfileMode;
   whiteLabelCompany: string;
   whiteLabelPhone: string;
@@ -178,25 +197,165 @@ type SampleImages = {
   after: string;
 };
 
+type SampleAsset =
+  | {
+      kind: "compare";
+      images: SampleImages;
+    }
+  | {
+      kind: "document";
+      file: string;
+      fileLabel: string;
+      helper: string;
+    };
+
 function makeSampleSvg(label: string, bg: string, fg: string) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760"><rect width="1200" height="760" fill="${bg}"/><rect x="70" y="70" width="1060" height="620" rx="42" fill="white" opacity="0.58"/><text x="600" y="352" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="800" fill="${fg}">${label}</text><text x="600" y="420" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="600" fill="${fg}" opacity="0.72">Replace with your project sample image</text></svg>`;
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
-const DEFAULT_SAMPLE_IMAGES: SampleImages = {
-  before: makeSampleSvg("Before", "#e5e7eb", "#334155"),
-  after: makeSampleSvg("After", "#dff4e7", "#166534"),
-};
+function makeDocumentSampleSvg() {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1800">
+    <rect width="900" height="1800" fill="#f8fafc"/>
+    <rect x="70" y="70" width="760" height="1660" rx="26" fill="white" stroke="#cbd5e1" stroke-width="3"/>
+    <text x="110" y="150" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="800" fill="#0f172a">Sample PDF / sheet package</text>
+    <text x="110" y="195" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#64748b">Scrollable document preview for drawings, images, notes, and calculations.</text>
+    <rect x="110" y="250" width="680" height="360" rx="18" fill="#e2e8f0"/>
+    <text x="450" y="445" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#475569">Image / rendering area</text>
+    <rect x="110" y="675" width="310" height="230" rx="16" fill="#ecfdf5" stroke="#86efac" stroke-width="2"/>
+    <rect x="480" y="675" width="310" height="230" rx="16" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+    <text x="265" y="790" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#166534">Plan / layout</text>
+    <text x="635" y="790" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#1d4ed8">Notes</text>
+    <line x1="110" y1="990" x2="790" y2="990" stroke="#cbd5e1" stroke-width="3"/>
+    <text x="110" y="1055" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="800" fill="#0f172a">Example table / quantities</text>
+    ${Array.from({ length: 8 }).map((_, i) => `<rect x="110" y="${1100 + i * 58}" width="680" height="38" rx="8" fill="${i % 2 ? "#f8fafc" : "#eef2f7"}"/>`).join("")}
+    <line x1="110" y1="1620" x2="790" y2="1620" stroke="#cbd5e1" stroke-width="3"/>
+    <text x="110" y="1675" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#64748b">Upload real PDF samples later to public/samples/ and connect them in SAMPLE_ASSETS.</text>
+  </svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
 
-const SAMPLE_IMAGES: Record<string, SampleImages> = {
-  "photo-concept-start": {
+const QUICK_PHOTO_SAMPLE: SampleAsset = {
+  kind: "compare",
+  images: {
     before: "/samples/quick-photo-before.jpg",
     after: "/samples/quick-photo-after.jpg",
   },
 };
 
-function getSampleImages(serviceId: string): SampleImages {
-  return SAMPLE_IMAGES[serviceId] ?? DEFAULT_SAMPLE_IMAGES;
+const DEFAULT_DOCUMENT_SAMPLE: SampleAsset = {
+  kind: "document",
+  file: makeDocumentSampleSvg(),
+  fileLabel: "Sample document preview",
+  helper:
+    "Scrollable sample document. Use this format for PDF-style samples with a visual, drawing, notes, and quantities/calculations.",
+};
+
+const SAMPLE_ASSETS: Record<string, SampleAsset> = {
+  "photo-concept-start": QUICK_PHOTO_SAMPLE,
+
+  // Later, when real PDF samples are ready, add them here.
+  // Example:
+  // "deck-small": {
+  //   kind: "document",
+  //   file: "/samples/deck-package-sample.pdf",
+  //   fileLabel: "Deck package sample PDF",
+  //   helper: "Scroll the PDF preview to see drawings, notes, and quantities.",
+  // },
+};
+
+function getSampleAsset(serviceId: string): SampleAsset {
+  return SAMPLE_ASSETS[serviceId] ?? DEFAULT_DOCUMENT_SAMPLE;
+}
+
+const STRUCTURE_DETAIL_SERVICE_IDS = [
+  "deck-small",
+  "deck-large",
+  "pergola-small",
+  "shade-large",
+  "carport-small",
+  "carport-large",
+  "outdoor-kitchen",
+  "custom-feature",
+];
+
+function emptyStructurePreference(): StructurePreference {
+  return {
+    material: "",
+    roofType: "",
+    roofMaterial: "",
+    finish: "",
+    countertop: "",
+    shape: "",
+    size: "",
+    backPanel: "",
+    appliances: "",
+    featureType: "",
+    notes: "",
+  };
+}
+
+function hasMeaningfulStructurePreference(serviceId: string, preference?: StructurePreference) {
+  if (!preference) return false;
+
+  if (serviceId === "outdoor-kitchen") {
+    return Boolean(
+      preference.finish ||
+        preference.countertop ||
+        preference.shape ||
+        preference.size ||
+        preference.backPanel ||
+        preference.appliances ||
+        preference.notes
+    );
+  }
+
+  if (serviceId === "custom-feature") {
+    return Boolean(preference.featureType || preference.material || preference.size || preference.notes);
+  }
+
+  if (serviceId === "pergola-small" || serviceId === "shade-large") {
+    return Boolean(preference.material || preference.roofType || preference.roofMaterial || preference.notes);
+  }
+
+  if (serviceId === "carport-small" || serviceId === "carport-large") {
+    return Boolean(preference.material || preference.roofMaterial || preference.size || preference.notes);
+  }
+
+  return Boolean(preference.material || preference.finish || preference.size || preference.notes);
+}
+
+function sanitizeStructurePreferences(
+  preferences: StructurePreferences,
+  selectedServiceIds: string[]
+) {
+  return selectedServiceIds.reduce<Record<string, Partial<StructurePreference>>>((acc, serviceId) => {
+    const preference = preferences[serviceId];
+    if (!preference) return acc;
+
+    const cleaned = Object.entries(preference).reduce<Partial<StructurePreference>>((next, [key, value]) => {
+      const cleanValue = sanitizeText(String(value || ""));
+      if (cleanValue) {
+        next[key as keyof StructurePreference] = cleanValue;
+      }
+      return next;
+    }, {});
+
+    if (Object.keys(cleaned).length) {
+      acc[serviceId] = cleaned;
+    }
+
+    return acc;
+  }, {});
+}
+
+function getStructureServiceType(serviceId: string) {
+  if (serviceId === "deck-small" || serviceId === "deck-large") return "deck";
+  if (serviceId === "pergola-small" || serviceId === "shade-large") return "cover";
+  if (serviceId === "carport-small" || serviceId === "carport-large") return "carport";
+  if (serviceId === "outdoor-kitchen") return "kitchen";
+  if (serviceId === "custom-feature") return "custom";
+  return "other";
 }
 
 const T = {
@@ -983,23 +1142,24 @@ const STRUCTURE_SERVICES: Service[] = [
   },
   {
     id: "carport-small",
-    title: "Small Carport under 200 sq.ft — Review First",
+    title: "Small Carport under 200 sq.ft",
     category: "Build",
-    icon: ShieldCheck,
-    pricingType: "quote",
-    stripePriceId: null,
+    icon: Box,
+    pricingType: "flat",
+    flatPrice: 1000,
+    stripePriceId: "price_carportsmall_1000",
     short:
       "Concept layout, design-intent sheet support, and 3D visuals for a small covered parking structure.",
     bestFor:
       "Carports under 200 sq.ft that need a clear concept before licensed engineering or permit work, if required.",
     youSend:
-      "Site plan, dimensions, clearance notes, parking needs, photos, and reference images if you have them.",
+      "Site plan, dimensions, clearance notes, parking needs, photos, material/roof preference, and reference images if you have them.",
     youGet:
       "A conceptual carport layout with design-intent sheet support and 3D visuals for review.",
     notIncluded:
       "Site visit, structural engineering, stamped permit drawings, utility coordination, or permit filing by us.",
     helper:
-      "Review first. Add Site Visit if field measuring is needed.",
+      "Same starting price as a small pergola / patio cover. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
   },
   {
@@ -1025,7 +1185,7 @@ const STRUCTURE_SERVICES: Service[] = [
   },
   {
     id: "outdoor-kitchen",
-    title: "Outdoor Kitchen Package",
+    title: "Outdoor Kitchen Package — from $750",
     category: "Build",
     icon: Box,
     pricingType: "flat",
@@ -1042,7 +1202,7 @@ const STRUCTURE_SERVICES: Service[] = [
     notIncluded:
       "Site visit, utility design, gas/electrical/plumbing design, code review, permit documents, appliance specification package, or construction drawings.",
     helper:
-      "This package is without site visit. Add Site Visit if field measuring is needed.",
+      "Starting at $750. If the appliance list, size, shape, or backsplash/back panel becomes complex, final invoice may be adjusted after review. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
   },
   {
@@ -1055,7 +1215,7 @@ const STRUCTURE_SERVICES: Service[] = [
     short:
       "Use this for an unusual outdoor element that does not fit the standard deck, shade, carport, or kitchen packages.",
     bestFor:
-      "Ponds, special planters, swings, small custom shades, decorative screens, low decorative dividers under 3 ft, or other one-off features that need review before pricing.",
+      "Shade sails, outdoor fireplaces, custom planters, decorative low divider walls, decorative screens, trellises, swings, small water features, or other one-off features that need review before pricing.",
     youSend:
       "Photos, a short description, rough size, location, and reference links or inspiration images.",
     youGet:
@@ -1525,6 +1685,7 @@ function emptyContact(): OrderContact {
     measurementHeight: "",
     measurementsNotes: "",
     referenceLinks: "",
+    structurePreferences: {},
     partnerProfileMode: "new",
     whiteLabelCompany: "",
     whiteLabelPhone: "",
@@ -1561,6 +1722,7 @@ function getInitialContact(): OrderContact {
       measurementHeight: "",
       measurementsNotes: "",
       referenceLinks: "",
+      structurePreferences: {},
       desiredDeliveryDate: "",
       sameProjectConfirmed: false,
       partnerProfileMode: "existing",
@@ -2226,6 +2388,67 @@ function BeforeAfterSlider({
   );
 }
 
+function DocumentSampleViewer({
+  sample,
+  title,
+  lang,
+}: {
+  sample: Extract<SampleAsset, { kind: "document" }>;
+  title: string;
+  lang: Lang;
+}) {
+  const isPdf = /\.pdf($|\?)/i.test(sample.file);
+  const isDataImage = sample.file.startsWith("data:");
+  const src = isPdf ? `${sample.file}#toolbar=0&navpanes=0&view=FitH` : sample.file;
+
+  return (
+    <div className="rounded-[2rem] bg-[#071833] p-4 md:p-6">
+      <div className="mb-3 flex flex-col gap-2 text-white md:flex-row md:items-center md:justify-between">
+        <div>
+          <div className="text-xs font-black uppercase tracking-[0.2em] text-emerald-200">
+            {lang === "es" ? "Documento de ejemplo" : "Sample document"}
+          </div>
+          <div className="mt-1 text-sm font-semibold text-white/80">
+            {sample.fileLabel || title}
+          </div>
+        </div>
+        {!isDataImage ? (
+          <a
+            href={sample.file}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-xs font-black text-slate-900 hover:bg-emerald-50"
+          >
+            {lang === "es" ? "Abrir archivo" : "Open file"}
+          </a>
+        ) : null}
+      </div>
+
+      <div className="max-h-[70vh] overflow-y-auto rounded-[1.5rem] border-4 border-white/90 bg-white shadow-2xl">
+        {isPdf ? (
+          <iframe
+            title={title}
+            src={src}
+            className="h-[70vh] w-full rounded-xl bg-white"
+          />
+        ) : (
+          <img
+            src={src}
+            alt={title}
+            className="mx-auto w-full max-w-4xl bg-white object-contain"
+          />
+        )}
+      </div>
+
+      <p className="mt-3 text-xs leading-5 text-white/70">
+        {lang === "es"
+          ? "Desplázate arriba/abajo para revisar el sample. Ejemplo solamente; cada proyecto se revisa por separado."
+          : sample.helper}
+      </p>
+    </div>
+  );
+}
+
 function SampleModal({
   service,
   lang,
@@ -2235,10 +2458,11 @@ function SampleModal({
   lang: Lang;
   onClose: () => void;
 }) {
-  const sample = getSampleImages(service.id);
+  const sample = getSampleAsset(service.id);
   const title = translateServiceTitle(service, lang);
   const beforeLabel = lang === "es" ? "Antes" : "Before";
   const afterLabel = lang === "es" ? "Después" : "After";
+  const isCompare = sample.kind === "compare";
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -2260,9 +2484,13 @@ function SampleModal({
               {title}
             </h3>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              {lang === "es"
-                ? "Mueve el control para comparar el input inicial con un ejemplo de resultado. Ejemplo solamente; cada proyecto se revisa por separado."
-                : "Drag the handle to compare the starting input with a sample result. Sample only; every project is reviewed separately."}
+              {isCompare
+                ? lang === "es"
+                  ? "Mueve el control para comparar la foto inicial con un ejemplo de concepto. Este comparador se usa solo para Quick Photo Concept."
+                  : "Drag the handle to compare the starting photo with a sample concept. This before/after slider is only for Quick Photo Concept."
+                : lang === "es"
+                  ? "Desplázate dentro del documento para revisar el sample. Úsalo para PDFs con imagen, dibujo, notas y cálculos."
+                  : "Scroll inside the document preview to review the sample. Use this format for PDFs with an image, drawing, notes, and quantities/calculations."}
             </p>
           </div>
           <button
@@ -2274,12 +2502,18 @@ function SampleModal({
             <X className="h-5 w-5" />
           </button>
         </div>
-        <BeforeAfterSlider
-          beforeImage={sample.before}
-          afterImage={sample.after}
-          beforeLabel={beforeLabel}
-          afterLabel={afterLabel}
-        />
+
+        {sample.kind === "compare" ? (
+          <BeforeAfterSlider
+            beforeImage={sample.images.before}
+            afterImage={sample.images.after}
+            beforeLabel={beforeLabel}
+            afterLabel={afterLabel}
+          />
+        ) : (
+          <DocumentSampleViewer sample={sample} title={title} lang={lang} />
+        )}
+
         <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
           {lang === "es"
             ? "Ejemplo solamente. Design-intent / presentation support. No es para construcción, permiso, ingeniería ni submittal sellado."
@@ -2991,6 +3225,386 @@ function FilePicker({
   );
 }
 
+function StructurePreferenceCard({
+  service,
+  preference,
+  onChange,
+  lang,
+  missing,
+}: {
+  service: Service;
+  preference: StructurePreference;
+  onChange: (patch: Partial<StructurePreference>) => void;
+  lang: Lang;
+  missing: boolean;
+}) {
+  const type = getStructureServiceType(service.id);
+  const title = translateServiceTitle(service, lang);
+  const labelClass = "grid gap-2";
+  const labelTextClass = "text-xs font-black uppercase tracking-wide text-slate-600";
+  const inputClass =
+    "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400";
+  const textareaClass =
+    "rounded-3xl border border-slate-200 bg-white p-4 text-sm outline-none focus:border-slate-400";
+  const selectClass = inputClass;
+
+  const selectPlaceholder = lang === "es" ? "Selecciona una opción" : "Select one";
+  const notSure = lang === "es" ? "Not sure / need advice" : "Not sure / need advice";
+  const other = lang === "es" ? "Other / describe below" : "Other / describe below";
+
+  const option = (value: string, en: string, es?: string) => (
+    <option value={value}>{lang === "es" ? es ?? en : en}</option>
+  );
+
+  return (
+    <div
+      className={`rounded-[1.5rem] border p-4 ${
+        missing ? "border-rose-300 bg-rose-50" : "border-slate-200 bg-slate-50"
+      }`}
+    >
+      <div className="flex flex-col gap-1">
+        <div className="text-base font-black text-slate-900">{title}</div>
+        <div className="text-xs leading-5 text-slate-500">
+          {lang === "es"
+            ? "Elige lo que sabes ahora. Si no aparece la opción exacta, elige Other y descríbelo abajo."
+            : "Choose what you know now. If the exact option is not listed, choose Other and describe it below."}
+        </div>
+      </div>
+
+      {missing ? (
+        <div className="mt-3 rounded-2xl border border-rose-200 bg-white px-3 py-2 text-xs font-semibold text-rose-700">
+          {lang === "es"
+            ? "Agrega al menos una preferencia para esta estructura antes de submit."
+            : "Add at least one preference for this structure before submitting."}
+        </div>
+      ) : null}
+
+      {type === "deck" ? (
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Material del deck" : "Decking / visible material"}</span>
+            <select
+              value={preference.material}
+              onChange={(e) => onChange({ material: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("ipe", "Ipe / tropical hardwood")}
+              {option("cedar", "Cedar")}
+              {option("treated-wood", "Pressure-treated wood")}
+              {option("composite", "Composite decking")}
+              {option("larch", "Larch / similar wood")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Color / acabado" : "Color / finish preference"}</span>
+            <input
+              value={preference.finish}
+              onChange={(e) => onChange({ finish: e.target.value })}
+              placeholder={lang === "es" ? "Natural, stain oscuro, gris composite..." : "Natural wood, dark stain, gray composite..."}
+              className={inputClass}
+            />
+          </label>
+          <label className={`${labelClass} md:col-span-2`}>
+            <span className={labelTextClass}>{lang === "es" ? "Tamaño / notas del deck" : "Approx. deck size / notes"}</span>
+            <textarea
+              value={preference.notes}
+              onChange={(e) => onChange({ notes: e.target.value })}
+              rows={3}
+              placeholder={lang === "es" ? "Altura, railings, escalones, skirting, referencias..." : "Height, railings, steps, skirting, references..."}
+              className={textareaClass}
+            />
+          </label>
+        </div>
+      ) : null}
+
+      {type === "cover" ? (
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Material de estructura" : "Structure material"}</span>
+            <select
+              value={preference.material}
+              onChange={(e) => onChange({ material: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("wood", "Wood")}
+              {option("steel", "Steel")}
+              {option("aluminum", "Aluminum")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Tipo de techo / sombra" : "Roof / shade type"}</span>
+            <select
+              value={preference.roofType}
+              onChange={(e) => onChange({ roofType: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("open-slats", "Open slats / permeable shade")}
+              {option("solid-roof", "Solid / non-permeable roof")}
+              {option("transparent-polycarbonate", "Transparent polycarbonate")}
+              {option("metal-roof", "Metal roof")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Material del techo" : "Roof material, if known"}</span>
+            <select
+              value={preference.roofMaterial}
+              onChange={(e) => onChange({ roofMaterial: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("slats-only", "Slats only / no solid roof")}
+              {option("polycarbonate", "Polycarbonate")}
+              {option("metal", "Metal panels")}
+              {option("solid-panel", "Solid panel / waterproof cover")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Color / acabado" : "Color / finish preference"}</span>
+            <input
+              value={preference.finish}
+              onChange={(e) => onChange({ finish: e.target.value })}
+              placeholder={lang === "es" ? "Cedar natural, negro, blanco, steel..." : "Natural cedar, black, white, steel..."}
+              className={inputClass}
+            />
+          </label>
+          <label className={`${labelClass} md:col-span-2`}>
+            <span className={labelTextClass}>{lang === "es" ? "Notas" : "Notes"}</span>
+            <textarea
+              value={preference.notes}
+              onChange={(e) => onChange({ notes: e.target.value })}
+              rows={3}
+              placeholder={lang === "es" ? "Adjunta a la casa, free-standing, referencias, dimensiones..." : "Attached to house, free-standing, references, dimensions..."}
+              className={textareaClass}
+            />
+          </label>
+        </div>
+      ) : null}
+
+      {type === "carport" ? (
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Material de estructura" : "Structure material"}</span>
+            <select
+              value={preference.material}
+              onChange={(e) => onChange({ material: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("aluminum", "Aluminum")}
+              {option("steel", "Steel")}
+              {option("wood", "Wood")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Material del techo" : "Roof material"}</span>
+            <select
+              value={preference.roofMaterial}
+              onChange={(e) => onChange({ roofMaterial: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("metal", "Metal roof")}
+              {option("polycarbonate", "Polycarbonate")}
+              {option("solid-panel", "Solid panel")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={`${labelClass} md:col-span-2`}>
+            <span className={labelTextClass}>{lang === "es" ? "Tamaño / clearance / notas" : "Size / clearance / notes"}</span>
+            <textarea
+              value={preference.notes}
+              onChange={(e) => onChange({ notes: e.target.value })}
+              rows={3}
+              placeholder={lang === "es" ? "Un auto, dos autos, dimensiones, clearance, attached/free-standing..." : "One car, two cars, dimensions, clearance, attached/free-standing..."}
+              className={textareaClass}
+            />
+          </label>
+        </div>
+      ) : null}
+
+      {type === "kitchen" ? (
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Acabado decorativo" : "Decorative finish"}</span>
+            <select
+              value={preference.finish}
+              onChange={(e) => onChange({ finish: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("stucco", "Stucco")}
+              {option("stone-veneer", "Stone veneer")}
+              {option("tile", "Tile")}
+              {option("polished-concrete", "Polished concrete")}
+              {option("steel", "Steel")}
+              {option("glass", "Glass")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Countertop" : "Countertop"}</span>
+            <select
+              value={preference.countertop}
+              onChange={(e) => onChange({ countertop: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("stone", "Stone / custom stone slab")}
+              {option("concrete", "Concrete")}
+              {option("tile", "Tile")}
+              {option("stainless", "Stainless steel")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Forma deseada" : "Desired shape"}</span>
+            <select
+              value={preference.shape}
+              onChange={(e) => onChange({ shape: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("straight", "Straight run / along wall")}
+              {option("l-shape", "L-shape")}
+              {option("u-shape", "U-shape")}
+              {option("island", "Island")}
+              {option("peninsula", "Peninsula / return")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Tamaño deseado" : "Desired size"}</span>
+            <input
+              value={preference.size}
+              onChange={(e) => onChange({ size: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 10 ft largo, 3 módulos..." : "Ex: 10 ft long, 3 modules..."}
+              className={inputClass}
+            />
+          </label>
+          <label className="grid gap-2 md:col-span-2">
+            <span className={labelTextClass}>{lang === "es" ? "Back panel / backdrop" : "Back panel / backdrop"}</span>
+            <select
+              value={preference.backPanel}
+              onChange={(e) => onChange({ backPanel: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("none-along-wall", "No back panel — kitchen goes along existing wall")}
+              {option("solid-back", "Solid back wall / privacy backdrop")}
+              {option("slats", "Slats / open screen")}
+              {option("decorative-screen", "Decorative screen")}
+              {option("pergola-or-cover", "Coordinate with pergola / cover")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className="grid gap-2 md:col-span-2">
+            <span className={labelTextClass}>{lang === "es" ? "Appliances / marcas preferidas" : "Appliances / preferred brands"}</span>
+            <textarea
+              value={preference.appliances}
+              onChange={(e) => onChange({ appliances: e.target.value })}
+              rows={3}
+              placeholder={lang === "es" ? "Grill, Big Green Egg, pizza oven, warming drawer, fridge, gas/electric, brand..." : "Grill, Big Green Egg, pizza oven, warming drawer, refrigerator, gas/electric, brand..."}
+              className={textareaClass}
+            />
+          </label>
+          <label className="grid gap-2 md:col-span-2">
+            <span className={labelTextClass}>{lang === "es" ? "Notas adicionales" : "Additional notes"}</span>
+            <textarea
+              value={preference.notes}
+              onChange={(e) => onChange({ notes: e.target.value })}
+              rows={3}
+              placeholder={lang === "es" ? "Storage, sink, seating, utilities known, references..." : "Storage, sink, seating, known utilities, references..."}
+              className={textareaClass}
+            />
+          </label>
+        </div>
+      ) : null}
+
+      {type === "custom" ? (
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Tipo de feature" : "Feature type"}</span>
+            <select
+              value={preference.featureType}
+              onChange={(e) => onChange({ featureType: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("shade-sail", "Shade sail / fabric shade")}
+              {option("outdoor-fireplace", "Outdoor fireplace")}
+              {option("custom-planter", "Custom planter")}
+              {option("decorative-divider-wall", "Decorative low divider wall / not retaining soil")}
+              {option("decorative-screen", "Decorative screen")}
+              {option("trellis", "Trellis")}
+              {option("swing", "Swing / small built feature")}
+              {option("water-feature", "Small pond / water feature")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Material preferido" : "Preferred material"}</span>
+            <select
+              value={preference.material}
+              onChange={(e) => onChange({ material: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("wood", "Wood")}
+              {option("steel", "Steel")}
+              {option("aluminum", "Aluminum")}
+              {option("stone", "Stone")}
+              {option("stucco", "Stucco")}
+              {option("polycarbonate", "Polycarbonate")}
+              {option("fabric", "Fabric / sail material")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Tamaño aproximado" : "Approx. size"}</span>
+            <input
+              value={preference.size}
+              onChange={(e) => onChange({ size: e.target.value })}
+              placeholder={lang === "es" ? "Altura, largo, ancho..." : "Height, length, width..."}
+              className={inputClass}
+            />
+          </label>
+          <label className={`${labelClass} md:col-span-2`}>
+            <span className={labelTextClass}>{lang === "es" ? "Describe lo que quieres" : "Describe what you want"}</span>
+            <textarea
+              value={preference.notes}
+              onChange={(e) => onChange({ notes: e.target.value })}
+              rows={4}
+              placeholder={lang === "es" ? "Si no encuentras la opción correcta, descríbela aquí antes de pedir invoice." : "If you do not see the right option, describe it here before we invoice."}
+              className={textareaClass}
+            />
+          </label>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+
 // ─── ProjectInfoCard ─────────────────────────────────────────────────────────
 
 function ProjectInfoCard({
@@ -3000,6 +3614,7 @@ function ProjectInfoCard({
   onFilesChange,
   lang,
   pathId,
+  selectedStructureServices,
   missingKeys,
 }: {
   contact: OrderContact;
@@ -3008,6 +3623,7 @@ function ProjectInfoCard({
   onFilesChange: (patch: Partial<ProjectFileUploads>) => void;
   lang: Lang;
   pathId: string;
+  selectedStructureServices: Service[];
   missingKeys: MissingRequirementKey[];
 }) {
   const t = T[lang];
@@ -3036,6 +3652,21 @@ function ProjectInfoCard({
   const logoRequired = false;
   const isQuickPhoto = pathId === "quick-sale";
   const isMissing = (key: MissingRequirementKey) => missingKeys.includes(key);
+  const updateStructurePreference = (
+    serviceId: string,
+    patch: Partial<StructurePreference>
+  ) => {
+    onChange({
+      structurePreferences: {
+        ...contact.structurePreferences,
+        [serviceId]: {
+          ...emptyStructurePreference(),
+          ...(contact.structurePreferences[serviceId] ?? {}),
+          ...patch,
+        },
+      },
+    });
+  };
   const inputClass = (missing: boolean, base = "rounded-2xl px-4 py-3 text-sm outline-none") =>
     `${base} border ${missing ? "border-rose-300 bg-rose-50 focus:border-rose-500" : "border-slate-200 bg-white focus:border-slate-400"}`;
   const timelineTitle = lang === "es" ? "Tiempo estimado" : "Estimated production timing";
@@ -3406,6 +4037,49 @@ function ProjectInfoCard({
               ? "Si dejas el nombre o la dirección vacíos, no los mostraremos en el title block."
               : "If you leave the client name or address blank, we will not show it on the title block."}
           </div>
+
+          {pathId === "build-one" && selectedStructureServices.length > 0 ? (
+            <div
+              className={`grid gap-4 rounded-[1.5rem] border p-4 md:col-span-2 ${
+                isMissing("structureDetails")
+                  ? "border-rose-300 bg-rose-50"
+                  : "border-slate-200 bg-white"
+              }`}
+            >
+              <div>
+                <h5 className="text-base font-black text-slate-900">
+                  {lang === "es"
+                    ? "Preferencias de estructura exterior"
+                    : "Outdoor structure preferences"}
+                </h5>
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  {lang === "es"
+                    ? "Estas preguntas ayudan a revisar el scope antes del invoice. Si no ves una opción, elige Other y descríbelo."
+                    : "These questions help us review the scope before invoicing. If you do not see the right option, choose Other and describe it."}
+                </p>
+              </div>
+
+              {selectedStructureServices.map((service) => {
+                const preference = {
+                  ...emptyStructurePreference(),
+                  ...(contact.structurePreferences[service.id] ?? {}),
+                };
+                return (
+                  <StructurePreferenceCard
+                    key={service.id}
+                    service={service}
+                    preference={preference}
+                    lang={lang}
+                    missing={
+                      isMissing("structureDetails") &&
+                      !hasMeaningfulStructurePreference(service.id, preference)
+                    }
+                    onChange={(patch) => updateStructurePreference(service.id, patch)}
+                  />
+                );
+              })}
+            </div>
+          ) : null}
 
           <label className="grid gap-2 md:col-span-2">
             <span className="text-sm font-semibold text-slate-700">
@@ -3964,7 +4638,8 @@ function getMissingRequirementKeys(
   contact: OrderContact,
   files: ProjectFileUploads,
   pathId: string,
-  selectedItemCount: number
+  selectedItemCount: number,
+  selectedServiceIds: string[] = []
 ): MissingRequirementKey[] {
   const missing: MissingRequirementKey[] = [];
   const requiresSurveyFiles = pathId !== "quick-sale";
@@ -3980,6 +4655,20 @@ function getMissingRequirementKeys(
   if (requiresPhotoFiles && !files.photos?.length) missing.push("projectPhotos");
   if (requiresSurveyFiles && !files.surveyDocs?.length) missing.push("surveyDocs");
   if (!files.references?.length) missing.push("references");
+
+  const selectedStructureIds = selectedServiceIds.filter((id) =>
+    STRUCTURE_DETAIL_SERVICE_IDS.includes(id)
+  );
+  if (
+    pathId === "build-one" &&
+    selectedStructureIds.length > 0 &&
+    selectedStructureIds.some(
+      (id) => !hasMeaningfulStructurePreference(id, contact.structurePreferences[id])
+    )
+  ) {
+    missing.push("structureDetails");
+  }
+
   if (!contact.sameProjectConfirmed) missing.push("sameProject");
 
   return missing;
@@ -3998,6 +4687,7 @@ function getMissingRequirementLabel(key: MissingRequirementKey, lang: Lang) {
     surveyDocs: { en: "Survey / site plan / measured base", es: "Survey / plano del sitio / base medida" },
     references: { en: "References / markups / measurements", es: "Referencias / markups / medidas" },
     sameProject: { en: "Confirm one client/project for this order", es: "Confirma un cliente/proyecto para este pedido" },
+    structureDetails: { en: "Add structure preferences for the selected outdoor structure", es: "Agrega preferencias de estructura para el elemento exterior seleccionado" },
   };
   return labels[key][lang];
 }
@@ -4199,17 +4889,23 @@ function App() {
   );
   const rushFee = cart["rush-fee"] ? Math.round(pricedSubtotal * 0.25) : 0;
   const total = pricedSubtotal + rushFee;
-  const deposit = Math.round(total * 0.7);
+  const deposit = Math.round(total * 0.5);
   const remaining = total - deposit;
   const hasTbd = pricedItems.some((item) => item.isQuote);
   const useDeposit = !hasTbd && total >= 500;
   const isQuickConceptOnly =
     pricedItems.length === 1 && pricedItems[0]?.service.id === "photo-concept-start";
+  const selectedServiceIds = pricedItems.map((item) => item.service.id);
+  const selectedStructureServices = pricedItems
+    .map((item) => item.service)
+    .filter((service) => STRUCTURE_DETAIL_SERVICE_IDS.includes(service.id));
+
   const missingRequirementKeys = getMissingRequirementKeys(
     contact,
     projectFiles,
     activePath,
-    pricedItems.length
+    pricedItems.length,
+    selectedServiceIds
   );
   const canProceed = missingRequirementKeys.length === 0;
 
@@ -4351,6 +5047,10 @@ function App() {
       measurement_height: sanitizeText(contact.measurementHeight),
       measurements_site_notes: sanitizeText(contact.measurementsNotes),
       reference_links: sanitizeText(contact.referenceLinks),
+      structure_preferences: sanitizeStructurePreferences(
+        contact.structurePreferences,
+        selectedServiceIds
+      ),
       requested_delivery_date: effectiveDeliveryDate,
       white_label_delivery: buildWhiteLabelPayload(contact),
       file_summary: buildFileSummary(projectFiles),
@@ -4722,6 +5422,7 @@ function App() {
                 }
                 lang={lang}
                 pathId={activePath}
+                selectedStructureServices={selectedStructureServices}
                 missingKeys={missingRequirementKeys}
               />
               {checkoutNotice ? (
