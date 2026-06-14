@@ -26,8 +26,8 @@ type PartnerProfileMode = "new" | "existing";
 type ClientNameDisplay = "show" | "hide";
 type AddressDisplay = "full" | "street" | "project" | "hide";
 type LogoOption = "upload" | "on-file" | "text-only";
-type TitleBlockOption = "standard-clean" | "standard-compact" | "upload";
-type TitleBlockSampleOption = "standard-clean" | "standard-compact";
+type TitleBlockOption = "standard-landscape" | "standard-portrait" | "upload";
+type TitleBlockSampleOption = "standard-landscape" | "standard-portrait";
 type MissingRequirementKey =
   | "selectedService"
   | "partnerName"
@@ -254,8 +254,8 @@ const T = {
     uploadSurveyHelp:
       "Required for all services except Quick Photo Concept. Upload a survey, site plan, measured sketch, marked base plan, PDF, or drawing that gives us the project geometry. Up to 10 files per upload.",
     titleBlockOption: "Title block / sheet template",
-    titleBlockStandardClean: "Use standard clean SiteForm title block",
-    titleBlockStandardCompact: "Use standard compact SiteForm title block",
+    titleBlockStandardLandscape: "Use standard landscape SiteForm title block",
+    titleBlockStandardPortrait: "Use standard portrait SiteForm title block",
     titleBlockUpload: "Upload my own title block / sheet template",
     uploadTitleBlock: "Upload title block / sheet template",
     uploadTitleBlockHelp:
@@ -510,8 +510,8 @@ const T = {
     uploadSurveyHelp:
       "Obligatorio para todos los servicios excepto Quick Photo Concept. Sube survey, site plan, sketch medido, base marcada, PDF o dibujo que nos dé la geometría del proyecto. Hasta 10 archivos por carga.",
     titleBlockOption: "Title block / plantilla de lámina",
-    titleBlockStandardClean: "Usar title block estándar limpio de SiteForm",
-    titleBlockStandardCompact: "Usar title block estándar compacto de SiteForm",
+    titleBlockStandardLandscape: "Usar title block horizontal estándar de SiteForm",
+    titleBlockStandardPortrait: "Usar title block vertical estándar de SiteForm",
     titleBlockUpload: "Subir mi propio title block / plantilla",
     uploadTitleBlock: "Subir title block / plantilla",
     uploadTitleBlockHelp:
@@ -1533,7 +1533,7 @@ function emptyContact(): OrderContact {
     clientNameDisplay: "show",
     addressDisplay: "street",
     logoOption: "upload",
-    titleBlockOption: "standard-clean",
+    titleBlockOption: "standard-landscape",
     brandingNotes: "",
     sameProjectConfirmed: false,
     rememberPartnerInfo: false,
@@ -2217,9 +2217,9 @@ function SampleModal({
   );
 }
 
-function makeTitleBlockSampleSvg(label: string, variant: "clean" | "compact") {
-  const isCompact = variant === "compact";
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760"><rect width="1200" height="760" fill="#f8fafc"/><rect x="70" y="70" width="1060" height="620" rx="34" fill="white" stroke="#cbd5e1" stroke-width="3"/><rect x="90" y="560" width="1020" height="110" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/><text x="120" y="620" font-family="Arial" font-size="32" font-weight="800" fill="#0f172a">${label}</text><text x="120" y="650" font-family="Arial" font-size="18" fill="#64748b">Sample blank title block / sheet frame</text>${isCompact ? '<rect x="865" y="580" width="220" height="70" fill="white" stroke="#cbd5e1" stroke-width="2"/><text x="885" y="622" font-family="Arial" font-size="18" fill="#64748b">Logo / info</text>' : '<line x1="90" y1="615" x2="1110" y2="615" stroke="#cbd5e1" stroke-width="2"/>'}</svg>`;
+function makeTitleBlockSampleSvg(label: string, variant: "landscape" | "portrait") {
+  const isPortrait = variant === "portrait";
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760"><rect width="1200" height="760" fill="#f8fafc"/><rect x="70" y="70" width="1060" height="620" rx="34" fill="white" stroke="#cbd5e1" stroke-width="3"/><rect x="90" y="560" width="1020" height="110" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/><text x="120" y="620" font-family="Arial" font-size="32" font-weight="800" fill="#0f172a">${label}</text><text x="120" y="650" font-family="Arial" font-size="18" fill="#64748b">Sample blank title block / sheet frame</text>${isPortrait ? '<rect x="930" y="110" width="120" height="500" fill="white" stroke="#cbd5e1" stroke-width="2"/><text x="948" y="360" transform="rotate(-90 948 360)" font-family="Arial" font-size="18" fill="#64748b">Vertical title block</text>' : '<line x1="90" y1="615" x2="1110" y2="615" stroke="#cbd5e1" stroke-width="2"/>'}</svg>`;
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
@@ -2232,18 +2232,18 @@ function TitleBlockSampleModal({
   lang: Lang;
   onClose: () => void;
 }) {
-  const isClean = option === "standard-clean";
-  const title = isClean
+  const isLandscape = option === "standard-landscape";
+  const title = isLandscape
     ? lang === "es"
-      ? "Title block estándar limpio"
-      : "Standard clean SiteForm title block"
+      ? "Title block horizontal estándar"
+      : "Standard landscape SiteForm title block"
     : lang === "es"
-      ? "Title block estándar compacto"
-      : "Standard compact SiteForm title block";
-  const image = isClean
-    ? "/samples/title-block-clean.jpg"
-    : "/samples/title-block-compact.jpg";
-  const fallback = makeTitleBlockSampleSvg(title, isClean ? "clean" : "compact");
+      ? "Title block vertical estándar"
+      : "Standard portrait SiteForm title block";
+  const image = isLandscape
+    ? "/samples/title-block-landscape.jpg"
+    : "/samples/title-block-portrait.jpg";
+  const fallback = makeTitleBlockSampleSvg(title, isLandscape ? "landscape" : "portrait");
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -3184,30 +3184,30 @@ function ProjectInfoCard({
                 <div className="text-sm font-semibold text-slate-700">{t.titleBlockOption}</div>
                 <p className="mt-2 text-xs leading-5 text-slate-500">{t.uploadTitleBlockHelp}</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-3">
-                  <label onClick={() => setTitleBlockSample("standard-clean")} className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "standard-clean" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
+                  <label onClick={() => setTitleBlockSample("standard-landscape")} className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "standard-landscape" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
                     <input
                       type="radio"
                       name="titleBlockOption"
-                      checked={contact.titleBlockOption === "standard-clean"}
-                      onChange={() => onChange({ titleBlockOption: "standard-clean" })}
+                      checked={contact.titleBlockOption === "standard-landscape"}
+                      onChange={() => onChange({ titleBlockOption: "standard-landscape" })}
                       className="sr-only"
                     />
-                    <span className="block font-black text-slate-900">{t.titleBlockStandardClean}</span>
+                    <span className="block font-black text-slate-900">{t.titleBlockStandardLandscape}</span>
                     <span className="mt-2 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-emerald-800">{t.titleBlockSample}</span>
                     <span className="mt-3 block h-16 rounded-xl border border-slate-200 bg-white p-2">
                       <span className="block h-3 w-28 rounded bg-slate-200" />
                       <span className="mt-6 block h-3 w-full rounded bg-slate-100" />
                     </span>
                   </label>
-                  <label onClick={() => setTitleBlockSample("standard-compact")} className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "standard-compact" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
+                  <label onClick={() => setTitleBlockSample("standard-portrait")} className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "standard-portrait" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
                     <input
                       type="radio"
                       name="titleBlockOption"
-                      checked={contact.titleBlockOption === "standard-compact"}
-                      onChange={() => onChange({ titleBlockOption: "standard-compact" })}
+                      checked={contact.titleBlockOption === "standard-portrait"}
+                      onChange={() => onChange({ titleBlockOption: "standard-portrait" })}
                       className="sr-only"
                     />
-                    <span className="block font-black text-slate-900">{t.titleBlockStandardCompact}</span>
+                    <span className="block font-black text-slate-900">{t.titleBlockStandardPortrait}</span>
                     <span className="mt-2 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-emerald-800">{t.titleBlockSample}</span>
                     <span className="mt-3 grid h-16 grid-cols-[1fr_auto] gap-2 rounded-xl border border-slate-200 bg-white p-2">
                       <span className="space-y-2"><span className="block h-3 w-24 rounded bg-slate-200" /><span className="block h-3 w-36 rounded bg-slate-100" /></span>
