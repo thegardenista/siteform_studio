@@ -167,9 +167,10 @@ const DEFAULT_SAMPLE_IMAGES: SampleImages = {
 };
 
 const SAMPLE_IMAGES: Record<string, SampleImages> = {
-  // Replace these paths after you add real files to /public/samples/.
-  // Example: before: "/samples/quick-photo-before.jpg", after: "/samples/quick-photo-after.jpg"
-  "photo-concept-start": DEFAULT_SAMPLE_IMAGES,
+  "photo-concept-start": {
+    before: "/samples/quick-photo-before.jpg",
+    after: "/samples/quick-photo-after.jpg",
+  },
 };
 
 function getSampleImages(serviceId: string): SampleImages {
