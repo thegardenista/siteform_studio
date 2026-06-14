@@ -26,6 +26,7 @@ type PartnerProfileMode = "new" | "existing";
 type ClientNameDisplay = "show" | "hide";
 type AddressDisplay = "full" | "street" | "project" | "hide";
 type LogoOption = "upload" | "on-file" | "text-only";
+type TitleBlockOption = "standard-clean" | "standard-compact" | "upload";
 type ViewState = "LANDING" | "MENU" | "CONFIG" | "SUCCESS";
 type PricingType = "size" | "flat" | "unit" | "hourly" | "quote" | "percentage";
 type NoticeKind = "hard" | "soft" | null;
@@ -83,6 +84,10 @@ interface OrderContact {
   customerPhone: string;
   projectAddress: string;
   notes: string;
+  measurementObject: string;
+  measurementWidth: string;
+  measurementLength: string;
+  measurementHeight: string;
   measurementsNotes: string;
   referenceLinks: string;
   partnerProfileMode: PartnerProfileMode;
@@ -94,6 +99,7 @@ interface OrderContact {
   clientNameDisplay: ClientNameDisplay;
   addressDisplay: AddressDisplay;
   logoOption: LogoOption;
+  titleBlockOption: TitleBlockOption;
   brandingNotes: string;
   sameProjectConfirmed: boolean;
   rememberPartnerInfo: boolean;
@@ -194,7 +200,7 @@ const T = {
     clientEmail: "Your email",
     clientEmailPlaceholder: "Email for this order",
     clientPhone: "Your phone number",
-    clientPhonePlaceholder: "Phone number for order records only",
+    clientPhonePlaceholder: "Example: 512-555-0198",
     projectAddress: "Project / client label",
     projectAddressPlaceholder: "Example: Garcia backyard, Oak St deck, Project 24-018, or full address",
     projectLabelHelp:
@@ -202,11 +208,17 @@ const T = {
     notes: "Project details",
     notesHelp:
       "Required. Tell us what you need, what the client wants, what area or structure this is, budget/timing concerns, and any site limits.",
-    measurementsNotes: "Measurements / site notes",
+    measurementsNotes: "Measurement notes",
+    measurementObject: "Object / area measured",
+    measurementObjectPlaceholder: "Example: deck, pergola, patio, front entry, side yard",
+    measurementWidth: "Width",
+    measurementLength: "Length / depth",
+    measurementHeight: "Height",
+    measurementValuePlaceholder: "Example: 12 ft",
     measurementsNotesPlaceholder:
-      "Required. List the measurements we should use: width, depth, height, roof/eave-to-ground height, house-to-fence distances, slopes, steps, walls, grade changes, or anything that affects the work.",
+      "Optional notes: roof/eave-to-ground height, house-to-fence distances, slopes, steps, walls, grade changes, or what each measurement means.",
     measurementsNotesHelp:
-      "If there is no site visit, work cannot start until usable dimensions are provided. Notes are better than unclear arrows when possible.",
+      "Measurements are not required to submit, but they are strongly recommended. If there is no site visit, work cannot start until usable dimensions are provided. Written notes are often clearer than arrows on photos.",
     referenceLinks: "Reference links / Pinterest / shared boards",
     referenceLinksPlaceholder:
       "Optional. Paste Pinterest boards, product links, Google Drive links, inspiration links, or notes about references.",
@@ -215,14 +227,18 @@ const T = {
       "Remote orders must include usable dimensions before work starts. Send a survey, site plan, measured sketch, or marked-up plan/photo with width, depth, height, roof/eave-to-ground height, house-to-fence distances, slopes, steps, walls, and level changes where relevant.",
     projectFilesTitle: "Project files for this order",
     projectFilesHelp:
-      "Upload files for this one client/project. References/markups and a survey/site plan/measured base are required. Project photos are helpful but optional. For a different client, start a separate order.",
+      "Upload files for this one client/project. References/markups are required. A survey/site plan/measured base is required for all services except Quick Photo Concept. Project photos are helpful for most orders and required for Quick Photo Concept. For a different client, start a separate order.",
     uploadPhotosHelp:
-      "Optional but helpful. Clear photos of the project area, facade, patio, yard, problem spots, slope, roof/eaves, fence lines, or existing conditions. Up to 10 files per upload.",
+      "Required for Quick Photo Concept; optional but helpful for other services. Clear photos of the project area, facade, patio, yard, problem spots, slope, roof/eaves, fence lines, or existing conditions. Up to 10 files per upload.",
     uploadSurveyHelp:
-      "Required. Upload a survey, site plan, measured sketch, marked base plan, PDF, or drawing that gives us the project geometry. Up to 10 files per upload.",
-    uploadTitleBlock: "Title block / sheet template",
+      "Required for all services except Quick Photo Concept. Upload a survey, site plan, measured sketch, marked base plan, PDF, or drawing that gives us the project geometry. Up to 10 files per upload.",
+    titleBlockOption: "Title block / sheet template",
+    titleBlockStandardClean: "Use standard clean SiteForm title block",
+    titleBlockStandardCompact: "Use standard compact SiteForm title block",
+    titleBlockUpload: "Upload my own title block / sheet template",
+    uploadTitleBlock: "Upload title block / sheet template",
     uploadTitleBlockHelp:
-      "Optional for first-time setup. Upload your ready-made title block, PDF border, sheet frame, or DWG/PDF template if you want us to use your company sheet format.",
+      "Choose one standard blank title block, or upload your own PDF border, sheet frame, DWG/PDF template, or title block file.",
     uploadLogoFiles: "Logo / brand files",
     uploadLogoHelp:
       "Optional. Upload a logo or brand file if you want it used. Use PNG, SVG, PDF, AI, or EPS if available. If you do not have one, choose text-only company name.",
@@ -256,6 +272,7 @@ const T = {
     whiteLabelWebsitePlaceholder: "Website, Instagram, Facebook, or other public contact",
     desiredDeliveryDate: "Desired delivery date (optional)",
     desiredDeliveryDateHelp: "Rush timing still depends on our schedule.",
+    quickDeliveryFixed: "Quick Photo Concept turnaround: about 1 business day after review, invoice/payment, and usable photo/files.",
     clientNameDisplay: "Client name display",
     showClientName: "Show client name",
     hideClientName: "Do not show client name",
@@ -325,7 +342,7 @@ const T = {
     safetyText:
       "We provide design-intent visuals, concept sheets, drafting cleanup, and white-label presentation support. We do not provide engineering, legal surveying, code review, permit filing, permit approval guarantees, sealed/stamped drawings, structural calculations, utility design, or construction-control documents.",
     fillRequired:
-      "Add your name/company, email, phone number, project/client label, project details, measurements/site notes, required survey/site plan or measured base, references/markups, confirm this is one client/project, and select at least one service. For first-time white-label setup, add the company name.",
+      "Add your name/company, email, phone number, project/client label, project details, required references/markups, required survey/site plan or measured base when needed, confirm this is one client/project, and select at least one service. For first-time white-label setup, add the company name.",
     quoteBlocksCheckout:
       "All orders are reviewed first. We send the invoice/payment link after scope and files are checked.",
     add: "Add",
@@ -433,7 +450,7 @@ const T = {
     clientEmail: "Tu email",
     clientEmailPlaceholder: "Email para este pedido",
     clientPhone: "Tu teléfono",
-    clientPhonePlaceholder: "Teléfono solo para el registro del pedido",
+    clientPhonePlaceholder: "Ejemplo: 512-555-0198",
     projectAddress: "Etiqueta de proyecto / cliente",
     projectAddressPlaceholder: "Ejemplo: patio Garcia, deck Oak St, Proyecto 24-018 o dirección completa",
     projectLabelHelp:
@@ -441,11 +458,17 @@ const T = {
     notes: "Detalles del proyecto",
     notesHelp:
       "Requerido. Di qué necesitas, qué quiere el cliente, qué área o estructura es, presupuesto/plazos y cualquier límite del sitio.",
-    measurementsNotes: "Medidas / notas del sitio",
+    measurementsNotes: "Notas de medidas",
+    measurementObject: "Objeto / área medida",
+    measurementObjectPlaceholder: "Ejemplo: deck, pérgola, patio, entrada, side yard",
+    measurementWidth: "Ancho",
+    measurementLength: "Largo / fondo",
+    measurementHeight: "Altura",
+    measurementValuePlaceholder: "Ejemplo: 12 ft",
     measurementsNotesPlaceholder:
-      "Requerido. Lista las medidas que debemos usar: ancho, profundidad, altura, roof/eave al piso, distancias de casa a fence, pendientes, escalones, muros, cambios de nivel o cualquier cosa que afecte el trabajo.",
+      "Notas opcionales: altura de alero a suelo, distancias de casa a cerca, pendientes, escalones, muros, cambios de nivel o qué significa cada medida.",
     measurementsNotesHelp:
-      "Si no hay visita al sitio, el trabajo no puede empezar hasta que recibamos medidas utilizables. Notas claras son mejores que flechas confusas cuando sea posible.",
+      "Las medidas no son obligatorias para enviar, pero son muy recomendables. Si no hay visita, el trabajo no puede empezar hasta que existan dimensiones utilizables. Las notas escritas suelen ser más claras que flechas en fotos.",
     referenceLinks: "Links de referencia / Pinterest / boards",
     referenceLinksPlaceholder:
       "Opcional. Pega Pinterest boards, links de productos, Google Drive, inspiración o notas sobre referencias.",
@@ -454,14 +477,18 @@ const T = {
       "Los pedidos remotos deben incluir medidas utilizables antes de empezar. Sube survey, site plan, sketch medido o plano/foto marcado con ancho, profundidad, altura, roof/eave al piso, distancias a fence, pendientes, escalones, muros y cambios de nivel cuando aplique.",
     projectFilesTitle: "Archivos para este pedido",
     projectFilesHelp:
-      "Sube archivos para este cliente/proyecto. Referencias/markups y survey/site plan/base medida son requeridos. Las fotos son útiles pero opcionales. Para otro cliente, inicia un pedido separado.",
+      "Sube archivos para este cliente/proyecto. Referencias/markups son obligatorios. Survey/site plan/base medida es obligatorio para todos los servicios excepto Quick Photo Concept. Las fotos son útiles para la mayoría de pedidos y obligatorias para Quick Photo Concept. Para otro cliente, inicia un pedido separado.",
     uploadPhotosHelp:
-      "Opcional pero útil. Fotos claras del área, fachada, patio, yard, problemas, pendiente, roof/eaves, fence lines o condiciones existentes. Hasta 10 archivos por carga.",
+      "Obligatorio para Quick Photo Concept; opcional pero útil para otros servicios. Fotos claras del área, fachada, patio, yard, problemas, pendiente, roof/eaves, fence lines o condiciones existentes. Hasta 10 archivos por carga.",
     uploadSurveyHelp:
-      "Requerido. Sube survey, site plan, sketch medido, base marcada, PDF o dibujo que nos dé la geometría del proyecto. Hasta 10 archivos por carga.",
-    uploadTitleBlock: "Title block / plantilla de lámina",
+      "Obligatorio para todos los servicios excepto Quick Photo Concept. Sube survey, site plan, sketch medido, base marcada, PDF o dibujo que nos dé la geometría del proyecto. Hasta 10 archivos por carga.",
+    titleBlockOption: "Title block / plantilla de lámina",
+    titleBlockStandardClean: "Usar title block estándar limpio de SiteForm",
+    titleBlockStandardCompact: "Usar title block estándar compacto de SiteForm",
+    titleBlockUpload: "Subir mi propio title block / plantilla",
+    uploadTitleBlock: "Subir title block / plantilla",
     uploadTitleBlockHelp:
-      "Opcional para la primera configuración. Sube tu title block, borde PDF, marco de lámina o plantilla DWG/PDF si quieres que usemos el formato de tu compañía.",
+      "Elige un title block estándar en blanco, o sube tu borde PDF, marco de lámina, plantilla DWG/PDF o archivo de title block.",
     uploadLogoFiles: "Logo / archivos de marca",
     uploadLogoHelp:
       "Opcional. Sube logo o archivo de marca si quieres usarlo. Usa PNG, SVG, PDF, AI o EPS si está disponible. Si no tienes logo, elige solo nombre de compañía.",
@@ -495,6 +522,7 @@ const T = {
     whiteLabelWebsitePlaceholder: "Website, Instagram, Facebook u otro contacto público",
     desiredDeliveryDate: "Fecha deseada de entrega (opcional)",
     desiredDeliveryDateHelp: "La entrega urgente todavía depende de nuestra agenda.",
+    quickDeliveryFixed: "Quick Photo Concept: normalmente 1 día hábil después de review, invoice/payment y foto/archivos utilizables.",
     clientNameDisplay: "Mostrar nombre del cliente",
     showClientName: "Mostrar nombre del cliente",
     hideClientName: "No mostrar nombre del cliente",
@@ -564,7 +592,7 @@ const T = {
     safetyText:
       "Ofrecemos visuales de intención de diseño, láminas conceptuales, cleanup de drafting y apoyo de presentación white-label. No ofrecemos ingeniería, survey legal, revisión de código, trámite de permisos, garantía de aprobación, planos sellados/estampados, cálculos estructurales, diseño de utilities o documentos de control de construcción.",
     fillRequired:
-      "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, medidas/notas del sitio, survey/site plan o base medida, referencias/markups, confirma que es un solo cliente/proyecto y elige al menos un servicio. Para primera configuración white-label, agrega el nombre de compañía.",
+      "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, referencias/markups obligatorios, survey/site plan o base medida cuando se requiera, confirma que es un solo cliente/proyecto y elige al menos un servicio. Para primera configuración white-label, agrega el nombre de compañía.",
     quoteBlocksCheckout:
       "Todos los pedidos se revisan primero. Mandamos la factura/link de pago después de revisar el alcance y los archivos.",
     add: "Agregar",
@@ -821,8 +849,8 @@ const STARTING_POINT_SERVICES: Service[] = [
     category: "Start",
     icon: Trees,
     pricingType: "flat",
-    flatPrice: 150,
-    stripePriceId: "price_quickconcept_150",
+    flatPrice: 99,
+    stripePriceId: "price_quickconcept_99",
     short: "Fast concept image to help close the sale.",
     bestFor: "Fast sales before full design work starts.",
     youSend:
@@ -1439,6 +1467,13 @@ function sanitizeText(value?: string) {
   return (value ?? "").replace(/\s+/g, " ").trim();
 }
 
+function formatPhoneInput(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
 const PARTNER_STORAGE_KEY = "scopebuilder_partner_profile_v1";
 
 function emptyContact(): OrderContact {
@@ -1448,6 +1483,10 @@ function emptyContact(): OrderContact {
     customerPhone: "",
     projectAddress: "",
     notes: "",
+    measurementObject: "",
+    measurementWidth: "",
+    measurementLength: "",
+    measurementHeight: "",
     measurementsNotes: "",
     referenceLinks: "",
     partnerProfileMode: "new",
@@ -1459,6 +1498,7 @@ function emptyContact(): OrderContact {
     clientNameDisplay: "show",
     addressDisplay: "street",
     logoOption: "upload",
+    titleBlockOption: "standard-clean",
     brandingNotes: "",
     sameProjectConfirmed: false,
     rememberPartnerInfo: false,
@@ -1477,6 +1517,10 @@ function getInitialContact(): OrderContact {
       ...saved,
       projectAddress: "",
       notes: "",
+      measurementObject: "",
+      measurementWidth: "",
+      measurementLength: "",
+      measurementHeight: "",
       measurementsNotes: "",
       referenceLinks: "",
       desiredDeliveryDate: "",
@@ -1503,6 +1547,7 @@ function savePartnerInfo(contact: OrderContact) {
     clientNameDisplay: contact.clientNameDisplay,
     addressDisplay: contact.addressDisplay,
     logoOption: contact.logoOption,
+    titleBlockOption: contact.titleBlockOption,
     brandingNotes: contact.brandingNotes,
   };
   window.localStorage.setItem(PARTNER_STORAGE_KEY, JSON.stringify(saved));
@@ -1519,6 +1564,7 @@ function buildWhiteLabelPayload(contact: OrderContact) {
     client_name_display: contact.clientNameDisplay,
     address_display: contact.addressDisplay,
     logo_option: contact.logoOption,
+    title_block_option: contact.titleBlockOption,
     branding_notes: sanitizeText(contact.brandingNotes),
     same_client_project_confirmed: contact.sameProjectConfirmed,
     remembered_on_device: contact.rememberPartnerInfo,
@@ -1545,8 +1591,11 @@ function hasAnyProjectFile(files: ProjectFileUploads) {
   );
 }
 
-function hasRequiredProjectFiles(files: ProjectFileUploads) {
-  return Boolean(files.surveyDocs?.length && files.references?.length);
+function hasRequiredProjectFiles(files: ProjectFileUploads, requireSurvey: boolean, requirePhoto: boolean) {
+  const hasReferences = Boolean(files.references?.length);
+  const hasSurvey = !requireSurvey || Boolean(files.surveyDocs?.length);
+  const hasPhoto = !requirePhoto || Boolean(files.photos?.length);
+  return hasReferences && hasSurvey && hasPhoto;
 }
 
 function summarizeFileList(files: FileList | null) {
@@ -2859,9 +2908,11 @@ function ProjectInfoCard({
             </span>
             <input
               type="tel"
+              inputMode="numeric"
               required
+              maxLength={12}
               value={contact.customerPhone}
-              onChange={(e) => onChange({ customerPhone: e.target.value })}
+              onChange={(e) => onChange({ customerPhone: formatPhoneInput(e.target.value) })}
               placeholder={t.clientPhonePlaceholder}
               className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
             />
@@ -2926,7 +2977,9 @@ function ProjectInfoCard({
                 </span>
                 <input
                   value={contact.whiteLabelPhone}
-                  onChange={(e) => onChange({ whiteLabelPhone: e.target.value })}
+                  inputMode="numeric"
+                  maxLength={12}
+                  onChange={(e) => onChange({ whiteLabelPhone: formatPhoneInput(e.target.value) })}
                   placeholder={t.whiteLabelPhonePlaceholder}
                   className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
                 />
@@ -2998,15 +3051,62 @@ function ProjectInfoCard({
                   requiredField={logoRequired}
                 />
               ) : null}
-              <FilePicker
-                title={t.uploadTitleBlock}
-                help={t.uploadTitleBlockHelp}
-                accept=".pdf,image/*,.dwg,.dxf,.ai,.eps,.svg"
-                files={projectFiles.titleBlockFiles}
-                onChange={(files) => onFilesChange({ titleBlockFiles: files })}
-                lang={lang}
-                maxFiles={5}
-              />
+              <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 md:col-span-2">
+                <div className="text-sm font-semibold text-slate-700">{t.titleBlockOption}</div>
+                <p className="mt-2 text-xs leading-5 text-slate-500">{t.uploadTitleBlockHelp}</p>
+                <div className="mt-4 grid gap-3 md:grid-cols-3">
+                  <label className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "standard-clean" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
+                    <input
+                      type="radio"
+                      name="titleBlockOption"
+                      checked={contact.titleBlockOption === "standard-clean"}
+                      onChange={() => onChange({ titleBlockOption: "standard-clean" })}
+                      className="sr-only"
+                    />
+                    <span className="block font-black text-slate-900">{t.titleBlockStandardClean}</span>
+                    <span className="mt-3 block h-16 rounded-xl border border-slate-200 bg-white p-2">
+                      <span className="block h-3 w-28 rounded bg-slate-200" />
+                      <span className="mt-6 block h-3 w-full rounded bg-slate-100" />
+                    </span>
+                  </label>
+                  <label className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "standard-compact" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
+                    <input
+                      type="radio"
+                      name="titleBlockOption"
+                      checked={contact.titleBlockOption === "standard-compact"}
+                      onChange={() => onChange({ titleBlockOption: "standard-compact" })}
+                      className="sr-only"
+                    />
+                    <span className="block font-black text-slate-900">{t.titleBlockStandardCompact}</span>
+                    <span className="mt-3 grid h-16 grid-cols-[1fr_auto] gap-2 rounded-xl border border-slate-200 bg-white p-2">
+                      <span className="space-y-2"><span className="block h-3 w-24 rounded bg-slate-200" /><span className="block h-3 w-36 rounded bg-slate-100" /></span>
+                      <span className="h-full w-16 rounded bg-slate-100" />
+                    </span>
+                  </label>
+                  <label className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "upload" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
+                    <input
+                      type="radio"
+                      name="titleBlockOption"
+                      checked={contact.titleBlockOption === "upload"}
+                      onChange={() => onChange({ titleBlockOption: "upload" })}
+                      className="sr-only"
+                    />
+                    <span className="block font-black text-slate-900">{t.titleBlockUpload}</span>
+                    <span className="mt-3 flex h-16 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white text-xs text-slate-500">Upload file</span>
+                  </label>
+                </div>
+              </div>
+              {contact.titleBlockOption === "upload" ? (
+                <FilePicker
+                  title={t.uploadTitleBlock}
+                  help={t.uploadTitleBlockHelp}
+                  accept=".pdf,image/*,.dwg,.dxf,.ai,.eps,.svg"
+                  files={projectFiles.titleBlockFiles}
+                  onChange={(files) => onFilesChange({ titleBlockFiles: files })}
+                  lang={lang}
+                  maxFiles={5}
+                />
+              ) : null}
             </div>
 
             <label className="mt-5 grid gap-2">
@@ -3169,20 +3269,55 @@ function ProjectInfoCard({
             <div className="text-xs text-slate-500">{t.notesHelp}</div>
           </label>
 
-          <label className="grid gap-2 md:col-span-2">
-            <span className="text-sm font-semibold text-slate-700">
-              {t.measurementsNotes}
-            </span>
-            <textarea
-              required
-              value={contact.measurementsNotes}
-              onChange={(e) => onChange({ measurementsNotes: e.target.value })}
-              rows={5}
-              placeholder={t.measurementsNotesPlaceholder}
-              className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-slate-400"
-            />
-            <div className="text-xs text-slate-500">{t.measurementsNotesHelp}</div>
-          </label>
+          <div className="grid gap-4 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4 md:col-span-2 md:grid-cols-4">
+            <label className="grid gap-2 md:col-span-4">
+              <span className="text-sm font-semibold text-slate-700">{t.measurementObject}</span>
+              <input
+                value={contact.measurementObject}
+                onChange={(e) => onChange({ measurementObject: e.target.value })}
+                placeholder={t.measurementObjectPlaceholder}
+                className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+              />
+            </label>
+            <label className="grid gap-2">
+              <span className="text-sm font-semibold text-slate-700">{t.measurementWidth}</span>
+              <input
+                value={contact.measurementWidth}
+                onChange={(e) => onChange({ measurementWidth: e.target.value })}
+                placeholder={t.measurementValuePlaceholder}
+                className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+              />
+            </label>
+            <label className="grid gap-2">
+              <span className="text-sm font-semibold text-slate-700">{t.measurementLength}</span>
+              <input
+                value={contact.measurementLength}
+                onChange={(e) => onChange({ measurementLength: e.target.value })}
+                placeholder={t.measurementValuePlaceholder}
+                className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+              />
+            </label>
+            <label className="grid gap-2">
+              <span className="text-sm font-semibold text-slate-700">{t.measurementHeight}</span>
+              <input
+                value={contact.measurementHeight}
+                onChange={(e) => onChange({ measurementHeight: e.target.value })}
+                placeholder={t.measurementValuePlaceholder}
+                className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+              />
+            </label>
+            <label className="grid gap-2 md:col-span-4">
+              <span className="text-sm font-semibold text-slate-700">{t.measurementsNotes}</span>
+              <textarea
+                value={contact.measurementsNotes}
+                onChange={(e) => onChange({ measurementsNotes: e.target.value })}
+                rows={4}
+                placeholder={t.measurementsNotesPlaceholder}
+                className="rounded-3xl border border-slate-200 bg-white p-4 text-sm outline-none focus:border-slate-400"
+              />
+              <div className="text-xs text-slate-500">{t.measurementsNotesHelp}</div>
+            </label>
+          </div>
 
           <label className="grid gap-2 md:col-span-2">
             <span className="text-sm font-semibold text-slate-700">
@@ -3197,18 +3332,25 @@ function ProjectInfoCard({
             />
           </label>
 
-          <label className="grid gap-2 md:col-span-2">
-            <span className="text-sm font-semibold text-slate-700">
-              {t.desiredDeliveryDate}
-            </span>
-            <input
-              type="date"
-              value={contact.desiredDeliveryDate}
-              onChange={(e) => onChange({ desiredDeliveryDate: e.target.value })}
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
-            />
-            <span className="text-xs text-slate-500">{t.desiredDeliveryDateHelp}</span>
-          </label>
+          {pathId === "quick-sale" ? (
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-950 md:col-span-2">
+              <span className="font-black">{t.desiredDeliveryDate}: </span>
+              {t.quickDeliveryFixed}
+            </div>
+          ) : (
+            <label className="grid gap-2 md:col-span-2">
+              <span className="text-sm font-semibold text-slate-700">
+                {t.desiredDeliveryDate}
+              </span>
+              <input
+                type="date"
+                value={contact.desiredDeliveryDate}
+                onChange={(e) => onChange({ desiredDeliveryDate: e.target.value })}
+                className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+              />
+              <span className="text-xs text-slate-500">{t.desiredDeliveryDateHelp}</span>
+            </label>
+          )}
         </div>
 
         <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-950">
@@ -3252,7 +3394,7 @@ function ProjectInfoCard({
               onChange={(files) => onFilesChange({ surveyDocs: files })}
               lang={lang}
               maxFiles={10}
-              requiredField
+              requiredField={pathId !== "quick-sale"}
             />
           </div>
         </div>
@@ -3838,14 +3980,15 @@ export default function App() {
   const hasRequiredBranding =
     contact.partnerProfileMode === "existing" ||
     Boolean(contact.whiteLabelCompany.trim());
+  const requiresSurveyFiles = activePath !== "quick-sale";
+  const requiresPhotoFiles = activePath === "quick-sale";
   const hasRequiredContact =
     Boolean(contact.clientName.trim()) &&
     Boolean(contact.customerEmail.trim()) &&
     Boolean(contact.customerPhone.trim()) &&
     Boolean(contact.projectAddress.trim()) &&
     Boolean(contact.notes.trim()) &&
-    Boolean(contact.measurementsNotes.trim()) &&
-    hasRequiredProjectFiles(projectFiles) &&
+    hasRequiredProjectFiles(projectFiles, requiresSurveyFiles, requiresPhotoFiles) &&
     hasRequiredBranding &&
     contact.sameProjectConfirmed;
   const canProceed = hasRequiredContact && pricedItems.length > 0;
@@ -3966,6 +4109,7 @@ export default function App() {
     }
 
     const orderId = `SB-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`;
+    const effectiveDeliveryDate = activePath === "quick-sale" ? "1 business day after review, invoice/payment, and usable photo/files" : sanitizeText(contact.desiredDeliveryDate);
     const reviewPayload = {
       order_id: orderId,
       path_id: activePath,
@@ -3979,9 +4123,13 @@ export default function App() {
       project_client_label: sanitizeText(contact.projectAddress),
       same_client_project_confirmed: contact.sameProjectConfirmed,
       full_notes: sanitizeText(contact.notes),
+      measurement_object: sanitizeText(contact.measurementObject),
+      measurement_width: sanitizeText(contact.measurementWidth),
+      measurement_length_depth: sanitizeText(contact.measurementLength),
+      measurement_height: sanitizeText(contact.measurementHeight),
       measurements_site_notes: sanitizeText(contact.measurementsNotes),
       reference_links: sanitizeText(contact.referenceLinks),
-      requested_delivery_date: sanitizeText(contact.desiredDeliveryDate),
+      requested_delivery_date: effectiveDeliveryDate,
       white_label_delivery: buildWhiteLabelPayload(contact),
       file_summary: buildFileSummary(projectFiles),
       payment_status: "submitted_for_review_invoice_pending",
