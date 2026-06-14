@@ -76,6 +76,7 @@ interface Service {
 interface OrderContact {
   clientName: string;
   customerEmail: string;
+  customerPhone: string;
   projectAddress: string;
   notes: string;
 }
@@ -95,6 +96,7 @@ interface PaidOrderSnapshot {
   sizeLabel: string;
   clientName: string;
   customerEmail: string;
+  customerPhone: string;
   projectAddress: string;
   items: Array<{ id: string; title: string; qty: number }>;
 }
@@ -128,18 +130,19 @@ const T = {
     openThisGroup: "Open this group",
     back: "Back to services",
     backHome: "Back to home",
-    reviewOrder: "View total",
     propertySize: "Property size",
     projectInfo: "Contact and project details",
     clientName: "Your name / company",
     clientNamePlaceholder: "Name or company we should contact",
     clientEmail: "Your email",
     clientEmailPlaceholder: "Email for this order",
+    clientPhone: "Your phone number",
+    clientPhonePlaceholder: "Phone or WhatsApp number",
     projectAddress: "Project name or address (optional)",
     projectAddressPlaceholder: "Example: Addison backyard, Oak St project, or full address",
     notes: "Project details",
     notesHelp:
-      "Use this for a short useful project description. Add the full address only if it is needed. Full project intake happens after payment.",
+      "Required. Add what you need, what the feature or yard is, what files/photos you have, and any location notes. Full address is optional at this stage.",
     notesPlaceholder:
       "Example: Addison backyard. Need quick concept from one photo. Client wants a patio cover. Exact address can be shared later if needed.",
     quickHelp: "Need help choosing?",
@@ -183,7 +186,7 @@ const T = {
     termsLine:
       "Stripe checkout should include Terms of Service consent and the Terms & Rules link.",
     fillRequired:
-      "Add your name/company, your email, and at least one payable service.",
+      "Add your name/company, email, phone number, project details, and at least one service.",
     quoteBlocksCheckout:
       "Quote-based or estate items need manual follow-up before payment.",
     add: "Add",
@@ -272,18 +275,19 @@ const T = {
     openThisGroup: "Abrir este grupo",
     back: "Volver a servicios",
     backHome: "Volver al inicio",
-    reviewOrder: "Ver total",
     propertySize: "Tamaño del lote",
     projectInfo: "Contacto y detalles del proyecto",
     clientName: "Tu nombre / compañía",
     clientNamePlaceholder: "Nombre o compañía para contactar",
     clientEmail: "Tu email",
     clientEmailPlaceholder: "Email para este pedido",
+    clientPhone: "Tu teléfono",
+    clientPhonePlaceholder: "Teléfono o WhatsApp",
     projectAddress: "Nombre del proyecto o dirección (opcional)",
     projectAddressPlaceholder: "Ejemplo: patio Addison, proyecto Oak St o dirección completa",
     notes: "Detalles del proyecto",
     notesHelp:
-      "Usa esto para una descripción corta y útil. Agrega la dirección completa solo si hace falta. El formulario completo del proyecto viene después del pago.",
+      "Requerido. Agrega qué necesitas, qué elemento o área es, qué archivos/fotos tienes y cualquier nota de ubicación. La dirección completa es opcional en esta etapa.",
     notesPlaceholder:
       "Ejemplo: Patio trasero Addison. Necesito concepto rápido desde una foto. El cliente quiere una cubierta de patio. La dirección exacta se puede compartir después si hace falta.",
     quickHelp: "¿Necesitas ayuda para elegir?",
@@ -327,7 +331,7 @@ const T = {
     termsLine:
       "El pago por Stripe debe incluir aceptación de los Términos de Servicio y enlace a Terms & Rules.",
     fillRequired:
-      "Agrega tu nombre/compañía, tu email y al menos un servicio pagable.",
+      "Agrega tu nombre/compañía, email, teléfono, detalles del proyecto y al menos un servicio.",
     quoteBlocksCheckout:
       "Las partidas por cotizar o estate necesitan seguimiento manual antes del pago.",
     add: "Agregar",
@@ -429,12 +433,12 @@ const ENTRY_PATHS: EntryPath[] = [
     title: "One Outdoor Feature",
     titleEs: "Una pieza exterior",
     description:
-      "Deck, pergola, patio cover, carport, outdoor kitchen, fire feature, or a custom outdoor element.",
+      "Deck, pergola, patio cover, carport, outdoor kitchen, custom shade, or small custom outdoor feature.",
     descriptionEs:
-      "Deck, pérgola, cubierta, carport, cocina exterior, fire feature o elemento exterior personalizado.",
-    helper: "Best when the job is one clear thing, not the whole yard.",
+      "Deck, pérgola, cubierta, carport, cocina exterior, sombra personalizada o pequeña pieza exterior especial.",
+    helper: "Best when the project is one clear outdoor feature, not a full yard design.",
     helperEs:
-      "Ideal cuando el trabajo es una sola cosa clara, no todo el patio.",
+      "Ideal cuando el proyecto es una sola pieza exterior clara, no un diseño completo del patio.",
     cta: "Choose feature",
     ctaEs: "Elegir pieza",
   },
@@ -582,53 +586,13 @@ const STRUCTURE_SERVICES: Service[] = [
     flatPrice: 1000,
     stripePriceId: "price_decksmall_1000",
     short: "Layout, AutoCAD plan set, and 3D visuals for a small deck.",
-    bestFor: "Smaller deck jobs that need a clean package by default.",
+    bestFor: "Decks under 200 sq.ft that need a clean visual and plan package.",
     youSend:
-      "Site plan, preferred location, dimensions, and reference ideas if any.",
+      "Site plan, preferred location, dimensions, photos, and reference ideas if any.",
     youGet:
       "Deck layout, AutoCAD plans, and 3D visuals. HOA-ready plan set by default.",
     notIncluded:
       "Site visit, structural engineering, stamped drawings, or permit filing by us.",
-    helper:
-      "This package is without site visit. Add Site Visit if field measuring is needed.",
-    sampleLabel: "See sample",
-  },
-  {
-    id: "pergola-small",
-    title: "Small Pergola / Patio Cover under 200 sq.ft",
-    category: "Build",
-    icon: Box,
-    pricingType: "flat",
-    flatPrice: 1000,
-    stripePriceId: "price_pergolasmall_1000",
-    short: "Layout, AutoCAD plan set, and 3D visuals for a small pergola or simple patio cover.",
-    bestFor: "Smaller shade-structure jobs that need a clean package by default.",
-    youSend:
-      "Site plan, preferred location, dimensions, and reference ideas if any.",
-    youGet:
-      "Pergola or patio cover layout, AutoCAD plans, and 3D visuals. HOA-ready plan set by default.",
-    notIncluded:
-      "Site visit, structural engineering, stamped drawings, or permit filing by us.",
-    helper:
-      "This package is without site visit. Add Site Visit if field measuring is needed.",
-    sampleLabel: "See sample",
-  },
-  {
-    id: "carport-package",
-    title: "Carport / Covered Parking Package",
-    category: "Build",
-    icon: Box,
-    pricingType: "quote",
-    stripePriceId: null,
-    short:
-      "Concept layout, plan support, and 3D visuals for a carport or covered parking structure.",
-    bestFor:
-      "Carport or covered parking ideas that need a clear concept before engineering or permit work.",
-    youSend:
-      "Site plan, dimensions, clearance notes, parking needs, and reference images if you have them.",
-    youGet: "A conceptual carport layout with plan support and 3D visuals.",
-    notIncluded:
-      "Site visit, structural engineering, stamped permit drawings, utility coordination, or permit filing by us.",
     helper:
       "This package is without site visit. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
@@ -643,7 +607,7 @@ const STRUCTURE_SERVICES: Service[] = [
     short:
       "Concept layout, plan support, and 3D visuals for a larger deck before engineering or permit work.",
     bestFor:
-      "Deck jobs over 200 sq.ft, elevated decks, or deck scopes that need review before pricing.",
+      "Decks over 200 sq.ft, elevated decks, multi-level decks, or deck scopes that need review before pricing.",
     youSend:
       "Survey, dimensions, preferred layout, photos, and any requirements you already have.",
     youGet:
@@ -652,6 +616,26 @@ const STRUCTURE_SERVICES: Service[] = [
       "Site visit, structural engineering, stamped permit drawings, permit fees, or permit filing by us.",
     helper:
       "Custom quote. Add Site Visit if field measuring is needed.",
+    sampleLabel: "See sample",
+  },
+  {
+    id: "pergola-small",
+    title: "Small Pergola / Patio Cover under 200 sq.ft",
+    category: "Build",
+    icon: Box,
+    pricingType: "flat",
+    flatPrice: 1000,
+    stripePriceId: "price_pergolasmall_1000",
+    short: "Layout, AutoCAD plan set, and 3D visuals for a small pergola or simple patio cover.",
+    bestFor: "Pergolas, patio covers, or shade structures under 200 sq.ft.",
+    youSend:
+      "Site plan, preferred location, dimensions, roof or shade preference, photos, and reference ideas if any.",
+    youGet:
+      "Pergola or patio cover layout, AutoCAD plans, and 3D visuals. HOA-ready plan set by default.",
+    notIncluded:
+      "Site visit, structural engineering, stamped drawings, roof tie-in details, or permit filing by us.",
+    helper:
+      "This package is without site visit. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
   },
   {
@@ -664,13 +648,55 @@ const STRUCTURE_SERVICES: Service[] = [
     short:
       "Concept layout, plan support, and 3D visuals for a larger shade or roofed outdoor structure.",
     bestFor:
-      "Pergolas, patio covers, attached covers, or larger shade structures that need review before pricing.",
+      "Pergolas, patio covers, attached covers, or larger shade structures over 200 sq.ft that need review before pricing.",
     youSend:
       "Survey, dimensions, photos, roof or cover preferences, attachment notes, and reference images if you have them.",
     youGet:
       "Shade-structure visuals and plans prepared for client, HOA, or engineer review.",
     notIncluded:
       "Site visit, structural engineering, stamped permit drawings, roof tie-in details, permit fees, or permit filing by us.",
+    helper:
+      "Custom quote. Add Site Visit if field measuring is needed.",
+    sampleLabel: "See sample",
+  },
+  {
+    id: "carport-small",
+    title: "Small Carport under 200 sq.ft — Review First",
+    category: "Build",
+    icon: ShieldCheck,
+    pricingType: "quote",
+    stripePriceId: null,
+    short:
+      "Concept layout, plan support, and 3D visuals for a small covered parking structure.",
+    bestFor:
+      "Carports under 200 sq.ft that need a clear concept before engineering or permit work.",
+    youSend:
+      "Site plan, dimensions, clearance notes, parking needs, photos, and reference images if you have them.",
+    youGet:
+      "A conceptual carport layout with plan support and 3D visuals for review.",
+    notIncluded:
+      "Site visit, structural engineering, stamped permit drawings, utility coordination, or permit filing by us.",
+    helper:
+      "Review first. Add Site Visit if field measuring is needed.",
+    sampleLabel: "See sample",
+  },
+  {
+    id: "carport-large",
+    title: "Large Carport over 200 sq.ft — Custom Quote",
+    category: "Build",
+    icon: ShieldCheck,
+    pricingType: "quote",
+    stripePriceId: null,
+    short:
+      "Concept layout, plan support, and 3D visuals for a larger covered parking structure.",
+    bestFor:
+      "Carports over 200 sq.ft, multi-car covers, attached carports, or scopes that need review before pricing.",
+    youSend:
+      "Site plan, dimensions, clearance notes, parking needs, photos, and reference images if you have them.",
+    youGet:
+      "Carport visuals and plans prepared for client, HOA, or engineer review.",
+    notIncluded:
+      "Site visit, structural engineering, stamped permit drawings, utility coordination, permit fees, or permit filing by us.",
     helper:
       "Custom quote. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
@@ -699,7 +725,7 @@ const STRUCTURE_SERVICES: Service[] = [
   },
   {
     id: "custom-feature",
-    title: "Misc Custom Feature — Review First",
+    title: "Misc Custom Outdoor Feature — Review First",
     category: "Build",
     icon: Sparkles,
     pricingType: "quote",
@@ -707,35 +733,15 @@ const STRUCTURE_SERVICES: Service[] = [
     short:
       "Use this for an unusual outdoor element that does not fit the standard deck, shade, carport, or kitchen packages.",
     bestFor:
-      "Ponds, special planters, swings, small custom structures, decorative elements, or other one-off features that need review before pricing.",
+      "Ponds, special planters, swings, small custom shades, decorative screens, low decorative dividers under 3 ft, or other one-off features that need review before pricing.",
     youSend:
       "Photos, a short description, rough size, location, and reference links or inspiration images.",
     youGet:
       "A manual review and feedback on whether we can help, what package fits, and what the likely next step or price range should be.",
     notIncluded:
-      "Engineering, code research, permit filing, fabrication details, or final construction documents.",
+      "Retaining walls, slope support, engineering, code research, permit filing, fabrication details, or final construction documents.",
     helper:
-      "Choose this when the feature is unusual. Describe what you want and upload or link references so we can review it first.",
-  },
-  {
-    id: "retaining-wall",
-    title: "Retaining Wall / Slope Issue — Custom Review Only",
-    category: "Build",
-    icon: ShieldCheck,
-    pricingType: "quote",
-    stripePriceId: null,
-    short:
-      "Early non-engineered wall or slope visuals for discussion before engineering.",
-    bestFor:
-      "Slope or wall situations that need visual direction first, but cannot be priced as a fixed simple package.",
-    youSend: "Survey, grades if available, photos, and wall intent.",
-    youGet:
-      "A conceptual retaining wall layout with visuals and plan support.",
-    notIncluded:
-      "Site visit, structural design, stamped engineering, or final construction drawings.",
-    helper:
-      "Custom review only. Retaining walls may involve engineering, drainage, height limits, surcharge, property lines, and permit issues.",
-    sampleLabel: "See sample",
+      "Choose this when the feature is unusual. Retaining walls and real slope-support walls belong in a separate design/review process, not here.",
   },
 ];
 
@@ -1216,7 +1222,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     title: "Paquete de deck pequeño, menos de 200 pies²",
     category: "Construcción",
     short: "Layout, set de planos en AutoCAD y visuales 3D para un deck pequeño.",
-    bestFor: "Trabajos de deck pequeño que necesitan un paquete limpio por defecto.",
+    bestFor: "Decks de menos de 200 pies² que necesitan un paquete visual y de planos limpio.",
     youSend: "Site plan, ubicación preferida, dimensiones e ideas de referencia si las tienes.",
     youGet: "Layout del deck, planos en AutoCAD y visuales 3D. Set listo para HOA por defecto.",
     notIncluded: "Visita al sitio, ingeniería estructural, planos sellados o trámite de permisos por nuestra parte.",
@@ -1227,22 +1233,33 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     title: "Paquete de pérgola / cubierta pequeña, menos de 200 pies²",
     category: "Construcción",
     short: "Layout, set de planos en AutoCAD y visuales 3D para una pérgola pequeña o cubierta sencilla.",
-    bestFor: "Estructuras de sombra pequeñas que necesitan un paquete limpio por defecto.",
-    youSend: "Site plan, ubicación preferida, dimensiones e ideas de referencia si las tienes.",
+    bestFor: "Pérgolas, patio covers o estructuras de sombra de menos de 200 pies².",
+    youSend: "Site plan, ubicación preferida, dimensiones, preferencia de techo o sombra, fotos e ideas de referencia si las tienes.",
     youGet: "Layout de pérgola o cubierta, planos en AutoCAD y visuales 3D. Set listo para HOA por defecto.",
-    notIncluded: "Visita al sitio, ingeniería estructural, planos sellados o trámite de permisos por nuestra parte.",
+    notIncluded: "Visita al sitio, ingeniería estructural, planos sellados, detalles de conexión de techo o trámite de permisos por nuestra parte.",
     helper: "Este paquete no incluye visita al sitio. Agrega Visita al sitio si se necesitan mediciones en campo.",
     sampleLabel: "Ver ejemplo",
   },
-  "carport-package": {
-    title: "Paquete de carport / estacionamiento cubierto",
+  "carport-small": {
+    title: "Carport pequeño, menos de 200 pies² — revisar primero",
     category: "Construcción",
-    short: "Layout conceptual, apoyo de planos y visuales 3D para un carport o estructura de estacionamiento cubierto.",
-    bestFor: "Ideas de carport o estacionamiento cubierto que necesitan un concepto claro antes de ingeniería o permisos.",
-    youSend: "Site plan, dimensiones, notas de altura libre, necesidades de estacionamiento e imágenes de referencia si las tienes.",
-    youGet: "Un layout conceptual de carport con apoyo de planos y visuales 3D.",
+    short: "Layout conceptual, apoyo de planos y visuales 3D para una estructura pequeña de estacionamiento cubierto.",
+    bestFor: "Carports de menos de 200 pies² que necesitan un concepto claro antes de ingeniería o permisos.",
+    youSend: "Site plan, dimensiones, notas de altura libre, necesidades de estacionamiento, fotos e imágenes de referencia si las tienes.",
+    youGet: "Un layout conceptual de carport con apoyo de planos y visuales 3D para revisión.",
     notIncluded: "Visita al sitio, ingeniería estructural, planos sellados para permiso, coordinación de utilities o trámite de permisos por nuestra parte.",
-    helper: "Este paquete no incluye visita al sitio. Agrega Visita al sitio si se necesitan mediciones en campo.",
+    helper: "Revisar primero. Agrega Visita al sitio si se necesitan mediciones en campo.",
+    sampleLabel: "Ver ejemplo",
+  },
+  "carport-large": {
+    title: "Carport grande, más de 200 pies² — cotización",
+    category: "Construcción",
+    short: "Layout conceptual, apoyo de planos y visuales 3D para una estructura grande de estacionamiento cubierto.",
+    bestFor: "Carports de más de 200 pies², cubiertas para varios autos, carports adjuntos o alcances que necesitan revisión antes de precio.",
+    youSend: "Site plan, dimensiones, notas de altura libre, necesidades de estacionamiento, fotos e imágenes de referencia si las tienes.",
+    youGet: "Visuales y planos de carport preparados para revisión del cliente, HOA o ingeniero.",
+    notIncluded: "Visita al sitio, ingeniería estructural, planos sellados para permiso, coordinación de utilities, fees de permisos o trámite de permisos por nuestra parte.",
+    helper: "Cotización personalizada. Agrega Visita al sitio si se necesitan mediciones en campo.",
     sampleLabel: "Ver ejemplo",
   },
   "deck-large": {
@@ -1260,7 +1277,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     title: "Paquete de pérgola / cubierta grande, más de 200 pies² — cotización",
     category: "Construcción",
     short: "Layout conceptual, apoyo de planos y visuales 3D para una estructura grande de sombra o cubierta exterior.",
-    bestFor: "Pérgolas, patio covers, cubiertas adjuntas o estructuras grandes de sombra que necesitan revisión antes de precio.",
+    bestFor: "Pérgolas, patio covers, cubiertas adjuntas o estructuras de sombra de más de 200 pies² que necesitan revisión antes de precio.",
     youSend: "Survey, dimensiones, fotos, preferencias de techo o cubierta, notas de conexión a la casa e imágenes de referencia si las tienes.",
     youGet: "Visuales y planos de la estructura de sombra preparados para revisión del cliente, HOA o ingeniero.",
     notIncluded: "Visita al sitio, ingeniería estructural, planos sellados para permiso, detalles de conexión de techo, fees de permisos o trámite de permisos por nuestra parte.",
@@ -1279,25 +1296,14 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     sampleLabel: "Ver ejemplo",
   },
   "custom-feature": {
-    title: "Elemento personalizado — revisar primero",
+    title: "Pieza exterior personalizada — revisar primero",
     category: "Construcción",
     short: "Usa esto para un elemento exterior inusual que no encaja en los paquetes estándar de deck, sombra, carport o cocina.",
-    bestFor: "Ponds, maceteros especiales, columpios, estructuras pequeñas personalizadas, elementos decorativos u otros features únicos que necesitan revisión antes de precio.",
+    bestFor: "Ponds, maceteros especiales, columpios, sombras pequeñas personalizadas, pantallas decorativas, divisores bajos decorativos de menos de 3 pies u otros elementos únicos que necesitan revisión antes de precio.",
     youSend: "Fotos, descripción corta, tamaño aproximado, ubicación y links de referencia o imágenes de inspiración.",
     youGet: "Una revisión manual y feedback sobre si podemos ayudar, qué paquete encaja y cuál sería el siguiente paso o rango de precio probable.",
-    notIncluded: "Ingeniería, investigación de código, trámites de permiso, detalles de fabricación o planos finales de construcción.",
-    helper: "Elige esto cuando el feature es inusual. Describe lo que quieres y sube o manda referencias para que podamos revisarlo primero.",
-  },
-  "retaining-wall": {
-    title: "Muro de contención / problema de pendiente — revisión personalizada",
-    category: "Construcción",
-    short: "Visuales tempranas no estructurales para muro o pendiente, solo para discusión antes de ingeniería.",
-    bestFor: "Situaciones de pendiente o muro que necesitan dirección visual primero, pero no se pueden vender como paquete fijo simple.",
-    youSend: "Survey, elevaciones si existen, fotos e intención del muro.",
-    youGet: "Un layout conceptual de muro de contención con visuales y apoyo de plano.",
-    notIncluded: "Visita al sitio, diseño estructural, ingeniería sellada o planos finales de construcción.",
-    helper: "Solo revisión personalizada. Los muros de contención pueden involucrar ingeniería, drenaje, límites de altura, surcharge, líneas de propiedad y permisos.",
-    sampleLabel: "Ver ejemplo",
+    notIncluded: "Muros de contención, soporte de pendientes, ingeniería, investigación de código, trámites de permiso, detalles de fabricación o planos finales de construcción.",
+    helper: "Elige esto cuando el feature es inusual. Los muros de contención y muros reales de soporte de pendiente pertenecen a un proceso separado de diseño/revisión, no aquí.",
   },
   "draw-your-idea": {
     title: "Tú traes la idea, nosotros la dibujamos",
@@ -2159,6 +2165,7 @@ function ProjectInfoCard({
             {t.clientName}
           </span>
           <input
+            required
             value={contact.clientName}
             onChange={(e) => onChange({ clientName: e.target.value })}
             placeholder={t.clientNamePlaceholder}
@@ -2171,9 +2178,23 @@ function ProjectInfoCard({
           </span>
           <input
             type="email"
+            required
             value={contact.customerEmail}
             onChange={(e) => onChange({ customerEmail: e.target.value })}
             placeholder={t.clientEmailPlaceholder}
+            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+          />
+        </label>
+        <label className="grid gap-2 md:col-span-2">
+          <span className="text-sm font-semibold text-slate-700">
+            {t.clientPhone}
+          </span>
+          <input
+            type="tel"
+            required
+            value={contact.customerPhone}
+            onChange={(e) => onChange({ customerPhone: e.target.value })}
+            placeholder={t.clientPhonePlaceholder}
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
           />
         </label>
@@ -2193,6 +2214,7 @@ function ProjectInfoCard({
             {t.notes}
           </span>
           <textarea
+            required
             value={contact.notes}
             onChange={(e) => onChange({ notes: e.target.value })}
             maxLength={NOTES_LIMIT}
@@ -2615,6 +2637,7 @@ export default function App() {
   const [contact, setContact] = useState<OrderContact>({
     clientName: "",
     customerEmail: "",
+    customerPhone: "",
     projectAddress: "",
     notes: "",
   });
@@ -2707,6 +2730,7 @@ export default function App() {
             sizeLabel: data.sizeLabel ?? "Small",
             clientName: data.clientName ?? "",
             customerEmail: data.customerEmail ?? "",
+            customerPhone: data.customerPhone ?? "",
             projectAddress: data.projectAddress ?? "",
             items: data.items ?? [],
           });
@@ -2721,6 +2745,7 @@ export default function App() {
               sizeLabel: "Small",
               clientName: "Demo Client",
               customerEmail: "client@example.com",
+              customerPhone: "",
               projectAddress: "Project name or address (optional)",
               items: [],
             });
@@ -2804,7 +2829,10 @@ export default function App() {
     (item) => item.service.stripePriceId && !item.isQuote
   );
   const hasRequiredContact =
-    Boolean(contact.clientName.trim()) && Boolean(contact.customerEmail.trim());
+    Boolean(contact.clientName.trim()) &&
+    Boolean(contact.customerEmail.trim()) &&
+    Boolean(contact.customerPhone.trim()) &&
+    Boolean(contact.notes.trim());
   const canSubmitReview = hasRequiredContact && pricedItems.length > 0 && hasTbd;
   const canCheckout = hasRequiredContact && hasPayableService && !hasTbd;
   const canProceed = canCheckout || canSubmitReview;
@@ -2844,7 +2872,7 @@ export default function App() {
     if (!window.confirm(t.confirmReset)) return;
     setCart({});
     setSelectedSize("small");
-    setContact({ clientName: "", customerEmail: "", projectAddress: "", notes: "" });
+    setContact({ clientName: "", customerEmail: "", customerPhone: "", projectAddress: "", notes: "" });
     setCleared(true);
   }
 
@@ -2885,6 +2913,7 @@ export default function App() {
         size_id: selectedSize,
         client_name: sanitizeText(contact.clientName),
         customer_email: sanitizeText(contact.customerEmail),
+        customer_phone: sanitizeText(contact.customerPhone),
         project_address: sanitizeText(contact.projectAddress),
         full_notes: contact.notes,
         payment_status: "needs_manual_review",
@@ -2924,6 +2953,7 @@ export default function App() {
       size_id: selectedSize,
       client_name: sanitizeText(contact.clientName),
       customer_email: sanitizeText(contact.customerEmail),
+      customer_phone: sanitizeText(contact.customerPhone),
       project_address: sanitizeText(contact.projectAddress),
       full_notes: contact.notes,
       payment_status: "pending_payment",
@@ -2944,6 +2974,7 @@ export default function App() {
       }).catch(() => undefined);
       const payload = {
         customer_email: sanitizeText(contact.customerEmail),
+        customer_phone: sanitizeText(contact.customerPhone),
         client_name: sanitizeText(contact.clientName),
         project_address: sanitizeText(contact.projectAddress),
         path_id: activePath,
@@ -2982,6 +3013,7 @@ export default function App() {
           sizeLabel: selectedSizeLabel,
           clientName: contact.clientName,
           customerEmail: contact.customerEmail,
+          customerPhone: contact.customerPhone,
           projectAddress: contact.projectAddress,
           items: pricedItems.map((item) => ({
             id: item.service.id,
@@ -3246,15 +3278,6 @@ export default function App() {
                         : selectedPath.descriptionEs}
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      window.scrollTo({ top: 0, behavior: "smooth" })
-                    }
-                    className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50"
-                  >
-                    {t.reviewOrder}
-                  </button>
                 </div>
               </section>
               {renderConfig()}
