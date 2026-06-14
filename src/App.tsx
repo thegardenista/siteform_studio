@@ -97,6 +97,13 @@ interface OrderContact {
   rememberPartnerInfo: boolean;
 }
 
+interface ProjectFileUploads {
+  photos: FileList | null;
+  surveyDocs: FileList | null;
+  logoFiles: FileList | null;
+  references: FileList | null;
+}
+
 interface QuickHelpForm {
   contact: string;
   question: string;
@@ -114,6 +121,11 @@ interface PaidOrderSnapshot {
   customerEmail: string;
   customerPhone: string;
   projectAddress: string;
+  estimatedTotal: number;
+  deposit: number;
+  remaining: number;
+  useDeposit: boolean;
+  hasTbd: boolean;
   items: Array<{ id: string; title: string; qty: number }>;
 }
 
@@ -178,7 +190,7 @@ const T = {
     clientEmail: "Your email",
     clientEmailPlaceholder: "Email for this order",
     clientPhone: "Your phone number",
-    clientPhonePlaceholder: "Phone or WhatsApp number",
+    clientPhonePlaceholder: "Phone number for the order record",
     projectAddress: "Project / client label",
     projectAddressPlaceholder: "Example: Garcia backyard, Oak St deck, Project 24-018, or full address",
     projectLabelHelp:
@@ -189,6 +201,29 @@ const T = {
     remoteInfoTitle: "If there is no site visit",
     remoteInfoText:
       "Upload a survey or site plan if you have one, plus clear photos with dimensions marked on the images. We need width, depth, height, roof/eave-to-ground height, house-to-fence distances, and any important slopes, steps, walls, or level changes.",
+    projectFilesTitle: "Project files for review",
+    projectFilesHelp:
+      "Upload files here so the project can be reviewed without phone calls or separate email threads. At least one file is required before submission.",
+    uploadPhotosHelp:
+      "Photos of the project area. Mark rough width, depth, height, roof/eave height, fence distances, and level changes directly on photos when possible.",
+    uploadSurveyHelp:
+      "Survey, site plan, PDFs, measurements, sketches, or existing drawings. Use this especially when there is no site visit.",
+    uploadLogoHelp:
+      "Logo or brand files for white-label sheets. If your logo is already on file, you can leave this blank.",
+    uploadReferences: "References / markups",
+    uploadReferencesHelp:
+      "Inspiration images, screenshots, client markups, links saved as PDFs, or notes that explain the desired look.",
+    filesSelected: "file(s) selected",
+    reviewOnlyNotice:
+      "Submit for review does not request payment. We check the files and selected scope first, then send an invoice/payment link. Work starts after invoice payment.",
+    estimatedInvoiceNote:
+      "This is an estimate based on the selected services. Final invoice is sent after review.",
+    orderIdLabel: "Order ID",
+    estimatedTotalLabel: "Estimated total",
+    invoiceNext:
+      "Next: we review the scope, check the uploaded files, and send an invoice/payment link if everything matches. If the scope is different, we will adjust it before invoicing.",
+    tbdOnReview: "Some items are TBD and will be priced after review.",
+    writtenOnlyNote: "Written communication only. No phone support for production questions.",
     partnerProfileTitle: "Partner / white-label profile",
     partnerProfileHelp:
       "Tell us how your company info should appear on white-label PDFs and sheets. Repeat partners can ask us to use details already on file.",
@@ -250,33 +285,33 @@ const T = {
     nothingSelected: "Nothing selected yet",
     qty: "Qty",
     total: "Total",
-    totalDueToday: "Total due today",
-    deposit: "Deposit due today (70%)",
-    remaining: "Remaining later",
+    totalDueToday: "Estimated invoice total",
+    deposit: "Estimated deposit (70%)",
+    remaining: "Estimated balance",
     tbd: "TBD",
-    currentPricedSubtotal: "Current priced subtotal",
+    currentPricedSubtotal: "Current priced estimate",
     rushFee: "Rush fee",
     tbdHelp:
-      "This order contains quote-based or estate items. Those need manual review before payment.",
+      "Some selected items need review before final pricing. Fixed-price items show an estimate; the invoice may change if the files or scope do not match the selected package.",
     copySummary: "Copy summary",
     copied: "Copied",
     resetCart: "Reset cart",
     cleared: "Cleared",
     confirmReset: "Reset cart and clear current selection?",
-    generateInvoice: "Continue to payment",
-    submitForReview: "Submit for review",
-    uploadAfterPaymentNote: "You will upload the project photo after payment.",
-    reviewSubmitted: "Request submitted. We will review the scope and follow up with pricing.",
-    generating: "Generating...",
+    generateInvoice: "Submit project for review",
+    submitForReview: "Submit project for review",
+    uploadAfterPaymentNote: "We will review your files and send an invoice/payment link before work starts.",
+    reviewSubmitted: "Project submitted for review. We will verify the scope and files, then send an invoice/payment link before work starts.",
+    generating: "Submitting...",
     termsLine:
       "All deliverables are design-intent / visualization / coordination support only. They are not sealed, stamped, permit-ready, construction-control, engineering, surveying, or code-compliance documents.",
     safetyTitle: "Scope safety note",
     safetyText:
       "We provide design-intent visuals, concept sheets, drafting cleanup, and white-label presentation support. We do not provide engineering, legal surveying, code review, permit filing, permit approval guarantees, sealed/stamped drawings, structural calculations, utility design, or construction-control documents.",
     fillRequired:
-      "Add your name/company, email, phone number, project/client label, project details, confirm this is one client/project, and select at least one service.",
+      "Add your name/company, email, phone number, project/client label, project details, at least one project file, confirm this is one client/project, and select at least one service.",
     quoteBlocksCheckout:
-      "Quote-based or estate items need manual follow-up before payment.",
+      "All orders are reviewed first. We send the invoice/payment link after scope and files are checked.",
     add: "Add",
     remove: "Remove",
     chooseFirst: "Choose this first",
@@ -306,7 +341,7 @@ const T = {
       "Add a local site visit if field measurements are needed. If the site is outside city limits, extra travel time may be added to the final invoice at $70/hour. Rush turnaround may be available when the schedule allows.",
     quickSection: "Quick Photo Concept",
     quickSectionDesc:
-      "One fast paid visual to help close the sale.",
+      "One fast visual to help close the sale.",
     specialSection: "Plans & Sheets",
     specialSectionDesc:
       "Use these when the design already exists and you need a specific clean design-intent sheet for presentation, pricing, or crew discussion.",
@@ -322,9 +357,9 @@ const T = {
       "Price assumes the main layout is already approved. If layout work is still missing, this may need a different package first.",
     hardDependencySiteVisit: "Choose Site Visit first.",
     hardDependencyOutsideCity: "Add Site Visit first.",
-    successTitle: "Project intake",
+    successTitle: "Project submitted for review",
     successText:
-      "Upload photos, survey/site plan, marked measurements, and the full scope after checkout or manual approval.",
+      "We received the project request, selected services, files, and white-label settings. We will review the scope and send an invoice/payment link if the selected package matches the files.",
     uploadPhotos: "Project photos",
     uploadSurvey: "Survey / site plan / PDFs",
     detailedBrief: "Detailed scope",
@@ -334,12 +369,12 @@ const T = {
     intakeSaved: "Intake saved",
     openProjectChat: "Open project chat",
     successNote:
-      "Use project chat for quick text and photo follow-up after payment or manual approval.",
-    verifyingPayment: "Checking order status...",
+      "Written project communication only. Please use the project message/update form when it is connected; no phone support is offered for production questions.",
+    verifyingPayment: "Checking project status...",
     previewMode:
-      "Preview mode: checkout is not connected. No real payment was made. This screen is only for testing the intake form.",
+      "Preview mode: the order review endpoint is not connected yet. No payment was requested and no invoice was created automatically.",
     uploadWidgetNote:
-      "Replace these file fields with Uploadcare or Cloudinary widget when backend is connected.",
+      "Files are intended to be collected inside this SiteForm intake. Connect this section to your upload storage before launch.",
     showcaseBadge: "Try it on a real job",
     showcaseTitle: "White-label support for outdoor pros.",
     showcaseDesc:
@@ -373,7 +408,7 @@ const T = {
     clientEmail: "Tu email",
     clientEmailPlaceholder: "Email para este pedido",
     clientPhone: "Tu teléfono",
-    clientPhonePlaceholder: "Teléfono o WhatsApp",
+    clientPhonePlaceholder: "Teléfono para el registro del pedido",
     projectAddress: "Etiqueta de proyecto / cliente",
     projectAddressPlaceholder: "Ejemplo: patio Garcia, deck Oak St, Proyecto 24-018 o dirección completa",
     projectLabelHelp:
@@ -384,6 +419,29 @@ const T = {
     remoteInfoTitle: "Si no hay visita al sitio",
     remoteInfoText:
       "Sube un survey o site plan si lo tienes, más fotos claras con medidas marcadas en las imágenes. Necesitamos ancho, profundidad, altura, altura de techo/eave al piso, distancias de casa a fence y cualquier pendiente, escalón, muro o cambio de nivel importante.",
+    projectFilesTitle: "Archivos del proyecto para revisión",
+    projectFilesHelp:
+      "Sube los archivos aquí para revisar el proyecto sin llamadas telefónicas ni emails separados. Se requiere al menos un archivo antes de enviar.",
+    uploadPhotosHelp:
+      "Fotos del área del proyecto. Marca ancho, profundidad, altura, roof/eave, distancias a fence y cambios de nivel directamente en las fotos cuando sea posible.",
+    uploadSurveyHelp:
+      "Survey, site plan, PDFs, medidas, sketches o dibujos existentes. Úsalo especialmente cuando no hay visita al sitio.",
+    uploadLogoHelp:
+      "Logo o archivos de marca para láminas white-label. Si tu logo ya está guardado, puedes dejar esto vacío.",
+    uploadReferences: "Referencias / markups",
+    uploadReferencesHelp:
+      "Imágenes de inspiración, screenshots, markups del cliente, links guardados como PDF o notas que expliquen el look deseado.",
+    filesSelected: "archivo(s) seleccionado(s)",
+    reviewOnlyNotice:
+      "Enviar para revisión no solicita pago. Revisamos los archivos y el alcance seleccionado primero, luego mandamos una factura/link de pago. El trabajo empieza después del pago de la factura.",
+    estimatedInvoiceNote:
+      "Este es un estimado basado en los servicios seleccionados. La factura final se manda después de la revisión.",
+    orderIdLabel: "Order ID",
+    estimatedTotalLabel: "Total estimado",
+    invoiceNext:
+      "Siguiente: revisamos el alcance, los archivos subidos y mandamos una factura/link de pago si todo coincide. Si el alcance es diferente, lo ajustamos antes de facturar.",
+    tbdOnReview: "Algunas partidas son TBD y se cotizarán después de la revisión.",
+    writtenOnlyNote: "Comunicación solo por escrito. No hay soporte telefónico para preguntas de producción.",
     partnerProfileTitle: "Perfil de partner / white-label",
     partnerProfileHelp:
       "Dinos cómo debe aparecer la información de tu compañía en PDFs y láminas white-label. Partners repetidos pueden pedir que usemos los datos ya guardados.",
@@ -445,33 +503,33 @@ const T = {
     nothingSelected: "Todavía no hay servicios seleccionados",
     qty: "Cant.",
     total: "Total",
-    totalDueToday: "Total a pagar hoy",
-    deposit: "Depósito a pagar hoy (70%)",
-    remaining: "Restante después",
+    totalDueToday: "Total estimado de factura",
+    deposit: "Depósito estimado (70%)",
+    remaining: "Balance estimado",
     tbd: "Por definir",
-    currentPricedSubtotal: "Subtotal actual con precio",
+    currentPricedSubtotal: "Estimado actual con precio",
     rushFee: "Cargo urgente",
     tbdHelp:
-      "Este pedido incluye partidas por cotizar o tamaño estate. Esas partidas necesitan revisión manual antes del pago.",
+      "Algunas partidas seleccionadas necesitan revisión antes del precio final. Las partidas con precio fijo muestran un estimado; la factura puede cambiar si los archivos o el alcance no coinciden con el paquete seleccionado.",
     copySummary: "Copiar resumen",
     copied: "Copiado",
     resetCart: "Vaciar carrito",
     cleared: "Vacío",
     confirmReset: "¿Vaciar carrito y borrar la selección actual?",
-    generateInvoice: "Continuar al pago",
-    submitForReview: "Enviar para revisión",
-    uploadAfterPaymentNote: "Subirás la foto del proyecto después del pago.",
-    reviewSubmitted: "Solicitud enviada. Revisaremos el alcance y responderemos con precio.",
-    generating: "Generando...",
+    generateInvoice: "Enviar proyecto para revisión",
+    submitForReview: "Enviar proyecto para revisión",
+    uploadAfterPaymentNote: "Revisaremos tus archivos y mandaremos una factura/link de pago antes de empezar.",
+    reviewSubmitted: "Proyecto enviado para revisión. Verificaremos el alcance y los archivos, luego mandaremos una factura/link de pago antes de empezar.",
+    generating: "Enviando...",
     termsLine:
       "Todos los entregables son solo apoyo de intención de diseño, visualización y coordinación. No son documentos sellados, estampados, listos para permiso, control de construcción, ingeniería, survey legal o cumplimiento de código.",
     safetyTitle: "Nota de alcance",
     safetyText:
       "Ofrecemos visuales de intención de diseño, láminas conceptuales, cleanup de drafting y apoyo de presentación white-label. No ofrecemos ingeniería, survey legal, revisión de código, trámite de permisos, garantía de aprobación, planos sellados/estampados, cálculos estructurales, diseño de utilities o documentos de control de construcción.",
     fillRequired:
-      "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, confirma que es un solo cliente/proyecto y elige al menos un servicio.",
+      "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, al menos un archivo, confirma que es un solo cliente/proyecto y elige al menos un servicio.",
     quoteBlocksCheckout:
-      "Las partidas por cotizar o estate necesitan seguimiento manual antes del pago.",
+      "Todos los pedidos se revisan primero. Mandamos la factura/link de pago después de revisar el alcance y los archivos.",
     add: "Agregar",
     remove: "Quitar",
     chooseFirst: "Elige esto primero",
@@ -517,9 +575,9 @@ const T = {
       "El precio asume que el layout principal ya está aprobado. Si todavía falta ese trabajo, primero puede necesitar otro paquete.",
     hardDependencySiteVisit: "Elige primero Visita al sitio.",
     hardDependencyOutsideCity: "Primero agrega Visita al sitio.",
-    successTitle: "Formulario del proyecto",
+    successTitle: "Proyecto enviado para revisión",
     successText:
-      "Sube fotos, survey/site plan, medidas marcadas y el alcance completo después del pago o revisión manual.",
+      "Recibimos la solicitud del proyecto, servicios seleccionados, archivos y datos white-label. Revisaremos el alcance y mandaremos una factura/link de pago si el paquete seleccionado coincide con los archivos.",
     uploadPhotos: "Fotos del proyecto",
     uploadSurvey: "Survey / site plan / PDFs",
     detailedBrief: "Alcance detallado",
@@ -529,12 +587,12 @@ const T = {
     intakeSaved: "Intake guardado",
     openProjectChat: "Abrir chat del proyecto",
     successNote:
-      "Usa el chat del proyecto para textos rápidos y seguimiento con fotos después del pago o revisión manual.",
-    verifyingPayment: "Verificando el estado del pedido...",
+      "Comunicación del proyecto solo por escrito. Usa el formulario de mensajes/updates cuando esté conectado; no ofrecemos soporte por teléfono para preguntas de producción.",
+    verifyingPayment: "Verificando el estado del proyecto...",
     previewMode:
-      "Modo de vista previa: el checkout no está conectado. No se hizo ningún pago real. Esta pantalla es solo para probar el formulario.",
+      "Modo de vista previa: el endpoint de revisión no está conectado todavía. No se pidió pago y no se creó factura automáticamente.",
     uploadWidgetNote:
-      "Sustituye estos campos por un widget de Uploadcare o Cloudinary cuando conectes el backend.",
+      "Los archivos deben recogerse dentro de este intake de SiteForm. Conecta esta sección al storage de uploads antes de lanzar.",
     showcaseBadge: "Pruébalo en un trabajo real",
     showcaseTitle: "Apoyo white-label para profesionales de exterior.",
     showcaseDesc:
@@ -719,10 +777,10 @@ const STARTING_POINT_SERVICES: Service[] = [
     pricingType: "flat",
     flatPrice: 150,
     stripePriceId: "price_quickconcept_150",
-    short: "Fast paid concept image to help close the sale.",
+    short: "Fast concept image to help close the sale.",
     bestFor: "Fast sales before full design work starts.",
     youSend:
-      "One clear site photo after payment, rough dimensions marked on the photo if possible, and a short text about what you want to show.",
+      "One clear site photo uploaded with this request, rough dimensions marked on the photo if possible, and a short text about what you want to show.",
     youGet:
       "One concept image and a short list of suggested materials or main features used in the concept.",
     notIncluded:
@@ -1415,6 +1473,54 @@ function buildWhiteLabelPayload(contact: OrderContact) {
     same_client_project_confirmed: contact.sameProjectConfirmed,
     remembered_on_device: contact.rememberPartnerInfo,
   };
+}
+
+function emptyProjectFiles(): ProjectFileUploads {
+  return {
+    photos: null,
+    surveyDocs: null,
+    logoFiles: null,
+    references: null,
+  };
+}
+
+function hasAnyProjectFile(files: ProjectFileUploads) {
+  return Boolean(
+    files.photos?.length ||
+      files.surveyDocs?.length ||
+      files.logoFiles?.length ||
+      files.references?.length
+  );
+}
+
+function summarizeFileList(files: FileList | null) {
+  if (!files?.length) return [];
+  return Array.from(files).map((file) => ({
+    name: file.name,
+    size: file.size,
+    type: file.type,
+  }));
+}
+
+function buildFileSummary(files: ProjectFileUploads) {
+  return {
+    photos: summarizeFileList(files.photos),
+    survey_docs: summarizeFileList(files.surveyDocs),
+    logo_files: summarizeFileList(files.logoFiles),
+    references: summarizeFileList(files.references),
+  };
+}
+
+function appendFileList(formData: FormData, key: string, files: FileList | null) {
+  if (!files?.length) return;
+  Array.from(files).forEach((file) => formData.append(key, file as File));
+}
+
+function appendProjectFiles(formData: FormData, files: ProjectFileUploads) {
+  appendFileList(formData, "photos", files.photos);
+  appendFileList(formData, "survey_docs", files.surveyDocs);
+  appendFileList(formData, "logo_files", files.logoFiles);
+  appendFileList(formData, "references", files.references);
 }
 
 type ServiceCopyField =
@@ -2510,15 +2616,60 @@ function ServiceSection({
   );
 }
 
+// ─── FilePicker ──────────────────────────────────────────────────────────────
+
+function FilePicker({
+  title,
+  help,
+  accept,
+  files,
+  onChange,
+  lang,
+}: {
+  title: string;
+  help: string;
+  accept: string;
+  files: FileList | null;
+  onChange: (files: FileList | null) => void;
+  lang: Lang;
+}) {
+  const t = T[lang];
+  return (
+    <label className="grid gap-2 rounded-3xl border border-slate-200 bg-white p-4">
+      <span className="text-sm font-semibold text-slate-700">{title}</span>
+      <span className="text-xs leading-5 text-slate-500">{help}</span>
+      <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-slate-500">
+        <Upload className="mb-3 h-5 w-5" />
+        <input
+          type="file"
+          accept={accept}
+          multiple
+          onChange={(e) => onChange(e.target.files)}
+          className="block w-full text-xs"
+        />
+        {files?.length ? (
+          <div className="mt-3 rounded-xl bg-white px-3 py-2 text-xs font-semibold text-emerald-800">
+            {files.length} {t.filesSelected}
+          </div>
+        ) : null}
+      </div>
+    </label>
+  );
+}
+
 // ─── ProjectInfoCard ─────────────────────────────────────────────────────────
 
 function ProjectInfoCard({
   contact,
+  projectFiles,
   onChange,
+  onFilesChange,
   lang,
 }: {
   contact: OrderContact;
+  projectFiles: ProjectFileUploads;
   onChange: (patch: Partial<OrderContact>) => void;
+  onFilesChange: (patch: Partial<ProjectFileUploads>) => void;
   lang: Lang;
 }) {
   const t = T[lang];
@@ -2602,6 +2753,45 @@ function ProjectInfoCard({
       <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
         <div className="font-black">{t.remoteInfoTitle}</div>
         <p className="mt-1 leading-6">{t.remoteInfoText}</p>
+      </div>
+
+      <div className="mt-5 rounded-[1.75rem] border border-emerald-200 bg-emerald-50 p-5 md:p-6">
+        <h4 className="text-lg font-black text-slate-900">{t.projectFilesTitle}</h4>
+        <p className="mt-2 text-sm leading-6 text-slate-600">{t.projectFilesHelp}</p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <FilePicker
+            title={t.uploadPhotos}
+            help={t.uploadPhotosHelp}
+            accept="image/*"
+            files={projectFiles.photos}
+            onChange={(files) => onFilesChange({ photos: files })}
+            lang={lang}
+          />
+          <FilePicker
+            title={t.uploadSurvey}
+            help={t.uploadSurveyHelp}
+            accept=".pdf,image/*,.dwg,.dxf"
+            files={projectFiles.surveyDocs}
+            onChange={(files) => onFilesChange({ surveyDocs: files })}
+            lang={lang}
+          />
+          <FilePicker
+            title={t.logoOption}
+            help={t.uploadLogoHelp}
+            accept="image/*,.pdf,.ai,.eps,.svg"
+            files={projectFiles.logoFiles}
+            onChange={(files) => onFilesChange({ logoFiles: files })}
+            lang={lang}
+          />
+          <FilePicker
+            title={t.uploadReferences}
+            help={t.uploadReferencesHelp}
+            accept="image/*,.pdf,.txt,.doc,.docx"
+            files={projectFiles.references}
+            onChange={(files) => onFilesChange({ references: files })}
+            lang={lang}
+          />
+        </div>
       </div>
 
       <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
@@ -3018,16 +3208,12 @@ function SummarySidebar({
           ) : (
             <FileText className="h-5 w-5" />
           )}
-          {isCreating ? t.generating : hasTbd ? t.submitForReview : t.generateInvoice}
+          {isCreating ? t.generating : t.submitForReview}
         </button>
-        {isQuickConceptOnly ? (
-          <div className="text-xs leading-6 text-slate-500">
-            {t.uploadAfterPaymentNote}
-          </div>
-        ) : null}
-        {!hasTbd ? (
-          <div className="text-xs leading-6 text-slate-500">{t.termsLine}</div>
-        ) : null}
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-950">
+          {t.reviewOnlyNotice}
+        </div>
+        <div className="text-xs leading-6 text-slate-500">{t.termsLine}</div>
       </div>
     </aside>
   );
@@ -3146,125 +3332,61 @@ function SuccessIntake({
   order: PaidOrderSnapshot;
 }) {
   const t = T[lang];
-  const [brief, setBrief] = useState("");
-  const [photos, setPhotos] = useState<FileList | null>(null);
-  const [docs, setDocs] = useState<FileList | null>(null);
-  const [saved, setSaved] = useState(false);
-
-  async function saveIntake() {
-    try {
-      const formData = new FormData();
-      formData.append("order_id", order.orderId);
-      formData.append("session_id", order.sessionId);
-      formData.append("brief", brief);
-      if (photos) {
-        Array.from(photos).forEach((file) =>
-          formData.append("photos", file as File)
-        );
-      }
-      if (docs) {
-        Array.from(docs).forEach((file) =>
-          formData.append("docs", file as File)
-        );
-      }
-      try {
-        await fetch("/api/intake-upload", { method: "POST", body: formData });
-      } catch {
-        // preview fallback
-      }
-      setSaved(true);
-    } catch {
-      setSaved(false);
-    }
-  }
-
-  function openProjectChat() {
-    const text = encodeURIComponent(
-      `Hi Olya, I just submitted intake for ${order.pathTitle} at ${order.projectAddress}. Order ID: ${order.orderId}.`
-    );
-    window.open(
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
-  }
-
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-      <h2 className="text-3xl font-black text-slate-900">
-        {t.successTitle}
-      </h2>
+      <h2 className="text-3xl font-black text-slate-900">{t.successTitle}</h2>
       <p className="mt-2 text-sm leading-6 text-slate-600">{t.successText}</p>
-      <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-        {t.uploadWidgetNote}
-      </div>
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        <label className="grid gap-2 rounded-3xl border border-slate-200 p-4">
-          <span className="text-sm font-semibold text-slate-700">
-            {t.uploadPhotos}
-          </span>
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-sm text-slate-500">
-            <Upload className="mb-3 h-5 w-5" />
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={(e) => setPhotos(e.target.files)}
-            />
+
+      <div className="mt-5 grid gap-4 md:grid-cols-2">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <div className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">
+            {t.orderIdLabel}
           </div>
-        </label>
-        <label className="grid gap-2 rounded-3xl border border-slate-200 p-4">
-          <span className="text-sm font-semibold text-slate-700">
-            {t.uploadSurvey}
-          </span>
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-sm text-slate-500">
-            <Upload className="mb-3 h-5 w-5" />
-            <input
-              type="file"
-              accept=".pdf,image/*"
-              multiple
-              onChange={(e) => setDocs(e.target.files)}
-            />
+          <div className="mt-1 text-lg font-black text-slate-900">{order.orderId}</div>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <div className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">
+            {t.estimatedTotalLabel}
           </div>
-        </label>
+          <div className="mt-1 text-lg font-black text-slate-900">
+            {formatPrice(order.estimatedTotal, lang)}{order.hasTbd ? ` + ${t.tbd}` : ""}
+          </div>
+        </div>
       </div>
-      <label className="mt-5 grid gap-2">
-        <span className="text-sm font-semibold text-slate-700">
-          {t.detailedBrief}
-        </span>
-        <textarea
-          value={brief}
-          onChange={(e) => setBrief(e.target.value)}
-          rows={8}
-          placeholder={t.detailedBriefPlaceholder}
-          className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-slate-400"
-        />
-      </label>
-      {saved ? (
-        <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-          {t.intakeSaved}
+
+      {order.useDeposit ? (
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-slate-500">{t.deposit}</span>
+            <span className="font-bold text-slate-900">{formatPrice(order.deposit, lang)}</span>
+          </div>
+          <div className="mt-2 flex items-center justify-between">
+            <span className="text-slate-500">{t.remaining}</span>
+            <span className="font-bold text-slate-900">{formatPrice(order.remaining, lang)}</span>
+          </div>
         </div>
       ) : null}
-      <div className="mt-6 flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={saveIntake}
-          className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-black text-white hover:bg-slate-800"
-        >
-          {t.saveIntake}
-        </button>
-        <button
-          type="button"
-          onClick={openProjectChat}
-          className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 text-sm font-black text-slate-900 hover:bg-slate-50"
-        >
-          <MessageCircle className="h-4 w-4" />
-          {t.openProjectChat}
-        </button>
+
+      <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-950">
+        {t.invoiceNext}
       </div>
-      <div className="mt-5 text-xs leading-6 text-slate-500">
-        {t.successNote}
+      {order.hasTbd ? (
+        <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950">
+          {t.tbdOnReview}
+        </div>
+      ) : null}
+      <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700">
+        {t.writtenOnlyNote}
       </div>
+      <div className="mt-6 space-y-3 rounded-3xl bg-slate-50 p-5">
+        {order.items.map((item) => (
+          <div key={item.id} className="flex items-center justify-between gap-3 border-b border-slate-200 pb-3 last:border-0 last:pb-0">
+            <span className="text-sm font-medium text-slate-900">{item.title}</span>
+            <span className="text-xs font-semibold text-slate-500">{t.qty}: {item.qty}</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-5 text-xs leading-6 text-slate-500">{t.successNote}</div>
     </section>
   );
 }
@@ -3291,6 +3413,7 @@ export default function App() {
   const [selectedSize, setSelectedSize] = useState<string>("small");
   const [cart, setCart] = useState<Record<string, number>>({});
   const [contact, setContact] = useState<OrderContact>(() => getInitialContact());
+  const [projectFiles, setProjectFiles] = useState<ProjectFileUploads>(() => emptyProjectFiles());
   const [cleared, setCleared] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [sendingHelp, setSendingHelp] = useState(false);
@@ -3486,19 +3609,15 @@ export default function App() {
   const useDeposit = !hasTbd && total >= 500;
   const isQuickConceptOnly =
     pricedItems.length === 1 && pricedItems[0]?.service.id === "photo-concept-start";
-  const hasPayableService = pricedItems.some(
-    (item) => item.service.stripePriceId && !item.isQuote
-  );
   const hasRequiredContact =
     Boolean(contact.clientName.trim()) &&
     Boolean(contact.customerEmail.trim()) &&
     Boolean(contact.customerPhone.trim()) &&
     Boolean(contact.projectAddress.trim()) &&
     Boolean(contact.notes.trim()) &&
+    hasAnyProjectFile(projectFiles) &&
     contact.sameProjectConfirmed;
-  const canSubmitReview = hasRequiredContact && pricedItems.length > 0 && hasTbd;
-  const canCheckout = hasRequiredContact && hasPayableService && !hasTbd;
-  const canProceed = canCheckout || canSubmitReview;
+  const canProceed = hasRequiredContact && pricedItems.length > 0;
 
   const summaryLines: SummaryLine[] = pricedItems.map((item) => ({
     title: translateServiceTitle(item.service, lang),
@@ -3577,6 +3696,7 @@ export default function App() {
     setCart({});
     setSelectedSize("small");
     setContact(getInitialContact());
+    setProjectFiles(emptyProjectFiles());
     setCleared(true);
   }
 
@@ -3602,147 +3722,90 @@ export default function App() {
   }
 
   async function createCheckout() {
-    if (hasTbd) {
-      if (!canSubmitReview) {
-        setCheckoutNotice(t.fillRequired);
-        return;
-      }
-      setCreatingCheckout(true);
-      setCheckoutNotice(null);
-      const orderId = `review_${Date.now()}`;
-      const reviewPayload = {
-        order_id: orderId,
-        path_id: activePath,
-        path_title: selectedPathTitle,
-        size_id: selectedSize,
-        client_name: sanitizeText(contact.clientName),
-        customer_email: sanitizeText(contact.customerEmail),
-        customer_phone: sanitizeText(contact.customerPhone),
-        project_address: sanitizeText(contact.projectAddress),
-        project_client_label: sanitizeText(contact.projectAddress),
-        same_client_project_confirmed: contact.sameProjectConfirmed,
-        full_notes: contact.notes,
-        white_label_delivery: buildWhiteLabelPayload(contact),
-        payment_status: "needs_manual_review",
-        items: pricedItems.map((item) => ({
-          id: item.service.id,
-          title: translateServiceTitle(item.service, lang),
-          quantity: item.qty,
-          unit_amount: getBasePrice(item.service, selectedSize),
-          stripe_price_id: item.service.stripePriceId,
-          pricing_type: item.service.pricingType,
-        })),
-      };
-      try {
-        await fetch("/api/order-draft", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(reviewPayload),
-        }).catch(() => undefined);
-        setCheckoutNotice(t.reviewSubmitted);
-      } finally {
-        setCreatingCheckout(false);
-      }
-      return;
-    }
-
-    if (!canCheckout) {
+    if (!canProceed) {
       setCheckoutNotice(t.fillRequired);
       return;
     }
+
     setCreatingCheckout(true);
     setCheckoutNotice(null);
-    const orderId = `order_${Date.now()}`;
-    const orderDraftPayload = {
+
+    if (contact.rememberPartnerInfo) {
+      savePartnerInfo(contact);
+    }
+
+    const orderId = `SB-${new Date().getFullYear()}-${Date.now().toString().slice(-6)}`;
+    const reviewPayload = {
       order_id: orderId,
       path_id: activePath,
       path_title: selectedPathTitle,
       size_id: selectedSize,
+      size_label: selectedSizeLabel,
       client_name: sanitizeText(contact.clientName),
       customer_email: sanitizeText(contact.customerEmail),
       customer_phone: sanitizeText(contact.customerPhone),
       project_address: sanitizeText(contact.projectAddress),
       project_client_label: sanitizeText(contact.projectAddress),
       same_client_project_confirmed: contact.sameProjectConfirmed,
-      full_notes: contact.notes,
+      full_notes: sanitizeText(contact.notes),
       white_label_delivery: buildWhiteLabelPayload(contact),
-      payment_status: "pending_payment",
+      file_summary: buildFileSummary(projectFiles),
+      payment_status: "submitted_for_review_invoice_pending",
+      payment_workflow: "manual_invoice_after_review",
+      invoice_note: "Review scope and files first, then create/send invoice or payment link manually.",
+      estimate: {
+        priced_subtotal: pricedSubtotal,
+        rush_fee: rushFee,
+        estimated_total: total,
+        estimated_deposit: useDeposit ? deposit : total,
+        estimated_remaining: useDeposit ? remaining : 0,
+        has_tbd: hasTbd,
+      },
       items: pricedItems.map((item) => ({
         id: item.service.id,
         title: translateServiceTitle(item.service, lang),
         quantity: item.qty,
         unit_amount: getBasePrice(item.service, selectedSize),
-        stripe_price_id: item.service.stripePriceId,
         pricing_type: item.service.pricingType,
+        estimate_amount: item.price,
+        needs_quote: item.isQuote,
       })),
     };
+
     try {
-      await fetch("/api/order-draft", {
+      const formData = new FormData();
+      formData.append("order", JSON.stringify(reviewPayload));
+      appendProjectFiles(formData, projectFiles);
+
+      await fetch("/api/order-review", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderDraftPayload),
+        body: formData,
       }).catch(() => undefined);
-      const payload = {
-        customer_email: sanitizeText(contact.customerEmail),
-        customer_phone: sanitizeText(contact.customerPhone),
-        client_name: sanitizeText(contact.clientName),
-        project_address: sanitizeText(contact.projectAddress),
-        project_client_label: sanitizeText(contact.projectAddress),
-        same_client_project_confirmed: contact.sameProjectConfirmed,
-        path_id: activePath,
-        size_id: selectedSize,
-        items: pricedItems
-          .filter((item) => item.service.stripePriceId && !item.isQuote)
-          .map((item) => ({
-            stripe_price_id: item.service.stripePriceId,
-            quantity: item.qty,
-            title: translateServiceTitle(item.service, lang),
-          })),
-        metadata: {
-          internal_id: orderId,
-          project_address: sanitizeText(contact.projectAddress),
-          project_client_label: sanitizeText(contact.projectAddress),
-          same_client_project_confirmed: String(contact.sameProjectConfirmed),
-          short_notes: contact.notes.slice(0, 250),
-          logo_option: contact.logoOption,
-          white_label_company: sanitizeText(contact.whiteLabelCompany || contact.clientName),
-        },
-        full_notes: contact.notes,
-        white_label_delivery: buildWhiteLabelPayload(contact),
-      };
-      const response = await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+
+      setPaidOrder({
+        sessionId: `review_${Date.now()}`,
+        orderId,
+        pathId: activePath,
+        pathTitle: selectedPathTitle,
+        sizeId: selectedSize,
+        sizeLabel: selectedSizeLabel,
+        clientName: contact.clientName,
+        customerEmail: contact.customerEmail,
+        customerPhone: contact.customerPhone,
+        projectAddress: contact.projectAddress,
+        estimatedTotal: total,
+        deposit,
+        remaining,
+        useDeposit,
+        hasTbd,
+        items: pricedItems.map((item) => ({
+          id: item.service.id,
+          title: translateServiceTitle(item.service, lang),
+          qty: item.qty,
+        })),
       });
-      if (!response.ok) throw new Error("checkout failed");
-      const data = await response.json();
-      if (!data?.url) throw new Error("missing url");
-      window.location.href = data.url;
-    } catch {
-      if (DEMO_MODE) {
-        setPaidOrder({
-          sessionId: `demo_session_${Date.now()}`,
-          orderId,
-          pathId: activePath,
-          pathTitle: selectedPathTitle,
-          sizeId: selectedSize,
-          sizeLabel: selectedSizeLabel,
-          clientName: contact.clientName,
-          customerEmail: contact.customerEmail,
-          customerPhone: contact.customerPhone,
-          projectAddress: contact.projectAddress,
-          items: pricedItems.map((item) => ({
-            id: item.service.id,
-            title: translateServiceTitle(item.service, lang),
-            qty: item.qty,
-          })),
-        });
-        setCheckoutNotice(t.previewMode);
-        setView("SUCCESS");
-      } else {
-        setCheckoutNotice(lang === "es" ? "El pago en línea todavía no está conectado. No se hizo ningún pago. Contáctanos para terminar este pedido." : "Online payment is not connected yet. No payment was made. Please contact us to finish this order.");
-      }
+      setCheckoutNotice(t.reviewSubmitted);
+      setView("SUCCESS");
     } finally {
       setCreatingCheckout(false);
     }
@@ -4049,8 +4112,12 @@ export default function App() {
               {renderConfig()}
               <ProjectInfoCard
                 contact={contact}
+                projectFiles={projectFiles}
                 onChange={(patch) =>
                   setContact((prev) => ({ ...prev, ...patch }))
+                }
+                onFilesChange={(patch) =>
+                  setProjectFiles((prev) => ({ ...prev, ...patch }))
                 }
                 lang={lang}
               />
