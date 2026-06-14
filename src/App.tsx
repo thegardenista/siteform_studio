@@ -130,7 +130,7 @@ const T = {
     openThisGroup: "Open this group",
     back: "Back to services",
     backHome: "Back to home",
-    propertySize: "Property size",
+    propertySize: "Design area size",
     projectInfo: "Contact and project details",
     clientName: "Your name / company",
     clientNamePlaceholder: "Name or company we should contact",
@@ -198,16 +198,19 @@ const T = {
     youGet: "You get",
     notIncluded: "Not included",
     warning: "Important",
-    startSection: "Starting point",
+    designPackageSection: "Yard design package",
+    designPackageSectionDesc:
+      "Best if you want us to handle the landscape concept without choosing technical production pieces.",
+    startSection: "3D / rendering support",
     startSectionDesc:
-      "Choose how the project base is prepared. On-site base modeling requires a site visit first.",
-    ideaSection: "Who owns the layout idea?",
+      "For designers and builders who know whether we should build a base model, work from uploaded documents, or render an existing 3D model.",
+    ideaSection: "Design input",
     ideaSectionDesc:
-      "You already know the layout, or you want us to help develop it into a render-ready direction.",
+      "Choose only one: you bring the layout idea, or we help develop the design direction.",
     afterLayout: "After layout",
     afterLayoutDesc:
       "At this point the layout is approved and treated as locked. From here you can order detailed plans and follow-up sheets.",
-    buildSection: "Choose the outdoor feature",
+    buildSection: "Choose outdoor structure",
     buildSectionDesc:
       "Pick the main structure or custom outdoor feature you want us to visualize or document.",
     supportSection: "Site visit and rush timing",
@@ -216,9 +219,9 @@ const T = {
     quickSection: "Quick Photo Concept",
     quickSectionDesc:
       "One fast paid visual to help close the sale.",
-    specialSection: "Plans & Specialty Sheets",
+    specialSection: "Plans & Sheets",
     specialSectionDesc:
-      "Use these when the layout already exists and you need one clean deliverable.",
+      "Use these when the layout already exists and you need a specific clean plan or sheet.",
     citySection: "HOA and city sheets",
     citySectionDesc:
       "These use an existing base, usually a clean master plan. You can still check the price now, but the price assumes that base already exists.",
@@ -275,7 +278,7 @@ const T = {
     openThisGroup: "Abrir este grupo",
     back: "Volver a servicios",
     backHome: "Volver al inicio",
-    propertySize: "Tamaño del lote",
+    propertySize: "Tamaño del área de diseño",
     projectInfo: "Contacto y detalles del proyecto",
     clientName: "Tu nombre / compañía",
     clientNamePlaceholder: "Nombre o compañía para contactar",
@@ -343,16 +346,19 @@ const T = {
     youGet: "Recibes",
     notIncluded: "No incluido",
     warning: "Importante",
-    startSection: "Punto de inicio",
+    designPackageSection: "Paquete de diseño de patio",
+    designPackageSectionDesc:
+      "Ideal si quieres que manejemos el concepto de landscape sin elegir piezas técnicas de producción.",
+    startSection: "Apoyo 3D / renders",
     startSectionDesc:
-      "Elige cómo se prepara la base del proyecto. El modelado en sitio requiere primero una visita.",
-    ideaSection: "¿Quién define la idea del layout?",
+      "Para diseñadores y constructores que saben si debemos crear una base, trabajar con documentos enviados o renderizar un modelo 3D existente.",
+    ideaSection: "Apoyo de diseño",
     ideaSectionDesc:
-      "Ya conoces el layout o quieres que te ayudemos a llevarlo hasta una dirección lista para render.",
+      "Elige solo una opción: tú traes la idea del layout o nosotros ayudamos a desarrollar la dirección de diseño.",
     afterLayout: "Después del layout",
     afterLayoutDesc:
       "En este punto el layout ya está aprobado y se trata como cerrado. Desde aquí puedes pedir planos detallados y láminas de seguimiento.",
-    buildSection: "Elige el elemento exterior",
+    buildSection: "Elige estructura exterior",
     buildSectionDesc:
       "Elige la estructura principal o elemento exterior personalizado que quieres visualizar o documentar.",
     supportSection: "Visita al sitio y urgencia",
@@ -361,9 +367,9 @@ const T = {
     quickSection: "Concepto rápido desde foto",
     quickSectionDesc:
       "Una visual pagada rápida para ayudar a cerrar la venta.",
-    specialSection: "Planos y láminas especiales",
+    specialSection: "Planos y láminas",
     specialSectionDesc:
-      "Úsalo cuando el layout ya existe y necesitas una entrega limpia.",
+      "Úsalo cuando el layout ya existe y necesitas un plano o una lámina limpia específica.",
     citySection: "Láminas HOA y ciudad",
     citySectionDesc:
       "Estas usan una base existente, normalmente un master plan limpio. Puedes revisar el precio ahora, pero el precio asume que esa base ya existe.",
@@ -408,10 +414,10 @@ const T = {
 } as const;
 
 const SIZES: Size[] = [
-  { id: "small", label: "Small", sublabel: "under 1/4 ac", visual: "🏠" },
-  { id: "medium", label: "Medium", sublabel: "around 1/2 ac", visual: "🏡" },
-  { id: "large", label: "Large", sublabel: "1/2-1 ac", visual: "🌿" },
-  { id: "estate", label: "Estate", sublabel: "1-2 ac", visual: "🌳" },
+  { id: "small", label: "Small", sublabel: "compact area / one zone", visual: "🏠" },
+  { id: "medium", label: "Medium", sublabel: "typical yard area", visual: "🏡" },
+  { id: "large", label: "Large", sublabel: "large area / multiple zones", visual: "🌿" },
+  { id: "estate", label: "Estate", sublabel: "estate / complex", visual: "🌳" },
 ];
 
 const ENTRY_PATHS: EntryPath[] = [
@@ -430,41 +436,56 @@ const ENTRY_PATHS: EntryPath[] = [
   },
   {
     id: "build-one",
-    title: "One Outdoor Feature",
-    titleEs: "Una pieza exterior",
+    title: "Decks, Covers & Outdoor Structures",
+    titleEs: "Decks, cubiertas y estructuras exteriores",
     description:
-      "Deck, pergola, patio cover, carport, outdoor kitchen, custom shade, or small custom outdoor feature.",
+      "Decks, pergolas, patio covers, carports, outdoor kitchens, and custom built features.",
     descriptionEs:
-      "Deck, pérgola, cubierta, carport, cocina exterior, sombra personalizada o pequeña pieza exterior especial.",
-    helper: "Best when the project is one clear outdoor feature, not a full yard design.",
+      "Decks, pérgolas, cubiertas, carports, cocinas exteriores y elementos construidos especiales.",
+    helper: "Best when the project is one clear structure, not a full yard design.",
     helperEs:
-      "Ideal cuando el proyecto es una sola pieza exterior clara, no un diseño completo del patio.",
-    cta: "Choose feature",
-    ctaEs: "Elegir pieza",
+      "Ideal cuando el proyecto es una estructura clara, no un diseño completo del patio.",
+    cta: "Choose structure",
+    ctaEs: "Elegir estructura",
   },
   {
     id: "full-design",
-    title: "Full Yard / Landscape Design",
-    titleEs: "Diseño de patio completo / landscape",
+    title: "Yard Design Package",
+    titleEs: "Paquete de diseño de patio",
     description:
-      "Front yard, backyard, full lot, planting, layout, or 3D concept support.",
+      "Planting, layout, and simple design direction for one project area.",
     descriptionEs:
-      "Patio frontal, patio trasero, lote completo, plantación, distribución o apoyo de concepto 3D.",
+      "Plantación, layout y dirección sencilla de diseño para un área del proyecto.",
     helper:
-      "Best when the whole area needs design thinking, not just one structure.",
+      "Best when the yard area needs design thinking, not a separate deck, cover, or kitchen package.",
     helperEs:
-      "Ideal cuando toda el área necesita dirección de diseño, no solo una estructura.",
-    cta: "Build design package",
-    ctaEs: "Armar paquete de diseño",
+      "Ideal cuando el área del patio necesita diseño, no un paquete separado de deck, cubierta o cocina.",
+    cta: "Build yard package",
+    ctaEs: "Armar paquete de patio",
+  },
+  {
+    id: "3d-rendering",
+    title: "3D & Rendering Support",
+    titleEs: "Apoyo 3D y renders",
+    description:
+      "Base models, SketchUp cleanup, and render support for designers and builders.",
+    descriptionEs:
+      "Modelos base, limpieza de SketchUp y apoyo de renders para diseñadores y builders.",
+    helper:
+      "Best when your team understands models, render files, or professional production workflow.",
+    helperEs:
+      "Ideal cuando tu equipo entiende modelos, archivos de render o workflow profesional de producción.",
+    cta: "Choose 3D support",
+    ctaEs: "Elegir apoyo 3D",
   },
   {
     id: "special-drawings",
     title: "Plans & Sheets",
     titleEs: "Planos y láminas",
     description:
-      "Planting plans, master plans, paving patterns, lighting concepts, HOA sheets, and cleanup drawings.",
+      "Planting plans, hardscape sheets, HOA sheets, takeoffs, lighting, and other follow-up documents.",
     descriptionEs:
-      "Planos de plantación, master plans, patrones de pavimento, conceptos de iluminación, láminas HOA y dibujos limpios.",
+      "Planos de plantación, láminas de hardscape, HOA, cómputos, iluminación y otros documentos de seguimiento.",
     helper:
       "Best when the layout already exists and you need one clean deliverable.",
     helperEs:
@@ -497,23 +518,22 @@ const STARTING_POINT_SERVICES: Service[] = [
   },
   {
     id: "onsite-base-model",
-    title: "Base Plan + 3D Model",
+    title: "Site Visit + Base Plan + 3D Model",
     category: "Start",
     icon: Map,
     pricingType: "size",
-    prices: { small: 100, medium: 200, large: 350, estate: null },
+    prices: { small: 300, medium: 400, large: 550, estate: null },
     stripePriceId: null,
     short:
-      "We build a basic 2D base plan and a 3D model of existing conditions with no design added.",
+      "We visit the site and build a basic 2D base plan and 3D existing-conditions model, with no design added yet.",
     bestFor:
-      "Jobs where we already visited the site and now need the existing yard modeled cleanly.",
-    youSend: "Choose Site Visit first so we have usable field data.",
+      "Professional workflows where field measuring is needed before design, rendering, or follow-up sheets.",
+    youSend: "Site address or meeting location, access details, and anything already known about the property.",
     youGet:
-      "A base 2D plan and a 3D existing-conditions model, without design work.",
+      "Local site visit, field photos/notes, a base 2D plan, and a 3D existing-conditions model.",
     notIncluded:
-      "Site visit time, design layout, rendering package, or engineering.",
-    helper: "This service is only available together with Site Visit.",
-    hardDependency: ["site-visit-start"],
+      "Design layout, planting plan, rendering package, engineering, or travel outside city limits.",
+    helper: "Choose this OR remote base/model OR existing 3D model. It is one starting point, not an add-on.",
   },
   {
     id: "survey-documents-start",
@@ -533,6 +553,7 @@ const STARTING_POINT_SERVICES: Service[] = [
       "A base 2D plan and a 3D existing-conditions model built from your documents.",
     notIncluded:
       "Site visit, legal survey work, engineering, permits, or final design.",
+    helper: "Choose this OR site visit base/model OR existing 3D model. It is one starting point, not an add-on.",
   },
   {
     id: "client-model-start",
@@ -553,7 +574,7 @@ const STARTING_POINT_SERVICES: Service[] = [
     notIncluded:
       "Heavy model cleanup, rebuilding missing geometry, creating materials from scratch, or design work not already present in the model.",
     helper:
-      "After review, extra cleanup hours may be discussed and billed only after approval. If we have to create or rebuild materials for you, that is extra hourly work.",
+      "Choose this OR site visit base/model OR remote base/model. Extra cleanup hours may be discussed and billed only after approval.",
   },
   {
     id: "photo-concept-start",
@@ -742,6 +763,30 @@ const STRUCTURE_SERVICES: Service[] = [
       "Retaining walls, slope support, engineering, code research, permit filing, fabrication details, or final construction documents.",
     helper:
       "Choose this when the feature is unusual. Retaining walls and real slope-support walls belong in a separate design/review process, not here.",
+  },
+];
+
+const FULL_YARD_PACKAGE_SERVICES: Service[] = [
+  {
+    id: "yard-design-package",
+    title: "Yard Design Package",
+    category: "Design",
+    icon: Sparkles,
+    pricingType: "size",
+    prices: { small: 1000, medium: 1500, large: 2200, estate: null },
+    stripePriceId: null,
+    short:
+      "Planting, layout, and simple design direction for the selected yard area.",
+    bestFor:
+      "Builders or landscape crews who need a clear landscape design under their brand, without dealing with 3D/model workflow details.",
+    youSend:
+      "Photos, rough measurements or survey if available, budget level, style references, client must-haves, and any site constraints.",
+    youGet:
+      "A concept layout for the selected area, planting direction, general material direction, simple dimensions where needed, and a client-ready PDF.",
+    notIncluded:
+      "Separate outdoor structures such as decks, pergolas, carports, outdoor kitchens, structural engineering, irrigation design, lighting plan, permit-ready drawings, or stamped documents.",
+    helper:
+      "If the design includes a deck, pergola, carport, outdoor kitchen, or other built structure, order that separately under Decks, Covers & Outdoor Structures. Add Site Visit below if field measuring is needed.",
   },
 ];
 
@@ -1135,6 +1180,7 @@ const SUPPORT_SERVICES: Service[] = [
 const ALL_SERVICES = [
   ...STARTING_POINT_SERVICES,
   ...STRUCTURE_SERVICES,
+  ...FULL_YARD_PACKAGE_SERVICES,
   ...DESIGN_DIRECTION_SERVICES,
   ...NEXT_PHASE_SERVICES,
   ...CITY_SERVICES,
@@ -1179,14 +1225,14 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     helper: "Elige esto junto con Plano base + modelo 3D si quieres que construyamos el modelo de condiciones existentes a partir de la visita.",
   },
   "onsite-base-model": {
-    title: "Plano base + modelo 3D",
+    title: "Visita al sitio + plano base + modelo 3D",
     category: "Inicio",
-    short: "Construimos un plano base 2D y un modelo 3D básico de las condiciones existentes, sin agregar diseño.",
-    bestFor: "Trabajos donde ya visitamos el sitio y ahora hay que modelar el patio existente de forma limpia.",
-    youSend: "Elige primero Visita al sitio para que tengamos datos de campo útiles.",
-    youGet: "Un plano base 2D y un modelo 3D de condiciones existentes, sin trabajo de diseño.",
-    notIncluded: "Tiempo de visita al sitio, diseño de layout, paquete de renders o ingeniería.",
-    helper: "Este servicio solo está disponible junto con Visita al sitio.",
+    short: "Visitamos el sitio y construimos un plano base 2D y un modelo 3D básico de condiciones existentes, sin agregar diseño todavía.",
+    bestFor: "Flujos profesionales donde se necesitan mediciones en campo antes del diseño, render o láminas de seguimiento.",
+    youSend: "Dirección o punto de reunión, detalles de acceso y cualquier información ya conocida sobre la propiedad.",
+    youGet: "Visita local, fotos/notas de campo, plano base 2D y modelo 3D de condiciones existentes.",
+    notIncluded: "Diseño de layout, planting plan, paquete de renders, ingeniería o traslado fuera de los límites de la ciudad.",
+    helper: "Elige esto O base remota/modelo O modelo 3D existente. Es un punto de inicio, no un add-on.",
   },
   "survey-documents-start": {
     title: "Plano base + modelo 3D remoto",
@@ -1196,6 +1242,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     youSend: "Survey, fotos, PDFs, redlines, dimensiones o incluso un sketch hecho a mano.",
     youGet: "Un plano base 2D y un modelo 3D de condiciones existentes construido desde tus documentos.",
     notIncluded: "Visita al sitio, survey legal, ingeniería, permisos o diseño final.",
+    helper: "Elige esto O visita/base/modelo O modelo 3D existente. Es un punto de inicio, no un add-on.",
   },
   "client-model-start": {
     title: "Tú mandas el modelo 3D, nosotros lo renderizamos",
@@ -1205,7 +1252,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     youSend: "Un modelo 3D listo para render, links o referencias JPG de materiales, notas y cualquier survey o PDF que ayude a revisarlo.",
     youGet: "Revisión del modelo, setup de render, aplicación de materiales desde tus referencias y vistas renderizadas. Cuando el modelo esté listo, se pueden probar materiales sin un límite fijo.",
     notIncluded: "Limpieza pesada del modelo, reconstrucción de geometría faltante, creación de materiales desde cero o diseño que no exista ya en el modelo.",
-    helper: "Después de revisar, cualquier hora extra de limpieza se conversa y se cobra solo con aprobación. Si hay que crear o reconstruir materiales, eso es trabajo extra por hora.",
+    helper: "Elige esto O visita/base/modelo O base remota/modelo. Cualquier hora extra de limpieza se conversa y se cobra solo con aprobación.",
   },
   "photo-concept-start": {
     title: "Una imagen conceptual rápida",
@@ -1304,6 +1351,26 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     youGet: "Una revisión manual y feedback sobre si podemos ayudar, qué paquete encaja y cuál sería el siguiente paso o rango de precio probable.",
     notIncluded: "Muros de contención, soporte de pendientes, ingeniería, investigación de código, trámites de permiso, detalles de fabricación o planos finales de construcción.",
     helper: "Elige esto cuando el feature es inusual. Los muros de contención y muros reales de soporte de pendiente pertenecen a un proceso separado de diseño/revisión, no aquí.",
+  },
+  "full-yard-concept-site": {
+    title: "Concepto de landscape para todo el patio — con visita",
+    category: "Paquete",
+    short: "Paquete inicial sencillo cuando quieres que revisemos el sitio, entendamos el patio y propongamos un concepto de landscape.",
+    bestFor: "Constructores, compañías de landscape o clientes que no quieren elegir piezas técnicas como modelo base, dirección de layout y setup de render.",
+    youSend: "Nombre o dirección del proyecto, fotos si las tienes, must-haves, referencias de estilo, nivel aproximado de presupuesto y restricciones de HOA o del sitio.",
+    youGet: "Revisión manual del alcance, recomendación del camino de diseño, dirección conceptual basada en visita y una cotización personalizada para el paquete correcto.",
+    notIncluded: "Ingeniería, trámite de permisos, planos sellados, documentos finales de construcción o rondas ilimitadas de rediseño.",
+    helper: "Elige esto si quieres un camino de diseño completo y no quieres armar tú el flujo técnico.",
+  },
+  "full-yard-concept-remote": {
+    title: "Concepto de landscape para todo el patio — desde archivos",
+    category: "Paquete",
+    short: "Paquete inicial sencillo cuando tienes fotos, survey, sketches o notas y quieres que propongamos el concepto remotamente.",
+    bestFor: "Trabajos fuera de la ciudad o equipos que pueden mandar suficiente información del sitio sin visita.",
+    youSend: "Fotos, survey o site plan si existe, medidas aproximadas, wish list, referencias de estilo y restricciones del proyecto.",
+    youGet: "Revisión manual del alcance, recomendación del camino de diseño, dirección conceptual remota y una cotización personalizada para el paquete correcto.",
+    notIncluded: "Visita al sitio, survey legal, ingeniería, trámite de permisos, planos sellados o documentos finales de construcción.",
+    helper: "Elige esto si quieres un camino de diseño completo, pero prefieres empezar desde información enviada.",
   },
   "draw-your-idea": {
     title: "Tú traes la idea, nosotros la dibujamos",
@@ -1527,10 +1594,10 @@ function translateSizeLabel(size: Size | undefined, lang: Lang) {
 function translateSizeSublabel(size: Size, lang: Lang) {
   if (lang === "es") {
     const sublabels: Record<string, string> = {
-      small: "menos de 1/4 ac",
-      medium: "aprox. 1/2 ac",
-      large: "1/2–1 ac",
-      estate: "1–2 ac",
+      small: "área compacta / una zona",
+      medium: "área típica de patio",
+      large: "área grande / varias zonas",
+      estate: "estate / complejo",
     };
     return sublabels[size.id] ?? size.sublabel;
   }
@@ -2628,6 +2695,10 @@ function SuccessIntake({
 
 // ─── App ─────────────────────────────────────────────────────────────────────
 
+const FULL_DESIGN_PACKAGE_IDS = ["yard-design-package"];
+const FULL_DESIGN_STARTING_POINT_IDS = ["onsite-base-model", "survey-documents-start", "client-model-start"];
+const FULL_DESIGN_IDEA_IDS = ["draw-your-idea", "help-design-it"];
+
 export default function App() {
   const [lang, setLang] = useState<Lang>("en");
   const [view, setView] = useState<ViewState>("LANDING");
@@ -2761,6 +2832,7 @@ export default function App() {
 
   const hasLayout = Object.keys(cart).some(
     (id) =>
+      FULL_YARD_PACKAGE_SERVICES.some((service) => service.id === id) ||
       DESIGN_DIRECTION_SERVICES.some((service) => service.id === id) ||
       STRUCTURE_SERVICES.some((service) => service.id === id)
   );
@@ -2858,8 +2930,26 @@ export default function App() {
     if (notice.kind === "hard") return;
     setCart((prev) => {
       const next = { ...prev };
-      if (next[service.id]) delete next[service.id];
-      else next[service.id] = 1;
+      if (next[service.id]) {
+        delete next[service.id];
+        return next;
+      }
+
+      if (FULL_DESIGN_PACKAGE_IDS.includes(service.id)) {
+        [...FULL_DESIGN_PACKAGE_IDS, ...FULL_DESIGN_STARTING_POINT_IDS, ...FULL_DESIGN_IDEA_IDS].forEach((id) => delete next[id]);
+      }
+
+      if (FULL_DESIGN_STARTING_POINT_IDS.includes(service.id)) {
+        FULL_DESIGN_PACKAGE_IDS.forEach((id) => delete next[id]);
+        FULL_DESIGN_STARTING_POINT_IDS.forEach((id) => delete next[id]);
+      }
+
+      if (FULL_DESIGN_IDEA_IDS.includes(service.id)) {
+        FULL_DESIGN_PACKAGE_IDS.forEach((id) => delete next[id]);
+        FULL_DESIGN_IDEA_IDS.forEach((id) => delete next[id]);
+      }
+
+      next[service.id] = 1;
       return next;
     });
   }
@@ -3090,10 +3180,46 @@ export default function App() {
               lang={lang}
             />
             <ServiceSection
+              title={t.designPackageSection}
+              description={t.designPackageSectionDesc}
+              services={FULL_YARD_PACKAGE_SERVICES}
+              selectedSize={selectedSize}
+              cart={cart}
+              lang={lang}
+              getNotice={getNotice}
+              onToggle={toggleService}
+              onQty={updateQty}
+              onDiscuss={openHelpWithService}
+            />
+            <ServiceSection
+              title={t.supportSection}
+              description={t.supportSectionDesc}
+              services={SUPPORT_SERVICES.filter((service) =>
+                ["site-visit-addon", "rush-fee"].includes(service.id)
+              )}
+              selectedSize={selectedSize}
+              cart={cart}
+              lang={lang}
+              getNotice={getNotice}
+              onToggle={toggleService}
+              onQty={updateQty}
+              onDiscuss={openHelpWithService}
+            />
+          </div>
+        );
+      case "3d-rendering":
+        return (
+          <div className="space-y-8">
+            <SizeSelector
+              value={selectedSize}
+              onChange={setSelectedSize}
+              lang={lang}
+            />
+            <ServiceSection
               title={t.startSection}
               description={t.startSectionDesc}
-              services={STARTING_POINT_SERVICES.filter(
-                (service) => service.id !== "photo-concept-start"
+              services={STARTING_POINT_SERVICES.filter((service) =>
+                FULL_DESIGN_STARTING_POINT_IDS.includes(service.id)
               )}
               selectedSize={selectedSize}
               cart={cart}
@@ -3116,9 +3242,11 @@ export default function App() {
               onDiscuss={openHelpWithService}
             />
             <ServiceSection
-              title={t.afterLayout}
-              description={t.afterLayoutDesc}
-              services={NEXT_PHASE_SERVICES}
+              title={t.supportSection}
+              description={t.supportSectionDesc}
+              services={SUPPORT_SERVICES.filter((service) =>
+                ["site-visit-addon", "rush-fee"].includes(service.id)
+              )}
               selectedSize={selectedSize}
               cart={cart}
               lang={lang}
