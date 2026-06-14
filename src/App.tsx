@@ -28,6 +28,7 @@ type AddressDisplay = "full" | "street" | "project" | "hide";
 type LogoOption = "upload" | "on-file" | "text-only";
 type TitleBlockOption = "standard-landscape" | "standard-portrait" | "upload";
 type TitleBlockSampleOption = "standard-landscape" | "standard-portrait";
+type SiteVisitScheduleMode = "" | "friday" | "other";
 
 interface StructurePreference {
   material: string;
@@ -57,7 +58,8 @@ type MissingRequirementKey =
   | "surveyDocs"
   | "references"
   | "sameProject"
-  | "structureDetails";
+  | "structureDetails"
+  | "siteVisitScheduling";
 type ViewState = "LANDING" | "MENU" | "CONFIG" | "SUCCESS";
 type PricingType = "size" | "flat" | "unit" | "hourly" | "quote" | "percentage";
 type NoticeKind = "hard" | "soft" | null;
@@ -124,6 +126,10 @@ interface OrderContact {
   measurementsNotes: string;
   referenceLinks: string;
   structurePreferences: StructurePreferences;
+  siteVisitScheduleMode: SiteVisitScheduleMode;
+  siteVisitFridayDate: string;
+  siteVisitOtherDates: string;
+  siteVisitNotes: string;
   partnerProfileMode: PartnerProfileMode;
   whiteLabelCompany: string;
   whiteLabelPhone: string;
@@ -278,6 +284,16 @@ const STRUCTURE_DETAIL_SERVICE_IDS = [
   "outdoor-kitchen",
   "custom-feature",
 ];
+
+const SITE_VISIT_SERVICE_IDS = [
+  "site-visit-start",
+  "site-visit-addon",
+  "onsite-base-model",
+];
+
+function hasSiteVisitSelected(serviceIds: string[]) {
+  return serviceIds.some((id) => SITE_VISIT_SERVICE_IDS.includes(id));
+}
 
 function emptyStructurePreference(): StructurePreference {
   return {
@@ -1686,6 +1702,10 @@ function emptyContact(): OrderContact {
     measurementsNotes: "",
     referenceLinks: "",
     structurePreferences: {},
+    siteVisitScheduleMode: "",
+    siteVisitFridayDate: "",
+    siteVisitOtherDates: "",
+    siteVisitNotes: "",
     partnerProfileMode: "new",
     whiteLabelCompany: "",
     whiteLabelPhone: "",
@@ -1723,6 +1743,10 @@ function getInitialContact(): OrderContact {
       measurementsNotes: "",
       referenceLinks: "",
       structurePreferences: {},
+      siteVisitScheduleMode: "",
+      siteVisitFridayDate: "",
+      siteVisitOtherDates: "",
+      siteVisitNotes: "",
       desiredDeliveryDate: "",
       sameProjectConfirmed: false,
       partnerProfileMode: "existing",
@@ -1768,6 +1792,15 @@ function buildWhiteLabelPayload(contact: OrderContact) {
     branding_notes: sanitizeText(contact.brandingNotes),
     same_client_project_confirmed: contact.sameProjectConfirmed,
     remembered_on_device: contact.rememberPartnerInfo,
+  };
+}
+
+function buildSiteVisitPayload(contact: OrderContact) {
+  return {
+    schedule_mode: contact.siteVisitScheduleMode,
+    friday_date: sanitizeText(contact.siteVisitFridayDate),
+    other_dates: sanitizeText(contact.siteVisitOtherDates),
+    notes: sanitizeText(contact.siteVisitNotes),
   };
 }
 
@@ -2936,6 +2969,9 @@ function ServiceSection({
   onQty,
   onDiscuss,
   onSample,
+  structurePreferences,
+  missingStructureDetails = false,
+  onStructurePreferenceChange,
 }: {
   title: string;
   description: string;
@@ -2948,6 +2984,9 @@ function ServiceSection({
   onQty: (serviceId: string, qty: number) => void;
   onDiscuss: (service: Service) => void;
   onSample: (service: Service) => void;
+  structurePreferences?: StructurePreferences;
+  missingStructureDetails?: boolean;
+  onStructurePreferenceChange?: (serviceId: string, patch: Partial<StructurePreference>) => void;
 }) {
   const t = T[lang];
   return (
@@ -2965,6 +3004,15 @@ function ServiceSection({
         {services.map((service) => {
           const selected = Boolean(cart[service.id]);
           const notice = getNotice(service);
+          const isStructureDetailService = STRUCTURE_DETAIL_SERVICE_IDS.includes(service.id);
+          const preference = {
+            ...emptyStructurePreference(),
+            ...(structurePreferences?.[service.id] ?? {}),
+          };
+          const showStructurePreferences =
+            selected &&
+            isStructureDetailService &&
+            Boolean(structurePreferences && onStructurePreferenceChange);
           const priceLabel =
             service.pricingType === "percentage"
               ? service.displayPriceLabel ?? "+25%"
@@ -3069,6 +3117,23 @@ function ServiceSection({
                   </p>
                 </div>
               </div>
+              {showStructurePreferences && onStructurePreferenceChange ? (
+                <div className="mt-5 rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-3">
+                  <div className="mb-3 px-1 text-xs font-black uppercase tracking-[0.18em] text-emerald-800">
+                    {lang === "es" ? "Preferencias para esta estructura" : "Preferences for this structure"}
+                  </div>
+                  <StructurePreferenceCard
+                    service={service}
+                    preference={preference}
+                    lang={lang}
+                    missing={
+                      missingStructureDetails &&
+                      !hasMeaningfulStructurePreference(service.id, preference)
+                    }
+                    onChange={(patch) => onStructurePreferenceChange(service.id, patch)}
+                  />
+                </div>
+              ) : null}
               {translateServiceField(service, "helper", lang) ? (
                 <div
                   className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${
@@ -3614,7 +3679,7 @@ function ProjectInfoCard({
   onFilesChange,
   lang,
   pathId,
-  selectedStructureServices,
+  selectedServiceIds,
   missingKeys,
 }: {
   contact: OrderContact;
@@ -3623,7 +3688,7 @@ function ProjectInfoCard({
   onFilesChange: (patch: Partial<ProjectFileUploads>) => void;
   lang: Lang;
   pathId: string;
-  selectedStructureServices: Service[];
+  selectedServiceIds: string[];
   missingKeys: MissingRequirementKey[];
 }) {
   const t = T[lang];
@@ -3651,22 +3716,8 @@ function ProjectInfoCard({
   const [titleBlockSample, setTitleBlockSample] = useState<TitleBlockSampleOption | null>(null);
   const logoRequired = false;
   const isQuickPhoto = pathId === "quick-sale";
+  const hasSelectedSiteVisit = hasSiteVisitSelected(selectedServiceIds);
   const isMissing = (key: MissingRequirementKey) => missingKeys.includes(key);
-  const updateStructurePreference = (
-    serviceId: string,
-    patch: Partial<StructurePreference>
-  ) => {
-    onChange({
-      structurePreferences: {
-        ...contact.structurePreferences,
-        [serviceId]: {
-          ...emptyStructurePreference(),
-          ...(contact.structurePreferences[serviceId] ?? {}),
-          ...patch,
-        },
-      },
-    });
-  };
   const inputClass = (missing: boolean, base = "rounded-2xl px-4 py-3 text-sm outline-none") =>
     `${base} border ${missing ? "border-rose-300 bg-rose-50 focus:border-rose-500" : "border-slate-200 bg-white focus:border-slate-400"}`;
   const timelineTitle = lang === "es" ? "Tiempo estimado" : "Estimated production timing";
@@ -4038,49 +4089,6 @@ function ProjectInfoCard({
               : "If you leave the client name or address blank, we will not show it on the title block."}
           </div>
 
-          {pathId === "build-one" && selectedStructureServices.length > 0 ? (
-            <div
-              className={`grid gap-4 rounded-[1.5rem] border p-4 md:col-span-2 ${
-                isMissing("structureDetails")
-                  ? "border-rose-300 bg-rose-50"
-                  : "border-slate-200 bg-white"
-              }`}
-            >
-              <div>
-                <h5 className="text-base font-black text-slate-900">
-                  {lang === "es"
-                    ? "Preferencias de estructura exterior"
-                    : "Outdoor structure preferences"}
-                </h5>
-                <p className="mt-1 text-xs leading-5 text-slate-500">
-                  {lang === "es"
-                    ? "Estas preguntas ayudan a revisar el scope antes del invoice. Si no ves una opción, elige Other y descríbelo."
-                    : "These questions help us review the scope before invoicing. If you do not see the right option, choose Other and describe it."}
-                </p>
-              </div>
-
-              {selectedStructureServices.map((service) => {
-                const preference = {
-                  ...emptyStructurePreference(),
-                  ...(contact.structurePreferences[service.id] ?? {}),
-                };
-                return (
-                  <StructurePreferenceCard
-                    key={service.id}
-                    service={service}
-                    preference={preference}
-                    lang={lang}
-                    missing={
-                      isMissing("structureDetails") &&
-                      !hasMeaningfulStructurePreference(service.id, preference)
-                    }
-                    onChange={(patch) => updateStructurePreference(service.id, patch)}
-                  />
-                );
-              })}
-            </div>
-          ) : null}
-
           <label className="grid gap-2 md:col-span-2">
             <span className="text-sm font-semibold text-slate-700">
               {t.notes}
@@ -4183,6 +4191,122 @@ function ProjectInfoCard({
             </label>
           )}
         </div>
+
+        {hasSelectedSiteVisit ? (
+          <div
+            className={`mt-5 rounded-[1.5rem] border p-4 ${
+              isMissing("siteVisitScheduling")
+                ? "border-rose-300 bg-rose-50"
+                : "border-slate-200 bg-slate-50"
+            }`}
+          >
+            <h5 className="text-base font-black text-slate-900">
+              {lang === "es" ? "Solicitud para visita al sitio" : "Site visit scheduling request"}
+            </h5>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              {lang === "es"
+                ? "Los viernes son los días más fáciles para visitas. Elige un viernes preferido o pide otras fechas/ventanas. La cita final se confirma por email."
+                : "Fridays are the easiest days to schedule site visits. Choose a preferred Friday or request other date windows. The final appointment is confirmed by email."}
+            </p>
+
+            <div className="mt-4 grid gap-3">
+              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+                <input
+                  type="radio"
+                  name="siteVisitScheduleMode"
+                  checked={contact.siteVisitScheduleMode === "friday"}
+                  onChange={() => onChange({ siteVisitScheduleMode: "friday" })}
+                  className="mt-1"
+                />
+                <span>
+                  <span className="font-bold">
+                    {lang === "es" ? "Preferimos viernes" : "Friday preferred"}
+                  </span>
+                  <span className="mt-1 block text-slate-500">
+                    {lang === "es"
+                      ? "Escoge el viernes que quieres pedir. Olga confirmará antes de ponerlo en calendario."
+                      : "Pick the Friday you want to request. Olga will confirm before putting it on the calendar."}
+                  </span>
+                </span>
+              </label>
+
+              {contact.siteVisitScheduleMode === "friday" ? (
+                <label className="grid gap-2">
+                  <span className="text-sm font-semibold text-slate-700">
+                    {lang === "es" ? "Viernes preferido" : "Preferred Friday"}
+                  </span>
+                  <input
+                    type="date"
+                    value={contact.siteVisitFridayDate}
+                    onChange={(e) => onChange({ siteVisitFridayDate: e.target.value })}
+                    className={inputClass(isMissing("siteVisitScheduling"))}
+                  />
+                  <span className="text-xs text-slate-500">
+                    {lang === "es"
+                      ? "Si eliges otro día por accidente, lo revisaremos antes de confirmar."
+                      : "If another weekday is selected by mistake, we will review it before confirming."}
+                  </span>
+                </label>
+              ) : null}
+
+              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+                <input
+                  type="radio"
+                  name="siteVisitScheduleMode"
+                  checked={contact.siteVisitScheduleMode === "other"}
+                  onChange={() => onChange({ siteVisitScheduleMode: "other" })}
+                  className="mt-1"
+                />
+                <span>
+                  <span className="font-bold">
+                    {lang === "es" ? "Pedir otras fechas" : "Request other dates"}
+                  </span>
+                  <span className="mt-1 block text-slate-500">
+                    {lang === "es"
+                      ? "Escribe 2–3 fechas o ventanas de tiempo que podrían funcionar."
+                      : "Write 2–3 dates or time windows that could work."}
+                  </span>
+                </span>
+              </label>
+
+              {contact.siteVisitScheduleMode === "other" ? (
+                <label className="grid gap-2">
+                  <span className="text-sm font-semibold text-slate-700">
+                    {lang === "es" ? "Fechas / ventanas solicitadas" : "Requested dates / time windows"}
+                  </span>
+                  <textarea
+                    value={contact.siteVisitOtherDates}
+                    onChange={(e) => onChange({ siteVisitOtherDates: e.target.value })}
+                    rows={3}
+                    placeholder={
+                      lang === "es"
+                        ? "Ejemplo: viernes 10–12, lunes después de 2pm, cualquier mañana la próxima semana"
+                        : "Example: Friday 10–12, Monday after 2pm, any morning next week"
+                    }
+                    className={inputClass(isMissing("siteVisitScheduling"), "rounded-3xl p-4 text-sm outline-none")}
+                  />
+                </label>
+              ) : null}
+
+              <label className="grid gap-2">
+                <span className="text-sm font-semibold text-slate-700">
+                  {lang === "es" ? "Notas de acceso / gate / mascotas" : "Access / gate / pets notes"}
+                </span>
+                <textarea
+                  value={contact.siteVisitNotes}
+                  onChange={(e) => onChange({ siteVisitNotes: e.target.value })}
+                  rows={2}
+                  placeholder={
+                    lang === "es"
+                      ? "Opcional: gate code, dónde estacionar, perros, persona de contacto en sitio"
+                      : "Optional: gate code, parking, dogs, on-site contact person"
+                  }
+                  className="rounded-3xl border border-slate-200 bg-white p-4 text-sm outline-none focus:border-slate-400"
+                />
+              </label>
+            </div>
+          </div>
+        ) : null}
 
         <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-950">
           <div className="font-black">{timelineTitle}</div>
@@ -4669,6 +4793,16 @@ function getMissingRequirementKeys(
     missing.push("structureDetails");
   }
 
+  if (hasSiteVisitSelected(selectedServiceIds)) {
+    if (!contact.siteVisitScheduleMode) {
+      missing.push("siteVisitScheduling");
+    } else if (contact.siteVisitScheduleMode === "friday" && !contact.siteVisitFridayDate.trim()) {
+      missing.push("siteVisitScheduling");
+    } else if (contact.siteVisitScheduleMode === "other" && !contact.siteVisitOtherDates.trim()) {
+      missing.push("siteVisitScheduling");
+    }
+  }
+
   if (!contact.sameProjectConfirmed) missing.push("sameProject");
 
   return missing;
@@ -4688,6 +4822,7 @@ function getMissingRequirementLabel(key: MissingRequirementKey, lang: Lang) {
     references: { en: "References / markups / measurements", es: "Referencias / markups / medidas" },
     sameProject: { en: "Confirm one client/project for this order", es: "Confirma un cliente/proyecto para este pedido" },
     structureDetails: { en: "Add structure preferences for the selected outdoor structure", es: "Agrega preferencias de estructura para el elemento exterior seleccionado" },
+    siteVisitScheduling: { en: "Choose a Friday site visit or request other dates", es: "Elige visita en viernes o pide otras fechas" },
   };
   return labels[key][lang];
 }
@@ -4896,10 +5031,6 @@ function App() {
   const isQuickConceptOnly =
     pricedItems.length === 1 && pricedItems[0]?.service.id === "photo-concept-start";
   const selectedServiceIds = pricedItems.map((item) => item.service.id);
-  const selectedStructureServices = pricedItems
-    .map((item) => item.service)
-    .filter((service) => STRUCTURE_DETAIL_SERVICE_IDS.includes(service.id));
-
   const missingRequirementKeys = getMissingRequirementKeys(
     contact,
     projectFiles,
@@ -4981,6 +5112,23 @@ function App() {
     setCart((prev) => ({ ...prev, [serviceId]: Math.max(1, qty) }));
   }
 
+  function updateStructurePreference(
+    serviceId: string,
+    patch: Partial<StructurePreference>
+  ) {
+    setContact((prev) => ({
+      ...prev,
+      structurePreferences: {
+        ...prev.structurePreferences,
+        [serviceId]: {
+          ...emptyStructurePreference(),
+          ...(prev.structurePreferences[serviceId] ?? {}),
+          ...patch,
+        },
+      },
+    }));
+  }
+
   function resetCart() {
     if (!window.confirm(t.confirmReset)) return;
     setCart({});
@@ -5052,6 +5200,7 @@ function App() {
         selectedServiceIds
       ),
       requested_delivery_date: effectiveDeliveryDate,
+      site_visit_request: buildSiteVisitPayload(contact),
       white_label_delivery: buildWhiteLabelPayload(contact),
       file_summary: buildFileSummary(projectFiles),
       payment_status: "submitted_for_review_invoice_pending",
@@ -5146,6 +5295,9 @@ function App() {
               onQty={updateQty}
               onDiscuss={openHelpWithService}
               onSample={openSample}
+              structurePreferences={contact.structurePreferences}
+              missingStructureDetails={missingRequirementKeys.includes("structureDetails")}
+              onStructurePreferenceChange={updateStructurePreference}
             />
             <ServiceSection
               title={t.supportSection}
@@ -5422,7 +5574,7 @@ function App() {
                 }
                 lang={lang}
                 pathId={activePath}
-                selectedStructureServices={selectedStructureServices}
+                selectedServiceIds={selectedServiceIds}
                 missingKeys={missingRequirementKeys}
               />
               {checkoutNotice ? (
