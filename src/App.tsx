@@ -269,13 +269,13 @@ const T = {
       "Required. Upload reference images, client markups, screenshots, marked photos, measurement notes, or PDFs showing desired look, key dimensions, and problem areas. Up to 10 files per upload.",
     filesSelected: "file(s) selected",
     reviewOnlyNotice:
-      "Submit for review does not request payment. We check the files and selected scope first, then send an invoice/payment link. Work starts after invoice payment.",
+      "Submit for review does not request payment. We check the files and selected scope first, then send an invoice/payment link. Quick Photo Concept is due on receipt before the 1-business-day turnaround. Other approved services start after the 50% deposit invoice is paid; the remaining 50% is invoiced after drawings/deliverables are provided.",
     estimatedInvoiceNote:
       "This is an estimate based on the selected services. Final invoice is sent after review.",
     orderIdLabel: "Order ID",
     estimatedTotalLabel: "Estimated total",
     invoiceNext:
-      "Next: we review the scope, check the uploaded files, and send an invoice/payment link if everything matches. If the scope is different, we will adjust it before invoicing.",
+      "Next: we review the scope, check the uploaded files, and send an invoice/payment link if everything matches. Quick Photo Concept is paid right away before the 1-business-day turnaround. Other approved services start after the 50% deposit invoice is paid; the remaining 50% is invoiced after drawings/deliverables are provided. Wave handles the invoice due date and reminders. If the scope is different, we will adjust it before invoicing.",
     tbdOnReview: "Some items are TBD and will be priced after review.",
     writtenOnlyNote: "Written communication only. No phone support for production questions.",
     partnerProfileTitle: "Company / white-label information",
@@ -525,13 +525,13 @@ const T = {
       "Requerido. Sube imágenes de referencia, markups del cliente, screenshots, fotos marcadas, notas de medidas o PDFs que muestren el look deseado, dimensiones clave y áreas problemáticas. Hasta 10 archivos por carga.",
     filesSelected: "archivo(s) seleccionado(s)",
     reviewOnlyNotice:
-      "Enviar para revisión no solicita pago. Revisamos los archivos y el alcance seleccionado primero, luego mandamos una factura/link de pago. El trabajo empieza después del pago de la factura.",
+      "Enviar para revisión no solicita pago. Revisamos los archivos y el alcance seleccionado primero, luego mandamos una factura/link de pago. Quick Photo Concept vence al recibir la factura antes del tiempo de entrega de 1 día hábil. Otros servicios aprobados empiezan después del pago del depósito del 50%; el 50% restante se factura después de entregar los dibujos/entregables.",
     estimatedInvoiceNote:
       "Este es un estimado basado en los servicios seleccionados. La factura final se manda después de la revisión.",
     orderIdLabel: "Order ID",
     estimatedTotalLabel: "Total estimado",
     invoiceNext:
-      "Siguiente: revisamos el alcance, los archivos subidos y mandamos una factura/link de pago si todo coincide. Si el alcance es diferente, lo ajustamos antes de facturar.",
+      "Siguiente: revisamos el alcance, los archivos subidos y mandamos una factura/link de pago si todo coincide. Quick Photo Concept se paga de inmediato antes del tiempo de entrega de 1 día hábil. Otros servicios aprobados empiezan después del pago del depósito del 50%; el 50% restante se factura después de entregar los dibujos/entregables. Wave maneja la fecha de vencimiento y los recordatorios de la factura. Si el alcance es diferente, lo ajustamos antes de facturar.",
     tbdOnReview: "Algunas partidas son TBD y se cotizarán después de la revisión.",
     writtenOnlyNote: "Comunicación solo por escrito. No hay soporte telefónico para preguntas de producción.",
     partnerProfileTitle: "Información de compañía / white-label",
