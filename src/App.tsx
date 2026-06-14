@@ -111,6 +111,8 @@ const SOCIAL_LINKS = {
   // Add SiteForm Studio social links later. Leave empty to show the icon as disabled.
   instagram: "",
   facebook: "",
+  tiktok: "",
+  youtube: "",
   email: "",
 };
 
@@ -249,11 +251,13 @@ const T = {
     showcaseStep1: "Quick photo concepts",
     showcaseStep2: "Drafting + 3D support",
     showcaseStep3: "HOA, takeoffs, planting, hardscape, lighting",
-    showcaseCta: "Explore popular services",
-    showcaseBrowse: "See all services",
+    showcaseCta: "Our services",
+    showcaseBrowse: "",
     followTitle: "Follow / contact",
     socialInstagram: "Instagram",
     socialFacebook: "Facebook",
+    socialTikTok: "TikTok",
+    socialYouTube: "YouTube",
     socialEmail: "Email",
     showcaseNote: "",
   },
@@ -391,8 +395,8 @@ const T = {
     showcaseStep1: "Conceptos rápidos desde foto",
     showcaseStep2: "Dibujo + apoyo 3D",
     showcaseStep3: "HOA, cómputos, plantación, hardscape, iluminación",
-    showcaseCta: "Ver servicios populares",
-    showcaseBrowse: "Ver todos los servicios",
+    showcaseCta: "Nuestros servicios",
+    showcaseBrowse: "",
     showcaseNote: "Empieza con un concepto rápido o elige el servicio que encaja con el trabajo.",
   },
 } as const;
@@ -1556,7 +1560,7 @@ function BeforeAfterSlider({
 
 // ─── Landing Showcase ───────────────────────────────────────────────────────
 
-function InstagramIcon({ className = "h-4 w-4" }: { className?: string }) {
+function InstagramIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none">
       <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="2" />
@@ -1566,7 +1570,7 @@ function InstagramIcon({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
-function FacebookIcon({ className = "h-4 w-4" }: { className?: string }) {
+function FacebookIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
       <path d="M14.5 8.2V6.7c0-.7.5-1.1 1.2-1.1h1.7V2.8c-.8-.1-1.7-.2-2.5-.2-2.6 0-4.4 1.6-4.4 4.5v1.1H7.8v3.2h2.7v8h3.4v-8h2.8l.5-3.2h-3.3Z" />
@@ -1574,7 +1578,23 @@ function FacebookIcon({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
-function EmailIcon({ className = "h-4 w-4" }: { className?: string }) {
+function TikTokIcon({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M15.5 3c.4 2.6 1.9 4.2 4.5 4.4v3.2c-1.6.1-3.1-.4-4.4-1.2v5.8c0 3.2-2.2 5.6-5.5 5.6-3.1 0-5.4-2.1-5.4-5.1 0-3.2 2.5-5.3 5.8-5.1.3 0 .6.1.9.1V14c-.4-.1-.7-.2-1.1-.2-1.4 0-2.3.8-2.3 2 0 1.1.8 1.9 2 1.9 1.3 0 2.1-.8 2.1-2.4V3h3.4Z" />
+    </svg>
+  );
+}
+
+function YouTubeIcon({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M21.6 7.2s-.2-1.5-.8-2.1c-.8-.8-1.7-.8-2.1-.9C15.8 4 12 4 12 4s-3.8 0-6.7.2c-.4.1-1.3.1-2.1.9-.6.6-.8 2.1-.8 2.1S2.2 9 2.2 10.8v1.7c0 1.8.2 3.6.2 3.6s.2 1.5.8 2.1c.8.8 1.9.8 2.4.9 1.7.2 6.4.2 6.4.2s3.8 0 6.7-.2c.4-.1 1.3-.1 2.1-.9.6-.6.8-2.1.8-2.1s.2-1.8.2-3.6v-1.7c0-1.8-.2-3.6-.2-3.6ZM10.2 14.8V8.6l5.8 3.1-5.8 3.1Z" />
+    </svg>
+  );
+}
+
+function EmailIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none">
       <rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" strokeWidth="2" />
@@ -1583,7 +1603,7 @@ function EmailIcon({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
-function SocialLink({
+function SocialIconLink({
   href,
   label,
   children,
@@ -1595,14 +1615,13 @@ function SocialLink({
   const enabled = Boolean(href);
 
   const className = enabled
-    ? "inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-black text-slate-700 hover:border-slate-900 hover:text-slate-900"
-    : "inline-flex cursor-default items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-black text-slate-400";
+    ? "inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:border-slate-900 hover:text-slate-900"
+    : "inline-flex h-11 w-11 cursor-default items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-400";
 
   if (!enabled) {
     return (
-      <span className={className} aria-disabled="true" title="Link will be added later">
+      <span className={className} aria-label={label} aria-disabled="true" title={`${label} link will be added later`}>
         {children}
-        <span>{label}</span>
       </span>
     );
   }
@@ -1613,21 +1632,20 @@ function SocialLink({
       target={href.startsWith("http") ? "_blank" : undefined}
       rel={href.startsWith("http") ? "noreferrer" : undefined}
       className={className}
+      aria-label={label}
+      title={label}
     >
       {children}
-      <span>{label}</span>
     </a>
   );
 }
 
 function LandingShowcase({
   lang,
-  onExploreServices,
-  onSeeAllServices,
+  onOpenServices,
 }: {
   lang: Lang;
-  onExploreServices: () => void;
-  onSeeAllServices: () => void;
+  onOpenServices: () => void;
 }) {
   const t = T[lang];
   return (
@@ -1659,36 +1677,32 @@ function LandingShowcase({
             <span>{t.showcaseStep3}</span>
           </div>
         </div>
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row md:mt-8">
+        <div className="mt-5 flex md:mt-8">
           <button
             type="button"
-            onClick={onExploreServices}
-            className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white shadow-lg transition hover:bg-emerald-700 md:px-6 md:py-4 md:text-base"
+            onClick={onOpenServices}
+            className="inline-flex w-full items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white shadow-lg transition hover:bg-emerald-700 sm:w-auto md:px-6 md:py-4 md:text-base"
           >
             {t.showcaseCta}
           </button>
-          <button
-            type="button"
-            onClick={onSeeAllServices}
-            className="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-5 py-3 text-sm font-black text-slate-900 hover:bg-slate-50 md:px-6 md:py-4 md:text-base"
-          >
-            {t.showcaseBrowse}
-          </button>
         </div>
         <div className="mt-5 border-t border-slate-100 pt-4 md:mt-6">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="mr-1 text-xs font-black uppercase tracking-wide text-slate-400">
-              {t.followTitle}
-            </span>
-            <SocialLink href={SOCIAL_LINKS.instagram} label={t.socialInstagram}>
+          <div className="flex items-center justify-center gap-3">
+            <SocialIconLink href={SOCIAL_LINKS.instagram} label={t.socialInstagram}>
               <InstagramIcon />
-            </SocialLink>
-            <SocialLink href={SOCIAL_LINKS.facebook} label={t.socialFacebook}>
+            </SocialIconLink>
+            <SocialIconLink href={SOCIAL_LINKS.facebook} label={t.socialFacebook}>
               <FacebookIcon />
-            </SocialLink>
-            <SocialLink href={SOCIAL_LINKS.email} label={t.socialEmail}>
+            </SocialIconLink>
+            <SocialIconLink href={SOCIAL_LINKS.tiktok} label={t.socialTikTok}>
+              <TikTokIcon />
+            </SocialIconLink>
+            <SocialIconLink href={SOCIAL_LINKS.youtube} label={t.socialYouTube}>
+              <YouTubeIcon />
+            </SocialIconLink>
+            <SocialIconLink href={SOCIAL_LINKS.email} label={t.socialEmail}>
               <EmailIcon />
-            </SocialLink>
+            </SocialIconLink>
           </div>
         </div>
       </div>
@@ -3100,8 +3114,7 @@ export default function App() {
           <div className="space-y-8">
             <LandingShowcase
               lang={lang}
-              onExploreServices={() => setView("MENU")}
-              onSeeAllServices={() => setView("MENU")}
+              onOpenServices={() => setView("MENU")}
             />
           </div>
         ) : view === "MENU" ? (
