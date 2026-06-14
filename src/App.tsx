@@ -163,6 +163,7 @@ interface SummaryLine {
 const DEMO_MODE = false;
 const NOTES_LIMIT = 2000;
 const WHATSAPP_NUMBER = "15551234567";
+const ORDER_REVIEW_ENDPOINT = "https://script.google.com/macros/s/AKfycbxNhc22ZYQ007ljInzF9vxQXL23qfL_r59GqtTjYhucEUBSd-EUBr33Tz8PRC892VoR/exec";
 const SOCIAL_LINKS = {
   // Add SiteForm Studio social links later. Leave empty to show the icon as disabled.
   instagram: "",
@@ -1665,6 +1666,76 @@ function appendProjectFiles(formData: FormData, files: ProjectFileUploads) {
   appendFileList(formData, "title_block_files", files.titleBlockFiles);
   appendFileList(formData, "logo_files", files.logoFiles);
   appendFileList(formData, "references", files.references);
+}
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(reader.error || new Error("Could not read file"));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function serializeFileList(files: FileList | null) {
+  if (!files?.length) return [];
+  const maxFileSize = 12 * 1024 * 1024;
+  const safeFiles = Array.from(files).slice(0, 10);
+
+  return Promise.all(
+    safeFiles.map(async (file) => {
+      if (file.size > maxFileSize) {
+        throw new Error(`${file.name} is too large. Please keep each file under 12 MB for this MVP upload.`);
+      }
+
+      return {
+        name: file.name,
+        size: file.size,
+        type: file.type || "application/octet-stream",
+        data: await fileToDataUrl(file),
+      };
+    })
+  );
+}
+
+async function buildProjectFilePayload(files: ProjectFileUploads) {
+  return {
+    photos: await serializeFileList(files.photos),
+    survey_docs: await serializeFileList(files.surveyDocs),
+    title_block_files: await serializeFileList(files.titleBlockFiles),
+    logo_files: await serializeFileList(files.logoFiles),
+    references: await serializeFileList(files.references),
+  };
+}
+
+async function submitOrderForReview(order: Record<string, unknown>, files: ProjectFileUploads) {
+  const filePayload = await buildProjectFilePayload(files);
+
+  const response = await fetch(ORDER_REVIEW_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8",
+    },
+    body: JSON.stringify({
+      order,
+      files: filePayload,
+    }),
+  });
+
+  const text = await response.text();
+  let data: { ok?: boolean; orderId?: string; folderUrl?: string; error?: string } = {};
+
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error("The order endpoint responded, but the response was not valid JSON.");
+  }
+
+  if (!response.ok || !data.ok) {
+    throw new Error(data.error || "The order could not be saved. Please try again.");
+  }
+
+  return data;
 }
 
 type ServiceCopyField =
@@ -4304,18 +4375,12 @@ function App() {
     };
 
     try {
-      const formData = new FormData();
-      formData.append("order", JSON.stringify(reviewPayload));
-      appendProjectFiles(formData, projectFiles);
-
-      await fetch("/api/order-review", {
-        method: "POST",
-        body: formData,
-      }).catch(() => undefined);
+      const submitResult = await submitOrderForReview(reviewPayload, projectFiles);
+      const savedOrderId = submitResult.orderId || orderId;
 
       setPaidOrder({
         sessionId: `review_${Date.now()}`,
-        orderId,
+        orderId: savedOrderId,
         pathId: activePath,
         pathTitle: selectedPathTitle,
         sizeId: selectedSize,
@@ -4337,6 +4402,8 @@ function App() {
       });
       setCheckoutNotice(t.reviewSubmitted);
       setView("SUCCESS");
+    } catch (error) {
+      setCheckoutNotice(error instanceof Error ? error.message : "The order could not be saved. Please try again.");
     } finally {
       setCreatingCheckout(false);
     }
