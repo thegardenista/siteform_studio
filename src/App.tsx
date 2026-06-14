@@ -357,7 +357,7 @@ const T = {
     submitForReview: "Submit project for review",
     uploadAfterPaymentNote: "We will review your files and send an invoice/payment link before work starts.",
     reviewSubmitted: "Project submitted for review. We will verify the scope and files, then send an invoice/payment link before work starts.",
-    generating: "Submitting...",
+    generating: "Uploading — keep page open...",
     termsLine:
       "All deliverables are design-intent / visualization / coordination support only. They are not sealed, stamped, permit-ready, construction-control, engineering, surveying, or code-compliance documents.",
     safetyTitle: "Scope safety note",
@@ -613,7 +613,7 @@ const T = {
     submitForReview: "Enviar proyecto para revisión",
     uploadAfterPaymentNote: "Revisaremos tus archivos y mandaremos una factura/link de pago antes de empezar.",
     reviewSubmitted: "Proyecto enviado para revisión. Verificaremos el alcance y los archivos, luego mandaremos una factura/link de pago antes de empezar.",
-    generating: "Enviando...",
+    generating: "Subiendo — deja esta página abierta...",
     termsLine:
       "Todos los entregables son solo apoyo de intención de diseño, visualización y coordinación. No son documentos sellados, estampados, listos para permiso, control de construcción, ingeniería, survey legal o cumplimiento de código.",
     safetyTitle: "Nota de alcance",
@@ -4750,6 +4750,29 @@ function App() {
           </div>
         )}
       </main>
+      {creatingCheckout ? (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/45 px-4 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-[1.75rem] border border-emerald-100 bg-white p-6 text-center shadow-2xl">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+              <Loader2 className="h-7 w-7 animate-spin" />
+            </div>
+            <h3 className="mt-4 text-lg font-black tracking-tight text-slate-900">
+              {lang === "es" ? "Subiendo tu pedido" : "Uploading your order"}
+            </h3>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              {lang === "es"
+                ? "No cierres esta página. Estamos subiendo los archivos y guardando la solicitud en ScopeBuilder Orders."
+                : "Please do not close this page. We are uploading the files and saving the request to ScopeBuilder Orders."}
+            </p>
+            <p className="mt-3 rounded-2xl bg-amber-50 px-3 py-2 text-xs font-semibold leading-5 text-amber-900">
+              {lang === "es"
+                ? "Fotos o PDFs grandes pueden tardar un poco, especialmente desde el teléfono."
+                : "Large photos or PDFs may take a little while, especially from a phone."}
+            </p>
+          </div>
+        </div>
+      ) : null}
+
       {showHelp ? (
         <QuickHelpModal
           lang={lang}
