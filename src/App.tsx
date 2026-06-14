@@ -41,6 +41,8 @@ interface EntryPath {
   descriptionEs: string;
   helper: string;
   helperEs: string;
+  cta: string;
+  ctaEs: string;
 }
 
 interface Service {
@@ -120,11 +122,11 @@ const T = {
   en: {
     header: "Scope Builder",
     subheader: "White-label drafting and visuals for outdoor pros",
-    selectPath: "What does this job need?",
+    selectPath: "What do you need help with?",
     selectPathHelp:
-      "Choose the service group for this job. After you enter, you will only see the options for that category.",
+      "Start with the option closest to your project. You can add site visits, extra sheets, or more detail later.",
     openThisGroup: "Open this group",
-    back: "Back to menu",
+    back: "Back to services",
     backHome: "Back to home",
     reviewOrder: "View total",
     propertySize: "Property size",
@@ -204,10 +206,10 @@ const T = {
       "At this point the layout is approved and treated as locked. From here you can order detailed plans and follow-up sheets.",
     buildSection: "Choose the outdoor feature",
     buildSectionDesc:
-      "Choose one clear feature or structure. Site visit is optional and added separately.",
-    supportSection: "Support and add-ons",
+      "Pick the main structure or custom outdoor feature you want us to visualize or document.",
+    supportSection: "Site visit and rush timing",
     supportSectionDesc:
-      "Site visit, outside-city travel, rush handling, or scoped redesign discussion after the main service is chosen.",
+      "Add a local site visit if field measurements are needed. If the site is outside city limits, extra travel time may be added to the final invoice at $70/hour. Rush turnaround may be available when the schedule allows.",
     quickSection: "Quick Photo Concept",
     quickSectionDesc:
       "One fast paid visual to help close the sale.",
@@ -264,11 +266,11 @@ const T = {
   es: {
     header: "Scope Builder",
     subheader: "Dibujo y visuales white-label para profesionales de exterior",
-    selectPath: "¿Qué necesita este trabajo?",
+    selectPath: "¿En qué necesitas ayuda?",
     selectPathHelp:
-      "Elige el grupo de servicios para este trabajo. Cuando entras, solo verás las opciones de esa categoría.",
+      "Empieza con la opción más cercana a tu proyecto. Después puedes agregar visitas, láminas extra o más detalle.",
     openThisGroup: "Abrir este grupo",
-    back: "Volver al menú",
+    back: "Volver a servicios",
     backHome: "Volver al inicio",
     reviewOrder: "Ver total",
     propertySize: "Tamaño del lote",
@@ -348,10 +350,10 @@ const T = {
       "En este punto el layout ya está aprobado y se trata como cerrado. Desde aquí puedes pedir planos detallados y láminas de seguimiento.",
     buildSection: "Elige el elemento exterior",
     buildSectionDesc:
-      "Elige una sola pieza o estructura clara. La visita al sitio es opcional y se agrega aparte.",
-    supportSection: "Apoyo y add-ons",
+      "Elige la estructura principal o elemento exterior personalizado que quieres visualizar o documentar.",
+    supportSection: "Visita al sitio y urgencia",
     supportSectionDesc:
-      "Visita al sitio, viaje fuera de la ciudad, urgencia o discusión de rediseño después de elegir el servicio principal.",
+      "Agrega una visita local si se necesitan medidas de campo. Si el sitio está fuera de los límites de la ciudad, el tiempo extra de traslado puede agregarse a la factura final a $70/hora. La entrega urgente puede estar disponible según agenda.",
     quickSection: "Concepto rápido desde foto",
     quickSectionDesc:
       "Una visual pagada rápida para ayudar a cerrar la venta.",
@@ -419,23 +421,27 @@ const ENTRY_PATHS: EntryPath[] = [
     helper: "Best when you need one visual to help the client understand the idea and move forward.",
     helperEs:
       "Ideal cuando necesitas una visual para que el cliente entienda la idea y avance.",
+    cta: "Start photo concept",
+    ctaEs: "Empezar concepto desde foto",
   },
   {
     id: "build-one",
     title: "One Outdoor Feature",
     titleEs: "Una pieza exterior",
     description:
-      "Deck, pergola, patio cover, carport, outdoor kitchen, fire feature, or one simple outdoor element.",
+      "Deck, pergola, patio cover, carport, outdoor kitchen, fire feature, or a custom outdoor element.",
     descriptionEs:
-      "Deck, pérgola, cubierta, carport, cocina exterior, fire feature o una sola pieza exterior.",
+      "Deck, pérgola, cubierta, carport, cocina exterior, fire feature o elemento exterior personalizado.",
     helper: "Best when the job is one clear thing, not the whole yard.",
     helperEs:
       "Ideal cuando el trabajo es una sola cosa clara, no todo el patio.",
+    cta: "Choose feature",
+    ctaEs: "Elegir pieza",
   },
   {
     id: "full-design",
-    title: "Full Yard Design Support",
-    titleEs: "Apoyo de diseño para todo el patio",
+    title: "Full Yard / Landscape Design",
+    titleEs: "Diseño de patio completo / landscape",
     description:
       "Front yard, backyard, full lot, planting, layout, or 3D concept support.",
     descriptionEs:
@@ -444,11 +450,13 @@ const ENTRY_PATHS: EntryPath[] = [
       "Best when the whole area needs design thinking, not just one structure.",
     helperEs:
       "Ideal cuando toda el área necesita dirección de diseño, no solo una estructura.",
+    cta: "Build design package",
+    ctaEs: "Armar paquete de diseño",
   },
   {
     id: "special-drawings",
-    title: "Plans & Specialty Sheets",
-    titleEs: "Planos y láminas especiales",
+    title: "Plans & Sheets",
+    titleEs: "Planos y láminas",
     description:
       "Planting plans, master plans, paving patterns, lighting concepts, HOA sheets, and cleanup drawings.",
     descriptionEs:
@@ -457,6 +465,8 @@ const ENTRY_PATHS: EntryPath[] = [
       "Best when the layout already exists and you need one clean deliverable.",
     helperEs:
       "Ideal cuando el layout ya existe y necesitas una entrega limpia.",
+    cta: "Choose plan type",
+    ctaEs: "Elegir tipo de plano",
   },
 ];
 
@@ -686,6 +696,26 @@ const STRUCTURE_SERVICES: Service[] = [
     helper:
       "This package is without site visit. Add Site Visit if field measuring is needed.",
     sampleLabel: "See sample",
+  },
+  {
+    id: "custom-feature",
+    title: "Misc Custom Feature — Review First",
+    category: "Build",
+    icon: Sparkles,
+    pricingType: "quote",
+    stripePriceId: null,
+    short:
+      "Use this for an unusual outdoor element that does not fit the standard deck, shade, carport, or kitchen packages.",
+    bestFor:
+      "Ponds, special planters, swings, small custom structures, decorative elements, or other one-off features that need review before pricing.",
+    youSend:
+      "Photos, a short description, rough size, location, and reference links or inspiration images.",
+    youGet:
+      "A manual review and feedback on whether we can help, what package fits, and what the likely next step or price range should be.",
+    notIncluded:
+      "Engineering, code research, permit filing, fabrication details, or final construction documents.",
+    helper:
+      "Choose this when the feature is unusual. Describe what you want and upload or link references so we can review it first.",
   },
   {
     id: "retaining-wall",
@@ -1038,6 +1068,8 @@ const SUPPORT_SERVICES: Service[] = [
       "Site visit time, raw measurements, photos, and field notes.",
     notIncluded:
       "Base plan, 3D model, design work, or travel outside city limits.",
+    helper:
+      "If the site is outside city limits, extra travel time may be added to the final invoice at $70/hour after we review the address.",
   },
   {
     id: "travel-outside-city",
@@ -1246,6 +1278,16 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     helper: "Este paquete no incluye visita al sitio. Agrega Visita al sitio si se necesitan mediciones en campo.",
     sampleLabel: "Ver ejemplo",
   },
+  "custom-feature": {
+    title: "Elemento personalizado — revisar primero",
+    category: "Construcción",
+    short: "Usa esto para un elemento exterior inusual que no encaja en los paquetes estándar de deck, sombra, carport o cocina.",
+    bestFor: "Ponds, maceteros especiales, columpios, estructuras pequeñas personalizadas, elementos decorativos u otros features únicos que necesitan revisión antes de precio.",
+    youSend: "Fotos, descripción corta, tamaño aproximado, ubicación y links de referencia o imágenes de inspiración.",
+    youGet: "Una revisión manual y feedback sobre si podemos ayudar, qué paquete encaja y cuál sería el siguiente paso o rango de precio probable.",
+    notIncluded: "Ingeniería, investigación de código, trámites de permiso, detalles de fabricación o planos finales de construcción.",
+    helper: "Elige esto cuando el feature es inusual. Describe lo que quieres y sube o manda referencias para que podamos revisarlo primero.",
+  },
   "retaining-wall": {
     title: "Muro de contención / problema de pendiente — revisión personalizada",
     category: "Construcción",
@@ -1411,6 +1453,7 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     youSend: "Dirección del sitio, detalles de acceso y qué hay que revisar.",
     youGet: "Tiempo de visita, medidas en bruto, fotos y notas de campo.",
     notIncluded: "Plano base, modelo 3D, trabajo de diseño o traslado fuera de los límites de la ciudad.",
+    helper: "Si el sitio está fuera de los límites de la ciudad, el tiempo extra de traslado puede agregarse a la factura final a $70/hora después de revisar la dirección.",
   },
   "travel-outside-city": {
     title: "Traslado fuera de los límites de la ciudad",
@@ -1829,7 +1872,7 @@ function MenuCard({
         {lang === "en" ? path.helper : path.helperEs}
       </div>
       <div className="mt-4 inline-flex items-center text-sm font-black text-slate-900">
-        {lang === "en" ? "Open this group" : "Abrir este grupo"} →
+        {lang === "en" ? path.cta : path.ctaEs} →
       </div>
     </button>
   );
@@ -1911,20 +1954,17 @@ function ServiceSection({
   const t = T[lang];
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-      <div className="mb-6 flex items-center justify-between gap-4">
+      <div className="mb-6">
         <div>
           <h3 className="text-2xl font-black tracking-tight text-slate-900">
             {title}
           </h3>
           <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
         </div>
-        <div className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-          {services.length} {lang === "es" ? "opciones" : "items"}
-        </div>
+
       </div>
       <div className="grid gap-5">
         {services.map((service) => {
-          const Icon = service.icon;
           const selected = Boolean(cart[service.id]);
           const notice = getNotice(service);
           const priceLabel =
@@ -1942,17 +1982,6 @@ function ServiceSection({
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3">
-                  <div
-                    className={`rounded-2xl p-3 ${
-                      selected ? "bg-white/10" : "bg-slate-100"
-                    }`}
-                  >
-                    <Icon
-                      className={`h-5 w-5 ${
-                        selected ? "text-white" : "text-slate-700"
-                      }`}
-                    />
-                  </div>
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
                       <h4 className="text-lg font-black leading-tight">
@@ -2612,6 +2641,39 @@ export default function App() {
   const selectedSizeLabel =
     translateSizeLabel(selectedSizeObj, lang) || selectedSize;
 
+  function navigateTo(nextView: ViewState, nextPath = activePath, historyMode: "push" | "replace" = "push") {
+    setActivePath(nextPath);
+    setView(nextView);
+    if (typeof window !== "undefined" && window.location.pathname !== "/success") {
+      const state = { scopeBuilderView: nextView, scopeBuilderActivePath: nextPath };
+      const url = `${window.location.pathname}${window.location.search}`;
+      if (historyMode === "replace") window.history.replaceState(state, "", url);
+      else window.history.pushState(state, "", url);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  useEffect(() => {
+    if (typeof window === "undefined" || window.location.pathname === "/success") return;
+    const currentState = window.history.state as { scopeBuilderView?: ViewState; scopeBuilderActivePath?: string } | null;
+    if (!currentState?.scopeBuilderView) {
+      window.history.replaceState(
+        { scopeBuilderView: "LANDING", scopeBuilderActivePath: activePath },
+        "",
+        `${window.location.pathname}${window.location.search}`
+      );
+    }
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state as { scopeBuilderView?: ViewState; scopeBuilderActivePath?: string } | null;
+      if (state?.scopeBuilderView) {
+        setView(state.scopeBuilderView);
+        if (state.scopeBuilderActivePath) setActivePath(state.scopeBuilderActivePath);
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   useEffect(() => {
     if (!cleared) return;
@@ -2974,7 +3036,9 @@ export default function App() {
             <ServiceSection
               title={t.supportSection}
               description={t.supportSectionDesc}
-              services={SUPPORT_SERVICES}
+              services={SUPPORT_SERVICES.filter((service) =>
+                ["site-visit-addon", "rush-fee"].includes(service.id)
+              )}
               selectedSize={selectedSize}
               cart={cart}
               lang={lang}
@@ -3103,9 +3167,9 @@ export default function App() {
         lang={lang}
         setLang={setLang}
         onBack={() => {
-          if (view === "SUCCESS") setView("CONFIG");
-          else if (view === "CONFIG") setView("MENU");
-          else setView("LANDING");
+          if (view === "SUCCESS") navigateTo("CONFIG", activePath, "replace");
+          else if (view === "CONFIG") navigateTo("MENU", activePath, "replace");
+          else navigateTo("LANDING", activePath, "replace");
         }}
         onOpenHelp={() => setShowHelp(true)}
       />
@@ -3114,7 +3178,7 @@ export default function App() {
           <div className="space-y-8">
             <LandingShowcase
               lang={lang}
-              onOpenServices={() => setView("MENU")}
+              onOpenServices={() => navigateTo("MENU")}
             />
           </div>
         ) : view === "MENU" ? (
@@ -3138,8 +3202,7 @@ export default function App() {
                     lang={lang}
                     path={path}
                     onSelect={(id) => {
-                      setActivePath(id);
-                      setView("CONFIG");
+                      navigateTo("CONFIG", id);
                     }}
                   />
                 ))}
