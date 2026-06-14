@@ -117,7 +117,6 @@ const T = {
     selectPathHelp:
       "Choose the service group for this job. After you enter, you will only see the options for that category.",
     openThisGroup: "Open this group",
-    activeGroup: "Active group",
     back: "Back to menu",
     reviewOrder: "Review order",
     propertySize: "Property size",
@@ -130,22 +129,22 @@ const T = {
       "Use this for a short but useful project description before checkout. Full project intake happens after payment.",
     notesPlaceholder:
       "Example: Front yard only, xeriscape preferred, gate stays, retaining wall may be needed near driveway.",
-    quickHelp: "¿Necesitas ayuda con el servicio?",
-    quickHelpTitle: "¿Preguntas?",
+    quickHelp: "Need help choosing?",
+    quickHelpTitle: "Questions?",
     quickHelpText:
-      "Manda los detalles del proyecto o tus preguntas. Deja tu email o teléfono y te respondemos si encaja con nuestro flujo de trabajo actual.",
-    helpContact: "Email o teléfono",
-    helpContactPlaceholder: "¿Cómo te podemos contactar?",
-    helpQuestion: "Tu pregunta o dirección del proyecto",
+      "Submit your project details or questions below. Leave your email or phone number, and we'll get back to you if it fits our current workflow.",
+    helpContact: "Email or phone",
+    helpContactPlaceholder: "How should we reach you?",
+    helpQuestion: "Your question or project address",
     helpQuestionPlaceholder:
-      "Cuéntanos qué necesitas, dónde está el proyecto y qué no está claro.",
-    helpBudgetTimeline: "Presupuesto / calendario (opcional)",
+      "Tell us what you need, where the project is, and what feels unclear.",
+    helpBudgetTimeline: "Budget / Timeline (optional)",
     helpBudgetTimelinePlaceholder:
-      "Ejemplo: Necesito precio esta semana, construcción el próximo mes.",
-    helpSend: "Enviar pregunta",
-    helpSending: "Enviando...",
-    helpSent: "Enviado",
-    close: "Cerrar",
+      "Example: Need this priced this week, build phase next month.",
+    helpSend: "Submit question",
+    helpSending: "Sending...",
+    helpSent: "Sent",
+    close: "Close",
     summary: "Summary",
     nothingSelected: "Nothing selected yet",
     qty: "Qty",
@@ -216,7 +215,7 @@ const T = {
     successText:
       "Now the real intake starts. Upload photos, survey files, and the full scope here.",
     uploadPhotos: "Project photos",
-    uploadSurvey: "Survey / levantamiento / PDFs",
+    uploadSurvey: "Survey / PDFs",
     detailedBrief: "Detailed scope",
     detailedBriefPlaceholder:
       "Add the full project brief here. This is the right place for the long version.",
@@ -248,7 +247,6 @@ const T = {
     selectPathHelp:
       "Elige el grupo de servicios para este trabajo. Cuando entras, solo verás las opciones de esa categoría.",
     openThisGroup: "Abrir este grupo",
-    activeGroup: "Grupo activo",
     back: "Volver al menú",
     reviewOrder: "Revisar pedido",
     propertySize: "Tamaño del lote",
@@ -3056,9 +3054,6 @@ export default function App() {
               <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
-                    <div className="mb-2 inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                      {t.activeGroup}
-                    </div>
                     <h2 className="text-2xl font-black">
                       {lang === "en"
                         ? selectedPath.title
