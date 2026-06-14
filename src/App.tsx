@@ -166,11 +166,11 @@ const WHATSAPP_NUMBER = "15551234567";
 const ORDER_REVIEW_ENDPOINT = "https://script.google.com/macros/s/AKfycbxNhc22ZYQ007ljInzF9vxQXL23qfL_r59GqtTjYhucEUBSd-EUBr33Tz8PRC892VoR/exec";
 const SOCIAL_LINKS = {
   // Add SiteForm Studio social links later. Leave empty to show the icon as disabled.
-  instagram: "",
+  instagram: "https://www.instagram.com/siteform.studio/",
   facebook: "",
   tiktok: "",
   youtube: "",
-  email: "",
+  email: "mailto:start@siteform.studio",
 };
 
 type SampleImages = {
