@@ -107,6 +107,12 @@ interface SummaryLine {
 const DEMO_MODE = false;
 const NOTES_LIMIT = 2000;
 const WHATSAPP_NUMBER = "15551234567";
+const SOCIAL_LINKS = {
+  // Add SiteForm Studio social links later. Leave empty to show the icon as disabled.
+  instagram: "",
+  facebook: "",
+  email: "",
+};
 
 const T = {
   en: {
@@ -118,7 +124,7 @@ const T = {
     openThisGroup: "Open this group",
     back: "Back to menu",
     backHome: "Back to home",
-    reviewOrder: "Review order",
+    reviewOrder: "View total",
     propertySize: "Property size",
     projectInfo: "Contact and project details",
     clientName: "Your name / company",
@@ -200,7 +206,7 @@ const T = {
     supportSection: "Support and add-ons",
     supportSectionDesc:
       "Site visit, outside-city travel, rush handling, or scoped redesign discussion after the main service is chosen.",
-    quickSection: "Quick Concept Image",
+    quickSection: "Quick Photo Concept",
     quickSectionDesc:
       "One fast paid visual to help close the sale.",
     specialSection: "Plans & Specialty Sheets",
@@ -245,6 +251,10 @@ const T = {
     showcaseStep3: "HOA, takeoffs, planting, hardscape, lighting",
     showcaseCta: "Explore popular services",
     showcaseBrowse: "See all services",
+    followTitle: "Follow / contact",
+    socialInstagram: "Instagram",
+    socialFacebook: "Facebook",
+    socialEmail: "Email",
     showcaseNote: "",
   },
   es: {
@@ -256,7 +266,7 @@ const T = {
     openThisGroup: "Abrir este grupo",
     back: "Volver al menú",
     backHome: "Volver al inicio",
-    reviewOrder: "Revisar pedido",
+    reviewOrder: "Ver total",
     propertySize: "Tamaño del lote",
     projectInfo: "Contacto y detalles del proyecto",
     clientName: "Tu nombre / compañía",
@@ -338,7 +348,7 @@ const T = {
     supportSection: "Apoyo y add-ons",
     supportSectionDesc:
       "Visita al sitio, viaje fuera de la ciudad, urgencia o discusión de rediseño después de elegir el servicio principal.",
-    quickSection: "Imagen conceptual rápida",
+    quickSection: "Concepto rápido desde foto",
     quickSectionDesc:
       "Una visual pagada rápida para ayudar a cerrar la venta.",
     specialSection: "Planos y láminas especiales",
@@ -397,8 +407,8 @@ const SIZES: Size[] = [
 const ENTRY_PATHS: EntryPath[] = [
   {
     id: "quick-sale",
-    title: "Quick Concept Image",
-    titleEs: "Imagen conceptual rápida",
+    title: "Quick Photo Concept",
+    titleEs: "Concepto rápido desde foto",
     description: "One fast concept image from a site photo.",
     descriptionEs:
       "Una imagen conceptual rápida a partir de una foto del sitio.",
@@ -529,7 +539,7 @@ const STARTING_POINT_SERVICES: Service[] = [
   },
   {
     id: "photo-concept-start",
-    title: "One Quick Concept Image",
+    title: "One Quick Photo Concept",
     category: "Start",
     icon: Trees,
     pricingType: "flat",
@@ -1546,6 +1556,70 @@ function BeforeAfterSlider({
 
 // ─── Landing Showcase ───────────────────────────────────────────────────────
 
+function InstagramIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none">
+      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="2" />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
+      <circle cx="17.5" cy="6.5" r="1.25" fill="currentColor" />
+    </svg>
+  );
+}
+
+function FacebookIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M14.5 8.2V6.7c0-.7.5-1.1 1.2-1.1h1.7V2.8c-.8-.1-1.7-.2-2.5-.2-2.6 0-4.4 1.6-4.4 4.5v1.1H7.8v3.2h2.7v8h3.4v-8h2.8l.5-3.2h-3.3Z" />
+    </svg>
+  );
+}
+
+function EmailIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none">
+      <rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" strokeWidth="2" />
+      <path d="m5 8 7 5 7-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function SocialLink({
+  href,
+  label,
+  children,
+}: {
+  href: string;
+  label: string;
+  children: React.ReactNode;
+}) {
+  const enabled = Boolean(href);
+
+  const className = enabled
+    ? "inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-black text-slate-700 hover:border-slate-900 hover:text-slate-900"
+    : "inline-flex cursor-default items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-black text-slate-400";
+
+  if (!enabled) {
+    return (
+      <span className={className} aria-disabled="true" title="Link will be added later">
+        {children}
+        <span>{label}</span>
+      </span>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noreferrer" : undefined}
+      className={className}
+    >
+      {children}
+      <span>{label}</span>
+    </a>
+  );
+}
+
 function LandingShowcase({
   lang,
   onExploreServices,
@@ -1600,6 +1674,22 @@ function LandingShowcase({
           >
             {t.showcaseBrowse}
           </button>
+        </div>
+        <div className="mt-5 border-t border-slate-100 pt-4 md:mt-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 text-xs font-black uppercase tracking-wide text-slate-400">
+              {t.followTitle}
+            </span>
+            <SocialLink href={SOCIAL_LINKS.instagram} label={t.socialInstagram}>
+              <InstagramIcon />
+            </SocialLink>
+            <SocialLink href={SOCIAL_LINKS.facebook} label={t.socialFacebook}>
+              <FacebookIcon />
+            </SocialLink>
+            <SocialLink href={SOCIAL_LINKS.email} label={t.socialEmail}>
+              <EmailIcon />
+            </SocialLink>
+          </div>
         </div>
       </div>
     </section>
