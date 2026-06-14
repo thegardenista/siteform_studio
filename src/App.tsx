@@ -100,6 +100,7 @@ interface OrderContact {
 interface ProjectFileUploads {
   photos: FileList | null;
   surveyDocs: FileList | null;
+  titleBlockFiles: FileList | null;
   logoFiles: FileList | null;
   references: FileList | null;
 }
@@ -201,18 +202,22 @@ const T = {
     remoteInfoTitle: "If there is no site visit",
     remoteInfoText:
       "Upload a survey or site plan if you have one, plus clear photos with dimensions marked on the images. We need width, depth, height, roof/eave-to-ground height, house-to-fence distances, and any important slopes, steps, walls, or level changes.",
-    projectFilesTitle: "Project files for review",
+    projectFilesTitle: "Project files for this order",
     projectFilesHelp:
-      "Upload files here so the project can be reviewed without phone calls or separate email threads. At least one file is required before submission.",
+      "Upload the files for this one client/project. Project photos and references/markups are required before submission. For a different client, start a separate order.",
     uploadPhotosHelp:
-      "Photos of the project area. Mark rough width, depth, height, roof/eave height, fence distances, and level changes directly on photos when possible.",
+      "Required. Photos of the project area. Mark rough width, depth, height, roof/eave height, fence distances, and level changes directly on photos when possible. Up to 10 files per upload.",
     uploadSurveyHelp:
       "Survey, site plan, PDFs, measurements, sketches, or existing drawings. Use this especially when there is no site visit.",
+    uploadTitleBlock: "Title block / sheet template",
+    uploadTitleBlockHelp:
+      "Optional for first-time setup. Upload your ready-made title block, PDF border, sheet frame, or DWG/PDF template if you want us to use your company sheet format.",
+    uploadLogoFiles: "Logo / brand files",
     uploadLogoHelp:
-      "Logo or brand files for white-label sheets. If your logo is already on file, you can leave this blank.",
+      "Required if you choose to upload a new logo. Use PNG, SVG, PDF, AI, or EPS if available.",
     uploadReferences: "References / markups",
     uploadReferencesHelp:
-      "Inspiration images, screenshots, client markups, links saved as PDFs, or notes that explain the desired look.",
+      "Required. Upload reference images, client markups, screenshots, marked photos, or notes/PDFs showing the desired look and any problem areas. Up to 10 files per upload.",
     filesSelected: "file(s) selected",
     reviewOnlyNotice:
       "Submit for review does not request payment. We check the files and selected scope first, then send an invoice/payment link. Work starts after invoice payment.",
@@ -309,7 +314,7 @@ const T = {
     safetyText:
       "We provide design-intent visuals, concept sheets, drafting cleanup, and white-label presentation support. We do not provide engineering, legal surveying, code review, permit filing, permit approval guarantees, sealed/stamped drawings, structural calculations, utility design, or construction-control documents.",
     fillRequired:
-      "Add your name/company, email, phone number, project/client label, project details, at least one project file, confirm this is one client/project, and select at least one service.",
+      "Add your name/company, email, phone number, project/client label, project details, project photos, references/markups, confirm this is one client/project, and select at least one service. For first-time white-label setup, add the company name and upload a logo if you selected logo upload.",
     quoteBlocksCheckout:
       "All orders are reviewed first. We send the invoice/payment link after scope and files are checked.",
     add: "Add",
@@ -419,18 +424,22 @@ const T = {
     remoteInfoTitle: "Si no hay visita al sitio",
     remoteInfoText:
       "Sube un survey o site plan si lo tienes, más fotos claras con medidas marcadas en las imágenes. Necesitamos ancho, profundidad, altura, altura de techo/eave al piso, distancias de casa a fence y cualquier pendiente, escalón, muro o cambio de nivel importante.",
-    projectFilesTitle: "Archivos del proyecto para revisión",
+    projectFilesTitle: "Archivos para este pedido",
     projectFilesHelp:
-      "Sube los archivos aquí para revisar el proyecto sin llamadas telefónicas ni emails separados. Se requiere al menos un archivo antes de enviar.",
+      "Sube los archivos para este cliente/proyecto. Las fotos del proyecto y las referencias/markups son requeridos antes de enviar. Para otro cliente, inicia un pedido separado.",
     uploadPhotosHelp:
-      "Fotos del área del proyecto. Marca ancho, profundidad, altura, roof/eave, distancias a fence y cambios de nivel directamente en las fotos cuando sea posible.",
+      "Requerido. Fotos del área del proyecto. Marca ancho, profundidad, altura, roof/eave, distancias a fence y cambios de nivel directamente en las fotos cuando sea posible. Hasta 10 archivos por carga.",
     uploadSurveyHelp:
       "Survey, site plan, PDFs, medidas, sketches o dibujos existentes. Úsalo especialmente cuando no hay visita al sitio.",
+    uploadTitleBlock: "Title block / plantilla de lámina",
+    uploadTitleBlockHelp:
+      "Opcional para la primera configuración. Sube tu title block, borde PDF, marco de lámina o plantilla DWG/PDF si quieres que usemos el formato de tu compañía.",
+    uploadLogoFiles: "Logo / archivos de marca",
     uploadLogoHelp:
-      "Logo o archivos de marca para láminas white-label. Si tu logo ya está guardado, puedes dejar esto vacío.",
+      "Requerido si eliges subir un logo nuevo. Usa PNG, SVG, PDF, AI o EPS si está disponible.",
     uploadReferences: "Referencias / markups",
     uploadReferencesHelp:
-      "Imágenes de inspiración, screenshots, markups del cliente, links guardados como PDF o notas que expliquen el look deseado.",
+      "Requerido. Sube imágenes de referencia, markups del cliente, screenshots, fotos marcadas o notas/PDFs que muestren el look deseado y cualquier área problemática. Hasta 10 archivos por carga.",
     filesSelected: "archivo(s) seleccionado(s)",
     reviewOnlyNotice:
       "Enviar para revisión no solicita pago. Revisamos los archivos y el alcance seleccionado primero, luego mandamos una factura/link de pago. El trabajo empieza después del pago de la factura.",
@@ -527,7 +536,7 @@ const T = {
     safetyText:
       "Ofrecemos visuales de intención de diseño, láminas conceptuales, cleanup de drafting y apoyo de presentación white-label. No ofrecemos ingeniería, survey legal, revisión de código, trámite de permisos, garantía de aprobación, planos sellados/estampados, cálculos estructurales, diseño de utilities o documentos de control de construcción.",
     fillRequired:
-      "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, al menos un archivo, confirma que es un solo cliente/proyecto y elige al menos un servicio.",
+      "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, fotos del proyecto, referencias/markups, confirma que es un solo cliente/proyecto y elige al menos un servicio. Para primera configuración white-label, agrega el nombre de compañía y sube el logo si elegiste subir logo.",
     quoteBlocksCheckout:
       "Todos los pedidos se revisan primero. Mandamos la factura/link de pago después de revisar el alcance y los archivos.",
     add: "Agregar",
@@ -1479,6 +1488,7 @@ function emptyProjectFiles(): ProjectFileUploads {
   return {
     photos: null,
     surveyDocs: null,
+    titleBlockFiles: null,
     logoFiles: null,
     references: null,
   };
@@ -1488,9 +1498,14 @@ function hasAnyProjectFile(files: ProjectFileUploads) {
   return Boolean(
     files.photos?.length ||
       files.surveyDocs?.length ||
+      files.titleBlockFiles?.length ||
       files.logoFiles?.length ||
       files.references?.length
   );
+}
+
+function hasRequiredProjectFiles(files: ProjectFileUploads) {
+  return Boolean(files.photos?.length && files.references?.length);
 }
 
 function summarizeFileList(files: FileList | null) {
@@ -1506,6 +1521,7 @@ function buildFileSummary(files: ProjectFileUploads) {
   return {
     photos: summarizeFileList(files.photos),
     survey_docs: summarizeFileList(files.surveyDocs),
+    title_block_files: summarizeFileList(files.titleBlockFiles),
     logo_files: summarizeFileList(files.logoFiles),
     references: summarizeFileList(files.references),
   };
@@ -1519,6 +1535,7 @@ function appendFileList(formData: FormData, key: string, files: FileList | null)
 function appendProjectFiles(formData: FormData, files: ProjectFileUploads) {
   appendFileList(formData, "photos", files.photos);
   appendFileList(formData, "survey_docs", files.surveyDocs);
+  appendFileList(formData, "title_block_files", files.titleBlockFiles);
   appendFileList(formData, "logo_files", files.logoFiles);
   appendFileList(formData, "references", files.references);
 }
@@ -2625,6 +2642,8 @@ function FilePicker({
   files,
   onChange,
   lang,
+  maxFiles,
+  requiredField = false,
 }: {
   title: string;
   help: string;
@@ -2632,21 +2651,59 @@ function FilePicker({
   files: FileList | null;
   onChange: (files: FileList | null) => void;
   lang: Lang;
+  maxFiles?: number;
+  requiredField?: boolean;
 }) {
   const t = T[lang];
+  const [error, setError] = useState<string | null>(null);
+  const maxHelp = maxFiles
+    ? lang === "es"
+      ? `Máximo ${maxFiles} archivos por carga.`
+      : `Up to ${maxFiles} files per upload.`
+    : null;
+
   return (
     <label className="grid gap-2 rounded-3xl border border-slate-200 bg-white p-4">
-      <span className="text-sm font-semibold text-slate-700">{title}</span>
-      <span className="text-xs leading-5 text-slate-500">{help}</span>
+      <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+        {title}
+        {requiredField ? (
+          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-amber-800">
+            {lang === "es" ? "Requerido" : "Required"}
+          </span>
+        ) : null}
+      </span>
+      <span className="text-xs leading-5 text-slate-500">
+        {help}
+        {maxHelp ? <span className="mt-1 block font-semibold text-slate-600">{maxHelp}</span> : null}
+      </span>
       <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-slate-500">
         <Upload className="mb-3 h-5 w-5" />
         <input
           type="file"
           accept={accept}
           multiple
-          onChange={(e) => onChange(e.target.files)}
+          onChange={(e) => {
+            const nextFiles = e.target.files;
+            if (maxFiles && nextFiles && nextFiles.length > maxFiles) {
+              setError(
+                lang === "es"
+                  ? `Sube máximo ${maxFiles} archivos por vez.`
+                  : `Please upload no more than ${maxFiles} files at once.`
+              );
+              e.currentTarget.value = "";
+              onChange(null);
+              return;
+            }
+            setError(null);
+            onChange(nextFiles);
+          }}
           className="block w-full text-xs"
         />
+        {error ? (
+          <div className="mt-3 rounded-xl bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700">
+            {error}
+          </div>
+        ) : null}
         {files?.length ? (
           <div className="mt-3 rounded-xl bg-white px-3 py-2 text-xs font-semibold text-emerald-800">
             {files.length} {t.filesSelected}
@@ -2673,158 +2730,86 @@ function ProjectInfoCard({
   lang: Lang;
 }) {
   const t = T[lang];
+  const isNewPartner = contact.partnerProfileMode === "new";
+  const partnerContactTitle =
+    lang === "es" ? "Contacto y perfil white-label" : "Contact and white-label profile";
+  const partnerContactHelp =
+    lang === "es"
+      ? "Primero dinos quién manda el pedido y cómo debe aparecer tu compañía en los entregables. Si ya tenemos tu información guardada, mantenemos esta parte corta."
+      : "First tell us who is sending the order and how your company should appear on the deliverables. If your company info is already on file, we keep this part short.";
+  const existingProfileNote =
+    lang === "es"
+      ? "Usaremos la información de compañía que ya tenemos guardada. Solo completa tu contacto actual y cualquier cambio en las notas del proyecto."
+      : "We will use the company information already on file. Just complete your current contact info and note any changes in the project details.";
+  const firstProfileNote =
+    lang === "es"
+      ? "Primer pedido: completa la configuración de marca para que no tengamos que preguntarte después por logo, title block, nombre de cliente o cómo mostrar la dirección."
+      : "First order: complete the branding setup so we do not have to ask later for logo, title block, client name, or address display preferences.";
+  const projectSectionTitle =
+    lang === "es" ? "Información del proyecto" : "Project information";
+  const projectSectionHelp =
+    lang === "es"
+      ? "Todo en este pedido debe ser para un solo cliente/proyecto. Para otro cliente o propiedad, inicia un pedido nuevo para mantener el Order ID limpio."
+      : "Everything in this order must be for one client/project. For a different client or property, start a new order so the Order ID stays clean.";
+  const logoRequired = isNewPartner && contact.logoOption === "upload";
+
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
       <h3 className="text-2xl font-black tracking-tight text-slate-900">
         {t.projectInfo}
       </h3>
-      <div className="mt-5 grid gap-4 md:grid-cols-2">
-        <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {t.clientName}
-          </span>
-          <input
-            required
-            value={contact.clientName}
-            onChange={(e) => onChange({ clientName: e.target.value })}
-            placeholder={t.clientNamePlaceholder}
-            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
-          />
-        </label>
-        <label className="grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {t.clientEmail}
-          </span>
-          <input
-            type="email"
-            required
-            value={contact.customerEmail}
-            onChange={(e) => onChange({ customerEmail: e.target.value })}
-            placeholder={t.clientEmailPlaceholder}
-            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
-          />
-        </label>
-        <label className="grid gap-2 md:col-span-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {t.clientPhone}
-          </span>
-          <input
-            type="tel"
-            required
-            value={contact.customerPhone}
-            onChange={(e) => onChange({ customerPhone: e.target.value })}
-            placeholder={t.clientPhonePlaceholder}
-            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
-          />
-        </label>
-        <label className="grid gap-2 md:col-span-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {t.projectAddress}
-          </span>
-          <input
-            required
-            value={contact.projectAddress}
-            onChange={(e) => onChange({ projectAddress: e.target.value })}
-            placeholder={t.projectAddressPlaceholder}
-            className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
-          />
-          <div className="text-xs leading-5 text-slate-500">{t.projectLabelHelp}</div>
-        </label>
-        <label className="grid gap-2 md:col-span-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {t.notes}
-          </span>
-          <textarea
-            required
-            value={contact.notes}
-            onChange={(e) => onChange({ notes: e.target.value })}
-            maxLength={NOTES_LIMIT}
-            rows={6}
-            placeholder={t.notesPlaceholder}
-            className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-slate-400"
-          />
-          <div className="text-right text-xs text-slate-400">
-            {contact.notes.length} / {NOTES_LIMIT}
-          </div>
-          <div className="text-xs text-slate-500">{t.notesHelp}</div>
-        </label>
-      </div>
 
-      <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
-        <div className="font-black">{t.remoteInfoTitle}</div>
-        <p className="mt-1 leading-6">{t.remoteInfoText}</p>
-      </div>
-
-      <div className="mt-5 rounded-[1.75rem] border border-emerald-200 bg-emerald-50 p-5 md:p-6">
-        <h4 className="text-lg font-black text-slate-900">{t.projectFilesTitle}</h4>
-        <p className="mt-2 text-sm leading-6 text-slate-600">{t.projectFilesHelp}</p>
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
-          <FilePicker
-            title={t.uploadPhotos}
-            help={t.uploadPhotosHelp}
-            accept="image/*"
-            files={projectFiles.photos}
-            onChange={(files) => onFilesChange({ photos: files })}
-            lang={lang}
-          />
-          <FilePicker
-            title={t.uploadSurvey}
-            help={t.uploadSurveyHelp}
-            accept=".pdf,image/*,.dwg,.dxf"
-            files={projectFiles.surveyDocs}
-            onChange={(files) => onFilesChange({ surveyDocs: files })}
-            lang={lang}
-          />
-          <FilePicker
-            title={t.logoOption}
-            help={t.uploadLogoHelp}
-            accept="image/*,.pdf,.ai,.eps,.svg"
-            files={projectFiles.logoFiles}
-            onChange={(files) => onFilesChange({ logoFiles: files })}
-            lang={lang}
-          />
-          <FilePicker
-            title={t.uploadReferences}
-            help={t.uploadReferencesHelp}
-            accept="image/*,.pdf,.txt,.doc,.docx"
-            files={projectFiles.references}
-            onChange={(files) => onFilesChange({ references: files })}
-            lang={lang}
-          />
-        </div>
-      </div>
-
-      <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-        <div className="font-black text-slate-900">{t.safetyTitle}</div>
-        <p className="mt-1 leading-6">{t.safetyText}</p>
-      </div>
-
-      <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm">
-        <input
-          type="checkbox"
-          required
-          checked={contact.sameProjectConfirmed}
-          onChange={(e) => onChange({ sameProjectConfirmed: e.target.checked })}
-          className="mt-1"
-        />
-        <span>
-          <span className="block font-black text-slate-900">
-            {t.sameProjectConfirm}
-          </span>
-          <span className="mt-1 block text-xs leading-5 text-slate-600">
-            {t.sameProjectHelp}
-          </span>
-        </span>
-      </label>
-
-      <div className="mt-8 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 md:p-6">
+      <div className="mt-5 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 md:p-6">
         <div className="flex flex-col gap-2">
           <h4 className="text-lg font-black text-slate-900">
-            {t.partnerProfileTitle}
+            {partnerContactTitle}
           </h4>
           <p className="text-sm leading-6 text-slate-600">
-            {t.partnerProfileHelp}
+            {partnerContactHelp}
           </p>
+        </div>
+
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <label className="grid gap-2">
+            <span className="text-sm font-semibold text-slate-700">
+              {t.clientName}
+            </span>
+            <input
+              required
+              value={contact.clientName}
+              onChange={(e) => onChange({ clientName: e.target.value })}
+              placeholder={t.clientNamePlaceholder}
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+            />
+          </label>
+
+          <label className="grid gap-2">
+            <span className="text-sm font-semibold text-slate-700">
+              {t.clientEmail}
+            </span>
+            <input
+              type="email"
+              required
+              value={contact.customerEmail}
+              onChange={(e) => onChange({ customerEmail: e.target.value })}
+              placeholder={t.clientEmailPlaceholder}
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+            />
+          </label>
+
+          <label className="grid gap-2 md:col-span-2">
+            <span className="text-sm font-semibold text-slate-700">
+              {t.clientPhone}
+            </span>
+            <input
+              type="tel"
+              required
+              value={contact.customerPhone}
+              onChange={(e) => onChange({ customerPhone: e.target.value })}
+              placeholder={t.clientPhonePlaceholder}
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+            />
+          </label>
         </div>
 
         <div className="mt-5 grid gap-3">
@@ -2853,57 +2838,274 @@ function ProjectInfoCard({
           </label>
         </div>
 
+        {isNewPartner ? (
+          <div className="mt-5 rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-950">
+            {firstProfileNote}
+          </div>
+        ) : (
+          <div className="mt-5 rounded-[1.5rem] border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-600">
+            {existingProfileNote}
+          </div>
+        )}
+
+        {isNewPartner ? (
+          <>
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              <label className="grid gap-2 md:col-span-2">
+                <span className="text-sm font-semibold text-slate-700">
+                  {t.whiteLabelCompany}
+                </span>
+                <input
+                  required={isNewPartner}
+                  value={contact.whiteLabelCompany}
+                  onChange={(e) => onChange({ whiteLabelCompany: e.target.value })}
+                  placeholder={t.whiteLabelCompanyPlaceholder}
+                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+                />
+              </label>
+
+              <label className="grid gap-2">
+                <span className="text-sm font-semibold text-slate-700">
+                  {t.whiteLabelPhone}
+                </span>
+                <input
+                  value={contact.whiteLabelPhone}
+                  onChange={(e) => onChange({ whiteLabelPhone: e.target.value })}
+                  placeholder={t.whiteLabelPhonePlaceholder}
+                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+                />
+              </label>
+
+              <label className="grid gap-2">
+                <span className="text-sm font-semibold text-slate-700">
+                  {t.whiteLabelEmail}
+                </span>
+                <input
+                  type="email"
+                  value={contact.whiteLabelEmail}
+                  onChange={(e) => onChange({ whiteLabelEmail: e.target.value })}
+                  placeholder={t.whiteLabelEmailPlaceholder}
+                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+                />
+              </label>
+
+              <label className="grid gap-2 md:col-span-2">
+                <span className="text-sm font-semibold text-slate-700">
+                  {t.whiteLabelWebsite}
+                </span>
+                <input
+                  value={contact.whiteLabelWebsite}
+                  onChange={(e) => onChange({ whiteLabelWebsite: e.target.value })}
+                  placeholder={t.whiteLabelWebsitePlaceholder}
+                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+                />
+              </label>
+            </div>
+
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                <div className="text-sm font-semibold text-slate-700">
+                  {t.clientNameDisplay}
+                </div>
+                <div className="mt-3 grid gap-2 text-sm">
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="clientNameDisplay"
+                      checked={contact.clientNameDisplay === "show"}
+                      onChange={() => onChange({ clientNameDisplay: "show" })}
+                    />
+                    <span>{t.showClientName}</span>
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="clientNameDisplay"
+                      checked={contact.clientNameDisplay === "hide"}
+                      onChange={() => onChange({ clientNameDisplay: "hide" })}
+                    />
+                    <span>{t.hideClientName}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                <div className="text-sm font-semibold text-slate-700">
+                  {t.addressDisplay}
+                </div>
+                <div className="mt-3 grid gap-2 text-sm">
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="addressDisplay"
+                      checked={contact.addressDisplay === "full"}
+                      onChange={() => onChange({ addressDisplay: "full" })}
+                    />
+                    <span>{t.addressFull}</span>
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="addressDisplay"
+                      checked={contact.addressDisplay === "street"}
+                      onChange={() => onChange({ addressDisplay: "street" })}
+                    />
+                    <span>{t.addressStreet}</span>
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="addressDisplay"
+                      checked={contact.addressDisplay === "project"}
+                      onChange={() => onChange({ addressDisplay: "project" })}
+                    />
+                    <span>{t.addressProject}</span>
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="addressDisplay"
+                      checked={contact.addressDisplay === "hide"}
+                      onChange={() => onChange({ addressDisplay: "hide" })}
+                    />
+                    <span>{t.addressHide}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
+              <div className="text-sm font-semibold text-slate-700">
+                {t.logoOption}
+              </div>
+              <div className="mt-3 grid gap-2 text-sm">
+                <label className="flex cursor-pointer items-center gap-2">
+                  <input
+                    type="radio"
+                    name="logoOption"
+                    checked={contact.logoOption === "upload"}
+                    onChange={() => onChange({ logoOption: "upload" })}
+                  />
+                  <span>{t.logoUpload}</span>
+                </label>
+                <label className="flex cursor-pointer items-center gap-2">
+                  <input
+                    type="radio"
+                    name="logoOption"
+                    checked={contact.logoOption === "text-only"}
+                    onChange={() => onChange({ logoOption: "text-only" })}
+                  />
+                  <span>{t.logoTextOnly}</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="mt-5 grid gap-4 md:grid-cols-2">
+              {contact.logoOption === "upload" ? (
+                <FilePicker
+                  title={t.uploadLogoFiles}
+                  help={t.uploadLogoHelp}
+                  accept="image/*,.pdf,.ai,.eps,.svg"
+                  files={projectFiles.logoFiles}
+                  onChange={(files) => onFilesChange({ logoFiles: files })}
+                  lang={lang}
+                  maxFiles={5}
+                  requiredField={logoRequired}
+                />
+              ) : null}
+              <FilePicker
+                title={t.uploadTitleBlock}
+                help={t.uploadTitleBlockHelp}
+                accept=".pdf,image/*,.dwg,.dxf,.ai,.eps,.svg"
+                files={projectFiles.titleBlockFiles}
+                onChange={(files) => onFilesChange({ titleBlockFiles: files })}
+                lang={lang}
+                maxFiles={5}
+              />
+            </div>
+
+            <label className="mt-5 grid gap-2">
+              <span className="text-sm font-semibold text-slate-700">
+                {t.brandingNotes}
+              </span>
+              <textarea
+                value={contact.brandingNotes}
+                onChange={(e) => onChange({ brandingNotes: e.target.value })}
+                rows={3}
+                placeholder={t.brandingNotesPlaceholder}
+                className="rounded-3xl border border-slate-200 bg-white p-4 text-sm outline-none focus:border-slate-400"
+              />
+            </label>
+
+            <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+              <input
+                type="checkbox"
+                checked={contact.rememberPartnerInfo}
+                onChange={(e) => onChange({ rememberPartnerInfo: e.target.checked })}
+                className="mt-1"
+              />
+              <span>
+                <span className="block font-semibold text-slate-800">
+                  {t.rememberPartnerInfo}
+                </span>
+                <span className="mt-1 block text-xs leading-5 text-slate-500">
+                  {t.rememberHelp}
+                </span>
+              </span>
+            </label>
+          </>
+        ) : null}
+      </div>
+
+      <div className="mt-6 rounded-[1.75rem] border border-slate-200 bg-white p-5 md:p-6">
+        <div className="flex flex-col gap-2">
+          <h4 className="text-lg font-black text-slate-900">
+            {projectSectionTitle}
+          </h4>
+          <p className="text-sm leading-6 text-slate-600">
+            {projectSectionHelp}
+          </p>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-950">
+          {t.oneProjectSummary}
+        </div>
+
         <div className="mt-5 grid gap-4 md:grid-cols-2">
           <label className="grid gap-2 md:col-span-2">
             <span className="text-sm font-semibold text-slate-700">
-              {t.whiteLabelCompany}
+              {t.projectAddress}
             </span>
             <input
-              value={contact.whiteLabelCompany}
-              onChange={(e) => onChange({ whiteLabelCompany: e.target.value })}
-              placeholder={t.whiteLabelCompanyPlaceholder}
+              required
+              value={contact.projectAddress}
+              onChange={(e) => onChange({ projectAddress: e.target.value })}
+              placeholder={t.projectAddressPlaceholder}
               className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
             />
+            <div className="text-xs leading-5 text-slate-500">{t.projectLabelHelp}</div>
           </label>
 
-          <label className="grid gap-2">
+          <label className="grid gap-2 md:col-span-2">
             <span className="text-sm font-semibold text-slate-700">
-              {t.whiteLabelPhone}
+              {t.notes}
             </span>
-            <input
-              value={contact.whiteLabelPhone}
-              onChange={(e) => onChange({ whiteLabelPhone: e.target.value })}
-              placeholder={t.whiteLabelPhonePlaceholder}
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+            <textarea
+              required
+              value={contact.notes}
+              onChange={(e) => onChange({ notes: e.target.value })}
+              maxLength={NOTES_LIMIT}
+              rows={6}
+              placeholder={t.notesPlaceholder}
+              className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-slate-400"
             />
+            <div className="text-right text-xs text-slate-400">
+              {contact.notes.length} / {NOTES_LIMIT}
+            </div>
+            <div className="text-xs text-slate-500">{t.notesHelp}</div>
           </label>
 
-          <label className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-700">
-              {t.whiteLabelEmail}
-            </span>
-            <input
-              type="email"
-              value={contact.whiteLabelEmail}
-              onChange={(e) => onChange({ whiteLabelEmail: e.target.value })}
-              placeholder={t.whiteLabelEmailPlaceholder}
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
-            />
-          </label>
-
-          <label className="grid gap-2">
-            <span className="text-sm font-semibold text-slate-700">
-              {t.whiteLabelWebsite}
-            </span>
-            <input
-              value={contact.whiteLabelWebsite}
-              onChange={(e) => onChange({ whiteLabelWebsite: e.target.value })}
-              placeholder={t.whiteLabelWebsitePlaceholder}
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
-            />
-          </label>
-
-          <label className="grid gap-2">
+          <label className="grid gap-2 md:col-span-2">
             <span className="text-sm font-semibold text-slate-700">
               {t.desiredDeliveryDate}
             </span>
@@ -2917,139 +3119,66 @@ function ProjectInfoCard({
           </label>
         </div>
 
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
-          <div className="rounded-2xl border border-slate-200 bg-white p-4">
-            <div className="text-sm font-semibold text-slate-700">
-              {t.clientNameDisplay}
-            </div>
-            <div className="mt-3 grid gap-2 text-sm">
-              <label className="flex cursor-pointer items-center gap-2">
-                <input
-                  type="radio"
-                  name="clientNameDisplay"
-                  checked={contact.clientNameDisplay === "show"}
-                  onChange={() => onChange({ clientNameDisplay: "show" })}
-                />
-                <span>{t.showClientName}</span>
-              </label>
-              <label className="flex cursor-pointer items-center gap-2">
-                <input
-                  type="radio"
-                  name="clientNameDisplay"
-                  checked={contact.clientNameDisplay === "hide"}
-                  onChange={() => onChange({ clientNameDisplay: "hide" })}
-                />
-                <span>{t.hideClientName}</span>
-              </label>
-            </div>
-          </div>
+        <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+          <div className="font-black">{t.remoteInfoTitle}</div>
+          <p className="mt-1 leading-6">{t.remoteInfoText}</p>
+        </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-4">
-            <div className="text-sm font-semibold text-slate-700">
-              {t.addressDisplay}
-            </div>
-            <div className="mt-3 grid gap-2 text-sm">
-              <label className="flex cursor-pointer items-center gap-2">
-                <input
-                  type="radio"
-                  name="addressDisplay"
-                  checked={contact.addressDisplay === "full"}
-                  onChange={() => onChange({ addressDisplay: "full" })}
-                />
-                <span>{t.addressFull}</span>
-              </label>
-              <label className="flex cursor-pointer items-center gap-2">
-                <input
-                  type="radio"
-                  name="addressDisplay"
-                  checked={contact.addressDisplay === "street"}
-                  onChange={() => onChange({ addressDisplay: "street" })}
-                />
-                <span>{t.addressStreet}</span>
-              </label>
-              <label className="flex cursor-pointer items-center gap-2">
-                <input
-                  type="radio"
-                  name="addressDisplay"
-                  checked={contact.addressDisplay === "project"}
-                  onChange={() => onChange({ addressDisplay: "project" })}
-                />
-                <span>{t.addressProject}</span>
-              </label>
-              <label className="flex cursor-pointer items-center gap-2">
-                <input
-                  type="radio"
-                  name="addressDisplay"
-                  checked={contact.addressDisplay === "hide"}
-                  onChange={() => onChange({ addressDisplay: "hide" })}
-                />
-                <span>{t.addressHide}</span>
-              </label>
-            </div>
+        <div className="mt-5 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
+          <h5 className="text-base font-black text-slate-900">{t.projectFilesTitle}</h5>
+          <p className="mt-2 text-sm leading-6 text-slate-600">{t.projectFilesHelp}</p>
+          <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <FilePicker
+              title={t.uploadPhotos}
+              help={t.uploadPhotosHelp}
+              accept="image/*"
+              files={projectFiles.photos}
+              onChange={(files) => onFilesChange({ photos: files })}
+              lang={lang}
+              maxFiles={10}
+              requiredField
+            />
+            <FilePicker
+              title={t.uploadReferences}
+              help={t.uploadReferencesHelp}
+              accept="image/*,.pdf,.txt,.doc,.docx"
+              files={projectFiles.references}
+              onChange={(files) => onFilesChange({ references: files })}
+              lang={lang}
+              maxFiles={10}
+              requiredField
+            />
+            <FilePicker
+              title={t.uploadSurvey}
+              help={t.uploadSurveyHelp}
+              accept=".pdf,image/*,.dwg,.dxf"
+              files={projectFiles.surveyDocs}
+              onChange={(files) => onFilesChange({ surveyDocs: files })}
+              lang={lang}
+              maxFiles={10}
+            />
           </div>
         </div>
 
-        <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
-          <div className="text-sm font-semibold text-slate-700">
-            {t.logoOption}
-          </div>
-          <div className="mt-3 grid gap-2 text-sm">
-            <label className="flex cursor-pointer items-center gap-2">
-              <input
-                type="radio"
-                name="logoOption"
-                checked={contact.logoOption === "upload"}
-                onChange={() => onChange({ logoOption: "upload" })}
-              />
-              <span>{t.logoUpload}</span>
-            </label>
-            <label className="flex cursor-pointer items-center gap-2">
-              <input
-                type="radio"
-                name="logoOption"
-                checked={contact.logoOption === "on-file"}
-                onChange={() => onChange({ logoOption: "on-file" })}
-              />
-              <span>{t.logoOnFile}</span>
-            </label>
-            <label className="flex cursor-pointer items-center gap-2">
-              <input
-                type="radio"
-                name="logoOption"
-                checked={contact.logoOption === "text-only"}
-                onChange={() => onChange({ logoOption: "text-only" })}
-              />
-              <span>{t.logoTextOnly}</span>
-            </label>
-          </div>
+        <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+          <div className="font-black text-slate-900">{t.safetyTitle}</div>
+          <p className="mt-1 leading-6">{t.safetyText}</p>
         </div>
 
-        <label className="mt-5 grid gap-2">
-          <span className="text-sm font-semibold text-slate-700">
-            {t.brandingNotes}
-          </span>
-          <textarea
-            value={contact.brandingNotes}
-            onChange={(e) => onChange({ brandingNotes: e.target.value })}
-            rows={3}
-            placeholder={t.brandingNotesPlaceholder}
-            className="rounded-3xl border border-slate-200 bg-white p-4 text-sm outline-none focus:border-slate-400"
-          />
-        </label>
-
-        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
+        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm">
           <input
             type="checkbox"
-            checked={contact.rememberPartnerInfo}
-            onChange={(e) => onChange({ rememberPartnerInfo: e.target.checked })}
+            required
+            checked={contact.sameProjectConfirmed}
+            onChange={(e) => onChange({ sameProjectConfirmed: e.target.checked })}
             className="mt-1"
           />
           <span>
-            <span className="block font-semibold text-slate-800">
-              {t.rememberPartnerInfo}
+            <span className="block font-black text-slate-900">
+              {t.sameProjectConfirm}
             </span>
-            <span className="mt-1 block text-xs leading-5 text-slate-500">
-              {t.rememberHelp}
+            <span className="mt-1 block text-xs leading-5 text-slate-600">
+              {t.sameProjectHelp}
             </span>
           </span>
         </label>
@@ -3609,13 +3738,18 @@ export default function App() {
   const useDeposit = !hasTbd && total >= 500;
   const isQuickConceptOnly =
     pricedItems.length === 1 && pricedItems[0]?.service.id === "photo-concept-start";
+  const hasRequiredBranding =
+    contact.partnerProfileMode === "existing" ||
+    (Boolean(contact.whiteLabelCompany.trim()) &&
+      (contact.logoOption !== "upload" || Boolean(projectFiles.logoFiles?.length)));
   const hasRequiredContact =
     Boolean(contact.clientName.trim()) &&
     Boolean(contact.customerEmail.trim()) &&
     Boolean(contact.customerPhone.trim()) &&
     Boolean(contact.projectAddress.trim()) &&
     Boolean(contact.notes.trim()) &&
-    hasAnyProjectFile(projectFiles) &&
+    hasRequiredProjectFiles(projectFiles) &&
+    hasRequiredBranding &&
     contact.sameProjectConfirmed;
   const canProceed = hasRequiredContact && pricedItems.length > 0;
 
@@ -3828,6 +3962,7 @@ export default function App() {
             onToggle={toggleService}
             onQty={updateQty}
             onDiscuss={openHelpWithService}
+            onSample={openSample}
           />
         );
       case "build-one":
