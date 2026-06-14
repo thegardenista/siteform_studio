@@ -27,6 +27,19 @@ type ClientNameDisplay = "show" | "hide";
 type AddressDisplay = "full" | "street" | "project" | "hide";
 type LogoOption = "upload" | "on-file" | "text-only";
 type TitleBlockOption = "standard-clean" | "standard-compact" | "upload";
+type TitleBlockSampleOption = "standard-clean" | "standard-compact";
+type MissingRequirementKey =
+  | "selectedService"
+  | "partnerName"
+  | "partnerEmail"
+  | "partnerPhone"
+  | "whiteLabelCompany"
+  | "projectLabel"
+  | "projectDetails"
+  | "projectPhotos"
+  | "surveyDocs"
+  | "references"
+  | "sameProject";
 type ViewState = "LANDING" | "MENU" | "CONFIG" | "SUCCESS";
 type PricingType = "size" | "flat" | "unit" | "hourly" | "quote" | "percentage";
 type NoticeKind = "hard" | "soft" | null;
@@ -83,6 +96,8 @@ interface OrderContact {
   customerEmail: string;
   customerPhone: string;
   projectAddress: string;
+  clientTitleBlockName: string;
+  clientTitleBlockAddress: string;
   notes: string;
   measurementObject: string;
   measurementWidth: string;
@@ -201,10 +216,16 @@ const T = {
     clientEmailPlaceholder: "Email for this order",
     clientPhone: "Your phone number",
     clientPhonePlaceholder: "Example: 512-555-0198",
-    projectAddress: "Project / client label",
-    projectAddressPlaceholder: "Example: Garcia backyard, Oak St deck, Project 24-018, or full address",
+    projectAddress: "Internal project label / job name",
+    projectAddressPlaceholder: "Example: Garcia backyard, Oak St deck, Project 24-018",
     projectLabelHelp:
-      "Required. Use a client name, street name, project nickname, or internal job number. Everything selected in this order must belong to this one client/project.",
+      "Required for order tracking. This does not have to appear on the title block. Everything selected in this order must belong to this one client/project.",
+    clientTitleBlockName: "Client name for title block",
+    clientTitleBlockNamePlaceholder: "Optional. Leave blank if you do not want a client name shown.",
+    clientTitleBlockAddress: "Client address for title block",
+    clientTitleBlockAddressPlaceholder: "Optional. Full address, street only, or leave blank.",
+    titleBlockSample: "View sample",
+    missingRequiredTitle: "Still needed before you submit",
     notes: "Project details",
     notesHelp:
       "Required. Tell us what you need, what the client wants, what area or structure this is, budget/timing concerns, and any site limits.",
@@ -227,7 +248,7 @@ const T = {
       "Remote orders must include usable dimensions before work starts. Send a survey, site plan, measured sketch, or marked-up plan/photo with width, depth, height, roof/eave-to-ground height, house-to-fence distances, slopes, steps, walls, and level changes where relevant.",
     projectFilesTitle: "Project files for this order",
     projectFilesHelp:
-      "Upload files for this one client/project. References/markups are required. A survey/site plan/measured base is required for all services except Quick Photo Concept. Project photos are helpful for most orders and required for Quick Photo Concept. For a different client, start a separate order.",
+      "Upload files for this one client/project. References/markups/measurement notes are required. A survey/site plan/measured base is required for all services except Quick Photo Concept. Project photos are required for Quick Photo Concept and helpful for other orders. For a different client, start a separate order.",
     uploadPhotosHelp:
       "Required for Quick Photo Concept; optional but helpful for other services. Clear photos of the project area, facade, patio, yard, problem spots, slope, roof/eaves, fence lines, or existing conditions. Up to 10 files per upload.",
     uploadSurveyHelp:
@@ -270,15 +291,15 @@ const T = {
     whiteLabelEmailPlaceholder: "Leave blank if you do not want an email shown",
     whiteLabelWebsite: "Website / social handle",
     whiteLabelWebsitePlaceholder: "Website, Instagram, Facebook, or other public contact",
-    desiredDeliveryDate: "Desired delivery date (optional)",
+    desiredDeliveryDate: "Desired delivery date",
     desiredDeliveryDateHelp: "Rush timing still depends on our schedule.",
-    quickDeliveryFixed: "Quick Photo Concept turnaround: about 1 business day after review, invoice/payment, and usable photo/files.",
-    clientNameDisplay: "Client name display",
-    showClientName: "Show client name",
-    hideClientName: "Do not show client name",
-    addressDisplay: "Project/address display",
-    addressFull: "Full address",
-    addressStreet: "Street only",
+    quickDeliveryFixed: "Quick Photo Concept turnaround: about 1 business day for usable photo orders.",
+    clientNameDisplay: "Client information for title block",
+    showClientName: "Client name to show on title block",
+    hideClientName: "Leave blank if you do not want it shown",
+    addressDisplay: "Client address for title block",
+    addressFull: "Client address to show on title block",
+    addressStreet: "Leave blank if you do not want it shown",
     addressProject: "Project name only",
     addressHide: "Do not show address",
     logoOption: "Logo option",
@@ -451,10 +472,16 @@ const T = {
     clientEmailPlaceholder: "Email para este pedido",
     clientPhone: "Tu teléfono",
     clientPhonePlaceholder: "Ejemplo: 512-555-0198",
-    projectAddress: "Etiqueta de proyecto / cliente",
-    projectAddressPlaceholder: "Ejemplo: patio Garcia, deck Oak St, Proyecto 24-018 o dirección completa",
+    projectAddress: "Etiqueta interna de proyecto / trabajo",
+    projectAddressPlaceholder: "Ejemplo: patio Garcia, deck Oak St, Proyecto 24-018",
     projectLabelHelp:
-      "Requerido. Usa nombre del cliente, calle, apodo del proyecto o número interno. Todo lo seleccionado en este pedido debe pertenecer a este mismo cliente/proyecto.",
+      "Requerido para organizar el pedido. No tiene que aparecer en el title block. Todo lo seleccionado en este pedido debe pertenecer a este mismo cliente/proyecto.",
+    clientTitleBlockName: "Nombre del cliente para title block",
+    clientTitleBlockNamePlaceholder: "Opcional. Déjalo vacío si no quieres mostrar nombre de cliente.",
+    clientTitleBlockAddress: "Dirección del cliente para title block",
+    clientTitleBlockAddressPlaceholder: "Opcional. Dirección completa, solo calle, o vacío.",
+    titleBlockSample: "Ver ejemplo",
+    missingRequiredTitle: "Falta antes de enviar",
     notes: "Detalles del proyecto",
     notesHelp:
       "Requerido. Di qué necesitas, qué quiere el cliente, qué área o estructura es, presupuesto/plazos y cualquier límite del sitio.",
@@ -520,15 +547,15 @@ const T = {
     whiteLabelEmailPlaceholder: "Déjalo vacío si no quieres mostrar email",
     whiteLabelWebsite: "Website / usuario social",
     whiteLabelWebsitePlaceholder: "Website, Instagram, Facebook u otro contacto público",
-    desiredDeliveryDate: "Fecha deseada de entrega (opcional)",
+    desiredDeliveryDate: "Fecha deseada de entrega",
     desiredDeliveryDateHelp: "La entrega urgente todavía depende de nuestra agenda.",
-    quickDeliveryFixed: "Quick Photo Concept: normalmente 1 día hábil después de review, invoice/payment y foto/archivos utilizables.",
-    clientNameDisplay: "Mostrar nombre del cliente",
-    showClientName: "Mostrar nombre del cliente",
-    hideClientName: "No mostrar nombre del cliente",
-    addressDisplay: "Mostrar proyecto / dirección",
-    addressFull: "Dirección completa",
-    addressStreet: "Solo calle",
+    quickDeliveryFixed: "Quick Photo Concept: normalmente 1 día hábil para pedidos con foto utilizable.",
+    clientNameDisplay: "Información del cliente para title block",
+    showClientName: "Nombre del cliente para title block",
+    hideClientName: "Déjalo vacío si no quieres mostrarlo",
+    addressDisplay: "Dirección del cliente para title block",
+    addressFull: "Dirección del cliente para title block",
+    addressStreet: "Déjalo vacío si no quieres mostrarlo",
     addressProject: "Solo nombre del proyecto",
     addressHide: "No mostrar dirección",
     logoOption: "Opción de logo",
@@ -592,7 +619,7 @@ const T = {
     safetyText:
       "Ofrecemos visuales de intención de diseño, láminas conceptuales, cleanup de drafting y apoyo de presentación white-label. No ofrecemos ingeniería, survey legal, revisión de código, trámite de permisos, garantía de aprobación, planos sellados/estampados, cálculos estructurales, diseño de utilities o documentos de control de construcción.",
     fillRequired:
-      "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, referencias/markups obligatorios, survey/site plan o base medida cuando se requiera, confirma que es un solo cliente/proyecto y elige al menos un servicio. Para primera configuración white-label, agrega el nombre de compañía.",
+      "Completa los campos/archivos requeridos marcados, elige al menos un servicio y confirma un cliente/proyecto antes de enviar.",
     quoteBlocksCheckout:
       "Todos los pedidos se revisan primero. Mandamos la factura/link de pago después de revisar el alcance y los archivos.",
     add: "Agregar",
@@ -676,6 +703,12 @@ const T = {
     showcaseStep3: "HOA, cómputos, plantación, hardscape, iluminación",
     showcaseCta: "Nuestros servicios",
     showcaseBrowse: "",
+    followTitle: "Seguir / contacto",
+    socialInstagram: "Instagram",
+    socialFacebook: "Facebook",
+    socialTikTok: "TikTok",
+    socialYouTube: "YouTube",
+    socialEmail: "Email",
     showcaseNote: "Empieza con un concepto rápido o elige el servicio que encaja con el trabajo.",
   },
 } as const;
@@ -1482,6 +1515,8 @@ function emptyContact(): OrderContact {
     customerEmail: "",
     customerPhone: "",
     projectAddress: "",
+    clientTitleBlockName: "",
+    clientTitleBlockAddress: "",
     notes: "",
     measurementObject: "",
     measurementWidth: "",
@@ -1516,6 +1551,8 @@ function getInitialContact(): OrderContact {
       ...base,
       ...saved,
       projectAddress: "",
+      clientTitleBlockName: "",
+      clientTitleBlockAddress: "",
       notes: "",
       measurementObject: "",
       measurementWidth: "",
@@ -1561,8 +1598,8 @@ function buildWhiteLabelPayload(contact: OrderContact) {
     email_on_sheets: sanitizeText(contact.whiteLabelEmail),
     website_or_social: sanitizeText(contact.whiteLabelWebsite),
     desired_delivery_date: sanitizeText(contact.desiredDeliveryDate),
-    client_name_display: contact.clientNameDisplay,
-    address_display: contact.addressDisplay,
+    client_name_for_title_block: sanitizeText(contact.clientTitleBlockName),
+    client_address_for_title_block: sanitizeText(contact.clientTitleBlockAddress),
     logo_option: contact.logoOption,
     title_block_option: contact.titleBlockOption,
     branding_notes: sanitizeText(contact.brandingNotes),
@@ -2180,6 +2217,85 @@ function SampleModal({
   );
 }
 
+function makeTitleBlockSampleSvg(label: string, variant: "clean" | "compact") {
+  const isCompact = variant === "compact";
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760"><rect width="1200" height="760" fill="#f8fafc"/><rect x="70" y="70" width="1060" height="620" rx="34" fill="white" stroke="#cbd5e1" stroke-width="3"/><rect x="90" y="560" width="1020" height="110" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/><text x="120" y="620" font-family="Arial" font-size="32" font-weight="800" fill="#0f172a">${label}</text><text x="120" y="650" font-family="Arial" font-size="18" fill="#64748b">Sample blank title block / sheet frame</text>${isCompact ? '<rect x="865" y="580" width="220" height="70" fill="white" stroke="#cbd5e1" stroke-width="2"/><text x="885" y="622" font-family="Arial" font-size="18" fill="#64748b">Logo / info</text>' : '<line x1="90" y1="615" x2="1110" y2="615" stroke="#cbd5e1" stroke-width="2"/>'}</svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+function TitleBlockSampleModal({
+  option,
+  lang,
+  onClose,
+}: {
+  option: TitleBlockSampleOption;
+  lang: Lang;
+  onClose: () => void;
+}) {
+  const isClean = option === "standard-clean";
+  const title = isClean
+    ? lang === "es"
+      ? "Title block estándar limpio"
+      : "Standard clean SiteForm title block"
+    : lang === "es"
+      ? "Title block estándar compacto"
+      : "Standard compact SiteForm title block";
+  const image = isClean
+    ? "/samples/title-block-clean.jpg"
+    : "/samples/title-block-compact.jpg";
+  const fallback = makeTitleBlockSampleSvg(title, isClean ? "clean" : "compact");
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+      <div className="max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-[2rem] bg-white p-4 shadow-2xl md:p-6">
+        <div className="mb-4 flex items-start justify-between gap-4">
+          <div>
+            <div className="text-xs font-black uppercase tracking-[0.2em] text-emerald-700">
+              {lang === "es" ? "Ejemplo" : "Sample"}
+            </div>
+            <h3 className="mt-1 text-xl font-black tracking-tight text-slate-900 md:text-2xl">
+              {title}
+            </h3>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+              {lang === "es"
+                ? "Puedes usar este title block estándar o subir tu propio archivo. Reemplaza esta imagen después con el sample real."
+                : "You can use this standard title block or upload your own file. Replace this placeholder with your real sample later."}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-full border border-slate-200 bg-white p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+            aria-label={lang === "es" ? "Cerrar ejemplo" : "Close sample"}
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="rounded-[1.5rem] border border-slate-200 bg-slate-100 p-3">
+          <img
+            src={image}
+            onError={(event) => {
+              event.currentTarget.onerror = null;
+              event.currentTarget.src = fallback;
+            }}
+            alt={title}
+            className="w-full rounded-2xl bg-white object-contain"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+}
+
 // ─── Landing Showcase ───────────────────────────────────────────────────────
 
 function InstagramIcon({ className = "h-5 w-5" }: { className?: string }) {
@@ -2730,6 +2846,7 @@ function FilePicker({
   lang,
   maxFiles,
   requiredField = false,
+  missing = false,
 }: {
   title: string;
   help: string;
@@ -2739,6 +2856,7 @@ function FilePicker({
   lang: Lang;
   maxFiles?: number;
   requiredField?: boolean;
+  missing?: boolean;
 }) {
   const t = T[lang];
   const [error, setError] = useState<string | null>(null);
@@ -2749,11 +2867,11 @@ function FilePicker({
     : null;
 
   return (
-    <label className="grid gap-2 rounded-3xl border border-slate-200 bg-white p-4">
+    <label className={`grid gap-2 rounded-3xl border p-4 ${missing ? "border-rose-300 bg-rose-50" : "border-slate-200 bg-white"}`}>
       <span className="flex items-center gap-2 text-sm font-semibold text-slate-700">
         {title}
         {requiredField ? (
-          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-amber-800">
+          <span className={`rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wide ${missing ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800"}`}>
             {lang === "es" ? "Requerido" : "Required"}
           </span>
         ) : null}
@@ -2809,6 +2927,7 @@ function ProjectInfoCard({
   onFilesChange,
   lang,
   pathId,
+  missingKeys,
 }: {
   contact: OrderContact;
   projectFiles: ProjectFileUploads;
@@ -2816,6 +2935,7 @@ function ProjectInfoCard({
   onFilesChange: (patch: Partial<ProjectFileUploads>) => void;
   lang: Lang;
   pathId: string;
+  missingKeys: MissingRequirementKey[];
 }) {
   const t = T[lang];
   const isNewPartner = contact.partnerProfileMode === "new";
@@ -2839,10 +2959,19 @@ function ProjectInfoCard({
     lang === "es"
       ? "Todo en este pedido debe ser para un solo cliente/proyecto. Aquí va la etiqueta del cliente/proyecto, detalles, medidas, links y archivos."
       : "Everything in this order must be for one client/project. Add the client/project label, details, measurements, links, and files here.";
+  const [titleBlockSample, setTitleBlockSample] = useState<TitleBlockSampleOption | null>(null);
   const logoRequired = false;
+  const isQuickPhoto = pathId === "quick-sale";
+  const isMissing = (key: MissingRequirementKey) => missingKeys.includes(key);
+  const inputClass = (missing: boolean, base = "rounded-2xl px-4 py-3 text-sm outline-none") =>
+    `${base} border ${missing ? "border-rose-300 bg-rose-50 focus:border-rose-500" : "border-slate-200 bg-white focus:border-slate-400"}`;
   const timelineTitle = lang === "es" ? "Tiempo estimado" : "Estimated production timing";
   const timelineText =
-    pathId === "build-one"
+    pathId === "quick-sale"
+      ? lang === "es"
+        ? "Quick Photo Concept normalmente se entrega en alrededor de 1 día hábil después de review, invoice/payment y una foto utilizable."
+        : "Quick Photo Concept is usually delivered in about 1 business day after review, invoice/payment, and a usable photo."
+      : pathId === "build-one"
       ? lang === "es"
         ? "Decks, pergolas, patio covers, carports y outdoor structures normalmente toman alrededor de 2 semanas calendario después de review, invoice/payment y archivos utilizables."
         : "Decks, pergolas, patio covers, carports, and outdoor structures usually take about 2 calendar weeks after review, invoice/payment, and usable files."
@@ -2884,7 +3013,7 @@ function ProjectInfoCard({
               value={contact.clientName}
               onChange={(e) => onChange({ clientName: e.target.value })}
               placeholder={t.clientNamePlaceholder}
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+              className={inputClass(isMissing("partnerName"))}
             />
           </label>
 
@@ -2898,7 +3027,7 @@ function ProjectInfoCard({
               value={contact.customerEmail}
               onChange={(e) => onChange({ customerEmail: e.target.value })}
               placeholder={t.clientEmailPlaceholder}
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+              className={inputClass(isMissing("partnerEmail"))}
             />
           </label>
 
@@ -2914,7 +3043,7 @@ function ProjectInfoCard({
               value={contact.customerPhone}
               onChange={(e) => onChange({ customerPhone: formatPhoneInput(e.target.value) })}
               placeholder={t.clientPhonePlaceholder}
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+              className={inputClass(isMissing("partnerPhone"))}
             />
           </label>
         </div>
@@ -2967,7 +3096,7 @@ function ProjectInfoCard({
                   value={contact.whiteLabelCompany}
                   onChange={(e) => onChange({ whiteLabelCompany: e.target.value })}
                   placeholder={t.whiteLabelCompanyPlaceholder}
-                  className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+                  className={inputClass(isMissing("whiteLabelCompany"))}
                 />
               </label>
 
@@ -3055,7 +3184,7 @@ function ProjectInfoCard({
                 <div className="text-sm font-semibold text-slate-700">{t.titleBlockOption}</div>
                 <p className="mt-2 text-xs leading-5 text-slate-500">{t.uploadTitleBlockHelp}</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-3">
-                  <label className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "standard-clean" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
+                  <label onClick={() => setTitleBlockSample("standard-clean")} className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "standard-clean" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
                     <input
                       type="radio"
                       name="titleBlockOption"
@@ -3064,12 +3193,13 @@ function ProjectInfoCard({
                       className="sr-only"
                     />
                     <span className="block font-black text-slate-900">{t.titleBlockStandardClean}</span>
+                    <span className="mt-2 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-emerald-800">{t.titleBlockSample}</span>
                     <span className="mt-3 block h-16 rounded-xl border border-slate-200 bg-white p-2">
                       <span className="block h-3 w-28 rounded bg-slate-200" />
                       <span className="mt-6 block h-3 w-full rounded bg-slate-100" />
                     </span>
                   </label>
-                  <label className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "standard-compact" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
+                  <label onClick={() => setTitleBlockSample("standard-compact")} className={`cursor-pointer rounded-2xl border p-4 text-sm ${contact.titleBlockOption === "standard-compact" ? "border-emerald-400 bg-emerald-50" : "border-slate-200 bg-slate-50"}`}>
                     <input
                       type="radio"
                       name="titleBlockOption"
@@ -3078,6 +3208,7 @@ function ProjectInfoCard({
                       className="sr-only"
                     />
                     <span className="block font-black text-slate-900">{t.titleBlockStandardCompact}</span>
+                    <span className="mt-2 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-emerald-800">{t.titleBlockSample}</span>
                     <span className="mt-3 grid h-16 grid-cols-[1fr_auto] gap-2 rounded-xl border border-slate-200 bg-white p-2">
                       <span className="space-y-2"><span className="block h-3 w-24 rounded bg-slate-200" /><span className="block h-3 w-36 rounded bg-slate-100" /></span>
                       <span className="h-full w-16 rounded bg-slate-100" />
@@ -3166,88 +3297,41 @@ function ProjectInfoCard({
               value={contact.projectAddress}
               onChange={(e) => onChange({ projectAddress: e.target.value })}
               placeholder={t.projectAddressPlaceholder}
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
+              className={inputClass(isMissing("projectLabel"))}
             />
             <div className="text-xs leading-5 text-slate-500">{t.projectLabelHelp}</div>
           </label>
 
 
           <div className="grid gap-4 md:col-span-2 md:grid-cols-2">
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="text-sm font-semibold text-slate-700">
-                  {t.clientNameDisplay}
-                </div>
-                <div className="mt-3 grid gap-2 text-sm">
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="clientNameDisplay"
-                      checked={contact.clientNameDisplay === "show"}
-                      onChange={() => onChange({ clientNameDisplay: "show" })}
-                    />
-                    <span>{t.showClientName}</span>
-                  </label>
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="clientNameDisplay"
-                      checked={contact.clientNameDisplay === "hide"}
-                      onChange={() => onChange({ clientNameDisplay: "hide" })}
-                    />
-                    <span>{t.hideClientName}</span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="text-sm font-semibold text-slate-700">
-                  {t.addressDisplay}
-                </div>
-                <div className="mt-3 grid gap-2 text-sm">
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="addressDisplay"
-                      checked={contact.addressDisplay === "full"}
-                      onChange={() => onChange({ addressDisplay: "full" })}
-                    />
-                    <span>{t.addressFull}</span>
-                  </label>
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="addressDisplay"
-                      checked={contact.addressDisplay === "street"}
-                      onChange={() => onChange({ addressDisplay: "street" })}
-                    />
-                    <span>{t.addressStreet}</span>
-                  </label>
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="addressDisplay"
-                      checked={contact.addressDisplay === "project"}
-                      onChange={() => onChange({ addressDisplay: "project" })}
-                    />
-                    <span>{t.addressProject}</span>
-                  </label>
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="addressDisplay"
-                      checked={contact.addressDisplay === "hide"}
-                      onChange={() => onChange({ addressDisplay: "hide" })}
-                    />
-                    <span>{t.addressHide}</span>
-                  </label>
-                </div>
-              </div>
-            </div>
+            <label className="grid gap-2">
+              <span className="text-sm font-semibold text-slate-700">
+                {t.showClientName}
+              </span>
+              <input
+                value={contact.clientTitleBlockName}
+                onChange={(e) => onChange({ clientTitleBlockName: e.target.value })}
+                placeholder={t.clientTitleBlockNamePlaceholder}
+                className={inputClass(false)}
+              />
+            </label>
+            <label className="grid gap-2">
+              <span className="text-sm font-semibold text-slate-700">
+                {t.addressFull}
+              </span>
+              <input
+                value={contact.clientTitleBlockAddress}
+                onChange={(e) => onChange({ clientTitleBlockAddress: e.target.value })}
+                placeholder={t.clientTitleBlockAddressPlaceholder}
+                className={inputClass(false)}
+              />
+            </label>
+          </div>
 
           <div className="md:col-span-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-950">
             {lang === "es"
-              ? "Elige cómo debe aparecer esta información del cliente/proyecto en las láminas. Si no quieres mostrar el nombre del cliente, podemos usar solo etiqueta interna, calle o nombre del proyecto."
-              : "Choose how this client/project information should appear on the sheets. If you do not want to show the client name, we can use only an internal label, street, or project name."}
+              ? "Si dejas el nombre o la dirección vacíos, no los mostraremos en el title block."
+              : "If you leave the client name or address blank, we will not show it on the title block."}
           </div>
 
           <label className="grid gap-2 md:col-span-2">
@@ -3261,7 +3345,7 @@ function ProjectInfoCard({
               maxLength={NOTES_LIMIT}
               rows={6}
               placeholder={t.notesPlaceholder}
-              className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-slate-400"
+              className={inputClass(isMissing("projectDetails"), "rounded-3xl p-4 text-sm outline-none")}
             />
             <div className="text-right text-xs text-slate-400">
               {contact.notes.length} / {NOTES_LIMIT}
@@ -3334,7 +3418,7 @@ function ProjectInfoCard({
 
           {pathId === "quick-sale" ? (
             <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-950 md:col-span-2">
-              <span className="font-black">{t.desiredDeliveryDate}: </span>
+              <span className="font-black">{lang === "es" ? "Tiempo de entrega" : "Turnaround"}: </span>
               {t.quickDeliveryFixed}
             </div>
           ) : (
@@ -3358,10 +3442,12 @@ function ProjectInfoCard({
           <p className="mt-1 leading-6">{timelineText}</p>
         </div>
 
-        <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
-          <div className="font-black">{t.remoteInfoTitle}</div>
-          <p className="mt-1 leading-6">{t.remoteInfoText}</p>
-        </div>
+        {!isQuickPhoto ? (
+          <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+            <div className="font-black">{t.remoteInfoTitle}</div>
+            <p className="mt-1 leading-6">{t.remoteInfoText}</p>
+          </div>
+        ) : null}
 
         <div className="mt-5 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
           <h5 className="text-base font-black text-slate-900">{t.projectFilesTitle}</h5>
@@ -3375,6 +3461,8 @@ function ProjectInfoCard({
               onChange={(files) => onFilesChange({ photos: files })}
               lang={lang}
               maxFiles={10}
+              requiredField={pathId === "quick-sale"}
+              missing={isMissing("projectPhotos")}
             />
             <FilePicker
               title={t.uploadReferences}
@@ -3385,6 +3473,7 @@ function ProjectInfoCard({
               lang={lang}
               maxFiles={10}
               requiredField
+              missing={isMissing("references")}
             />
             <FilePicker
               title={t.uploadSurvey}
@@ -3395,6 +3484,7 @@ function ProjectInfoCard({
               lang={lang}
               maxFiles={10}
               requiredField={pathId !== "quick-sale"}
+              missing={isMissing("surveyDocs")}
             />
           </div>
         </div>
@@ -3404,7 +3494,7 @@ function ProjectInfoCard({
           <p className="mt-1 leading-6">{t.safetyText}</p>
         </div>
 
-        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm">
+        <label className={`mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border p-4 text-sm ${isMissing("sameProject") ? "border-rose-300 bg-rose-50" : "border-emerald-200 bg-emerald-50"}`}>
           <input
             type="checkbox"
             required
@@ -3422,6 +3512,13 @@ function ProjectInfoCard({
           </span>
         </label>
       </div>
+      {titleBlockSample ? (
+        <TitleBlockSampleModal
+          option={titleBlockSample}
+          lang={lang}
+          onClose={() => setTitleBlockSample(null)}
+        />
+      ) : null}
     </section>
   );
 }
@@ -3443,6 +3540,7 @@ function SummarySidebar({
   onReset,
   onCheckout,
   cleared,
+  missingRequirementKeys,
 }: {
   lang: Lang;
   items: SummaryLine[];
@@ -3458,6 +3556,7 @@ function SummarySidebar({
   onReset: () => void;
   onCheckout: () => void;
   cleared: boolean;
+  missingRequirementKeys: MissingRequirementKey[];
 }) {
   const t = T[lang];
   return (
@@ -3561,6 +3660,16 @@ function SummarySidebar({
             {cleared ? t.cleared : t.resetCart}
           </button>
         </div>
+        {missingRequirementKeys.length ? (
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+            <div className="font-black">{t.missingRequiredTitle}</div>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-xs leading-5">
+              {missingRequirementKeys.map((key) => (
+                <li key={key}>{getMissingRequirementLabel(key, lang)}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
         <button
           type="button"
           disabled={!canCheckout || isCreating}
@@ -3774,7 +3883,54 @@ const STRUCTURE_MAIN_BUILD_IDS = [
   "outdoor-kitchen",
 ];
 
-export default function App() {
+export default 
+function getPhoneDigitCount(value: string) {
+  return value.replace(/\D/g, "").length;
+}
+
+function getMissingRequirementKeys(
+  contact: OrderContact,
+  files: ProjectFileUploads,
+  pathId: string,
+  selectedItemCount: number
+): MissingRequirementKey[] {
+  const missing: MissingRequirementKey[] = [];
+  const requiresSurveyFiles = pathId !== "quick-sale";
+  const requiresPhotoFiles = pathId === "quick-sale";
+
+  if (selectedItemCount <= 0) missing.push("selectedService");
+  if (!contact.clientName.trim()) missing.push("partnerName");
+  if (!contact.customerEmail.trim()) missing.push("partnerEmail");
+  if (getPhoneDigitCount(contact.customerPhone) < 10) missing.push("partnerPhone");
+  if (contact.partnerProfileMode === "new" && !contact.whiteLabelCompany.trim()) missing.push("whiteLabelCompany");
+  if (!contact.projectAddress.trim()) missing.push("projectLabel");
+  if (!contact.notes.trim()) missing.push("projectDetails");
+  if (requiresPhotoFiles && !files.photos?.length) missing.push("projectPhotos");
+  if (requiresSurveyFiles && !files.surveyDocs?.length) missing.push("surveyDocs");
+  if (!files.references?.length) missing.push("references");
+  if (!contact.sameProjectConfirmed) missing.push("sameProject");
+
+  return missing;
+}
+
+function getMissingRequirementLabel(key: MissingRequirementKey, lang: Lang) {
+  const labels: Record<MissingRequirementKey, { en: string; es: string }> = {
+    selectedService: { en: "Choose at least one service", es: "Elige al menos un servicio" },
+    partnerName: { en: "Your name / company", es: "Tu nombre / compañía" },
+    partnerEmail: { en: "Your email", es: "Tu email" },
+    partnerPhone: { en: "Your phone number — 10 digits", es: "Tu teléfono — 10 dígitos" },
+    whiteLabelCompany: { en: "Company name to show on deliverables", es: "Nombre de compañía para entregables" },
+    projectLabel: { en: "Internal project label / job name", es: "Etiqueta interna del proyecto" },
+    projectDetails: { en: "Project details", es: "Detalles del proyecto" },
+    projectPhotos: { en: "Project photos for Quick Photo Concept", es: "Fotos para Quick Photo Concept" },
+    surveyDocs: { en: "Survey / site plan / measured base", es: "Survey / plano del sitio / base medida" },
+    references: { en: "References / markups / measurements", es: "Referencias / markups / medidas" },
+    sameProject: { en: "Confirm one client/project for this order", es: "Confirma un cliente/proyecto para este pedido" },
+  };
+  return labels[key][lang];
+}
+
+function App() {
   const [lang, setLang] = useState<Lang>("en");
   const [view, setView] = useState<ViewState>("LANDING");
   const [activePath, setActivePath] = useState<string>("quick-sale");
@@ -3977,21 +4133,13 @@ export default function App() {
   const useDeposit = !hasTbd && total >= 500;
   const isQuickConceptOnly =
     pricedItems.length === 1 && pricedItems[0]?.service.id === "photo-concept-start";
-  const hasRequiredBranding =
-    contact.partnerProfileMode === "existing" ||
-    Boolean(contact.whiteLabelCompany.trim());
-  const requiresSurveyFiles = activePath !== "quick-sale";
-  const requiresPhotoFiles = activePath === "quick-sale";
-  const hasRequiredContact =
-    Boolean(contact.clientName.trim()) &&
-    Boolean(contact.customerEmail.trim()) &&
-    Boolean(contact.customerPhone.trim()) &&
-    Boolean(contact.projectAddress.trim()) &&
-    Boolean(contact.notes.trim()) &&
-    hasRequiredProjectFiles(projectFiles, requiresSurveyFiles, requiresPhotoFiles) &&
-    hasRequiredBranding &&
-    contact.sameProjectConfirmed;
-  const canProceed = hasRequiredContact && pricedItems.length > 0;
+  const missingRequirementKeys = getMissingRequirementKeys(
+    contact,
+    projectFiles,
+    activePath,
+    pricedItems.length
+  );
+  const canProceed = missingRequirementKeys.length === 0;
 
   const summaryLines: SummaryLine[] = pricedItems.map((item) => ({
     title: translateServiceTitle(item.service, lang),
@@ -4121,6 +4269,8 @@ export default function App() {
       customer_phone: sanitizeText(contact.customerPhone),
       project_address: sanitizeText(contact.projectAddress),
       project_client_label: sanitizeText(contact.projectAddress),
+        client_name_for_title_block: sanitizeText(contact.clientTitleBlockName),
+        client_address_for_title_block: sanitizeText(contact.clientTitleBlockAddress),
       same_client_project_confirmed: contact.sameProjectConfirmed,
       full_notes: sanitizeText(contact.notes),
       measurement_object: sanitizeText(contact.measurementObject),
@@ -4504,6 +4654,7 @@ export default function App() {
                 }
                 lang={lang}
                 pathId={activePath}
+                missingKeys={missingRequirementKeys}
               />
               {checkoutNotice ? (
                 <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
@@ -4526,6 +4677,7 @@ export default function App() {
               onReset={resetCart}
               onCheckout={createCheckout}
               cleared={cleared}
+              missingRequirementKeys={missingRequirementKeys}
             />
           </div>
         )}
