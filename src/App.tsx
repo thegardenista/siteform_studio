@@ -111,7 +111,7 @@ const WHATSAPP_NUMBER = "15551234567";
 const T = {
   en: {
     header: "Scope Builder",
-    subheader: "Drafting, visuals, and plan support for builders and landscape pros",
+    subheader: "White-label drafting and visuals for outdoor pros",
     selectPath: "What does this job need?",
     selectPathHelp:
       "Choose the service group for this job. After you enter, you will only see the options for that category.",
@@ -119,15 +119,18 @@ const T = {
     back: "Back to menu",
     reviewOrder: "Review order",
     propertySize: "Property size",
-    projectInfo: "Billing and project info",
-    clientName: "Client name",
-    clientEmail: "Client email",
-    projectAddress: "Project address",
-    notes: "Project details / Notes",
+    projectInfo: "Contact and project details",
+    clientName: "Your name / company",
+    clientNamePlaceholder: "Name or company we should contact",
+    clientEmail: "Your email",
+    clientEmailPlaceholder: "Email for this order",
+    projectAddress: "Project name or address (optional)",
+    projectAddressPlaceholder: "Example: Addison backyard, Oak St project, or full address",
+    notes: "Project details",
     notesHelp:
-      "Use this for a short but useful project description before checkout. Full project intake happens after payment.",
+      "Use this for a short useful project description. Add the full address only if it is needed. Full project intake happens after payment.",
     notesPlaceholder:
-      "Example: Front yard only, xeriscape preferred, gate stays, retaining wall may be needed near driveway.",
+      "Example: Addison backyard. Need quick concept from one photo. Client wants a patio cover. Exact address can be shared later if needed.",
     quickHelp: "Need help choosing?",
     quickHelpTitle: "Questions?",
     quickHelpText:
@@ -169,7 +172,7 @@ const T = {
     termsLine:
       "Stripe checkout should include Terms of Service consent and the Terms & Rules link.",
     fillRequired:
-      "Add client name, client email, and at least one payable service.",
+      "Add your name/company, your email, and at least one payable service.",
     quoteBlocksCheckout:
       "Quote-based or estate items need manual follow-up before payment.",
     add: "Add",
@@ -233,19 +236,19 @@ const T = {
     uploadWidgetNote:
       "Replace these file fields with Uploadcare or Cloudinary widget when backend is connected.",
     showcaseBadge: "Try it on a real job",
-    showcaseTitle: "Visuals that help close the job.",
+    showcaseTitle: "White-label design support for outdoor pros.",
     showcaseDesc:
-      "Send one site photo. Get a clear concept visual adjusted to the project, not just blindly generated. If the client moves forward, add takeoffs, plans, or specialty sheets next.",
-    showcaseStep1: "Use one photo to test the idea before committing to full scope.",
-    showcaseStep2: "Show the concept to the homeowner and move the sale forward faster.",
-    showcaseStep3: "Need more depth? Add layout support, takeoffs, grading, HOA, or CRZ sheets.",
-    showcaseCta: "Try 1 Quick Concept",
-    showcaseBrowse: "See all services",
-    showcaseNote: "Best first step for builders who want to test the workflow on one real job.",
+      "SiteForm Studio helps builders, landscape companies, and designers turn rough site info into clear visuals, simple plan sheets, and presentation support — under your brand, behind the scenes.",
+    showcaseStep1: "Quick photo concepts when you need one fast visual to move a client forward.",
+    showcaseStep2: "Drafting and 3D support for decks, pergolas, kitchens, yard layouts, and outdoor features.",
+    showcaseStep3: "Specialty sheets for HOA, client review, takeoffs, planting, hardscape, lighting, or drainage discussion.",
+    showcaseCta: "Try Quick Photo Concept",
+    showcaseBrowse: "See services",
+    showcaseNote: "Start with one quick concept, or choose the service path that fits the job.",
   },
   es: {
     header: "Scope Builder",
-    subheader: "Planos, visuales y apoyo técnico para constructores y profesionales del landscape",
+    subheader: "Dibujo y visuales white-label para profesionales de exterior",
     selectPath: "¿Qué necesita este trabajo?",
     selectPathHelp:
       "Elige el grupo de servicios para este trabajo. Cuando entras, solo verás las opciones de esa categoría.",
@@ -253,15 +256,18 @@ const T = {
     back: "Volver al menú",
     reviewOrder: "Revisar pedido",
     propertySize: "Tamaño del lote",
-    projectInfo: "Datos para factura y proyecto",
-    clientName: "Nombre del cliente",
-    clientEmail: "Email del cliente",
-    projectAddress: "Dirección del proyecto",
-    notes: "Detalles del proyecto / notas",
+    projectInfo: "Contacto y detalles del proyecto",
+    clientName: "Tu nombre / compañía",
+    clientNamePlaceholder: "Nombre o compañía para contactar",
+    clientEmail: "Tu email",
+    clientEmailPlaceholder: "Email para este pedido",
+    projectAddress: "Nombre del proyecto o dirección (opcional)",
+    projectAddressPlaceholder: "Ejemplo: patio Addison, proyecto Oak St o dirección completa",
+    notes: "Detalles del proyecto",
     notesHelp:
-      "Usa esto para una descripción corta pero útil antes del pago. El formulario completo del proyecto viene después del pago.",
+      "Usa esto para una descripción corta y útil. Agrega la dirección completa solo si hace falta. El formulario completo del proyecto viene después del pago.",
     notesPlaceholder:
-      "Ejemplo: Solo frente, xeriscape preferido, la puerta se queda, puede hacer falta muro de contención cerca de la entrada.",
+      "Ejemplo: Patio trasero Addison. Necesito concepto rápido desde una foto. El cliente quiere una cubierta de patio. La dirección exacta se puede compartir después si hace falta.",
     quickHelp: "¿Necesitas ayuda para elegir?",
     quickHelpTitle: "¿Preguntas?",
     quickHelpText:
@@ -303,7 +309,7 @@ const T = {
     termsLine:
       "El pago por Stripe debe incluir aceptación de los Términos de Servicio y enlace a Terms & Rules.",
     fillRequired:
-      "Agrega nombre del cliente, email del cliente y al menos un servicio pagable.",
+      "Agrega tu nombre/compañía, tu email y al menos un servicio pagable.",
     quoteBlocksCheckout:
       "Las partidas por cotizar o estate necesitan seguimiento manual antes del pago.",
     add: "Agregar",
@@ -367,15 +373,15 @@ const T = {
     uploadWidgetNote:
       "Sustituye estos campos por un widget de Uploadcare o Cloudinary cuando conectes el backend.",
     showcaseBadge: "Pruébalo en un trabajo real",
-    showcaseTitle: "Visuales que ayudan a cerrar el trabajo.",
+    showcaseTitle: "Apoyo de diseño white-label para profesionales de exterior.",
     showcaseDesc:
-      "Manda una foto del sitio. Recibe una visual conceptual clara ajustada al proyecto, no generada a ciegas. Si el cliente avanza, agrega cómputos, planos o láminas especiales.",
-    showcaseStep1: "Usa una foto para probar la idea antes de comprometerte con el alcance completo.",
-    showcaseStep2: "Muestra el concepto al dueño y avanza la venta más rápido.",
-    showcaseStep3: "¿Necesitas más detalle? Agrega apoyo de layout, cómputos, concepto de nivelación, HOA o láminas CRZ.",
-    showcaseCta: "Probar 1 concepto rápido",
+      "SiteForm Studio ayuda a constructores, compañías de landscape y diseñadores a convertir información básica del sitio en visuales claras, planos simples y apoyo de presentación — bajo tu marca y detrás de escena.",
+    showcaseStep1: "Conceptos rápidos desde foto cuando necesitas una visual para avanzar con el cliente.",
+    showcaseStep2: "Apoyo de dibujo y 3D para decks, pérgolas, cocinas, layouts de patio y piezas exteriores.",
+    showcaseStep3: "Láminas especiales para HOA, revisión del cliente, cómputos, plantación, hardscape, iluminación o drenaje conceptual.",
+    showcaseCta: "Probar concepto desde foto",
     showcaseBrowse: "Ver servicios",
-    showcaseNote: "El mejor primer paso para constructores que quieren probar el flujo en un trabajo real.",
+    showcaseNote: "Empieza con un concepto rápido o elige el servicio que encaja con el trabajo.",
   },
 } as const;
 
@@ -1548,59 +1554,51 @@ function LandingShowcase({
   const t = T[lang];
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-      <div className="grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-center">
-        <div>
-          <h2 className="text-4xl font-black tracking-tight text-slate-900 md:text-5xl">
-            {t.showcaseTitle}
-          </h2>
-          <p className="mt-4 max-w-xl text-base leading-8 text-slate-600 md:text-lg">
-            {t.showcaseDesc}
-          </p>
-          <div className="mt-6 grid gap-3 text-sm text-slate-700">
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 font-black text-emerald-700">
-                1
-              </span>
-              <span>{t.showcaseStep1}</span>
+      <div className="mx-auto max-w-4xl">
+        <h2 className="text-4xl font-black tracking-tight text-slate-900 md:text-6xl">
+          {t.showcaseTitle}
+        </h2>
+        <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 md:text-lg">
+          {t.showcaseDesc}
+        </p>
+        <div className="mt-6 grid gap-3 text-sm text-slate-700 md:grid-cols-3">
+          <div className="rounded-2xl bg-slate-50 p-4 leading-6">
+            <div className="mb-2 text-xs font-black uppercase tracking-wide text-slate-500">
+              01
             </div>
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 font-black text-emerald-700">
-                2
-              </span>
-              <span>{t.showcaseStep2}</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 font-black text-emerald-700">
-                3
-              </span>
-              <span>{t.showcaseStep3}</span>
-            </div>
+            {t.showcaseStep1}
           </div>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              onClick={onTryQuickConcept}
-              className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-6 py-4 text-base font-black text-white shadow-lg transition hover:bg-emerald-700"
-            >
-              {t.showcaseCta}
-            </button>
-            <a
-              href="#service-groups"
-              className="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-6 py-4 text-base font-black text-slate-900 hover:bg-slate-50"
-            >
-              {t.showcaseBrowse}
-            </a>
+          <div className="rounded-2xl bg-slate-50 p-4 leading-6">
+            <div className="mb-2 text-xs font-black uppercase tracking-wide text-slate-500">
+              02
+            </div>
+            {t.showcaseStep2}
           </div>
-          <p className="mt-3 text-xs leading-6 text-slate-500">
-            {t.showcaseNote}
-          </p>
+          <div className="rounded-2xl bg-slate-50 p-4 leading-6">
+            <div className="mb-2 text-xs font-black uppercase tracking-wide text-slate-500">
+              03
+            </div>
+            {t.showcaseStep3}
+          </div>
         </div>
-        <BeforeAfterSlider
-          beforeImage="/images/showcase-original.jpg"
-          afterImage="/images/showcase-concept.jpg"
-          beforeLabel={lang === "es" ? "ORIGINAL" : "ORIGINAL"}
-          afterLabel={lang === "es" ? "CONCEPTO ADAPTADO" : "ADAPTED CONCEPT"}
-        />
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            onClick={onTryQuickConcept}
+            className="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-6 py-4 text-base font-black text-white shadow-lg transition hover:bg-emerald-700"
+          >
+            {t.showcaseCta}
+          </button>
+          <a
+            href="#service-groups"
+            className="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-6 py-4 text-base font-black text-slate-900 hover:bg-slate-50"
+          >
+            {t.showcaseBrowse}
+          </a>
+        </div>
+        <p className="mt-3 text-xs leading-6 text-slate-500">
+          {t.showcaseNote}
+        </p>
       </div>
     </section>
   );
@@ -2028,6 +2026,7 @@ function ProjectInfoCard({
           <input
             value={contact.clientName}
             onChange={(e) => onChange({ clientName: e.target.value })}
+            placeholder={t.clientNamePlaceholder}
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
           />
         </label>
@@ -2039,6 +2038,7 @@ function ProjectInfoCard({
             type="email"
             value={contact.customerEmail}
             onChange={(e) => onChange({ customerEmail: e.target.value })}
+            placeholder={t.clientEmailPlaceholder}
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
           />
         </label>
@@ -2049,6 +2049,7 @@ function ProjectInfoCard({
           <input
             value={contact.projectAddress}
             onChange={(e) => onChange({ projectAddress: e.target.value })}
+            placeholder={t.projectAddressPlaceholder}
             className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400"
           />
         </label>
@@ -2552,7 +2553,7 @@ export default function App() {
               sizeLabel: "Small",
               clientName: "Demo Client",
               customerEmail: "client@example.com",
-              projectAddress: "Project address",
+              projectAddress: "Project name or address (optional)",
               items: [],
             });
             setCheckoutNotice(t.previewMode);
