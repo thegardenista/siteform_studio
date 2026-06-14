@@ -3883,7 +3883,6 @@ const STRUCTURE_MAIN_BUILD_IDS = [
   "outdoor-kitchen",
 ];
 
-export default 
 function getPhoneDigitCount(value: string) {
   return value.replace(/\D/g, "").length;
 }
@@ -4705,3 +4704,5 @@ function App() {
     </div>
   );
 }
+
+export default App;
