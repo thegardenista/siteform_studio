@@ -160,7 +160,10 @@ const T = {
       "Required. Use a client name, street name, project nickname, or internal job number. Everything selected in this order must belong to this one client/project.",
     notes: "Project details",
     notesHelp:
-      "Required. Add what you need, what the feature or yard is, what files/photos you have, and any location notes. Full address is optional at this stage.",
+      "Required. Tell us what you need, what the feature or yard is, what files/photos you have, and any location notes. Full address is optional at this stage.",
+    remoteInfoTitle: "If there is no site visit",
+    remoteInfoText:
+      "Upload a survey or site plan if you have one, plus clear photos with dimensions marked on the images. We need width, depth, height, roof/eave-to-ground height, house-to-fence distances, and any important slopes, steps, walls, or level changes.",
     partnerProfileTitle: "Partner / white-label profile",
     partnerProfileHelp:
       "Tell us how your company info should appear on white-label PDFs and sheets. Repeat partners can ask us to use details already on file.",
@@ -257,13 +260,13 @@ const T = {
     warning: "Important",
     designPackageSection: "Yard design package",
     designPackageSectionDesc:
-      "Best if you want us to handle the landscape concept without choosing technical production pieces.",
+      "Simple yard design package: main plan, planting plan, and presentation renders for one design area. Built structures, extra specialty sheets, and professional 3D workflow live in separate sections.",
     startSection: "3D / rendering support",
     startSectionDesc:
-      "For designers and builders who know whether we should build a base model, work from uploaded documents, or render an existing 3D model.",
-    ideaSection: "Design input",
+      "Choose the base/model path first. Site Visit is an optional add-on if you want us to collect field photos, notes, and rough measurements ourselves.",
+    ideaSection: "Design role",
     ideaSectionDesc:
-      "Choose only one: you bring the layout idea, or we help develop the design direction.",
+      "Choose only one: we produce your design direction, or we lead the design brief before modeling/rendering.",
     afterLayout: "After layout",
     afterLayoutDesc:
       "At this point the layout is approved and treated as locked. From here you can order detailed plans and follow-up sheets.",
@@ -293,12 +296,12 @@ const T = {
     hardDependencyOutsideCity: "Add Site Visit first.",
     successTitle: "Project intake",
     successText:
-      "Upload photos, survey files, and the full scope after checkout or manual approval.",
+      "Upload photos, survey/site plan, marked measurements, and the full scope after checkout or manual approval.",
     uploadPhotos: "Project photos",
-    uploadSurvey: "Survey / PDFs",
+    uploadSurvey: "Survey / site plan / PDFs",
     detailedBrief: "Detailed scope",
     detailedBriefPlaceholder:
-      "Add the full project brief here. This is the right place for the long version.",
+      "Add the full project brief here. Include budget, client goals, site limits, and any measurements we should trust.",
     saveIntake: "Save intake",
     intakeSaved: "Intake saved",
     openProjectChat: "Open project chat",
@@ -350,6 +353,9 @@ const T = {
     notes: "Detalles del proyecto",
     notesHelp:
       "Requerido. Agrega qué necesitas, qué elemento o área es, qué archivos/fotos tienes y cualquier nota de ubicación. La dirección completa es opcional en esta etapa.",
+    remoteInfoTitle: "Si no hay visita al sitio",
+    remoteInfoText:
+      "Sube un survey o site plan si lo tienes, más fotos claras con medidas marcadas en las imágenes. Necesitamos ancho, profundidad, altura, altura de techo/eave al piso, distancias de casa a fence y cualquier pendiente, escalón, muro o cambio de nivel importante.",
     partnerProfileTitle: "Perfil de partner / white-label",
     partnerProfileHelp:
       "Dinos cómo debe aparecer la información de tu compañía en PDFs y láminas white-label. Partners repetidos pueden pedir que usemos los datos ya guardados.",
@@ -446,13 +452,13 @@ const T = {
     warning: "Importante",
     designPackageSection: "Paquete de diseño de patio",
     designPackageSectionDesc:
-      "Ideal si quieres que manejemos el concepto de landscape sin elegir piezas técnicas de producción.",
+      "Paquete simple de diseño de patio: plano principal, plano de plantación y renders de presentación para un área de diseño. Estructuras, láminas especiales extra y workflow profesional 3D van en secciones separadas.",
     startSection: "Apoyo 3D / renders",
     startSectionDesc:
-      "Para diseñadores y constructores que saben si debemos crear una base, trabajar con documentos enviados o renderizar un modelo 3D existente.",
-    ideaSection: "Apoyo de diseño",
+      "Primero elige la ruta de base/modelo. La visita al sitio es un add-on opcional si quieres que nosotros recojamos fotos, notas y medidas aproximadas en campo.",
+    ideaSection: "Rol de diseño",
     ideaSectionDesc:
-      "Elige solo una opción: tú traes la idea del layout o nosotros ayudamos a desarrollar la dirección de diseño.",
+      "Elige solo una opción: producimos tu dirección de diseño o lideramos el brief de diseño antes de modelar/renderizar.",
     afterLayout: "Después del layout",
     afterLayoutDesc:
       "En este punto el layout ya está aprobado y se trata como cerrado. Desde aquí puedes pedir planos detallados y láminas de seguimiento.",
@@ -482,12 +488,12 @@ const T = {
     hardDependencyOutsideCity: "Primero agrega Visita al sitio.",
     successTitle: "Formulario del proyecto",
     successText:
-      "Sube fotos, survey o levantamiento, y el alcance completo después del pago o revisión manual.",
+      "Sube fotos, survey/site plan, medidas marcadas y el alcance completo después del pago o revisión manual.",
     uploadPhotos: "Fotos del proyecto",
-    uploadSurvey: "Survey / levantamiento / PDFs",
+    uploadSurvey: "Survey / site plan / PDFs",
     detailedBrief: "Alcance detallado",
     detailedBriefPlaceholder:
-      "Agrega aquí la versión larga del proyecto. Este es el lugar correcto para el detalle completo.",
+      "Agrega aquí la versión larga del proyecto. Incluye presupuesto, metas del cliente, límites del sitio y cualquier medida que debemos usar.",
     saveIntake: "Guardar intake",
     intakeSaved: "Intake guardado",
     openProjectChat: "Abrir chat del proyecto",
@@ -551,13 +557,13 @@ const ENTRY_PATHS: EntryPath[] = [
     title: "Yard Design Package",
     titleEs: "Paquete de diseño de patio",
     description:
-      "Planting, layout, and simple design direction for one project area.",
+      "Main plan, planting plan, and presentation renders for one design area.",
     descriptionEs:
-      "Plantación, layout y dirección sencilla de diseño para un área del proyecto.",
+      "Plano principal, plano de plantación y renders de presentación para un área de diseño.",
     helper:
-      "Best when the yard area needs design thinking, not a separate deck, cover, or kitchen package.",
+      "Best when a contractor needs a yard design under their brand. Structures, extra sheets, and 3D-only work are separate sections.",
     helperEs:
-      "Ideal cuando el área del patio necesita diseño, no un paquete separado de deck, cubierta o cocina.",
+      "Ideal cuando un contractor necesita diseño de patio bajo su marca. Estructuras, láminas extra y trabajo solo 3D van separados.",
     cta: "Build yard package",
     ctaEs: "Armar paquete de patio",
   },
@@ -635,23 +641,23 @@ const STARTING_POINT_SERVICES: Service[] = [
   },
   {
     id: "survey-documents-start",
-    title: "Remote Base Plan + 3D Model",
+    title: "Base Plan + 3D Existing Model",
     category: "Start",
     icon: Map,
     pricingType: "size",
     prices: { small: 200, medium: 300, large: 450, estate: null },
     stripePriceId: null,
     short:
-      "No site visit. You send survey, photos, PDFs, sketches, or measurements, and we build the basic 2D and 3D model remotely.",
+      "We build a basic 2D base plan and existing-conditions 3D model from your survey, photos, measurements, PDFs, sketches, or field notes.",
     bestFor:
-      "Out-of-town jobs or jobs where enough information already exists.",
+      "Designers and builders who need the site traced into a clean base before design, rendering, or follow-up sheets.",
     youSend:
-      "Survey, photos, PDFs, redlines, dimensions, or even a hand-drawn sketch.",
+      "Survey or site plan if available, PDFs, redlines, clear photos, and dimensions marked on photos: width, depth, height, roof/eave-to-ground, house-to-fence distances, and important level changes. If you add Site Visit, we collect the field photos, notes, and rough measurements ourselves.",
     youGet:
-      "A base 2D plan and a 3D existing-conditions model built from your documents.",
+      "A basic AutoCAD/DWG-style 2D base plan and a simple 3D existing-conditions model. This is geometry and scale setup, not final materials or detailed render textures.",
     notIncluded:
-      "Site visit, legal survey work, engineering, permits, or final design.",
-    helper: "Choose this OR site visit base/model OR existing 3D model. It is one starting point, not an add-on.",
+      "Site visit unless added separately, legal survey work, engineering, permits, final design, planting plan, detailed render materials, or final presentation renders.",
+    helper: "Choose this OR Your 3D Model, We Render It. Add Site Visit separately if we need to collect the site information.",
   },
   {
     id: "client-model-start",
@@ -672,7 +678,7 @@ const STARTING_POINT_SERVICES: Service[] = [
     notIncluded:
       "Heavy model cleanup, rebuilding missing geometry, creating materials from scratch, or design work not already present in the model.",
     helper:
-      "Choose this OR site visit base/model OR remote base/model. Extra cleanup hours may be discussed and billed only after approval.",
+      "Choose this OR Base Plan + 3D Existing Model. Extra cleanup hours may be discussed and billed only after approval.",
   },
   {
     id: "photo-concept-start",
@@ -685,7 +691,7 @@ const STARTING_POINT_SERVICES: Service[] = [
     short: "Fast paid concept image to help close the sale.",
     bestFor: "Fast sales before full design work starts.",
     youSend:
-      "One site photo after payment, rough dimensions if you have them, and a short text about what you want to show.",
+      "One clear site photo after payment, rough dimensions marked on the photo if possible, and a short text about what you want to show.",
     youGet:
       "One concept image and a short list of suggested materials or main features used in the concept.",
     notIncluded:
@@ -874,62 +880,62 @@ const FULL_YARD_PACKAGE_SERVICES: Service[] = [
     prices: { small: 1000, medium: 1500, large: 2200, estate: null },
     stripePriceId: null,
     short:
-      "Planting, layout, and simple design direction for the selected yard area.",
+      "Yard design package with a main plan, planting plan, and presentation renders for the selected design area.",
     bestFor:
-      "Builders or landscape crews who need a clear landscape design under their brand, without dealing with 3D/model workflow details.",
+      "Builders or landscape crews who need a clear yard design under their brand for a real client budget, without dealing with 3D/model workflow details.",
     youSend:
-      "Photos, rough measurements or survey if available, budget level, style references, client must-haves, and any site constraints.",
+      "Survey or site plan if available, clear photos, marked measurements, budget level, style references, client must-haves, and site constraints. If there is no site visit, dimensions are required: widths, depths, heights, roof/eave-to-ground, house-to-fence distances, and important level changes.",
     youGet:
-      "A concept layout for the selected area, planting direction, general material direction, simple dimensions where needed, and a client-ready PDF.",
+      "Main concept plan for the selected design area, planting plan/direction, simple dimensions where needed, presentation renders, and a client-ready PDF.",
     notIncluded:
-      "Separate outdoor structures such as decks, pergolas, carports, outdoor kitchens, structural engineering, irrigation design, lighting plan, permit-ready drawings, or stamped documents.",
+      "Separate outdoor structures such as decks, pergolas, carports, outdoor kitchens; detailed specialty sheets; lighting plan; irrigation design; grading/drainage engineering; permit-ready drawings; stamped documents.",
     helper:
-      "If the design includes a deck, pergola, carport, outdoor kitchen, or other built structure, order that separately under Decks, Covers & Outdoor Structures. Add Site Visit below if field measuring is needed.",
+      "For decks, pergolas, patio covers, carports, kitchens, or custom built structures, use Decks, Covers & Outdoor Structures. For extra sheets after the design, use Plans & Sheets. If you are a designer and want 3D/model/render workflow support, use 3D & Rendering Support.",
   },
 ];
 
 const DESIGN_DIRECTION_SERVICES: Service[] = [
   {
     id: "draw-your-idea",
-    title: "You Bring the Idea, We Draw It",
-    category: "Idea",
+    title: "Your Design Direction, Our Production",
+    category: "Design role",
     icon: Wrench,
     pricingType: "size",
     prices: { small: 500, medium: 800, large: 1300, estate: null },
     stripePriceId: null,
     short:
-      "You decide where elements, levels, features, decor, and transitions go, and we turn that into a render-ready model with a locked layout.",
+      "You bring the idea, references, layout direction, markups, and notes. We turn your direction into clean 3D production and visuals.",
     bestFor:
-      "Contractors who already understand the layout and need it formalized into a clean model and presentation package.",
+      "Contractors or designers who already know what should happen and need us to model and present it cleanly.",
     youSend:
-      "Your layout thinking, markups, sketches, reference images, dimensions, material links, and pictures that show the elements you want built into the model.",
+      "Your layout idea, sketches, marked photos, reference images, links, notes about what to model, material direction, dimensions, and examples of the look or planning logic you want us to follow.",
     youGet:
-      "A designed model with a locked layout, applied material direction, and review visuals ready to move toward rendering.",
+      "A clean production model / visual direction based on your instructions, with review visuals ready to move toward final rendering.",
     notIncluded:
-      "Engineering, permit drawings, detailed production sheets, or takeoffs unless added later.",
+      "Leading the design from scratch, client design meetings, engineering, permit drawings, detailed production sheets, takeoffs, or separate structure packages unless ordered separately.",
     helper:
-      "Support your ideas with images and material links so we can model the right elements and textures cleanly.",
+      "Use this when the design direction is yours and our job is to execute it cleanly. Decks, pergolas, carports, kitchens, or other built structures may still need the outdoor structures section if they require their own package.",
   },
   {
     id: "help-design-it",
-    title: "We Help Design It",
-    category: "Idea",
+    title: "We Lead the Design",
+    category: "Design role",
     icon: Sparkles,
     pricingType: "size",
     prices: { small: 1000, medium: 1500, large: 2200, estate: null },
     stripePriceId: null,
     short:
-      "We help shape the design brief, select references, test sketch options, and move the job toward the final rendered direction.",
+      "We take the lead on design direction before the model/render stage instead of only drafting a fixed idea.",
     bestFor:
-      "Contractors who have the lead but do not want to solve the design process alone.",
+      "Contractors who want us to solve the design direction, but still need the work kept under their brand.",
     youSend:
-      "Survey, measurements, photos, style references, must-haves, rough budget level, and site constraints.",
+      "Survey, measurements, photos, style references, must-haves, rough budget level, site constraints, and a remote video brief with the partner or client-side contact present.",
     youGet:
-      "Design brief work, reference selection, intermediate sketch options, design development, and final direction ready for rendering.",
+      "Design brief work, reference selection, sketch options, design development, final design direction, and a clear path into modeling/rendering.",
     notIncluded:
-      "Engineering, permit package, stamped drawings, planting plans, takeoffs, or detailed production sheets unless added later.",
+      "Engineering, permit package, stamped drawings, planting plans, takeoffs, detailed production sheets, or acting as the direct client-facing designer unless agreed separately.",
     helper:
-      "This is design development before final rendering, not just drafting a fixed idea.",
+      "A partner or client-side contact must attend the remote design brief so the client discussion does not turn into a broken telephone. We can lead design, but the white-label partner stays connected to the client conversation.",
   },
 ];
 
@@ -1415,14 +1421,14 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     helper: "Elige esto O base remota/modelo O modelo 3D existente. Es un punto de inicio, no un add-on.",
   },
   "survey-documents-start": {
-    title: "Plano base + modelo 3D remoto",
+    title: "Plano base + modelo 3D existente",
     category: "Inicio",
-    short: "Sin visita al sitio. Tú mandas survey, fotos, PDFs, sketches o medidas, y construimos el plano base 2D y el modelo 3D.",
-    bestFor: "Trabajos fuera de la ciudad o trabajos donde ya existe suficiente información.",
-    youSend: "Survey, fotos, PDFs, redlines, dimensiones o incluso un sketch hecho a mano.",
-    youGet: "Un plano base 2D y un modelo 3D de condiciones existentes construido desde tus documentos.",
-    notIncluded: "Visita al sitio, survey legal, ingeniería, permisos o diseño final.",
-    helper: "Elige esto O visita/base/modelo O modelo 3D existente. Es un punto de inicio, no un add-on.",
+    short: "Construimos un plano base 2D y un modelo 3D básico de condiciones existentes desde survey, fotos, medidas, PDFs, sketches o notas de campo.",
+    bestFor: "Diseñadores y builders que necesitan una base limpia del sitio antes de diseño, render o láminas de seguimiento.",
+    youSend: "Survey o site plan si existe, PDFs, redlines, fotos claras y medidas marcadas en fotos: ancho, profundidad, altura, altura de techo/eave al piso, distancias de casa a fence y cambios de nivel importantes. Si agregas visita al sitio, nosotros recogemos fotos, notas y medidas aproximadas en campo.",
+    youGet: "Un plano base 2D estilo AutoCAD/DWG y un modelo 3D simple de condiciones existentes. Esto es geometría y escala, no materiales finales ni texturas detalladas para render.",
+    notIncluded: "Visita al sitio salvo que se agregue aparte, survey legal, ingeniería, permisos, diseño final, planting plan, materiales detallados de render o renders finales de presentación.",
+    helper: "Elige esto O Tú mandas el modelo 3D, nosotros lo renderizamos. Agrega visita al sitio aparte si necesitamos recoger la información del sitio.",
   },
   "client-model-start": {
     title: "Tú mandas el modelo 3D, nosotros lo renderizamos",
@@ -1432,14 +1438,14 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     youSend: "Un modelo 3D listo para render, links o referencias JPG de materiales, notas y cualquier survey o PDF que ayude a revisarlo.",
     youGet: "Revisión del modelo, setup de render, aplicación de materiales desde tus referencias y vistas renderizadas. Cuando el modelo esté listo, se pueden probar materiales sin un límite fijo.",
     notIncluded: "Limpieza pesada del modelo, reconstrucción de geometría faltante, creación de materiales desde cero o diseño que no exista ya en el modelo.",
-    helper: "Elige esto O visita/base/modelo O base remota/modelo. Cualquier hora extra de limpieza se conversa y se cobra solo con aprobación.",
+    helper: "Elige esto O Plano base + modelo 3D existente. Cualquier hora extra de limpieza se conversa y se cobra solo con aprobación.",
   },
   "photo-concept-start": {
     title: "Una imagen conceptual rápida",
     category: "Inicio",
     short: "Imagen conceptual rápida pagada para ayudar a cerrar la venta.",
     bestFor: "Ventas rápidas antes de empezar un diseño completo.",
-    youSend: "Una foto del sitio después del pago, medidas aproximadas si las tienes y un texto corto sobre lo que quieres mostrar.",
+    youSend: "Una foto clara del sitio después del pago, medidas aproximadas marcadas en la foto si es posible y un texto corto sobre lo que quieres mostrar.",
     youGet: "Una imagen conceptual y una lista corta de materiales sugeridos o elementos principales usados en el concepto.",
     notIncluded: "Visita al sitio, modelo exacto del sitio, planos listos para construcción, ingeniería, permisos o documentación final de diseño.",
     sampleLabel: "Ver ejemplo",
@@ -1552,25 +1558,35 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     notIncluded: "Visita al sitio, survey legal, ingeniería, trámite de permisos, planos sellados o documentos finales de construcción.",
     helper: "Elige esto si quieres un camino de diseño completo, pero prefieres empezar desde información enviada.",
   },
+  "yard-design-package": {
+    title: "Paquete de diseño de patio",
+    category: "Diseño",
+    short: "Paquete de diseño con plano principal, plano de plantación y renders de presentación para el área seleccionada.",
+    bestFor: "Constructores o crews de landscape que necesitan un diseño claro bajo su marca para un presupuesto real del cliente, sin elegir pasos técnicos de modelo 3D.",
+    youSend: "Survey o site plan si existe, fotos claras, medidas marcadas, nivel de presupuesto, referencias de estilo, must-haves del cliente y restricciones del sitio. Si no hay visita, las dimensiones son requeridas: anchos, profundidades, alturas, altura de techo/eave al piso, distancias de casa a fence y cambios de nivel importantes.",
+    youGet: "Plano conceptual principal para el área seleccionada, plano/dirección de plantación, dimensiones simples donde hagan falta, renders de presentación y PDF listo para cliente.",
+    notIncluded: "Estructuras separadas como decks, pérgolas, cubiertas, carports o cocinas exteriores; láminas especiales detalladas; plano de iluminación; diseño de riego; ingeniería de grading/drainage; planos listos para permiso; documentos sellados.",
+    helper: "Para decks, pérgolas, cubiertas, carports, cocinas o estructuras construidas, usa Decks, cubiertas y estructuras exteriores. Para láminas extra después del diseño, usa Planos y láminas. Si eres diseñador y quieres apoyo de modelo/render/3D, usa Apoyo 3D y renders.",
+  },
   "draw-your-idea": {
-    title: "Tú traes la idea, nosotros la dibujamos",
-    category: "Idea",
-    short: "Tú decides dónde van los elementos, niveles, features, decor y transiciones; nosotros lo convertimos en un modelo listo para render con layout cerrado.",
-    bestFor: "Contratistas que ya entienden el layout y necesitan formalizarlo en un modelo limpio y un paquete de presentación.",
-    youSend: "Tu idea de layout, markups, sketches, imágenes de referencia, dimensiones, links de materiales y fotos que muestren los elementos que quieres en el modelo.",
-    youGet: "Un modelo diseñado con layout cerrado, dirección de materiales aplicada y visuales de revisión listas para avanzar a render.",
-    notIncluded: "Ingeniería, planos de permiso, láminas detalladas de producción o takeoffs, salvo que se agreguen después.",
-    helper: "Apoya tus ideas con imágenes y links de materiales para que podamos modelar correctamente los elementos y texturas.",
+    title: "Tu dirección de diseño, nuestra producción",
+    category: "Rol de diseño",
+    short: "Tú traes la idea, referencias, dirección de layout, markups y notas. Nosotros convertimos esa dirección en producción 3D limpia y visuales.",
+    bestFor: "Contratistas o diseñadores que ya saben qué debe pasar y necesitan que lo modelemos y presentemos limpiamente.",
+    youSend: "Tu idea de layout, sketches, fotos marcadas, imágenes de referencia, links, notas sobre qué modelar, dirección de materiales, dimensiones y ejemplos del look o lógica de planificación que quieres seguir.",
+    youGet: "Un modelo / dirección visual limpia basada en tus instrucciones, con visuales de revisión listas para avanzar al render final.",
+    notIncluded: "Liderar el diseño desde cero, reuniones de diseño con el cliente, ingeniería, planos de permiso, láminas detalladas, takeoffs o paquetes separados de estructuras salvo que se pidan aparte.",
+    helper: "Usa esto cuando la dirección de diseño es tuya y nuestro trabajo es ejecutarla limpiamente. Decks, pérgolas, carports, cocinas u otras estructuras pueden necesitar la sección de estructuras exteriores si requieren su propio paquete.",
   },
   "help-design-it": {
-    title: "Te ayudamos a diseñarlo",
-    category: "Idea",
-    short: "Ayudamos a formar el brief de diseño, elegir referencias, probar opciones de sketch y mover el trabajo hacia una dirección final lista para render.",
-    bestFor: "Contratistas que tienen el lead, pero no quieren resolver solos el proceso de diseño.",
-    youSend: "Survey, medidas, fotos, referencias de estilo, must-haves, nivel aproximado de presupuesto y restricciones del sitio.",
-    youGet: "Trabajo de brief, selección de referencias, opciones intermedias de sketch, desarrollo de diseño y dirección final lista para render.",
-    notIncluded: "Ingeniería, paquete de permisos, planos sellados, planting plans, takeoffs o láminas detalladas de producción, salvo que se agreguen después.",
-    helper: "Esto es desarrollo de diseño antes del render final, no solo dibujo de una idea fija.",
+    title: "Nosotros lideramos el diseño",
+    category: "Rol de diseño",
+    short: "Tomamos la dirección de diseño antes de la etapa de modelo/render, no solo dibujamos una idea fija.",
+    bestFor: "Contratistas que quieren que resolvamos la dirección de diseño, pero manteniendo el trabajo bajo su marca.",
+    youSend: "Survey, medidas, fotos, referencias de estilo, must-haves, nivel aproximado de presupuesto, restricciones del sitio y un brief remoto por video con el partner o contacto del cliente presente.",
+    youGet: "Trabajo de brief, selección de referencias, opciones de sketch, desarrollo de diseño, dirección final y camino claro hacia modelado/render.",
+    notIncluded: "Ingeniería, paquete de permisos, planos sellados, planting plans, takeoffs, láminas detalladas o actuar como diseñador directo frente al cliente salvo acuerdo separado.",
+    helper: "Un partner o contacto del cliente debe estar presente en el brief remoto para evitar teléfono descompuesto. Podemos liderar el diseño, pero el partner white-label sigue conectado a la conversación con el cliente.",
   },
   "master-plan": {
     title: "Master plan limpio 2D",
@@ -2478,6 +2494,11 @@ function ProjectInfoCard({
         </label>
       </div>
 
+      <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+        <div className="font-black">{t.remoteInfoTitle}</div>
+        <p className="mt-1 leading-6">{t.remoteInfoText}</p>
+      </div>
+
       <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm">
         <input
           type="checkbox"
@@ -3137,7 +3158,7 @@ function SuccessIntake({
 // ─── App ─────────────────────────────────────────────────────────────────────
 
 const FULL_DESIGN_PACKAGE_IDS = ["yard-design-package"];
-const FULL_DESIGN_STARTING_POINT_IDS = ["onsite-base-model", "survey-documents-start", "client-model-start"];
+const FULL_DESIGN_STARTING_POINT_IDS = ["survey-documents-start", "client-model-start"];
 const FULL_DESIGN_IDEA_IDS = ["draw-your-idea", "help-design-it"];
 
 const STRUCTURE_DECK_IDS = ["deck-small", "deck-large"];
