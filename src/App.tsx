@@ -249,7 +249,7 @@ const T = {
       "Remote orders must include usable dimensions before work starts. Send a survey, site plan, measured sketch, or marked-up plan/photo with width, depth, height, roof/eave-to-ground height, house-to-fence distances, slopes, steps, walls, and level changes where relevant.",
     projectFilesTitle: "Project files for this order",
     projectFilesHelp:
-      "Upload files for this one client/project. References/markups/measurement notes are required. A survey/site plan/measured base is required for all services except Quick Photo Concept. Project photos are required for Quick Photo Concept and helpful for other orders. For a different client, start a separate order.",
+      "Upload files for this one client/project. References/markups/measurement notes are required. A survey/site plan/measured base is required for all services except Quick Photo Concept. Project photos are required for Quick Photo Concept and helpful for other orders. Keep each file under 12 MB for this first-version uploader; if a phone photo or PDF is larger, upload a reduced/compressed copy and mention that high-resolution files are available. For a different client, start a separate order.",
     uploadPhotosHelp:
       "Required for Quick Photo Concept; optional but helpful for other services. You may upload up to 10 photos for context, but Quick Photo Concept includes work on one selected photo only. Clear photos of the project area, facade, patio, yard, problem spots, slope, roof/eaves, fence lines, or existing conditions.",
     uploadSurveyHelp:
@@ -1685,7 +1685,9 @@ async function serializeFileList(files: FileList | null) {
   return Promise.all(
     safeFiles.map(async (file) => {
       if (file.size > maxFileSize) {
-        throw new Error(`${file.name} is too large. Please keep each file under 12 MB for this MVP upload.`);
+        throw new Error(
+          `${file.name} is too large for this first-version uploader. Please reduce/compress the file and try again. For phone photos, export or send a smaller JPG version. You can note in Project details if high-resolution files are available. Current upload limit: 12 MB per file.`
+        );
       }
 
       return {
