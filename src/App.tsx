@@ -4,7 +4,6 @@ import {
   Box,
   Camera,
   Check,
-  Copy,
   DraftingCompass,
   Droplets,
   FileText,
@@ -105,14 +104,14 @@ interface SummaryLine {
   isQuote: boolean;
 }
 
-const DEMO_MODE = true;
+const DEMO_MODE = false;
 const NOTES_LIMIT = 2000;
 const WHATSAPP_NUMBER = "15551234567";
 
 const T = {
   en: {
     header: "Scope Builder",
-    subheader: "Drafting, visuals, and plan support for landscapers",
+    subheader: "Drafting, visuals, and plan support for builders and landscape pros",
     selectPath: "What does this job need?",
     selectPathHelp:
       "Choose the service group for this job. After you enter, you will only see the options for that category.",
@@ -149,7 +148,8 @@ const T = {
     nothingSelected: "Nothing selected yet",
     qty: "Qty",
     total: "Total",
-    deposit: "Deposit (70%)",
+    totalDueToday: "Total due today",
+    deposit: "Deposit due today (70%)",
     remaining: "Remaining later",
     tbd: "TBD",
     currentPricedSubtotal: "Current priced subtotal",
@@ -161,7 +161,10 @@ const T = {
     resetCart: "Reset cart",
     cleared: "Cleared",
     confirmReset: "Reset cart and clear current selection?",
-    generateInvoice: "Generate Invoice & Pay",
+    generateInvoice: "Continue to payment",
+    submitForReview: "Submit for review",
+    uploadAfterPaymentNote: "You will upload the project photo after payment.",
+    reviewSubmitted: "Request submitted. We will review the scope and follow up with pricing.",
     generating: "Generating...",
     termsLine:
       "Stripe checkout should include Terms of Service consent and the Terms & Rules link.",
@@ -211,9 +214,9 @@ const T = {
       "Price assumes the main layout is already approved. If layout work is still missing, this may need a different package first.",
     hardDependencySiteVisit: "Choose Site Visit first.",
     hardDependencyOutsideCity: "Add Site Visit first.",
-    successTitle: "Payment received",
+    successTitle: "Project intake",
     successText:
-      "Now the real intake starts. Upload photos, survey files, and the full scope here.",
+      "Upload photos, survey files, and the full scope after checkout or manual approval.",
     uploadPhotos: "Project photos",
     uploadSurvey: "Survey / PDFs",
     detailedBrief: "Detailed scope",
@@ -223,26 +226,26 @@ const T = {
     intakeSaved: "Intake saved",
     openProjectChat: "Open project chat",
     successNote:
-      "Use project chat only after payment for quick text and photo follow-up.",
-    verifyingPayment: "Checking payment status...",
+      "Use project chat for quick text and photo follow-up after payment or manual approval.",
+    verifyingPayment: "Checking order status...",
     previewMode:
-      "Preview mode: checkout endpoint is not connected, showing local success screen.",
+      "Preview mode: checkout is not connected. No real payment was made. This screen is only for testing the intake form.",
     uploadWidgetNote:
       "Replace these file fields with Uploadcare or Cloudinary widget when backend is connected.",
     showcaseBadge: "Try it on a real job",
     showcaseTitle: "Visuals that help close the job.",
     showcaseDesc:
-      "Send one site photo. Get a photorealistic concept adjusted to the project, not just blindly generated. If the client moves forward, add takeoffs, plans, or specialty sheets next.",
+      "Send one site photo. Get a clear concept visual adjusted to the project, not just blindly generated. If the client moves forward, add takeoffs, plans, or specialty sheets next.",
     showcaseStep1: "Use one photo to test the idea before committing to full scope.",
     showcaseStep2: "Show the concept to the homeowner and move the sale forward faster.",
     showcaseStep3: "Need more depth? Add layout support, takeoffs, grading, HOA, or CRZ sheets.",
     showcaseCta: "Try 1 Quick Concept",
-    showcaseBrowse: "Browse all service paths",
+    showcaseBrowse: "See all services",
     showcaseNote: "Best first step for builders who want to test the workflow on one real job.",
   },
   es: {
     header: "Scope Builder",
-    subheader: "Planos, visuales y apoyo técnico para paisajistas",
+    subheader: "Planos, visuales y apoyo técnico para constructores y profesionales del landscape",
     selectPath: "¿Qué necesita este trabajo?",
     selectPathHelp:
       "Elige el grupo de servicios para este trabajo. Cuando entras, solo verás las opciones de esa categoría.",
@@ -259,7 +262,7 @@ const T = {
       "Usa esto para una descripción corta pero útil antes del pago. El formulario completo del proyecto viene después del pago.",
     notesPlaceholder:
       "Ejemplo: Solo frente, xeriscape preferido, la puerta se queda, puede hacer falta muro de contención cerca de la entrada.",
-    quickHelp: "¿Necesitas ayuda con el servicio?",
+    quickHelp: "¿Necesitas ayuda para elegir?",
     quickHelpTitle: "¿Preguntas?",
     quickHelpText:
       "Manda los detalles del proyecto o tus preguntas. Deja tu email o teléfono y te respondemos si encaja con nuestro flujo de trabajo actual.",
@@ -279,7 +282,8 @@ const T = {
     nothingSelected: "Todavía no hay servicios seleccionados",
     qty: "Cant.",
     total: "Total",
-    deposit: "Depósito (70%)",
+    totalDueToday: "Total a pagar hoy",
+    deposit: "Depósito a pagar hoy (70%)",
     remaining: "Restante después",
     tbd: "Por definir",
     currentPricedSubtotal: "Subtotal actual con precio",
@@ -291,7 +295,10 @@ const T = {
     resetCart: "Vaciar carrito",
     cleared: "Vacío",
     confirmReset: "¿Vaciar carrito y borrar la selección actual?",
-    generateInvoice: "Generar factura y pagar",
+    generateInvoice: "Continuar al pago",
+    submitForReview: "Enviar para revisión",
+    uploadAfterPaymentNote: "Subirás la foto del proyecto después del pago.",
+    reviewSubmitted: "Solicitud enviada. Revisaremos el alcance y responderemos con precio.",
     generating: "Generando...",
     termsLine:
       "El pago por Stripe debe incluir aceptación de los Términos de Servicio y enlace a Terms & Rules.",
@@ -341,9 +348,9 @@ const T = {
       "El precio asume que el layout principal ya está aprobado. Si todavía falta ese trabajo, primero puede necesitar otro paquete.",
     hardDependencySiteVisit: "Elige primero Visita al sitio.",
     hardDependencyOutsideCity: "Primero agrega Visita al sitio.",
-    successTitle: "Pago recibido",
+    successTitle: "Formulario del proyecto",
     successText:
-      "Ahora empieza el formulario real del proyecto. Sube fotos, survey o levantamiento, y el alcance completo aquí.",
+      "Sube fotos, survey o levantamiento, y el alcance completo después del pago o revisión manual.",
     uploadPhotos: "Fotos del proyecto",
     uploadSurvey: "Survey / levantamiento / PDFs",
     detailedBrief: "Alcance detallado",
@@ -353,21 +360,21 @@ const T = {
     intakeSaved: "Intake guardado",
     openProjectChat: "Abrir chat del proyecto",
     successNote:
-      "Usa el chat del proyecto solo después del pago para textos rápidos y seguimiento con fotos.",
-    verifyingPayment: "Verificando el pago...",
+      "Usa el chat del proyecto para textos rápidos y seguimiento con fotos después del pago o revisión manual.",
+    verifyingPayment: "Verificando el estado del pedido...",
     previewMode:
-      "Modo de vista previa: el endpoint de pago no está conectado; se muestra una pantalla local de éxito.",
+      "Modo de vista previa: el checkout no está conectado. No se hizo ningún pago real. Esta pantalla es solo para probar el formulario.",
     uploadWidgetNote:
       "Sustituye estos campos por un widget de Uploadcare o Cloudinary cuando conectes el backend.",
     showcaseBadge: "Pruébalo en un trabajo real",
     showcaseTitle: "Visuales que ayudan a cerrar el trabajo.",
     showcaseDesc:
-      "Manda una foto del sitio. Recibe un concepto fotorrealista ajustado al proyecto, no generado a ciegas. Si el cliente avanza, agrega cómputos, planos o láminas especiales.",
+      "Manda una foto del sitio. Recibe una visual conceptual clara ajustada al proyecto, no generada a ciegas. Si el cliente avanza, agrega cómputos, planos o láminas especiales.",
     showcaseStep1: "Usa una foto para probar la idea antes de comprometerte con el alcance completo.",
     showcaseStep2: "Muestra el concepto al dueño y avanza la venta más rápido.",
     showcaseStep3: "¿Necesitas más detalle? Agrega apoyo de layout, cómputos, concepto de nivelación, HOA o láminas CRZ.",
     showcaseCta: "Probar 1 concepto rápido",
-    showcaseBrowse: "Ver todos los servicios",
+    showcaseBrowse: "Ver servicios",
     showcaseNote: "El mejor primer paso para constructores que quieren probar el flujo en un trabajo real.",
   },
 } as const;
@@ -1501,7 +1508,7 @@ function BeforeAfterSlider({
           <div className="pointer-events-none absolute left-4 top-4 z-20 rounded-full bg-black/70 px-3 py-1 text-xs font-black tracking-wide text-white shadow">
             {afterLabel}
           </div>
-          <div className="pointer-events-none absolute right-4 top-4 z-20 rounded-full bg-emerald-500 px-3 py-1 text-xs font-black tracking-wide text-white shadow">
+          <div className="pointer-events-none absolute right-4 top-4 z-20 rounded-full bg-slate-900 px-3 py-1 text-xs font-black tracking-wide text-white shadow">
             {beforeLabel}
           </div>
           <div
@@ -1543,10 +1550,7 @@ function LandingShowcase({
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
       <div className="grid gap-8 lg:grid-cols-[1fr_1.15fr] lg:items-center">
         <div>
-          <div className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-            {t.showcaseBadge}
-          </div>
-          <h2 className="mt-4 text-4xl font-black tracking-tight text-slate-900 md:text-5xl">
+          <h2 className="text-4xl font-black tracking-tight text-slate-900 md:text-5xl">
             {t.showcaseTitle}
           </h2>
           <p className="mt-4 max-w-xl text-base leading-8 text-slate-600 md:text-lg">
@@ -1676,7 +1680,7 @@ function Header({
             onClick={() => setLang(lang === "en" ? "es" : "en")}
             className="rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-900 hover:border-slate-900"
           >
-            {lang === "en" ? "Español 🇲🇽" : "English 🇺🇸"}
+            {lang === "en" ? "Español" : "English"}
           </button>
           {view !== "MENU" ? (
             <button
@@ -1850,11 +1854,6 @@ function ServiceSection({
                       <h4 className="text-lg font-black leading-tight">
                         {translateServiceTitle(service, lang)}
                       </h4>
-                      {translateServiceField(service, "badgeLabel", lang) ? (
-                        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                          {translateServiceField(service, "badgeLabel", lang)}
-                        </span>
-                      ) : null}
                       {translateServiceField(service, "sampleLabel", lang) ? (
                         <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
                           {translateServiceField(service, "sampleLabel", lang)}
@@ -2085,12 +2084,12 @@ function SummarySidebar({
   remaining,
   rushFee,
   hasTbd,
+  useDeposit,
+  isQuickConceptOnly,
   canCheckout,
   isCreating,
-  onCopy,
   onReset,
   onCheckout,
-  copied,
   cleared,
 }: {
   lang: Lang;
@@ -2100,12 +2099,12 @@ function SummarySidebar({
   remaining: number;
   rushFee: number;
   hasTbd: boolean;
+  useDeposit: boolean;
+  isQuickConceptOnly: boolean;
   canCheckout: boolean;
   isCreating: boolean;
-  onCopy: () => void;
   onReset: () => void;
   onCheckout: () => void;
-  copied: boolean;
   cleared: boolean;
 }) {
   const t = T[lang];
@@ -2114,9 +2113,6 @@ function SummarySidebar({
       <div className="space-y-6 rounded-[2.5rem] border-2 border-slate-900 bg-white p-8 shadow-2xl">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-xl font-black">{t.summary}</h2>
-          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-            {lang === "es" ? "Activo" : "Live"}
-          </span>
         </div>
         <div className="space-y-3 rounded-3xl bg-slate-50 p-5">
           {items.length === 0 ? (
@@ -2166,7 +2162,7 @@ function SummarySidebar({
                 {t.tbdHelp}
               </div>
             </>
-          ) : (
+          ) : useDeposit ? (
             <>
               <div className="flex items-center justify-between">
                 <span className="text-slate-500">{t.total}</span>
@@ -2187,17 +2183,16 @@ function SummarySidebar({
                 </span>
               </div>
             </>
+          ) : (
+            <div className="flex items-center justify-between">
+              <span className="text-slate-500">{t.totalDueToday}</span>
+              <span className="font-bold text-slate-900">
+                {formatPrice(total, lang)}
+              </span>
+            </div>
           )}
         </div>
         <div className="grid gap-3">
-          <button
-            type="button"
-            onClick={onCopy}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-4 py-4 text-sm font-black text-slate-900 hover:bg-slate-50"
-          >
-            <Copy className="h-4 w-4" />
-            {copied ? t.copied : t.copySummary}
-          </button>
           <button
             type="button"
             onClick={onReset}
@@ -2222,9 +2217,16 @@ function SummarySidebar({
           ) : (
             <FileText className="h-5 w-5" />
           )}
-          {isCreating ? t.generating : t.generateInvoice}
+          {isCreating ? t.generating : hasTbd ? t.submitForReview : t.generateInvoice}
         </button>
-        <div className="text-xs leading-6 text-slate-500">{t.termsLine}</div>
+        {isQuickConceptOnly ? (
+          <div className="text-xs leading-6 text-slate-500">
+            {t.uploadAfterPaymentNote}
+          </div>
+        ) : null}
+        {!hasTbd ? (
+          <div className="text-xs leading-6 text-slate-500">{t.termsLine}</div>
+        ) : null}
       </div>
     </aside>
   );
@@ -2307,7 +2309,7 @@ function QuickHelpModal({
             />
           </label>
           {sent ? (
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
               {t.helpSent}
             </div>
           ) : null}
@@ -2377,7 +2379,7 @@ function SuccessIntake({
 
   function openProjectChat() {
     const text = encodeURIComponent(
-      `Hi Olya, I just paid for ${order.pathTitle} at ${order.projectAddress}. Order ID: ${order.orderId}.`
+      `Hi Olya, I just submitted intake for ${order.pathTitle} at ${order.projectAddress}. Order ID: ${order.orderId}.`
     );
     window.open(
       `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`,
@@ -2388,10 +2390,7 @@ function SuccessIntake({
 
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-        {t.successTitle}
-      </div>
-      <h2 className="mt-5 text-3xl font-black text-slate-900">
+      <h2 className="text-3xl font-black text-slate-900">
         {t.successTitle}
       </h2>
       <p className="mt-2 text-sm leading-6 text-slate-600">{t.successText}</p>
@@ -2441,7 +2440,7 @@ function SuccessIntake({
         />
       </label>
       {saved ? (
-        <div className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
           {t.intakeSaved}
         </div>
       ) : null}
@@ -2483,7 +2482,6 @@ export default function App() {
     projectAddress: "",
     notes: "",
   });
-  const [copied, setCopied] = useState(false);
   const [cleared, setCleared] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [sendingHelp, setSendingHelp] = useState(false);
@@ -2507,11 +2505,6 @@ export default function App() {
   const selectedSizeLabel =
     translateSizeLabel(selectedSizeObj, lang) || selectedSize;
 
-  useEffect(() => {
-    if (!copied) return;
-    const timer = window.setTimeout(() => setCopied(false), 1200);
-    return () => window.clearTimeout(timer);
-  }, [copied]);
 
   useEffect(() => {
     if (!cleared) return;
@@ -2635,14 +2628,17 @@ export default function App() {
   const deposit = Math.round(total * 0.7);
   const remaining = total - deposit;
   const hasTbd = pricedItems.some((item) => item.isQuote);
+  const useDeposit = !hasTbd && total >= 500;
+  const isQuickConceptOnly =
+    pricedItems.length === 1 && pricedItems[0]?.service.id === "photo-concept-start";
   const hasPayableService = pricedItems.some(
     (item) => item.service.stripePriceId && !item.isQuote
   );
-  const canCheckout =
-    Boolean(contact.clientName.trim()) &&
-    Boolean(contact.customerEmail.trim()) &&
-    hasPayableService &&
-    !hasTbd;
+  const hasRequiredContact =
+    Boolean(contact.clientName.trim()) && Boolean(contact.customerEmail.trim());
+  const canSubmitReview = hasRequiredContact && pricedItems.length > 0 && hasTbd;
+  const canCheckout = hasRequiredContact && hasPayableService && !hasTbd;
+  const canProceed = canCheckout || canSubmitReview;
 
   const summaryLines: SummaryLine[] = pricedItems.map((item) => ({
     title: translateServiceTitle(item.service, lang),
@@ -2651,24 +2647,6 @@ export default function App() {
     isQuote: item.isQuote,
   }));
 
-  const summaryText = [
-    `${lang === "es" ? "Grupo" : "Path"}: ${selectedPathTitle}`,
-    `${lang === "es" ? "Tamaño" : "Size"}: ${selectedSizeLabel}`,
-    "",
-    ...pricedItems.map(
-      (item) =>
-        `• ${translateServiceTitle(item.service, lang)} x${item.qty} — ${
-          item.isQuote ? t.tbd : formatPrice(item.price, lang)
-        }`
-    ),
-    "",
-    `${lang === "es" ? "Cliente" : "Client"}: ${contact.clientName || "-"}`,
-    `${lang === "es" ? "Email" : "Email"}: ${contact.customerEmail || "-"}`,
-    `${lang === "es" ? "Dirección" : "Address"}: ${contact.projectAddress || "-"}`,
-    contact.notes ? `${lang === "es" ? "Notas" : "Notes"}: ${contact.notes}` : "",
-  ]
-    .filter(Boolean)
-    .join("\n");
 
   function openHelpWithService(service: Service) {
     setHelpForm((prev) => ({
@@ -2701,14 +2679,6 @@ export default function App() {
     setCleared(true);
   }
 
-  async function copySummary() {
-    try {
-      await navigator.clipboard.writeText(summaryText);
-      setCopied(true);
-    } catch {
-      setCopied(false);
-    }
-  }
 
   async function sendQuickHelp() {
     const payload = {
@@ -2731,8 +2701,48 @@ export default function App() {
   }
 
   async function createCheckout() {
+    if (hasTbd) {
+      if (!canSubmitReview) {
+        setCheckoutNotice(t.fillRequired);
+        return;
+      }
+      setCreatingCheckout(true);
+      setCheckoutNotice(null);
+      const orderId = `review_${Date.now()}`;
+      const reviewPayload = {
+        order_id: orderId,
+        path_id: activePath,
+        path_title: selectedPathTitle,
+        size_id: selectedSize,
+        client_name: sanitizeText(contact.clientName),
+        customer_email: sanitizeText(contact.customerEmail),
+        project_address: sanitizeText(contact.projectAddress),
+        full_notes: contact.notes,
+        payment_status: "needs_manual_review",
+        items: pricedItems.map((item) => ({
+          id: item.service.id,
+          title: translateServiceTitle(item.service, lang),
+          quantity: item.qty,
+          unit_amount: getBasePrice(item.service, selectedSize),
+          stripe_price_id: item.service.stripePriceId,
+          pricing_type: item.service.pricingType,
+        })),
+      };
+      try {
+        await fetch("/api/order-draft", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(reviewPayload),
+        }).catch(() => undefined);
+        setCheckoutNotice(t.reviewSubmitted);
+      } finally {
+        setCreatingCheckout(false);
+      }
+      return;
+    }
+
     if (!canCheckout) {
-      setCheckoutNotice(hasTbd ? t.quoteBlocksCheckout : t.fillRequired);
+      setCheckoutNotice(t.fillRequired);
       return;
     }
     setCreatingCheckout(true);
@@ -2813,7 +2823,7 @@ export default function App() {
         setCheckoutNotice(t.previewMode);
         setView("SUCCESS");
       } else {
-        setCheckoutNotice(lang === "es" ? "El endpoint de checkout todavía no está conectado." : "Checkout endpoint is not connected yet.");
+        setCheckoutNotice(lang === "es" ? "El pago en línea todavía no está conectado. No se hizo ningún pago. Contáctanos para terminar este pedido." : "Online payment is not connected yet. No payment was made. Please contact us to finish this order.");
       }
     } finally {
       setCreatingCheckout(false);
@@ -3098,12 +3108,12 @@ export default function App() {
               remaining={remaining}
               rushFee={rushFee}
               hasTbd={hasTbd}
-              canCheckout={canCheckout}
+              useDeposit={useDeposit}
+              isQuickConceptOnly={isQuickConceptOnly}
+              canCheckout={canProceed}
               isCreating={creatingCheckout}
-              onCopy={copySummary}
               onReset={resetCart}
               onCheckout={createCheckout}
-              copied={copied}
               cleared={cleared}
             />
           </div>
