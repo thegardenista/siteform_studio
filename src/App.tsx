@@ -83,6 +83,8 @@ interface OrderContact {
   customerPhone: string;
   projectAddress: string;
   notes: string;
+  measurementsNotes: string;
+  referenceLinks: string;
   partnerProfileMode: PartnerProfileMode;
   whiteLabelCompany: string;
   whiteLabelPhone: string;
@@ -187,37 +189,45 @@ const T = {
     propertySize: "Design area size",
     projectInfo: "Contact and project details",
     clientName: "Your name / company",
-    clientNamePlaceholder: "Name or company we should contact",
+    clientNamePlaceholder: "Name or company we should contact about this order",
     clientEmail: "Your email",
     clientEmailPlaceholder: "Email for this order",
     clientPhone: "Your phone number",
-    clientPhonePlaceholder: "Phone number for the order record",
+    clientPhonePlaceholder: "Phone number for order records only",
     projectAddress: "Project / client label",
     projectAddressPlaceholder: "Example: Garcia backyard, Oak St deck, Project 24-018, or full address",
     projectLabelHelp:
       "Required. Use a client name, street name, project nickname, or internal job number. Everything selected in this order must belong to this one client/project.",
     notes: "Project details",
     notesHelp:
-      "Required. Tell us what you need, what the feature or yard is, what files/photos you have, and any location notes. Full address is optional at this stage.",
+      "Required. Tell us what you need, what the client wants, what area or structure this is, budget/timing concerns, and any site limits.",
+    measurementsNotes: "Measurements / site notes",
+    measurementsNotesPlaceholder:
+      "Required. List the measurements we should use: width, depth, height, roof/eave-to-ground height, house-to-fence distances, slopes, steps, walls, grade changes, or anything that affects the work.",
+    measurementsNotesHelp:
+      "If there is no site visit, work cannot start until usable dimensions are provided. Notes are better than unclear arrows when possible.",
+    referenceLinks: "Reference links / Pinterest / shared boards",
+    referenceLinksPlaceholder:
+      "Optional. Paste Pinterest boards, product links, Google Drive links, inspiration links, or notes about references.",
     remoteInfoTitle: "If there is no site visit",
     remoteInfoText:
-      "Upload a survey or site plan if you have one, plus clear photos with dimensions marked on the images. We need width, depth, height, roof/eave-to-ground height, house-to-fence distances, and any important slopes, steps, walls, or level changes.",
+      "Remote orders must include usable dimensions before work starts. Send a survey, site plan, measured sketch, or marked-up plan/photo with width, depth, height, roof/eave-to-ground height, house-to-fence distances, slopes, steps, walls, and level changes where relevant.",
     projectFilesTitle: "Project files for this order",
     projectFilesHelp:
-      "Upload the files for this one client/project. Project photos and references/markups are required before submission. For a different client, start a separate order.",
+      "Upload files for this one client/project. References/markups and a survey/site plan/measured base are required. Project photos are helpful but optional. For a different client, start a separate order.",
     uploadPhotosHelp:
-      "Required. Photos of the project area. Mark rough width, depth, height, roof/eave height, fence distances, and level changes directly on photos when possible. Up to 10 files per upload.",
+      "Optional but helpful. Clear photos of the project area, facade, patio, yard, problem spots, slope, roof/eaves, fence lines, or existing conditions. Up to 10 files per upload.",
     uploadSurveyHelp:
-      "Survey, site plan, PDFs, measurements, sketches, or existing drawings. Use this especially when there is no site visit.",
+      "Required. Upload a survey, site plan, measured sketch, marked base plan, PDF, or drawing that gives us the project geometry. Up to 10 files per upload.",
     uploadTitleBlock: "Title block / sheet template",
     uploadTitleBlockHelp:
       "Optional for first-time setup. Upload your ready-made title block, PDF border, sheet frame, or DWG/PDF template if you want us to use your company sheet format.",
     uploadLogoFiles: "Logo / brand files",
     uploadLogoHelp:
-      "Required if you choose to upload a new logo. Use PNG, SVG, PDF, AI, or EPS if available.",
-    uploadReferences: "References / markups",
+      "Optional. Upload a logo or brand file if you want it used. Use PNG, SVG, PDF, AI, or EPS if available. If you do not have one, choose text-only company name.",
+    uploadReferences: "References / markups / measurements",
     uploadReferencesHelp:
-      "Required. Upload reference images, client markups, screenshots, marked photos, or notes/PDFs showing the desired look and any problem areas. Up to 10 files per upload.",
+      "Required. Upload reference images, client markups, screenshots, marked photos, measurement notes, or PDFs showing desired look, key dimensions, and problem areas. Up to 10 files per upload.",
     filesSelected: "file(s) selected",
     reviewOnlyNotice:
       "Submit for review does not request payment. We check the files and selected scope first, then send an invoice/payment link. Work starts after invoice payment.",
@@ -229,9 +239,9 @@ const T = {
       "Next: we review the scope, check the uploaded files, and send an invoice/payment link if everything matches. If the scope is different, we will adjust it before invoicing.",
     tbdOnReview: "Some items are TBD and will be priced after review.",
     writtenOnlyNote: "Written communication only. No phone support for production questions.",
-    partnerProfileTitle: "Partner / white-label profile",
+    partnerProfileTitle: "Company / white-label information",
     partnerProfileHelp:
-      "Tell us how your company info should appear on white-label PDFs and sheets. Repeat partners can ask us to use details already on file.",
+      "Tell us how your company information should appear on white-label PDFs and sheets. Repeat partners can ask us to use details already on file.",
     partnerProfileQuestion: "Is this your first order with us?",
     partnerProfileNew: "Yes, set up my white-label info",
     partnerProfileExisting: "No, use my company info already on file",
@@ -254,7 +264,7 @@ const T = {
     addressProject: "Project name only",
     addressHide: "Do not show address",
     logoOption: "Logo option",
-    logoUpload: "Upload a new logo with this order",
+    logoUpload: "Use logo — upload a logo/brand file",
     logoOnFile: "Use logo already on file",
     logoTextOnly: "Text-only company name, no logo",
     brandingNotes: "Branding notes",
@@ -314,7 +324,7 @@ const T = {
     safetyText:
       "We provide design-intent visuals, concept sheets, drafting cleanup, and white-label presentation support. We do not provide engineering, legal surveying, code review, permit filing, permit approval guarantees, sealed/stamped drawings, structural calculations, utility design, or construction-control documents.",
     fillRequired:
-      "Add your name/company, email, phone number, project/client label, project details, project photos, references/markups, confirm this is one client/project, and select at least one service. For first-time white-label setup, add the company name and upload a logo if you selected logo upload.",
+      "Add your name/company, email, phone number, project/client label, project details, measurements/site notes, required survey/site plan or measured base, references/markups, confirm this is one client/project, and select at least one service. For first-time white-label setup, add the company name.",
     quoteBlocksCheckout:
       "All orders are reviewed first. We send the invoice/payment link after scope and files are checked.",
     add: "Add",
@@ -383,7 +393,16 @@ const T = {
     showcaseBadge: "Try it on a real job",
     showcaseTitle: "White-label support for outdoor pros.",
     showcaseDesc:
-      "SiteForm Studio helps builders, landscape companies, and designers turn rough site info into concepts, simple plan sheets, and presentation visuals — under your brand.",
+      "SiteForm Studio helps builders, landscape crews, deck builders, designers, and outdoor contractors turn rough site info into clear client-facing design support — under your brand.",
+    showcaseWhiteTitle: "What white-label means",
+    showcaseWhiteText:
+      "We stay behind the scenes. Your company name, logo, sheet style, and project label can appear on the PDF, so your client sees your brand — not another design company.",
+    showcaseHowTitle: "How it works",
+    showcaseHowText:
+      "Choose a service, upload photos, measurements, survey files, references, and white-label details. We review the scope, confirm the estimate, and then you receive an invoice/payment link before work starts.",
+    showcaseSafeTitle: "Design-intent support",
+    showcaseSafeText:
+      "Deliverables are for concept, presentation, coordination, and pricing support. We do not provide engineering, permit filing, stamped drawings, or approval guarantees.",
     showcaseStep1: "Quick photo concepts",
     showcaseStep2: "Drafting + 3D support",
     showcaseStep3: "HOA, takeoffs, planting, hardscape, lighting",
@@ -409,37 +428,45 @@ const T = {
     propertySize: "Tamaño del área de diseño",
     projectInfo: "Contacto y detalles del proyecto",
     clientName: "Tu nombre / compañía",
-    clientNamePlaceholder: "Nombre o compañía para contactar",
+    clientNamePlaceholder: "Nombre o compañía para contactar sobre este pedido",
     clientEmail: "Tu email",
     clientEmailPlaceholder: "Email para este pedido",
     clientPhone: "Tu teléfono",
-    clientPhonePlaceholder: "Teléfono para el registro del pedido",
+    clientPhonePlaceholder: "Teléfono solo para el registro del pedido",
     projectAddress: "Etiqueta de proyecto / cliente",
     projectAddressPlaceholder: "Ejemplo: patio Garcia, deck Oak St, Proyecto 24-018 o dirección completa",
     projectLabelHelp:
       "Requerido. Usa nombre del cliente, calle, apodo del proyecto o número interno. Todo lo seleccionado en este pedido debe pertenecer a este mismo cliente/proyecto.",
     notes: "Detalles del proyecto",
     notesHelp:
-      "Requerido. Agrega qué necesitas, qué elemento o área es, qué archivos/fotos tienes y cualquier nota de ubicación. La dirección completa es opcional en esta etapa.",
+      "Requerido. Di qué necesitas, qué quiere el cliente, qué área o estructura es, presupuesto/plazos y cualquier límite del sitio.",
+    measurementsNotes: "Medidas / notas del sitio",
+    measurementsNotesPlaceholder:
+      "Requerido. Lista las medidas que debemos usar: ancho, profundidad, altura, roof/eave al piso, distancias de casa a fence, pendientes, escalones, muros, cambios de nivel o cualquier cosa que afecte el trabajo.",
+    measurementsNotesHelp:
+      "Si no hay visita al sitio, el trabajo no puede empezar hasta que recibamos medidas utilizables. Notas claras son mejores que flechas confusas cuando sea posible.",
+    referenceLinks: "Links de referencia / Pinterest / boards",
+    referenceLinksPlaceholder:
+      "Opcional. Pega Pinterest boards, links de productos, Google Drive, inspiración o notas sobre referencias.",
     remoteInfoTitle: "Si no hay visita al sitio",
     remoteInfoText:
-      "Sube un survey o site plan si lo tienes, más fotos claras con medidas marcadas en las imágenes. Necesitamos ancho, profundidad, altura, altura de techo/eave al piso, distancias de casa a fence y cualquier pendiente, escalón, muro o cambio de nivel importante.",
+      "Los pedidos remotos deben incluir medidas utilizables antes de empezar. Sube survey, site plan, sketch medido o plano/foto marcado con ancho, profundidad, altura, roof/eave al piso, distancias a fence, pendientes, escalones, muros y cambios de nivel cuando aplique.",
     projectFilesTitle: "Archivos para este pedido",
     projectFilesHelp:
-      "Sube los archivos para este cliente/proyecto. Las fotos del proyecto y las referencias/markups son requeridos antes de enviar. Para otro cliente, inicia un pedido separado.",
+      "Sube archivos para este cliente/proyecto. Referencias/markups y survey/site plan/base medida son requeridos. Las fotos son útiles pero opcionales. Para otro cliente, inicia un pedido separado.",
     uploadPhotosHelp:
-      "Requerido. Fotos del área del proyecto. Marca ancho, profundidad, altura, roof/eave, distancias a fence y cambios de nivel directamente en las fotos cuando sea posible. Hasta 10 archivos por carga.",
+      "Opcional pero útil. Fotos claras del área, fachada, patio, yard, problemas, pendiente, roof/eaves, fence lines o condiciones existentes. Hasta 10 archivos por carga.",
     uploadSurveyHelp:
-      "Survey, site plan, PDFs, medidas, sketches o dibujos existentes. Úsalo especialmente cuando no hay visita al sitio.",
+      "Requerido. Sube survey, site plan, sketch medido, base marcada, PDF o dibujo que nos dé la geometría del proyecto. Hasta 10 archivos por carga.",
     uploadTitleBlock: "Title block / plantilla de lámina",
     uploadTitleBlockHelp:
       "Opcional para la primera configuración. Sube tu title block, borde PDF, marco de lámina o plantilla DWG/PDF si quieres que usemos el formato de tu compañía.",
     uploadLogoFiles: "Logo / archivos de marca",
     uploadLogoHelp:
-      "Requerido si eliges subir un logo nuevo. Usa PNG, SVG, PDF, AI o EPS si está disponible.",
-    uploadReferences: "Referencias / markups",
+      "Opcional. Sube logo o archivo de marca si quieres usarlo. Usa PNG, SVG, PDF, AI o EPS si está disponible. Si no tienes logo, elige solo nombre de compañía.",
+    uploadReferences: "Referencias / markups / medidas",
     uploadReferencesHelp:
-      "Requerido. Sube imágenes de referencia, markups del cliente, screenshots, fotos marcadas o notas/PDFs que muestren el look deseado y cualquier área problemática. Hasta 10 archivos por carga.",
+      "Requerido. Sube imágenes de referencia, markups del cliente, screenshots, fotos marcadas, notas de medidas o PDFs que muestren el look deseado, dimensiones clave y áreas problemáticas. Hasta 10 archivos por carga.",
     filesSelected: "archivo(s) seleccionado(s)",
     reviewOnlyNotice:
       "Enviar para revisión no solicita pago. Revisamos los archivos y el alcance seleccionado primero, luego mandamos una factura/link de pago. El trabajo empieza después del pago de la factura.",
@@ -451,7 +478,7 @@ const T = {
       "Siguiente: revisamos el alcance, los archivos subidos y mandamos una factura/link de pago si todo coincide. Si el alcance es diferente, lo ajustamos antes de facturar.",
     tbdOnReview: "Algunas partidas son TBD y se cotizarán después de la revisión.",
     writtenOnlyNote: "Comunicación solo por escrito. No hay soporte telefónico para preguntas de producción.",
-    partnerProfileTitle: "Perfil de partner / white-label",
+    partnerProfileTitle: "Información de compañía / white-label",
     partnerProfileHelp:
       "Dinos cómo debe aparecer la información de tu compañía en PDFs y láminas white-label. Partners repetidos pueden pedir que usemos los datos ya guardados.",
     partnerProfileQuestion: "¿Es tu primer pedido con nosotros?",
@@ -476,7 +503,7 @@ const T = {
     addressProject: "Solo nombre del proyecto",
     addressHide: "No mostrar dirección",
     logoOption: "Opción de logo",
-    logoUpload: "Subir un logo nuevo con este pedido",
+    logoUpload: "Usar logo — subir logo/archivo de marca",
     logoOnFile: "Usar logo ya guardado",
     logoTextOnly: "Solo nombre de compañía, sin logo",
     brandingNotes: "Notas de branding",
@@ -536,7 +563,7 @@ const T = {
     safetyText:
       "Ofrecemos visuales de intención de diseño, láminas conceptuales, cleanup de drafting y apoyo de presentación white-label. No ofrecemos ingeniería, survey legal, revisión de código, trámite de permisos, garantía de aprobación, planos sellados/estampados, cálculos estructurales, diseño de utilities o documentos de control de construcción.",
     fillRequired:
-      "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, fotos del proyecto, referencias/markups, confirma que es un solo cliente/proyecto y elige al menos un servicio. Para primera configuración white-label, agrega el nombre de compañía y sube el logo si elegiste subir logo.",
+      "Agrega tu nombre/compañía, email, teléfono, etiqueta de proyecto/cliente, detalles del proyecto, medidas/notas del sitio, survey/site plan o base medida, referencias/markups, confirma que es un solo cliente/proyecto y elige al menos un servicio. Para primera configuración white-label, agrega el nombre de compañía.",
     quoteBlocksCheckout:
       "Todos los pedidos se revisan primero. Mandamos la factura/link de pago después de revisar el alcance y los archivos.",
     add: "Agregar",
@@ -605,7 +632,16 @@ const T = {
     showcaseBadge: "Pruébalo en un trabajo real",
     showcaseTitle: "Apoyo white-label para profesionales de exterior.",
     showcaseDesc:
-      "SiteForm Studio ayuda a constructores, compañías de landscape y diseñadores a convertir información básica del sitio en visuales claras, planos simples y apoyo de presentación — bajo tu marca y detrás de escena.",
+      "SiteForm Studio ayuda a builders, equipos de landscape, deck builders, diseñadores y contratistas de exterior a convertir información básica del sitio en apoyo claro para presentar al cliente — bajo tu marca.",
+    showcaseWhiteTitle: "Qué significa white-label",
+    showcaseWhiteText:
+      "Trabajamos detrás de escena. Tu nombre de compañía, logo, estilo de lámina y etiqueta del proyecto pueden aparecer en el PDF, para que tu cliente vea tu marca — no otra compañía de diseño.",
+    showcaseHowTitle: "Cómo funciona",
+    showcaseHowText:
+      "Elige un servicio, sube fotos, medidas, survey, referencias y datos white-label. Revisamos el alcance, confirmamos el estimate y después recibes una factura/link de pago antes de empezar el trabajo.",
+    showcaseSafeTitle: "Apoyo de intención de diseño",
+    showcaseSafeText:
+      "Los entregables son para concepto, presentación, coordinación y apoyo de presupuesto. No hacemos ingeniería, permisos, dibujos sellados/stamped ni garantizamos aprobaciones.",
     showcaseStep1: "Conceptos rápidos desde foto",
     showcaseStep2: "Dibujo + apoyo 3D",
     showcaseStep3: "HOA, cómputos, plantación, hardscape, iluminación",
@@ -1411,6 +1447,8 @@ function emptyContact(): OrderContact {
     customerPhone: "",
     projectAddress: "",
     notes: "",
+    measurementsNotes: "",
+    referenceLinks: "",
     partnerProfileMode: "new",
     whiteLabelCompany: "",
     whiteLabelPhone: "",
@@ -1438,6 +1476,8 @@ function getInitialContact(): OrderContact {
       ...saved,
       projectAddress: "",
       notes: "",
+      measurementsNotes: "",
+      referenceLinks: "",
       desiredDeliveryDate: "",
       sameProjectConfirmed: false,
       partnerProfileMode: "existing",
@@ -1505,7 +1545,7 @@ function hasAnyProjectFile(files: ProjectFileUploads) {
 }
 
 function hasRequiredProjectFiles(files: ProjectFileUploads) {
-  return Boolean(files.photos?.length && files.references?.length);
+  return Boolean(files.surveyDocs?.length && files.references?.length);
 }
 
 function summarizeFileList(files: FileList | null) {
@@ -2187,25 +2227,19 @@ function LandingShowcase({
         <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 md:text-lg md:leading-8">
           {t.showcaseDesc}
         </p>
-        <div className="mt-4 grid gap-2 text-sm text-slate-700 md:grid-cols-3">
-          <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-3 py-2 leading-5 md:block md:p-4 md:leading-6">
-            <span className="text-xs font-black uppercase tracking-wide text-slate-500 md:mb-2 md:block">
-              01
-            </span>
-            <span>{t.showcaseStep1}</span>
-          </div>
-          <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-3 py-2 leading-5 md:block md:p-4 md:leading-6">
-            <span className="text-xs font-black uppercase tracking-wide text-slate-500 md:mb-2 md:block">
-              02
-            </span>
-            <span>{t.showcaseStep2}</span>
-          </div>
-          <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-3 py-2 leading-5 md:block md:p-4 md:leading-6">
-            <span className="text-xs font-black uppercase tracking-wide text-slate-500 md:mb-2 md:block">
-              03
-            </span>
-            <span>{t.showcaseStep3}</span>
-          </div>
+        <div className="mt-5 space-y-4 border-l-4 border-emerald-200 pl-4 text-sm leading-6 text-slate-700 md:mt-6 md:max-w-3xl md:text-base md:leading-7">
+          <p>
+            <span className="font-black text-slate-900">{t.showcaseWhiteTitle}: </span>
+            {t.showcaseWhiteText}
+          </p>
+          <p>
+            <span className="font-black text-slate-900">{t.showcaseHowTitle}: </span>
+            {t.showcaseHowText}
+          </p>
+          <p>
+            <span className="font-black text-slate-900">{t.showcaseSafeTitle}: </span>
+            {t.showcaseSafeText}
+          </p>
         </div>
         <div className="mt-5 flex md:mt-8">
           <button
@@ -2722,36 +2756,55 @@ function ProjectInfoCard({
   onChange,
   onFilesChange,
   lang,
+  pathId,
 }: {
   contact: OrderContact;
   projectFiles: ProjectFileUploads;
   onChange: (patch: Partial<OrderContact>) => void;
   onFilesChange: (patch: Partial<ProjectFileUploads>) => void;
   lang: Lang;
+  pathId: string;
 }) {
   const t = T[lang];
   const isNewPartner = contact.partnerProfileMode === "new";
   const partnerContactTitle =
-    lang === "es" ? "Contacto y perfil white-label" : "Contact and white-label profile";
+    lang === "es" ? "Contacto e información de compañía" : "Contact and company information";
   const partnerContactHelp =
     lang === "es"
-      ? "Primero dinos quién manda el pedido y cómo debe aparecer tu compañía en los entregables. Si ya tenemos tu información guardada, mantenemos esta parte corta."
-      : "First tell us who is sending the order and how your company should appear on the deliverables. If your company info is already on file, we keep this part short.";
+      ? "Primero dinos quién manda el pedido. Después, si es tu primera vez, dinos qué información de tu compañía debe aparecer en las láminas white-label."
+      : "First tell us who is sending the order. Then, if this is your first time, tell us what company information should appear on the white-label sheets.";
   const existingProfileNote =
     lang === "es"
-      ? "Usaremos la información de compañía que ya tenemos guardada. Solo completa tu contacto actual y cualquier cambio en las notas del proyecto."
-      : "We will use the company information already on file. Just complete your current contact info and note any changes in the project details.";
+      ? "Usaremos la información de compañía que ya tenemos guardada. Esta sección queda corta para que puedas pasar directo al proyecto."
+      : "We will use the company information already on file. This section stays short so you can move straight to the project.";
   const firstProfileNote =
     lang === "es"
-      ? "Primer pedido: completa la configuración de marca para que no tengamos que preguntarte después por logo, title block, nombre de cliente o cómo mostrar la dirección."
-      : "First order: complete the branding setup so we do not have to ask later for logo, title block, client name, or address display preferences.";
+      ? "Primer pedido: configura cómo debe aparecer tu compañía. Logo y title block son opcionales: súbelos si quieres que los usemos."
+      : "First order: set up how your company should appear. Logo and title block are optional: upload them if you want us to use them.";
   const projectSectionTitle =
     lang === "es" ? "Información del proyecto" : "Project information";
   const projectSectionHelp =
     lang === "es"
-      ? "Todo en este pedido debe ser para un solo cliente/proyecto. Para otro cliente o propiedad, inicia un pedido nuevo para mantener el Order ID limpio."
-      : "Everything in this order must be for one client/project. For a different client or property, start a new order so the Order ID stays clean.";
-  const logoRequired = isNewPartner && contact.logoOption === "upload";
+      ? "Todo en este pedido debe ser para un solo cliente/proyecto. Aquí va la etiqueta del cliente/proyecto, detalles, medidas, links y archivos."
+      : "Everything in this order must be for one client/project. Add the client/project label, details, measurements, links, and files here.";
+  const logoRequired = false;
+  const timelineTitle = lang === "es" ? "Tiempo estimado" : "Estimated production timing";
+  const timelineText =
+    pathId === "build-one"
+      ? lang === "es"
+        ? "Decks, pergolas, patio covers, carports y outdoor structures normalmente toman alrededor de 2 semanas calendario después de review, invoice/payment y archivos utilizables."
+        : "Decks, pergolas, patio covers, carports, and outdoor structures usually take about 2 calendar weeks after review, invoice/payment, and usable files."
+      : pathId === "full-design"
+        ? lang === "es"
+          ? "Yard design packages se programan después de revisar todo lo enviado. Normalmente toma desde 2 semanas hasta 1 mes para proyectos más complejos."
+          : "Yard design packages are scheduled after we review what was sent. Typical timing is about 2 weeks to 1 month for more complex projects."
+        : pathId === "special-drawings" || pathId === "3d-rendering"
+          ? lang === "es"
+            ? "3D, rendering support y specialty sheets se programan después de review. El tiempo depende del alcance y calidad de los archivos; normalmente 2 semanas a 1 mes."
+            : "3D, rendering support, and specialty sheets are scheduled after review. Timing depends on scope and file quality; usually about 2 weeks to 1 month."
+          : lang === "es"
+            ? "El tiempo final se confirma después de revisar el alcance, archivos y disponibilidad. El trabajo empieza después del invoice/payment."
+            : "Final timing is confirmed after we review the scope, files, and schedule. Work starts after invoice/payment.";
 
   return (
     <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
@@ -2902,77 +2955,6 @@ function ProjectInfoCard({
               </label>
             </div>
 
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="text-sm font-semibold text-slate-700">
-                  {t.clientNameDisplay}
-                </div>
-                <div className="mt-3 grid gap-2 text-sm">
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="clientNameDisplay"
-                      checked={contact.clientNameDisplay === "show"}
-                      onChange={() => onChange({ clientNameDisplay: "show" })}
-                    />
-                    <span>{t.showClientName}</span>
-                  </label>
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="clientNameDisplay"
-                      checked={contact.clientNameDisplay === "hide"}
-                      onChange={() => onChange({ clientNameDisplay: "hide" })}
-                    />
-                    <span>{t.hideClientName}</span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                <div className="text-sm font-semibold text-slate-700">
-                  {t.addressDisplay}
-                </div>
-                <div className="mt-3 grid gap-2 text-sm">
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="addressDisplay"
-                      checked={contact.addressDisplay === "full"}
-                      onChange={() => onChange({ addressDisplay: "full" })}
-                    />
-                    <span>{t.addressFull}</span>
-                  </label>
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="addressDisplay"
-                      checked={contact.addressDisplay === "street"}
-                      onChange={() => onChange({ addressDisplay: "street" })}
-                    />
-                    <span>{t.addressStreet}</span>
-                  </label>
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="addressDisplay"
-                      checked={contact.addressDisplay === "project"}
-                      onChange={() => onChange({ addressDisplay: "project" })}
-                    />
-                    <span>{t.addressProject}</span>
-                  </label>
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="radio"
-                      name="addressDisplay"
-                      checked={contact.addressDisplay === "hide"}
-                      onChange={() => onChange({ addressDisplay: "hide" })}
-                    />
-                    <span>{t.addressHide}</span>
-                  </label>
-                </div>
-              </div>
-            </div>
 
             <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
               <div className="text-sm font-semibold text-slate-700">
@@ -3086,6 +3068,85 @@ function ProjectInfoCard({
             <div className="text-xs leading-5 text-slate-500">{t.projectLabelHelp}</div>
           </label>
 
+
+          <div className="grid gap-4 md:col-span-2 md:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                <div className="text-sm font-semibold text-slate-700">
+                  {t.clientNameDisplay}
+                </div>
+                <div className="mt-3 grid gap-2 text-sm">
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="clientNameDisplay"
+                      checked={contact.clientNameDisplay === "show"}
+                      onChange={() => onChange({ clientNameDisplay: "show" })}
+                    />
+                    <span>{t.showClientName}</span>
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="clientNameDisplay"
+                      checked={contact.clientNameDisplay === "hide"}
+                      onChange={() => onChange({ clientNameDisplay: "hide" })}
+                    />
+                    <span>{t.hideClientName}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                <div className="text-sm font-semibold text-slate-700">
+                  {t.addressDisplay}
+                </div>
+                <div className="mt-3 grid gap-2 text-sm">
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="addressDisplay"
+                      checked={contact.addressDisplay === "full"}
+                      onChange={() => onChange({ addressDisplay: "full" })}
+                    />
+                    <span>{t.addressFull}</span>
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="addressDisplay"
+                      checked={contact.addressDisplay === "street"}
+                      onChange={() => onChange({ addressDisplay: "street" })}
+                    />
+                    <span>{t.addressStreet}</span>
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="addressDisplay"
+                      checked={contact.addressDisplay === "project"}
+                      onChange={() => onChange({ addressDisplay: "project" })}
+                    />
+                    <span>{t.addressProject}</span>
+                  </label>
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <input
+                      type="radio"
+                      name="addressDisplay"
+                      checked={contact.addressDisplay === "hide"}
+                      onChange={() => onChange({ addressDisplay: "hide" })}
+                    />
+                    <span>{t.addressHide}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+          <div className="md:col-span-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-950">
+            {lang === "es"
+              ? "Elige cómo debe aparecer esta información del cliente/proyecto en las láminas. Si no quieres mostrar el nombre del cliente, podemos usar solo etiqueta interna, calle o nombre del proyecto."
+              : "Choose how this client/project information should appear on the sheets. If you do not want to show the client name, we can use only an internal label, street, or project name."}
+          </div>
+
           <label className="grid gap-2 md:col-span-2">
             <span className="text-sm font-semibold text-slate-700">
               {t.notes}
@@ -3107,6 +3168,34 @@ function ProjectInfoCard({
 
           <label className="grid gap-2 md:col-span-2">
             <span className="text-sm font-semibold text-slate-700">
+              {t.measurementsNotes}
+            </span>
+            <textarea
+              required
+              value={contact.measurementsNotes}
+              onChange={(e) => onChange({ measurementsNotes: e.target.value })}
+              rows={5}
+              placeholder={t.measurementsNotesPlaceholder}
+              className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-slate-400"
+            />
+            <div className="text-xs text-slate-500">{t.measurementsNotesHelp}</div>
+          </label>
+
+          <label className="grid gap-2 md:col-span-2">
+            <span className="text-sm font-semibold text-slate-700">
+              {t.referenceLinks}
+            </span>
+            <textarea
+              value={contact.referenceLinks}
+              onChange={(e) => onChange({ referenceLinks: e.target.value })}
+              rows={3}
+              placeholder={t.referenceLinksPlaceholder}
+              className="rounded-3xl border border-slate-200 bg-white p-4 text-sm outline-none focus:border-slate-400"
+            />
+          </label>
+
+          <label className="grid gap-2 md:col-span-2">
+            <span className="text-sm font-semibold text-slate-700">
               {t.desiredDeliveryDate}
             </span>
             <input
@@ -3117,6 +3206,11 @@ function ProjectInfoCard({
             />
             <span className="text-xs text-slate-500">{t.desiredDeliveryDateHelp}</span>
           </label>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-950">
+          <div className="font-black">{timelineTitle}</div>
+          <p className="mt-1 leading-6">{timelineText}</p>
         </div>
 
         <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
@@ -3136,7 +3230,6 @@ function ProjectInfoCard({
               onChange={(files) => onFilesChange({ photos: files })}
               lang={lang}
               maxFiles={10}
-              requiredField
             />
             <FilePicker
               title={t.uploadReferences}
@@ -3156,6 +3249,7 @@ function ProjectInfoCard({
               onChange={(files) => onFilesChange({ surveyDocs: files })}
               lang={lang}
               maxFiles={10}
+              requiredField
             />
           </div>
         </div>
@@ -3740,14 +3834,14 @@ export default function App() {
     pricedItems.length === 1 && pricedItems[0]?.service.id === "photo-concept-start";
   const hasRequiredBranding =
     contact.partnerProfileMode === "existing" ||
-    (Boolean(contact.whiteLabelCompany.trim()) &&
-      (contact.logoOption !== "upload" || Boolean(projectFiles.logoFiles?.length)));
+    Boolean(contact.whiteLabelCompany.trim());
   const hasRequiredContact =
     Boolean(contact.clientName.trim()) &&
     Boolean(contact.customerEmail.trim()) &&
     Boolean(contact.customerPhone.trim()) &&
     Boolean(contact.projectAddress.trim()) &&
     Boolean(contact.notes.trim()) &&
+    Boolean(contact.measurementsNotes.trim()) &&
     hasRequiredProjectFiles(projectFiles) &&
     hasRequiredBranding &&
     contact.sameProjectConfirmed;
@@ -3882,6 +3976,9 @@ export default function App() {
       project_client_label: sanitizeText(contact.projectAddress),
       same_client_project_confirmed: contact.sameProjectConfirmed,
       full_notes: sanitizeText(contact.notes),
+      measurements_site_notes: sanitizeText(contact.measurementsNotes),
+      reference_links: sanitizeText(contact.referenceLinks),
+      requested_delivery_date: sanitizeText(contact.desiredDeliveryDate),
       white_label_delivery: buildWhiteLabelPayload(contact),
       file_summary: buildFileSummary(projectFiles),
       payment_status: "submitted_for_review_invoice_pending",
@@ -4255,6 +4352,7 @@ export default function App() {
                   setProjectFiles((prev) => ({ ...prev, ...patch }))
                 }
                 lang={lang}
+                pathId={activePath}
               />
               {checkoutNotice ? (
                 <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
