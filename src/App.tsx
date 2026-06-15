@@ -1699,7 +1699,7 @@ const CITY_SERVICES: Service[] = [
   },
 ];
 
-const IRRIGATION_SERVICES: Service[
+const IRRIGATION_SERVICES: Service[] = [
   {
     id: "watering-strategy",
     title: "Basic Watering Strategy",
@@ -1722,7 +1722,6 @@ const IRRIGATION_SERVICES: Service[
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
   },
-] = [
   {
     id: "irrigation-drafting",
     title: "Irrigation Drafting Cleanup from Your Markups",
