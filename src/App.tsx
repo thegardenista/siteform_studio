@@ -78,6 +78,8 @@ type MissingRequirementKey =
   | "projectPhotos"
   | "surveyDocs"
   | "references"
+  | "referenceLinks"
+  | "yardDesignNotes"
   | "sameProject"
   | "structureDetails"
   | "siteVisitScheduling";
@@ -4746,24 +4748,29 @@ function ProjectInfoCard({
 
               <label className="grid gap-2">
                 <span className="text-sm font-semibold text-slate-700">
-                  {lang === "es" ? "Notas para este paquete básico" : "Notes for this basic package"}
+                  {lang === "es" ? "Client notes / must-haves / avoid" : "Client notes / must-haves / avoid"}
                 </span>
                 <textarea
                   value={contact.yardDesignNotes}
                   onChange={(e) => onChange({ yardDesignNotes: e.target.value })}
-                  rows={3}
+                  rows={4}
                   placeholder={
                     lang === "es"
-                      ? "Ej: mostly planting, simple walkway direction, lighting only as concept notes, no deck/pergola sheets..."
-                      : "Ex: mostly planting, simple walkway direction, lighting only as concept notes, no deck/pergola sheets..."
+                      ? "Qué quiere el cliente, qué NO quiere, qué evitar, qué mantener, qué problema resolver, a qué prestar atención..."
+                      : "What the client wants, what they do NOT want, what to avoid, what to keep, what problem to solve, and what we should pay attention to..."
                   }
-                  className="rounded-3xl border border-slate-200 bg-white p-4 text-sm text-slate-900 outline-none focus:border-slate-400"
+                  className={inputClass(isMissing("yardDesignNotes"), "rounded-3xl p-4 text-sm text-slate-900 outline-none")}
                 />
+                <div className="text-xs leading-5 text-slate-600">
+                  {lang === "es"
+                    ? "Requerido para Yard Design Package. Written notes are clearer than arrows on photos."
+                    : "Required for Yard Design Package. Written notes are often clearer than arrows on photos."}
+                </div>
               </label>
             </div>
           ) : null}
 
-          {pathId !== "build-one" ? (
+          {pathId !== "build-one" && pathId !== "full-design" ? (
             <>
 <div className="grid gap-4 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4 md:col-span-2 md:grid-cols-4">
             <label className="grid gap-2 md:col-span-4">
@@ -4824,8 +4831,15 @@ function ProjectInfoCard({
               onChange={(e) => onChange({ referenceLinks: e.target.value })}
               rows={3}
               placeholder={t.referenceLinksPlaceholder}
-              className="rounded-3xl border border-slate-200 bg-white p-4 text-sm outline-none focus:border-slate-400"
+              className={inputClass(isMissing("referenceLinks"), "rounded-3xl p-4 text-sm outline-none")}
             />
+            {pathId === "full-design" ? (
+              <div className="text-xs font-semibold text-emerald-700">
+                {lang === "es"
+                  ? "Requerido para Yard Design Package: Pinterest board, shared board, product/reference links, o links de inspiración."
+                  : "Required for Yard Design Package: Pinterest board, shared board, product/reference links, or inspiration links."}
+              </div>
+            ) : null}
           </label>
 
                       </>
@@ -4986,19 +5000,31 @@ function ProjectInfoCard({
           <p className="mt-2 text-sm leading-6 text-slate-600">{t.projectFilesHelp}</p>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             <FilePicker
-              title={t.uploadPhotos}
-              help={t.uploadPhotosHelp}
+              title={pathId === "full-design" ? (lang === "es" ? "Photos of the whole property / design area" : "Photos of the whole property / design area") : t.uploadPhotos}
+              help={
+                pathId === "full-design"
+                  ? lang === "es"
+                    ? "Requerido para Yard Design Package. Sube tantas fotos claras como puedas: todo el objeto, vistas generales, bordes, fences, house edges, slopes, problem areas, existing plants, utilities, patios, walkways, and anything the client cares about."
+                    : "Required for Yard Design Package. Upload as many clear photos as possible: the whole property/design area, overall views, edges, fences, house edges, slopes, problem areas, existing plants, utilities, patios, walkways, and anything the client cares about."
+                  : t.uploadPhotosHelp
+              }
               accept="image/*"
               files={projectFiles.photos}
               onChange={(files) => onFilesChange({ photos: files })}
               lang={lang}
-              maxFiles={10}
-              requiredField={pathId === "quick-sale"}
+              maxFiles={pathId === "full-design" ? 20 : 10}
+              requiredField={pathId === "quick-sale" || pathId === "full-design"}
               missing={isMissing("projectPhotos")}
             />
             <FilePicker
-              title={t.uploadReferences}
-              help={t.uploadReferencesHelp}
+              title={pathId === "full-design" ? (lang === "es" ? "Marked survey / rough layout markup" : "Marked survey / rough layout markup") : t.uploadReferences}
+              help={
+                pathId === "full-design"
+                  ? lang === "es"
+                    ? "Requerido para Yard Design Package. Sube un archivo donde encima del survey/site plan esté dibujado aproximadamente dónde va cada zona: planting, lawn, paths, patio, privacy, problem spots, keep/remove areas. Puede ser markup a mano."
+                    : "Required for Yard Design Package. Upload a file where the survey/site plan is marked up with approximate zones: planting, lawn, paths, patio, privacy, problem spots, keep/remove areas. A hand markup is fine."
+                  : t.uploadReferencesHelp
+              }
               accept="image/*,.pdf,.txt,.doc,.docx"
               files={projectFiles.references}
               onChange={(files) => onFilesChange({ references: files })}
@@ -5008,8 +5034,14 @@ function ProjectInfoCard({
               missing={isMissing("references")}
             />
             <FilePicker
-              title={t.uploadSurvey}
-              help={t.uploadSurveyHelp}
+              title={pathId === "full-design" ? (lang === "es" ? "Clean survey / site plan" : "Clean survey / site plan") : t.uploadSurvey}
+              help={
+                pathId === "full-design"
+                  ? lang === "es"
+                    ? "Requerido para Yard Design Package. Sube el clean survey/site plan/base plan sin markup si lo tienes. El markup aproximado va en el bloque separado."
+                    : "Required for Yard Design Package. Upload the clean survey/site plan/base plan without markup if available. The approximate markup goes in the separate markup upload."
+                  : t.uploadSurveyHelp
+              }
               accept=".pdf,image/*,.dwg,.dxf"
               files={projectFiles.surveyDocs}
               onChange={(files) => onFilesChange({ surveyDocs: files })}
@@ -5430,7 +5462,7 @@ function getMissingRequirementKeys(
 ): MissingRequirementKey[] {
   const missing: MissingRequirementKey[] = [];
   const requiresSurveyFiles = pathId !== "quick-sale" && pathId !== "build-one";
-  const requiresPhotoFiles = pathId === "quick-sale";
+  const requiresPhotoFiles = pathId === "quick-sale" || pathId === "full-design";
 
   if (selectedItemCount <= 0) missing.push("selectedService");
   if (!contact.clientName.trim()) missing.push("partnerName");
@@ -5442,6 +5474,8 @@ function getMissingRequirementKeys(
   if (requiresPhotoFiles && !files.photos?.length) missing.push("projectPhotos");
   if (requiresSurveyFiles && !files.surveyDocs?.length) missing.push("surveyDocs");
   if (pathId !== "build-one" && !files.references?.length) missing.push("references");
+  if (pathId === "full-design" && !contact.referenceLinks.trim()) missing.push("referenceLinks");
+  if (pathId === "full-design" && !contact.yardDesignNotes.trim()) missing.push("yardDesignNotes");
 
   const selectedStructureIds = selectedServiceIds.filter((id) =>
     STRUCTURE_DETAIL_SERVICE_IDS.includes(id)
@@ -5495,6 +5529,8 @@ function getMissingRequirementLabel(key: MissingRequirementKey, lang: Lang) {
     projectPhotos: { en: "Project photos for Quick Photo Concept", es: "Fotos para Quick Photo Concept" },
     surveyDocs: { en: "Survey / site plan / measured base", es: "Survey / plano del sitio / base medida" },
     references: { en: "References / markups / measurements", es: "Referencias / markups / medidas" },
+    referenceLinks: { en: "Reference links / Pinterest / shared boards", es: "Links de referencia / Pinterest / tableros compartidos" },
+    yardDesignNotes: { en: "Client notes / must-haves / avoid for Yard Design Package", es: "Notas del cliente / deseos / evitar para Yard Design Package" },
     sameProject: { en: "Confirm one client/project for this order", es: "Confirma un cliente/proyecto para este pedido" },
     structureDetails: { en: "Add required structure details and files for the selected outdoor structure", es: "Agrega detalles y archivos de la estructura exterior seleccionada" },
     siteVisitScheduling: { en: "Choose a Friday site visit or request other dates", es: "Elige visita en viernes o pide otras fechas" },
