@@ -28,7 +28,7 @@ type AddressDisplay = "full" | "street" | "project" | "hide";
 type LogoOption = "upload" | "on-file" | "text-only";
 type TitleBlockOption = "standard-landscape" | "standard-portrait" | "upload";
 type TitleBlockSampleOption = "standard-landscape" | "standard-portrait";
-type SiteVisitScheduleMode = "" | "friday" | "other";
+type SiteVisitScheduleMode = "" | "friday" | "options";
 
 interface StructurePreference {
   material: string;
@@ -67,6 +67,13 @@ interface StructurePreference {
 
 type StructurePreferences = Record<string, StructurePreference>;
 
+interface PlanSheetPreference {
+  notes: string;
+  referenceLinks: string;
+}
+
+type PlanSheetPreferences = Record<string, PlanSheetPreference>;
+
 type MissingRequirementKey =
   | "selectedService"
   | "partnerName"
@@ -82,6 +89,7 @@ type MissingRequirementKey =
   | "yardDesignNotes"
   | "sameProject"
   | "structureDetails"
+  | "planDetails"
   | "siteVisitScheduling";
 type ViewState = "LANDING" | "MENU" | "CONFIG" | "SUCCESS";
 type PricingType = "size" | "flat" | "unit" | "hourly" | "quote" | "percentage";
@@ -152,8 +160,16 @@ interface OrderContact {
   yardDesignFocus: string[];
   yardDesignNotes: string;
   structurePreferences: StructurePreferences;
+  planSheetPreferences: PlanSheetPreferences;
   siteVisitScheduleMode: SiteVisitScheduleMode;
   siteVisitFridayDate: string;
+  siteVisitFridayTime: string;
+  siteVisitOption1Date: string;
+  siteVisitOption1Time: string;
+  siteVisitOption2Date: string;
+  siteVisitOption2Time: string;
+  siteVisitOption3Date: string;
+  siteVisitOption3Time: string;
   siteVisitOtherDates: string;
   siteVisitNotes: string;
   partnerProfileMode: PartnerProfileMode;
@@ -179,6 +195,9 @@ interface ProjectFileUploads {
   references: FileList | null;
   structureFiles: Record<string, FileList | null>;
   structureReferenceFiles: Record<string, FileList | null>;
+  planSurveyFiles: Record<string, FileList | null>;
+  planMarkupFiles: Record<string, FileList | null>;
+  planReferenceFiles: Record<string, FileList | null>;
 }
 
 interface QuickHelpForm {
@@ -207,6 +226,7 @@ interface PaidOrderSnapshot {
 }
 
 interface SummaryLine {
+  id: string;
   title: string;
   qty: number;
   price: number | null;
@@ -296,6 +316,45 @@ const DEFAULT_DOCUMENT_SAMPLE: SampleAsset = {
 const SAMPLE_ASSETS: Record<string, SampleAsset> = {
   "photo-concept-start": QUICK_PHOTO_SAMPLE,
 
+  // 3D & Rendering Support samples.
+  // Put your real screenshots/files into public/samples/ with these exact names,
+  // or change the file paths below after upload.
+  "survey-documents-start": {
+    kind: "document",
+    file: "/samples/3d-existing-model-sample.jpg",
+    fileLabel: "Base plan + 3D existing model sample",
+    helper:
+      "Example of a clean base plan / existing-conditions model. This is geometry setup, not final design or photoreal rendering.",
+  },
+  "onsite-base-model": {
+    kind: "document",
+    file: "/samples/3d-existing-model-with-site-visit-sample.jpg",
+    fileLabel: "Base plan + 3D model with site visit sample",
+    helper:
+      "Example of a base plan and existing-conditions model built after a site visit.",
+  },
+  "client-model-start": {
+    kind: "document",
+    file: "/samples/3d-client-model-render-sample.jpg",
+    fileLabel: "Client model render setup sample",
+    helper:
+      "Example of a supplied model prepared for materials, camera views, and presentation rendering.",
+  },
+  "draw-your-idea": {
+    kind: "document",
+    file: "/samples/3d-your-design-direction-sample.jpg",
+    fileLabel: "Your design direction — our production sample",
+    helper:
+      "Example of turning partner sketches, notes, and references into a clean production model / visual direction.",
+  },
+  "help-design-it": {
+    kind: "document",
+    file: "/samples/3d-we-lead-design-sample.jpg",
+    fileLabel: "We lead the design sample",
+    helper:
+      "Example of design direction, reference selection, and modeling/rendering path when SiteForm helps lead the concept.",
+  },
+
   // Later, when real PDF samples are ready, add them here.
   // Example:
   // "deck-small": {
@@ -372,6 +431,13 @@ function emptyStructurePreference(): StructurePreference {
   };
 }
 
+function emptyPlanSheetPreference(): PlanSheetPreference {
+  return {
+    notes: "",
+    referenceLinks: "",
+  };
+}
+
 function hasMeaningfulStructurePreference(serviceId: string, preference?: StructurePreference) {
   if (!preference) return false;
 
@@ -442,6 +508,34 @@ function sanitizeStructurePreferences(
   }, {});
 }
 
+function hasMeaningfulPlanSheetPreference(preference?: PlanSheetPreference) {
+  return Boolean(preference?.notes?.trim());
+}
+
+function sanitizePlanSheetPreferences(
+  preferences: PlanSheetPreferences,
+  selectedServiceIds: string[]
+) {
+  return selectedServiceIds.reduce<Record<string, Partial<PlanSheetPreference>>>((acc, serviceId) => {
+    const preference = preferences[serviceId];
+    if (!preference) return acc;
+
+    const cleaned = Object.entries(preference).reduce<Partial<PlanSheetPreference>>((next, [key, value]) => {
+      const cleanValue = sanitizeText(String(value || ""));
+      if (cleanValue) {
+        next[key as keyof PlanSheetPreference] = cleanValue;
+      }
+      return next;
+    }, {});
+
+    if (Object.keys(cleaned).length) {
+      acc[serviceId] = cleaned;
+    }
+
+    return acc;
+  }, {});
+}
+
 function getStructureServiceType(serviceId: string) {
   if (serviceId === "deck-small" || serviceId === "deck-large") return "deck";
   if (serviceId === "pergola-small" || serviceId === "shade-large") return "cover";
@@ -454,7 +548,7 @@ function getStructureServiceType(serviceId: string) {
 const T = {
   en: {
     header: "SiteForm Studio",
-    subheader: "White-label outdoor design support for outdoor pros",
+    subheader: "White-label design, 3D production, and preconstruction support for outdoor pros. From premium Lumion/D5 renders to HOA sheets, CRZ overlays, and site logistics.",
     selectPath: "What do you need help with?",
     selectPathHelp:
       "Start with the option closest to your project. You can add site visits, extra sheets, or more detail later.",
@@ -686,18 +780,18 @@ const T = {
     showcaseTitle: "White-label outdoor design support",
     showcaseDesc:
       "SiteForm Studio helps builders, landscape crews, deck builders, designers, and outdoor contractors turn rough site info into clear client-facing design support — under your brand.",
-    showcaseWhiteTitle: "What white-label means",
+    showcaseWhiteTitle: "Premium 3D for Designers",
     showcaseWhiteText:
-      "We stay behind the scenes. Your company name, logo, sheet style, and project label can appear on the PDF, so your client sees your brand — not another design company.",
-    showcaseHowTitle: "How it works",
+      "Get high-end Lumion or D5 presentation renders without investing thousands in expensive software licenses or heavy graphics hardware overhead. We build your 3D base models, trace surveys, and handle the production heavy lifting under your brand.",
+    showcaseHowTitle: "Preconstruction & Site Logistics",
     showcaseHowText:
-      "Choose a service, upload photos, measurements, survey files, references, and white-label details. For most services, the price and typical timing are visible before you submit — no waiting for a manager just to know what it may cost.",
+      "Need technical compliance sheets? We produce exact site setup layouts, material staging plans, restroom/dumpster placements, detailed Impervious Cover estimates, and critical Root Zone (CRZ) tree overlays to clear HOA and jurisdiction reviews fast.",
     showcasePricingTitle: "Clear price before the back-and-forth",
     showcasePricingText:
       "In most cases you can see what your client-facing support will cost and when you can expect it. Complex or custom work may need a short written review before invoicing, but you will still see a starting price range before you submit.",
-    showcaseSafeTitle: "Design-intent support",
+    showcaseSafeTitle: "100% Behind the Scenes",
     showcaseSafeText:
-      "Deliverables are for concept, presentation, coordination, and pricing support. We do not provide engineering, permit filing, stamped drawings, or approval guarantees.",
+      "We stay completely invisible to your clients. Your company name, logo, title block, and project labels go directly on the drawings. Whether it is a fast sales-closing photo concept or a complete sheet package, it looks like your in-house team built it.",
     showcaseStep1: "Quick photo concepts",
     showcaseStep2: "Drafting + 3D support",
     showcaseStep3: "HOA, takeoffs, planting, hardscape, lighting",
@@ -713,7 +807,7 @@ const T = {
   },
   es: {
     header: "SiteForm Studio",
-    subheader: "Apoyo white-label de diseño exterior para profesionales",
+    subheader: "Apoyo de diseño white-label, producción 3D y preconstrucción para profesionales exteriores. Desde renders premium en Lumion/D5 hasta láminas HOA, overlays de CRZ y logística de sitio.",
     selectPath: "¿En qué necesitas ayuda?",
     selectPathHelp:
       "Empieza con la opción más cercana a tu proyecto. Después puedes agregar visitas, láminas extra o más detalle.",
@@ -945,18 +1039,18 @@ const T = {
     showcaseTitle: "Apoyo white-label para proyectos exteriores",
     showcaseDesc:
       "SiteForm Studio ayuda a builders, equipos de landscape, deck builders, diseñadores y contratistas de exterior a convertir información básica del sitio en apoyo claro para presentar al cliente — bajo tu marca.",
-    showcaseWhiteTitle: "Qué significa white-label",
+    showcaseWhiteTitle: "3D Premium para Diseñadores",
     showcaseWhiteText:
-      "Trabajamos detrás de escena. Tu nombre de compañía, logo, estilo de lámina y etiqueta del proyecto pueden aparecer en el PDF, para que tu cliente vea tu marca — no otra compañía de diseño.",
-    showcaseHowTitle: "Cómo funciona",
+      "Obtén renders de presentación de alta gama en Lumion o D5 sin invertir miles en licencias de software o computadoras costosas. Construimos tus modelos base 3D, calcamos surveys y nos encargamos del trabajo pesado bajo tu marca.",
+    showcaseHowTitle: "Preconstrucción y Logística de Sitio",
     showcaseHowText:
-      "Elige un servicio, sube fotos, medidas, survey, referencias y datos white-label. Para la mayoría de servicios, el precio y tiempo típico están visibles antes de enviar — sin esperar a hablar con un manager solo para saber cuánto puede costar.",
+      "¿Necesitas láminas de cumplimiento técnico? Producimos layouts de organización de sitio, zonas de materiales, ubicación de baños/dumpsters, estimados de cobertura impermeable (Impervious Cover) y overlays de CRZ para aprobar HOA y revisiones rápido.",
     showcasePricingTitle: "Precio claro antes del intercambio",
     showcasePricingText:
       "En la mayoría de casos puedes ver cuánto costará el apoyo para tu cliente y cuándo puedes esperarlo. Trabajos complejos o custom pueden necesitar una revisión breve por escrito antes de facturar, pero todavía ves un rango de precio inicial antes de enviar.",
-    showcaseSafeTitle: "Apoyo de intención de diseño",
+    showcaseSafeTitle: "100% Detrás de Escena",
     showcaseSafeText:
-      "Los entregables son para concepto, presentación, coordinación y apoyo de presupuesto. No hacemos ingeniería, permisos, dibujos sellados/stamped ni garantizamos aprobaciones.",
+      "Permanecemos invisibles para tus clientes. Tu nombre de compañía, logo, title block y etiquetas van directo en los planos. Ya sea un concepto rápido en foto para cerrar una venta o un paquete completo de láminas, parecerá hecho por tu propio equipo.",
     showcaseStep1: "Conceptos rápidos desde foto",
     showcaseStep2: "Dibujo + apoyo 3D",
     showcaseStep3: "HOA, cómputos, plantación, hardscape, iluminación",
@@ -1093,6 +1187,7 @@ const STARTING_POINT_SERVICES: Service[] = [
     notIncluded:
       "Design layout, planting plan, rendering package, legal survey, engineering, code review, permits, or travel outside city limits.",
     helper: "Choose this OR remote base/model OR existing 3D model. It is one starting point, not an add-on.",
+    sampleLabel: "See sample",
   },
   {
     id: "survey-documents-start",
@@ -1113,6 +1208,7 @@ const STARTING_POINT_SERVICES: Service[] = [
     notIncluded:
       "Site visit unless added separately, legal survey work, engineering, code review, permit work, final design, planting plan, detailed render materials, final presentation renders, or construction-control documents.",
     helper: "Choose this OR Your 3D Model, We Render It. Add Site Visit separately if we need to collect the site information.",
+    sampleLabel: "See sample",
   },
   {
     id: "client-model-start",
@@ -1134,6 +1230,7 @@ const STARTING_POINT_SERVICES: Service[] = [
       "Heavy model cleanup, rebuilding missing geometry, creating materials from scratch, or design work not already present in the model.",
     helper:
       "Choose this OR Base Plan + 3D Existing Model. Extra cleanup hours may be discussed and billed only after approval.",
+    sampleLabel: "See sample",
   },
   {
     id: "photo-concept-start",
@@ -1371,6 +1468,7 @@ const DESIGN_DIRECTION_SERVICES: Service[] = [
       "Leading the design from scratch, client design meetings, engineering, permit drawings, detailed production sheets, takeoffs, or separate structure packages unless ordered separately.",
     helper:
       "Use this when the design direction is yours and our job is to execute it cleanly. Decks, pergolas, carports, kitchens, or other built structures may still need the outdoor structures section if they require their own package.",
+    sampleLabel: "See sample",
   },
   {
     id: "help-design-it",
@@ -1392,6 +1490,7 @@ const DESIGN_DIRECTION_SERVICES: Service[] = [
       "Engineering, permit packages, sealed/stamped drawings, planting plans, takeoffs, detailed production sheets, code review, or acting as the direct client-facing designer unless agreed separately.",
     helper:
       "A partner or client-side contact must attend the remote design brief so the client discussion does not turn into a broken telephone. We can lead design, but the white-label partner stays connected to the client conversation.",
+    sampleLabel: "See sample",
   },
 ];
 
@@ -1681,26 +1780,7 @@ const SUPPORT_SERVICES: Service[] = [
       "Base plan, 3D model, design work, legal survey, engineering, code review, or travel outside city limits.",
     helper:
       "If the site is outside city limits, extra travel time may be added to the final invoice at $70/hour after we review the address.",
-  },
-  {
-    id: "travel-outside-city",
-    title: "Travel Outside City Limits",
-    category: "Help",
-    icon: Map,
-    pricingType: "hourly",
-    hourlyRate: 70,
-    stripePriceId: "price_travelhour_70",
-    quantityEnabled: true,
-    quantityLabel: "hours",
-    short: "Extra travel time when the site is outside city limits.",
-    bestFor: "Out-of-town site visits.",
-    youSend: "Job location and expected travel distance.",
-    youGet: "Approved extra travel time billed hourly.",
-    notIncluded: "Local site visit time itself.",
-    helper: "Use this only together with Site Visit.",
-    hardDependency: ["site-visit-addon", "site-visit-start"],
-  },
-  {
+  },  {
     id: "revision-redesign",
     title: "Additional Revision / Redesign Time",
     category: "Help",
@@ -1788,8 +1868,16 @@ function emptyContact(): OrderContact {
     yardDesignFocus: [],
     yardDesignNotes: "",
     structurePreferences: {},
+    planSheetPreferences: {},
     siteVisitScheduleMode: "",
     siteVisitFridayDate: "",
+    siteVisitFridayTime: "",
+    siteVisitOption1Date: "",
+    siteVisitOption1Time: "",
+    siteVisitOption2Date: "",
+    siteVisitOption2Time: "",
+    siteVisitOption3Date: "",
+    siteVisitOption3Time: "",
     siteVisitOtherDates: "",
     siteVisitNotes: "",
     partnerProfileMode: "new",
@@ -1832,8 +1920,16 @@ function getInitialContact(): OrderContact {
       yardDesignFocus: [],
       yardDesignNotes: "",
       structurePreferences: {},
+      planSheetPreferences: {},
       siteVisitScheduleMode: "",
       siteVisitFridayDate: "",
+      siteVisitFridayTime: "",
+      siteVisitOption1Date: "",
+      siteVisitOption1Time: "",
+      siteVisitOption2Date: "",
+      siteVisitOption2Time: "",
+      siteVisitOption3Date: "",
+      siteVisitOption3Time: "",
       siteVisitOtherDates: "",
       siteVisitNotes: "",
       desiredDeliveryDate: "",
@@ -1888,6 +1984,21 @@ function buildSiteVisitPayload(contact: OrderContact) {
   return {
     schedule_mode: contact.siteVisitScheduleMode,
     friday_date: sanitizeText(contact.siteVisitFridayDate),
+    friday_time: sanitizeText(contact.siteVisitFridayTime),
+    requested_options: [
+      {
+        date: sanitizeText(contact.siteVisitOption1Date),
+        time: sanitizeText(contact.siteVisitOption1Time),
+      },
+      {
+        date: sanitizeText(contact.siteVisitOption2Date),
+        time: sanitizeText(contact.siteVisitOption2Time),
+      },
+      {
+        date: sanitizeText(contact.siteVisitOption3Date),
+        time: sanitizeText(contact.siteVisitOption3Time),
+      },
+    ].filter((option) => option.date || option.time),
     other_dates: sanitizeText(contact.siteVisitOtherDates),
     notes: sanitizeText(contact.siteVisitNotes),
   };
@@ -1902,6 +2013,9 @@ function emptyProjectFiles(): ProjectFileUploads {
     references: null,
     structureFiles: {},
     structureReferenceFiles: {},
+    planSurveyFiles: {},
+    planMarkupFiles: {},
+    planReferenceFiles: {},
   };
 }
 
@@ -1913,7 +2027,10 @@ function hasAnyProjectFile(files: ProjectFileUploads) {
       files.logoFiles?.length ||
       files.references?.length ||
       Object.values(files.structureFiles || {}).some((fileList) => Boolean(fileList?.length)) ||
-      Object.values(files.structureReferenceFiles || {}).some((fileList) => Boolean(fileList?.length))
+      Object.values(files.structureReferenceFiles || {}).some((fileList) => Boolean(fileList?.length)) ||
+      Object.values(files.planSurveyFiles || {}).some((fileList) => Boolean(fileList?.length)) ||
+      Object.values(files.planMarkupFiles || {}).some((fileList) => Boolean(fileList?.length)) ||
+      Object.values(files.planReferenceFiles || {}).some((fileList) => Boolean(fileList?.length))
   );
 }
 
@@ -1955,6 +2072,17 @@ function summarizeStructureReferenceFiles(files: ProjectFileUploads) {
   );
 }
 
+function summarizeFileMap(fileMap: Record<string, FileList | null>) {
+  return Object.entries(fileMap || {}).reduce<Record<string, ReturnType<typeof summarizeFileList>>>(
+    (acc, [serviceId, fileList]) => {
+      const summary = summarizeFileList(fileList);
+      if (summary.length) acc[serviceId] = summary;
+      return acc;
+    },
+    {}
+  );
+}
+
 function buildFileSummary(files: ProjectFileUploads) {
   return {
     photos: summarizeFileList(files.photos),
@@ -1964,6 +2092,9 @@ function buildFileSummary(files: ProjectFileUploads) {
     references: summarizeFileList(files.references),
     structure_files: summarizeStructureFiles(files),
     structure_reference_files: summarizeStructureReferenceFiles(files),
+    plan_survey_files: summarizeFileMap(files.planSurveyFiles),
+    plan_markup_files: summarizeFileMap(files.planMarkupFiles),
+    plan_reference_files: summarizeFileMap(files.planReferenceFiles),
   };
 }
 
@@ -2040,6 +2171,20 @@ async function serializeStructureReferenceFileMap(files: ProjectFileUploads) {
   }, {});
 }
 
+async function serializeFileMap(fileMap: Record<string, FileList | null>) {
+  const entries = await Promise.all(
+    Object.entries(fileMap || {}).map(async ([serviceId, fileList]) => {
+      const serialized = await serializeFileList(fileList);
+      return [serviceId, serialized] as const;
+    })
+  );
+
+  return entries.reduce<Record<string, Awaited<ReturnType<typeof serializeFileList>>>>((acc, [serviceId, serialized]) => {
+    if (serialized.length) acc[serviceId] = serialized;
+    return acc;
+  }, {});
+}
+
 async function buildProjectFilePayload(files: ProjectFileUploads) {
   return {
     photos: await serializeFileList(files.photos),
@@ -2049,6 +2194,9 @@ async function buildProjectFilePayload(files: ProjectFileUploads) {
     references: await serializeFileList(files.references),
     structure_files: await serializeStructureFileMap(files),
     structure_reference_files: await serializeStructureReferenceFileMap(files),
+    plan_survey_files: await serializeFileMap(files.planSurveyFiles),
+    plan_markup_files: await serializeFileMap(files.planMarkupFiles),
+    plan_reference_files: await serializeFileMap(files.planReferenceFiles),
   };
 }
 
@@ -2420,17 +2568,6 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     youGet: "Tiempo de visita, fotos de campo, medidas en bruto y notas de campo para trabajo de intención de diseño.",
     notIncluded: "Plano base, modelo 3D, trabajo de diseño, survey legal, ingeniería, revisión de código o traslado fuera de los límites de la ciudad.",
     helper: "Si el sitio está fuera de los límites de la ciudad, el tiempo extra de traslado puede agregarse a la factura final a $70/hora después de revisar la dirección.",
-  },
-  "travel-outside-city": {
-    title: "Traslado fuera de los límites de la ciudad",
-    category: "Apoyo",
-    quantityLabel: "horas",
-    short: "Tiempo extra de traslado cuando el sitio está fuera de los límites de la ciudad.",
-    bestFor: "Visitas fuera de la ciudad.",
-    youSend: "Ubicación del trabajo y distancia estimada de traslado.",
-    youGet: "Tiempo extra de traslado aprobado, cobrado por hora.",
-    notIncluded: "La visita local al sitio en sí.",
-    helper: "Usa esto solo junto con Visita al sitio.",
   },
   "revision-redesign": {
     title: "Tiempo adicional de revisión / rediseño",
@@ -4300,6 +4437,172 @@ function StructurePreferenceCard({
 }
 
 
+
+function toDateInputValue(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getUpcomingFridayOptions(count = 10) {
+  const options: Array<{ value: string; label: string }> = [];
+  const current = new Date();
+  current.setHours(12, 0, 0, 0);
+
+  const daysUntilFriday = (5 - current.getDay() + 7) % 7;
+  current.setDate(current.getDate() + daysUntilFriday);
+
+  for (let i = 0; i < count; i += 1) {
+    const optionDate = new Date(current);
+    optionDate.setDate(current.getDate() + i * 7);
+    options.push({
+      value: toDateInputValue(optionDate),
+      label: optionDate.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      }),
+    });
+  }
+
+  return options;
+}
+
+function getSiteVisitSlotKey(date: string, time: string) {
+  return date && time ? `${date}|${time}` : "";
+}
+
+
+function PlanSheetDetailCard({
+  service,
+  preference,
+  surveyFiles,
+  markupFiles,
+  referenceFiles,
+  onChange,
+  onSurveyFilesChange,
+  onMarkupFilesChange,
+  onReferenceFilesChange,
+  lang,
+  missing,
+}: {
+  service: Service;
+  preference: PlanSheetPreference;
+  surveyFiles: FileList | null;
+  markupFiles: FileList | null;
+  referenceFiles: FileList | null;
+  onChange: (patch: Partial<PlanSheetPreference>) => void;
+  onSurveyFilesChange: (files: FileList | null) => void;
+  onMarkupFilesChange: (files: FileList | null) => void;
+  onReferenceFilesChange: (files: FileList | null) => void;
+  lang: Lang;
+  missing: boolean;
+}) {
+  const title = translateServiceTitle(service, lang);
+  const textareaClass =
+    "rounded-3xl border border-slate-200 bg-white p-4 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-400";
+
+  return (
+    <div
+      className={`rounded-[1.5rem] border p-4 ${
+        missing ? "border-rose-300 bg-rose-50" : "border-slate-200 bg-white"
+      }`}
+    >
+      <div className="flex flex-col gap-1">
+        <div className="text-base font-black text-slate-900">{title}</div>
+        <div className="text-xs leading-5 text-slate-500">
+          {lang === "es"
+            ? "Estos archivos y notas se guardan separados para esta lámina, no mezclados con deck/pergola/kitchen u otras láminas."
+            : "These files and notes are saved separately for this sheet, not mixed with deck/pergola/kitchen or other sheets."}
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2 md:col-span-2">
+          <span className="text-xs font-black uppercase tracking-wide text-slate-600">
+            {lang === "es" ? "Descripción / instrucciones para esta lámina" : "Description / instructions for this sheet"}
+          </span>
+          <textarea
+            value={preference.notes}
+            onChange={(e) => onChange({ notes: e.target.value })}
+            rows={4}
+            placeholder={
+              lang === "es"
+                ? "Qué hay que mostrar en esta lámina, qué revisar, qué calcular, qué layer/markups usar..."
+                : "What this sheet needs to show, review, calculate, and which layer/markup we should follow..."
+            }
+            className={textareaClass}
+          />
+        </label>
+
+        <FilePicker
+          title={lang === "es" ? "Survey / base file for this sheet" : "Survey / base file for this sheet"}
+          help={
+            lang === "es"
+              ? "Required. Clean survey, site plan, base CAD/PDF, approved plan, or model export that gives geometry for this specific sheet."
+              : "Required. Clean survey, site plan, base CAD/PDF, approved plan, or model export that gives geometry for this specific sheet."
+          }
+          accept=".pdf,image/*,.dwg,.dxf,.skp"
+          files={surveyFiles}
+          onChange={onSurveyFilesChange}
+          lang={lang}
+          maxFiles={5}
+          requiredField
+          missing={missing && !surveyFiles?.length}
+        />
+
+        <FilePicker
+          title={lang === "es" ? "Marked plan / instructions for this sheet" : "Marked plan / instructions for this sheet"}
+          help={
+            lang === "es"
+              ? "Required. Upload marked plan, redline, sketch, screenshot, HOA checklist, CRZ/tree markup, IC markup, planting markup, or notes showing what belongs to this sheet."
+              : "Required. Upload marked plan, redline, sketch, screenshot, HOA checklist, CRZ/tree markup, IC markup, planting markup, or notes showing what belongs to this sheet."
+          }
+          accept=".pdf,image/*,.dwg,.dxf,.skp"
+          files={markupFiles}
+          onChange={onMarkupFilesChange}
+          lang={lang}
+          maxFiles={5}
+          requiredField
+          missing={missing && !markupFiles?.length}
+        />
+
+        <FilePicker
+          title={lang === "es" ? "Reference / supporting files for this sheet" : "Reference / supporting files for this sheet"}
+          help={
+            lang === "es"
+              ? "Optional. Product screenshots, HOA rules, plant list, material notes, example sheet, city checklist, or other support files for this exact sheet."
+              : "Optional. Product screenshots, HOA rules, plant list, material notes, example sheet, city checklist, or other support files for this exact sheet."
+          }
+          accept=".pdf,image/*,.doc,.docx,.xls,.xlsx,.csv,.dwg,.dxf,.skp"
+          files={referenceFiles}
+          onChange={onReferenceFilesChange}
+          lang={lang}
+          maxFiles={5}
+        />
+
+        <label className="grid gap-2">
+          <span className="text-xs font-black uppercase tracking-wide text-slate-600">
+            {lang === "es" ? "Reference links for this sheet" : "Reference links for this sheet"}
+          </span>
+          <textarea
+            value={preference.referenceLinks}
+            onChange={(e) => onChange({ referenceLinks: e.target.value })}
+            rows={4}
+            placeholder={
+              lang === "es"
+                ? "Google Drive, HOA link, city checklist, product page, Pinterest/reference links..."
+                : "Google Drive, HOA link, city checklist, product page, Pinterest/reference links..."
+            }
+            className={textareaClass}
+          />
+        </label>
+      </div>
+    </div>
+  );
+}
+
 // ─── ProjectInfoCard ─────────────────────────────────────────────────────────
 
 function ProjectInfoCard({
@@ -4347,6 +4650,44 @@ function ProjectInfoCard({
   const logoRequired = false;
   const isQuickPhoto = pathId === "quick-sale";
   const hasSelectedSiteVisit = hasSiteVisitSelected(selectedServiceIds);
+  const [unavailableSiteVisitSlots, setUnavailableSiteVisitSlots] = useState<string[]>([]);
+  const fridayOptions = getUpcomingFridayOptions(10);
+  const siteVisitTimeOptions = [
+    { value: "09:00", label: "9:00–10:30 AM" },
+    { value: "10:30", label: "10:30 AM–12:00 PM" },
+    { value: "13:00", label: "1:00–2:30 PM" },
+    { value: "14:30", label: "2:30–4:00 PM" },
+  ];
+  const selectedFridaySlotKey = getSiteVisitSlotKey(contact.siteVisitFridayDate, contact.siteVisitFridayTime);
+  const selectedFridaySlotUnavailable =
+    Boolean(selectedFridaySlotKey) && unavailableSiteVisitSlots.includes(selectedFridaySlotKey);
+  const planSheetServices = [
+    ...NEXT_PHASE_SERVICES,
+    ...CITY_SERVICES,
+    ...IRRIGATION_SERVICES,
+  ];
+  const selectedPlanSheetServices =
+    pathId === "special-drawings"
+      ? planSheetServices.filter((service) => selectedServiceIds.includes(service.id))
+      : [];
+
+  useEffect(() => {
+    if (!hasSelectedSiteVisit) return;
+
+    let cancelled = false;
+    fetch(`${ORDER_REVIEW_ENDPOINT}?action=site_visit_slots&form_key=${encodeURIComponent(SITEFORM_FORM_KEY)}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (!cancelled && data?.ok && Array.isArray(data.unavailable_slots)) {
+          setUnavailableSiteVisitSlots(data.unavailable_slots);
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [hasSelectedSiteVisit]);
   const yardFocusOptions = [
     { id: "planting-softscape", en: "Planting / softscape direction", es: "Plantación / softscape" },
     { id: "basic-paving-hardscape", en: "Basic paving / hardscape direction", es: "Pavimento / hardscape básico" },
@@ -4363,6 +4704,36 @@ function ProjectInfoCard({
         : [...current, id],
     });
   };
+
+  const updatePlanSheetPreference = (
+    serviceId: string,
+    patch: Partial<PlanSheetPreference>
+  ) => {
+    onChange({
+      planSheetPreferences: {
+        ...contact.planSheetPreferences,
+        [serviceId]: {
+          ...emptyPlanSheetPreference(),
+          ...(contact.planSheetPreferences[serviceId] ?? {}),
+          ...patch,
+        },
+      },
+    });
+  };
+
+  const updatePlanFileMap = (
+    key: "planSurveyFiles" | "planMarkupFiles" | "planReferenceFiles",
+    serviceId: string,
+    files: FileList | null
+  ) => {
+    onFilesChange({
+      [key]: {
+        ...(projectFiles[key] ?? {}),
+        [serviceId]: files,
+      },
+    } as Partial<ProjectFileUploads>);
+  };
+
   const isMissing = (key: MissingRequirementKey) => missingKeys.includes(key);
   const inputClass = (missing: boolean, base = "rounded-2xl px-4 py-3 text-sm outline-none") =>
     `${base} border ${missing ? "border-rose-300 bg-rose-50 focus:border-rose-500" : "border-slate-200 bg-white focus:border-slate-400"}`;
@@ -4848,7 +5219,7 @@ function ProjectInfoCard({
             </div>
           ) : null}
 
-          {pathId !== "build-one" && pathId !== "full-design" ? (
+          {pathId !== "build-one" && pathId !== "full-design" && pathId !== "special-drawings" ? (
             <>
 <div className="grid gap-4 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4 md:col-span-2 md:grid-cols-4">
             <label className="grid gap-2 md:col-span-4">
@@ -4944,6 +5315,52 @@ function ProjectInfoCard({
           )}
         </div>
 
+        {pathId === "special-drawings" && selectedPlanSheetServices.length ? (
+          <div className="mt-5 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
+            <h5 className="text-base font-black text-slate-900">
+              {lang === "es" ? "Detalles por lámina seleccionada" : "Details by selected plan / sheet"}
+            </h5>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              {lang === "es"
+                ? "Cada lámina tiene sus propios archivos. No mezcles survey/markups de CRZ, IC, planting, lighting, HOA, deck, pergola o carport en un solo upload global."
+                : "Each sheet gets its own files. Do not mix CRZ, IC, planting, lighting, HOA, deck, pergola, or carport survey/markups into one global upload."}
+            </p>
+            <div className="mt-4 grid gap-4">
+              {selectedPlanSheetServices.map((service) => {
+                const pref = {
+                  ...emptyPlanSheetPreference(),
+                  ...(contact.planSheetPreferences[service.id] ?? {}),
+                };
+                const surveyFiles = projectFiles.planSurveyFiles?.[service.id] ?? null;
+                const markupFiles = projectFiles.planMarkupFiles?.[service.id] ?? null;
+                const referenceFiles = projectFiles.planReferenceFiles?.[service.id] ?? null;
+                const planMissing =
+                  isMissing("planDetails") &&
+                  (!hasMeaningfulPlanSheetPreference(pref) ||
+                    !surveyFiles?.length ||
+                    !markupFiles?.length);
+
+                return (
+                  <PlanSheetDetailCard
+                    key={service.id}
+                    service={service}
+                    preference={pref}
+                    surveyFiles={surveyFiles}
+                    markupFiles={markupFiles}
+                    referenceFiles={referenceFiles}
+                    onChange={(patch) => updatePlanSheetPreference(service.id, patch)}
+                    onSurveyFilesChange={(files) => updatePlanFileMap("planSurveyFiles", service.id, files)}
+                    onMarkupFilesChange={(files) => updatePlanFileMap("planMarkupFiles", service.id, files)}
+                    onReferenceFilesChange={(files) => updatePlanFileMap("planReferenceFiles", service.id, files)}
+                    lang={lang}
+                    missing={planMissing}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+
         {hasSelectedSiteVisit ? (
           <div
             className={`mt-5 rounded-[1.5rem] border p-4 ${
@@ -4957,8 +5374,8 @@ function ProjectInfoCard({
             </h5>
             <p className="mt-2 text-sm leading-6 text-slate-600">
               {lang === "es"
-                ? "Los viernes son los días más fáciles para visitas. Elige un viernes preferido o pide otras fechas/ventanas. La cita final se confirma por email."
-                : "Fridays are the easiest days to schedule site visits. Choose a preferred Friday or request other date windows. The final appointment is confirmed by email."}
+                ? "Elige un slot de viernes disponible o manda 3 opciones de fecha/hora. Los slots bloqueados ya fueron pedidos en otro order."
+                : "Choose an available Friday slot or send 3 date/time options. Blocked slots were already requested in another order."}
             </p>
 
             <div className="mt-4 grid gap-3">
@@ -4967,77 +5384,147 @@ function ProjectInfoCard({
                   type="radio"
                   name="siteVisitScheduleMode"
                   checked={contact.siteVisitScheduleMode === "friday"}
-                  onChange={() => onChange({ siteVisitScheduleMode: "friday" })}
+                  onChange={() =>
+                    onChange({
+                      siteVisitScheduleMode: "friday",
+                      siteVisitOption1Date: "",
+                      siteVisitOption1Time: "",
+                      siteVisitOption2Date: "",
+                      siteVisitOption2Time: "",
+                      siteVisitOption3Date: "",
+                      siteVisitOption3Time: "",
+                    })
+                  }
                   className="mt-1"
                 />
                 <span>
                   <span className="font-bold">
-                    {lang === "es" ? "Preferimos viernes" : "Friday preferred"}
+                    {lang === "es" ? "Elegir viernes disponible" : "Choose an available Friday slot"}
                   </span>
                   <span className="mt-1 block text-slate-500">
                     {lang === "es"
-                      ? "Escoge el viernes que quieres pedir. Olga confirmará antes de ponerlo en calendario."
-                      : "Pick the Friday you want to request. Olga will confirm before putting it on the calendar."}
+                      ? "Después de submit, este slot se marca como requested para que otro cliente no elija lo mismo."
+                      : "After submit, this slot is marked as requested so another client cannot choose the same slot."}
                   </span>
                 </span>
               </label>
 
               {contact.siteVisitScheduleMode === "friday" ? (
-                <label className="grid gap-2">
-                  <span className="text-sm font-semibold text-slate-700">
-                    {lang === "es" ? "Viernes preferido" : "Preferred Friday"}
-                  </span>
-                  <input
-                    type="date"
-                    value={contact.siteVisitFridayDate}
-                    onChange={(e) => onChange({ siteVisitFridayDate: e.target.value })}
-                    className={inputClass(isMissing("siteVisitScheduling"))}
-                  />
-                  <span className="text-xs text-slate-500">
-                    {lang === "es"
-                      ? "Si eliges otro día por accidente, lo revisaremos antes de confirmar."
-                      : "If another weekday is selected by mistake, we will review it before confirming."}
-                  </span>
-                </label>
+                <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 md:grid-cols-2">
+                  <label className="grid gap-2">
+                    <span className="text-sm font-semibold text-slate-700">
+                      {lang === "es" ? "Viernes" : "Friday"}
+                    </span>
+                    <select
+                      value={contact.siteVisitFridayDate}
+                      onChange={(e) => onChange({ siteVisitFridayDate: e.target.value })}
+                      className={inputClass(isMissing("siteVisitScheduling"))}
+                    >
+                      <option value="">{lang === "es" ? "Elige viernes" : "Choose Friday"}</option>
+                      {fridayOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="grid gap-2">
+                    <span className="text-sm font-semibold text-slate-700">
+                      {lang === "es" ? "Hora" : "Time"}
+                    </span>
+                    <select
+                      value={contact.siteVisitFridayTime}
+                      onChange={(e) => onChange({ siteVisitFridayTime: e.target.value })}
+                      className={inputClass(
+                        isMissing("siteVisitScheduling") || selectedFridaySlotUnavailable
+                      )}
+                    >
+                      <option value="">{lang === "es" ? "Elige hora" : "Choose time"}</option>
+                      {siteVisitTimeOptions.map((option) => {
+                        const slotKey = getSiteVisitSlotKey(contact.siteVisitFridayDate, option.value);
+                        const disabled = Boolean(contact.siteVisitFridayDate) && unavailableSiteVisitSlots.includes(slotKey);
+                        return (
+                          <option key={option.value} value={option.value} disabled={disabled}>
+                            {option.label}
+                            {disabled ? (lang === "es" ? " — no disponible" : " — unavailable") : ""}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    {selectedFridaySlotUnavailable ? (
+                      <span className="text-xs font-semibold text-rose-700">
+                        {lang === "es"
+                          ? "Este slot ya fue pedido. Elige otra hora."
+                          : "This slot was already requested. Choose another time."}
+                      </span>
+                    ) : null}
+                  </label>
+                </div>
               ) : null}
 
               <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
                 <input
                   type="radio"
                   name="siteVisitScheduleMode"
-                  checked={contact.siteVisitScheduleMode === "other"}
-                  onChange={() => onChange({ siteVisitScheduleMode: "other" })}
+                  checked={contact.siteVisitScheduleMode === "options"}
+                  onChange={() =>
+                    onChange({
+                      siteVisitScheduleMode: "options",
+                      siteVisitFridayDate: "",
+                      siteVisitFridayTime: "",
+                    })
+                  }
                   className="mt-1"
                 />
                 <span>
                   <span className="font-bold">
-                    {lang === "es" ? "Pedir otras fechas" : "Request other dates"}
+                    {lang === "es" ? "Ofrecer 3 opciones de fecha/hora" : "Offer 3 date/time options"}
                   </span>
                   <span className="mt-1 block text-slate-500">
                     {lang === "es"
-                      ? "Escribe 2–3 fechas o ventanas de tiempo que podrían funcionar."
-                      : "Write 2–3 dates or time windows that could work."}
+                      ? "Útil si Friday no funciona. Olga escogerá una y confirmará por email."
+                      : "Useful when Friday does not work. Olga will choose one and confirm by email."}
                   </span>
                 </span>
               </label>
 
-              {contact.siteVisitScheduleMode === "other" ? (
-                <label className="grid gap-2">
-                  <span className="text-sm font-semibold text-slate-700">
-                    {lang === "es" ? "Fechas / ventanas solicitadas" : "Requested dates / time windows"}
-                  </span>
-                  <textarea
-                    value={contact.siteVisitOtherDates}
-                    onChange={(e) => onChange({ siteVisitOtherDates: e.target.value })}
-                    rows={3}
-                    placeholder={
-                      lang === "es"
-                        ? "Ejemplo: viernes 10–12, lunes después de 2pm, cualquier mañana la próxima semana"
-                        : "Example: Friday 10–12, Monday after 2pm, any morning next week"
-                    }
-                    className={inputClass(isMissing("siteVisitScheduling"), "rounded-3xl p-4 text-sm outline-none")}
-                  />
-                </label>
+              {contact.siteVisitScheduleMode === "options" ? (
+                <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+                  {[1, 2, 3].map((slotNumber) => {
+                    const dateKey = `siteVisitOption${slotNumber}Date` as keyof OrderContact;
+                    const timeKey = `siteVisitOption${slotNumber}Time` as keyof OrderContact;
+                    return (
+                      <div key={slotNumber} className="grid gap-3 md:grid-cols-[auto_1fr_1fr] md:items-end">
+                        <div className="text-sm font-black text-slate-700">
+                          {lang === "es" ? `Opción ${slotNumber}` : `Option ${slotNumber}`}
+                        </div>
+                        <label className="grid gap-2">
+                          <span className="text-xs font-semibold text-slate-600">
+                            {lang === "es" ? "Fecha" : "Date"}
+                          </span>
+                          <input
+                            type="date"
+                            value={String(contact[dateKey] || "")}
+                            onChange={(e) => onChange({ [dateKey]: e.target.value } as Partial<OrderContact>)}
+                            className={inputClass(isMissing("siteVisitScheduling"))}
+                          />
+                        </label>
+                        <label className="grid gap-2">
+                          <span className="text-xs font-semibold text-slate-600">
+                            {lang === "es" ? "Hora / ventana" : "Time / window"}
+                          </span>
+                          <input
+                            value={String(contact[timeKey] || "")}
+                            onChange={(e) => onChange({ [timeKey]: e.target.value } as Partial<OrderContact>)}
+                            placeholder={lang === "es" ? "Ej: 10:00–11:30" : "Ex: 10:00–11:30"}
+                            className={inputClass(isMissing("siteVisitScheduling"))}
+                          />
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
               ) : null}
 
               <label className="grid gap-2">
@@ -5072,7 +5559,7 @@ function ProjectInfoCard({
           </div>
         ) : null}
 
-        {pathId !== "build-one" ? (
+        {pathId !== "build-one" && pathId !== "special-drawings" ? (
         <div className="mt-5 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
           <h5 className="text-base font-black text-slate-900">{t.projectFilesTitle}</h5>
           <p className="mt-2 text-sm leading-6 text-slate-600">{t.projectFilesHelp}</p>
@@ -5182,6 +5669,7 @@ function SummarySidebar({
   canCheckout,
   isCreating,
   onReset,
+  onRemove,
   onCheckout,
   cleared,
   missingRequirementKeys,
@@ -5198,6 +5686,7 @@ function SummarySidebar({
   canCheckout: boolean;
   isCreating: boolean;
   onReset: () => void;
+  onRemove: (serviceId: string) => void;
   onCheckout: () => void;
   cleared: boolean;
   missingRequirementKeys: MissingRequirementKey[];
@@ -5224,10 +5713,10 @@ function SummarySidebar({
           ) : (
             items.map((item, index) => (
               <div
-                key={`${item.title}-${index}`}
+                key={`${item.id}-${index}`}
                 className="flex items-start justify-between gap-3 border-b border-slate-200 pb-3 last:border-0 last:pb-0"
               >
-                <div>
+                <div className="min-w-0 flex-1">
                   <div className="text-sm font-medium text-slate-900">
                     {item.title}
                   </div>
@@ -5235,10 +5724,20 @@ function SummarySidebar({
                     {t.qty}: {item.qty}
                   </div>
                 </div>
-                <div className="text-right text-sm font-bold text-slate-900">
-                  {item.isQuote || item.price === null
-                    ? t.tbd
-                    : formatPrice(item.price, lang)}
+                <div className="flex shrink-0 items-start gap-2">
+                  <div className="text-right text-sm font-bold text-slate-900">
+                    {item.isQuote || item.price === null
+                      ? t.tbd
+                      : formatPrice(item.price, lang)}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onRemove(item.id)}
+                    className="rounded-full border border-slate-200 bg-white p-1 text-slate-400 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
+                    aria-label={lang === "es" ? "Quitar servicio" : "Remove service"}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               </div>
             ))
@@ -5532,6 +6031,21 @@ const STRUCTURE_MAIN_BUILD_IDS = [
   "outdoor-kitchen",
 ];
 
+const PLAN_SHEET_SERVICE_IDS = [
+  "master-plan",
+  "planting-plan",
+  "paving-plan",
+  "grading",
+  "watering-strategy",
+  "lighting",
+  "takeoff",
+  "artistic-sheet",
+  "hoa-city",
+  "impervious",
+  "tree-overlay",
+  "irrigation-drafting",
+];
+
 function getPhoneDigitCount(value: string) {
   return value.replace(/\D/g, "").length;
 }
@@ -5544,7 +6058,7 @@ function getMissingRequirementKeys(
   selectedServiceIds: string[] = []
 ): MissingRequirementKey[] {
   const missing: MissingRequirementKey[] = [];
-  const requiresSurveyFiles = pathId !== "quick-sale" && pathId !== "build-one";
+  const requiresSurveyFiles = pathId !== "quick-sale" && pathId !== "build-one" && pathId !== "special-drawings";
   const requiresPhotoFiles = pathId === "quick-sale" || pathId === "full-design";
 
   if (selectedItemCount <= 0) missing.push("selectedService");
@@ -5556,7 +6070,7 @@ function getMissingRequirementKeys(
   if (!contact.notes.trim()) missing.push("projectDetails");
   if (requiresPhotoFiles && !files.photos?.length) missing.push("projectPhotos");
   if (requiresSurveyFiles && !files.surveyDocs?.length) missing.push("surveyDocs");
-  if (pathId !== "build-one" && !files.references?.length) missing.push("references");
+  if (pathId !== "build-one" && pathId !== "special-drawings" && !files.references?.length) missing.push("references");
   if (pathId === "full-design" && !contact.referenceLinks.trim()) missing.push("referenceLinks");
   if (pathId === "full-design" && !contact.yardDesignNotes.trim()) missing.push("yardDesignNotes");
 
@@ -5585,12 +6099,40 @@ function getMissingRequirementKeys(
     missing.push("structureDetails");
   }
 
+  const selectedPlanSheetIds = selectedServiceIds.filter((id) =>
+    PLAN_SHEET_SERVICE_IDS.includes(id)
+  );
+  if (
+    pathId === "special-drawings" &&
+    selectedPlanSheetIds.length > 0 &&
+    selectedPlanSheetIds.some((id) => {
+      const pref = contact.planSheetPreferences[id];
+      return (
+        !hasMeaningfulPlanSheetPreference(pref) ||
+        !files.planSurveyFiles?.[id]?.length ||
+        !files.planMarkupFiles?.[id]?.length
+      );
+    })
+  ) {
+    missing.push("planDetails");
+  }
+
   if (hasSiteVisitSelected(selectedServiceIds)) {
-    if (!contact.siteVisitScheduleMode) {
-      missing.push("siteVisitScheduling");
-    } else if (contact.siteVisitScheduleMode === "friday" && !contact.siteVisitFridayDate.trim()) {
-      missing.push("siteVisitScheduling");
-    } else if (contact.siteVisitScheduleMode === "other" && !contact.siteVisitOtherDates.trim()) {
+    const hasFridaySlot =
+      contact.siteVisitScheduleMode === "friday" &&
+      contact.siteVisitFridayDate.trim() &&
+      contact.siteVisitFridayTime.trim();
+
+    const hasThreeOptions =
+      contact.siteVisitScheduleMode === "options" &&
+      contact.siteVisitOption1Date.trim() &&
+      contact.siteVisitOption1Time.trim() &&
+      contact.siteVisitOption2Date.trim() &&
+      contact.siteVisitOption2Time.trim() &&
+      contact.siteVisitOption3Date.trim() &&
+      contact.siteVisitOption3Time.trim();
+
+    if (!hasFridaySlot && !hasThreeOptions) {
       missing.push("siteVisitScheduling");
     }
   }
@@ -5616,6 +6158,7 @@ function getMissingRequirementLabel(key: MissingRequirementKey, lang: Lang) {
     yardDesignNotes: { en: "Client notes / must-haves / avoid for Yard Design Package", es: "Notas del cliente / deseos / evitar para Yard Design Package" },
     sameProject: { en: "Confirm one client/project for this order", es: "Confirma un cliente/proyecto para este pedido" },
     structureDetails: { en: "Add required structure details and files for the selected outdoor structure", es: "Agrega detalles y archivos de la estructura exterior seleccionada" },
+    planDetails: { en: "Complete notes, survey/base file, and marked plan/instructions for each selected plan or sheet", es: "Completa notas, survey/base e instrucciones/markup para cada plano o lámina seleccionada" },
     siteVisitScheduling: { en: "Choose a Friday site visit or request other dates", es: "Elige visita en viernes o pide otras fechas" },
   };
   return labels[key][lang];
@@ -5835,6 +6378,7 @@ function App() {
   const canProceed = missingRequirementKeys.length === 0;
 
   const summaryLines: SummaryLine[] = pricedItems.map((item) => ({
+    id: item.service.id,
     title: translateServiceTitle(item.service, lang),
     qty: item.qty,
     price: item.price,
@@ -5881,21 +6425,14 @@ function App() {
 
       if (STRUCTURE_DECK_IDS.includes(service.id)) {
         STRUCTURE_DECK_IDS.forEach((id) => delete next[id]);
-        STRUCTURE_CARPORT_IDS.forEach((id) => delete next[id]);
       }
 
       if (STRUCTURE_COVER_IDS.includes(service.id)) {
         STRUCTURE_COVER_IDS.forEach((id) => delete next[id]);
-        STRUCTURE_CARPORT_IDS.forEach((id) => delete next[id]);
-      }
-
-      if (service.id === "outdoor-kitchen") {
-        STRUCTURE_CARPORT_IDS.forEach((id) => delete next[id]);
       }
 
       if (STRUCTURE_CARPORT_IDS.includes(service.id)) {
         STRUCTURE_CARPORT_IDS.forEach((id) => delete next[id]);
-        STRUCTURE_MAIN_BUILD_IDS.forEach((id) => delete next[id]);
       }
 
       next[service.id] = 1;
@@ -6053,6 +6590,10 @@ function App() {
       yard_design_notes: sanitizeText(contact.yardDesignNotes),
       structure_preferences: sanitizeStructurePreferences(
         contact.structurePreferences,
+        selectedServiceIds
+      ),
+      plan_sheet_preferences: sanitizePlanSheetPreferences(
+        contact.planSheetPreferences,
         selectedServiceIds
       ),
       requested_delivery_date: effectiveDeliveryDate,
@@ -6460,6 +7001,13 @@ function App() {
               canCheckout={canProceed}
               isCreating={creatingCheckout}
               onReset={resetCart}
+              onRemove={(serviceId) =>
+                setCart((prev) => {
+                  const next = { ...prev };
+                  delete next[serviceId];
+                  return next;
+                })
+              }
               onCheckout={createCheckout}
               cleared={cleared}
               missingRequirementKeys={missingRequirementKeys}
