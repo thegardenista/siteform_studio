@@ -146,6 +146,8 @@ interface OrderContact {
   measurementHeight: string;
   measurementsNotes: string;
   referenceLinks: string;
+  yardDesignFocus: string[];
+  yardDesignNotes: string;
   structurePreferences: StructurePreferences;
   siteVisitScheduleMode: SiteVisitScheduleMode;
   siteVisitFridayDate: string;
@@ -622,7 +624,7 @@ const T = {
     warning: "Important",
     designPackageSection: "Yard design package",
     designPackageSectionDesc:
-      "Design-intent yard package: concept plan, planting direction, and presentation visuals for one design area. Built structures, specialty sheets, and professional 3D workflow live in separate sections.",
+      "Basic design-intent yard package for planting, general layout, and light site-improvement direction. Built structures, specialty sheets, and professional 3D/model workflow live in separate sections.",
     startSection: "3D / rendering support",
     startSectionDesc:
       "Choose the base/model path first. Site Visit is an optional add-on if you want us to collect field photos, notes, and rough measurements ourselves. This is existing-conditions setup for design and visualization, not survey or engineering.",
@@ -1004,13 +1006,13 @@ const ENTRY_PATHS: EntryPath[] = [
     title: "Yard Design Package",
     titleEs: "Paquete de diseño de patio",
     description:
-      "Main plan, planting plan, and presentation renders for one design area.",
+      "Basic yard design package for planting, general layout, and light site-improvement direction.",
     descriptionEs:
-      "Plano principal, plano de plantación y renders de presentación para un área de diseño.",
+      "Paquete básico de diseño de patio para plantación, layout general y mejoras ligeras del sitio.",
     helper:
-      "Best when a contractor needs a yard design under their brand. Structures, extra sheets, and 3D-only work are separate sections.",
+      "Use this for a basic landscape / site-improvement design. For decks, pergolas, covers, carports, kitchens, custom structures, extra sheets, or 3D workflow support, choose the matching section.",
     helperEs:
-      "Ideal cuando un contractor necesita diseño de patio bajo su marca. Estructuras, láminas extra y trabajo solo 3D van separados.",
+      "Úsalo para diseño básico de landscape / mejoras del sitio. Para decks, pérgolas, cubiertas, carports, cocinas, estructuras custom, láminas extra o apoyo 3D, elige la sección correspondiente.",
     cta: "Build yard package",
     ctaEs: "Armar paquete de patio",
   },
@@ -1328,17 +1330,17 @@ const FULL_YARD_PACKAGE_SERVICES: Service[] = [
     prices: { small: 1000, medium: 1500, large: 2200, estate: null },
     stripePriceId: null,
     short:
-      "Design-intent yard package with a concept plan, planting direction/planting sheet, and presentation visuals for the selected design area.",
+      "Basic design-intent yard package for planting, general outdoor layout, light hardscape direction, and presentation visuals for the selected design area.",
     bestFor:
-      "Builders or landscape crews who need a clear yard design direction under their brand for a real client budget, without dealing with professional 3D/model workflow details.",
+      "Builders or landscape crews who need a clear basic yard design direction under their brand, mostly for planting, outdoor layout, and site beautification — not detailed construction development.",
     youSend:
       "Survey or site plan if available, clear photos, marked measurements, budget level, style references, client must-haves, and site constraints. If there is no site visit, dimensions are required: widths, depths, heights, roof/eave-to-ground, house-to-fence distances, and important level changes.",
     youGet:
       "Design-intent concept plan for the selected design area, planting direction / planting sheet, general dimensions where helpful, presentation visuals, and a client-ready PDF.",
     notIncluded:
-      "Separate outdoor structures such as decks, pergolas, carports, outdoor kitchens; detailed specialty sheets; lighting design; irrigation design; grading/drainage engineering; permit-ready drawings; sealed/stamped documents; code review; or construction-control drawings.",
+      "Decks, pergolas, patio covers, carports, outdoor kitchens, custom built structures, detailed lighting plans, detailed paving/hardscape construction sheets, irrigation design, grading/drainage engineering, permit-ready drawings, sealed/stamped documents, code review, or construction-control drawings.",
     helper:
-      "For decks, pergolas, patio covers, carports, kitchens, or custom built structures, use Decks, Covers & Outdoor Structures. For extra sheets after the design, use Plans & Sheets. If you are a designer and want 3D/model/render workflow support, use 3D & Rendering Support.",
+      "This package is intentionally basic. For decks, pergolas, patio covers, carports, kitchens, or custom built structures, use Decks, Covers & Outdoor Structures. For extra or detailed sheets after the design, use Plans & Sheets. If you are a designer and want 3D/model/render workflow support, use 3D & Rendering Support.",
   },
 ];
 
@@ -1776,6 +1778,8 @@ function emptyContact(): OrderContact {
     measurementHeight: "",
     measurementsNotes: "",
     referenceLinks: "",
+    yardDesignFocus: [],
+    yardDesignNotes: "",
     structurePreferences: {},
     siteVisitScheduleMode: "",
     siteVisitFridayDate: "",
@@ -1817,6 +1821,8 @@ function getInitialContact(): OrderContact {
       measurementHeight: "",
       measurementsNotes: "",
       referenceLinks: "",
+      yardDesignFocus: [],
+      yardDesignNotes: "",
       structurePreferences: {},
       siteVisitScheduleMode: "",
       siteVisitFridayDate: "",
@@ -4296,6 +4302,22 @@ function ProjectInfoCard({
   const logoRequired = false;
   const isQuickPhoto = pathId === "quick-sale";
   const hasSelectedSiteVisit = hasSiteVisitSelected(selectedServiceIds);
+  const yardFocusOptions = [
+    { id: "planting-softscape", en: "Planting / softscape direction", es: "Plantación / softscape" },
+    { id: "basic-paving-hardscape", en: "Basic paving / hardscape direction", es: "Pavimento / hardscape básico" },
+    { id: "lighting-concept", en: "Lighting concept / fixture locations", es: "Concepto de iluminación / ubicación de fixtures" },
+    { id: "materials-style", en: "Materials / style direction", es: "Dirección de materiales / estilo" },
+    { id: "simple-site-improvements", en: "General site-improvement / beautification plan", es: "Mejoras generales / embellecimiento del sitio" },
+    { id: "other", en: "Other / describe below", es: "Otro / describe abajo" },
+  ];
+  const toggleYardFocus = (id: string) => {
+    const current = contact.yardDesignFocus ?? [];
+    onChange({
+      yardDesignFocus: current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id],
+    });
+  };
   const isMissing = (key: MissingRequirementKey) => missingKeys.includes(key);
   const inputClass = (missing: boolean, base = "rounded-2xl px-4 py-3 text-sm outline-none") =>
     `${base} border ${missing ? "border-rose-300 bg-rose-50 focus:border-rose-500" : "border-slate-200 bg-white focus:border-slate-400"}`;
@@ -4686,6 +4708,60 @@ function ProjectInfoCard({
             </div>
             <div className="text-xs text-slate-500">{t.notesHelp}</div>
           </label>
+
+          {pathId === "full-design" ? (
+            <div className="grid gap-4 rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-4 md:col-span-2">
+              <div>
+                <h5 className="text-base font-black text-slate-900">
+                  {lang === "es" ? "Enfoque del Yard Design Package" : "Yard Design Package scope check"}
+                </h5>
+                <p className="mt-2 text-sm leading-6 text-emerald-950">
+                  {lang === "es"
+                    ? "Este paquete es básico y sirve principalmente para plantación, layout general y mejoras ligeras del sitio. Si necesitas decks, pérgolas, cubiertas, carports, cocinas o estructuras custom, ve a Decks, Covers & Outdoor Structures. Si necesitas láminas extra o más detalladas después del diseño, usa Plans & Sheets. Si eres diseñador y quieres apoyo de modelo/render/3D workflow, usa 3D & Rendering Support."
+                    : "This is a basic yard design package, mostly for planting, general outdoor layout, and light site-improvement direction. For decks, pergolas, patio covers, carports, outdoor kitchens, or custom built structures, use Decks, Covers & Outdoor Structures. For extra or detailed sheets after the design, use Plans & Sheets. If you are a designer and want 3D/model/render workflow support, use 3D & Rendering Support."}
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-emerald-200 bg-white p-4">
+                <div className="text-sm font-black text-slate-900">
+                  {lang === "es" ? "¿Hay algo específico que quieras enfatizar?" : "Do you want anything specific emphasized?"}
+                </div>
+                <div className="mt-3 grid gap-2 md:grid-cols-2">
+                  {yardFocusOptions.map((option) => (
+                    <label
+                      key={option.id}
+                      className="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-700"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={(contact.yardDesignFocus ?? []).includes(option.id)}
+                        onChange={() => toggleYardFocus(option.id)}
+                        className="mt-1"
+                      />
+                      <span>{lang === "es" ? option.es : option.en}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <label className="grid gap-2">
+                <span className="text-sm font-semibold text-slate-700">
+                  {lang === "es" ? "Notas para este paquete básico" : "Notes for this basic package"}
+                </span>
+                <textarea
+                  value={contact.yardDesignNotes}
+                  onChange={(e) => onChange({ yardDesignNotes: e.target.value })}
+                  rows={3}
+                  placeholder={
+                    lang === "es"
+                      ? "Ej: mostly planting, simple walkway direction, lighting only as concept notes, no deck/pergola sheets..."
+                      : "Ex: mostly planting, simple walkway direction, lighting only as concept notes, no deck/pergola sheets..."
+                  }
+                  className="rounded-3xl border border-slate-200 bg-white p-4 text-sm text-slate-900 outline-none focus:border-slate-400"
+                />
+              </label>
+            </div>
+          ) : null}
 
           {pathId !== "build-one" ? (
             <>
@@ -5814,6 +5890,8 @@ function App() {
       measurement_height: sanitizeText(contact.measurementHeight),
       measurements_site_notes: sanitizeText(contact.measurementsNotes),
       reference_links: sanitizeText(contact.referenceLinks),
+      yard_design_focus: contact.yardDesignFocus,
+      yard_design_notes: sanitizeText(contact.yardDesignNotes),
       structure_preferences: sanitizeStructurePreferences(
         contact.structurePreferences,
         selectedServiceIds
