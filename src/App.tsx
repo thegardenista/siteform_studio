@@ -1582,30 +1582,7 @@ const NEXT_PHASE_SERVICES: Service[] = [
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
-  },
-  {
-    id: "watering-strategy",
-    title: "Basic Watering Strategy",
-    category: "After layout",
-    icon: Droplets,
-    pricingType: "size",
-    prices: { small: 200, medium: 250, large: 300, estate: null },
-    stripePriceId: null,
-    short:
-      "A simple plant watering approach for approved planting areas, for planning discussion only.",
-    bestFor:
-      "You want clear understanding of sun zones, shade zones, and plant watering needs before a licensed irrigation professional designs the system.",
-    youSend:
-      "Approved plan, planting direction, and any known notes about shade, sun exposure, or difficult areas.",
-    youGet:
-      "Sun and shade zone notes, watering logic by area, and general recommendations such as drip or other basic approach where appropriate.",
-    notIncluded:
-      "Pipe sizing, head layout, irrigation specifications, hydraulic design, installation diagrams, or replacement of a licensed irrigator's work.",
-    sampleLabel: "See sample",
-    softDependency: ["master-plan"],
-    allowWithoutDependency: true,
-  },
-  {
+  },  {
     id: "lighting",
     title: "Lighting Concept",
     category: "After layout",
@@ -1635,41 +1612,21 @@ const NEXT_PHASE_SERVICES: Service[] = [
     prices: { small: 200, medium: 350, large: 700, estate: null },
     stripePriceId: null,
     short:
-      "Estimated material quantities and dimensions from an approved 3D or 2D design.",
-    bestFor: "The scope is clear and you are ready to price the job.",
+      "Quantity takeoff support from bid/tender drawings, large CAD files, PDFs, or approved plans.",
+    bestFor:
+      "Builders and crews trying to price a job from messy tender drawings or big AutoCAD/PDF sets where symbols, hatches, and layers make quantities hard to read.",
     youSend:
-      "Approved plan or model if it comes from your side. If we built it, no extra files are needed.",
+      "Tender drawings, CAD/PDF plan set, approved plan, material legend if available, and notes about what you need counted: lawn, mulch, gravel, steel edging, pavers, planting areas, concrete, lighting counts, or other scope items.",
     youGet:
-      "Estimated quantities and dimensions based on the approved scope, delivered in Google Sheets. Tell us what format works best for your team.",
-    notIncluded: "Purchasing, vendor follow-up, field verification, waste factors, or guarantee that quantities match final field installation.",
+      "A clear takeoff worksheet with estimated quantities, areas, lengths, and item notes organized in Google Sheets so your team can price the job faster.",
+    notIncluded:
+      "Purchasing, vendor follow-up, field verification, waste factors, construction estimating, or a guarantee that quantities match final field installation.",
+    helper:
+      "This is for extracting usable quantities from drawing chaos — not for redesigning the project.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
-  },
-  {
-    id: "artistic-sheet",
-    title: "Artistic Rendered Sheet",
-    category: "After layout",
-    icon: Trees,
-    pricingType: "unit",
-    unitPrice: 100,
-    stripePriceId: "price_artisticsheet_100",
-    quantityEnabled: true,
-    quantityLabel: "sheets",
-    short:
-      "Artistic presentation sheet from a CAD plan, master plan, or render base.",
-    bestFor:
-      "You already have a plan or view and want an artistic sheet that looks better in front of the client.",
-    youSend:
-      "Provided CAD plan, master plan, or base render. You can also show the style you want, such as watercolor or ink sketch.",
-    youGet:
-      "One high-resolution artistic sheet in the selected style, such as watercolor or ink sketch. Price is per sheet, not for the whole project.",
-    notIncluded: "Design revisions or new CAD work.",
-    helper:
-      "This can be a master plan sheet or an artistic treatment of rendered views.",
-    sampleLabel: "See sample",
-  },
-];
+  },];
 
 const CITY_SERVICES: Service[] = [
   {
@@ -1736,7 +1693,30 @@ const CITY_SERVICES: Service[] = [
   },
 ];
 
-const IRRIGATION_SERVICES: Service[] = [
+const IRRIGATION_SERVICES: Service[
+  {
+    id: "watering-strategy",
+    title: "Basic Watering Strategy",
+    category: "After layout",
+    icon: Droplets,
+    pricingType: "size",
+    prices: { small: 200, medium: 250, large: 300, estate: null },
+    stripePriceId: null,
+    short:
+      "A simple plant watering approach for approved planting areas, for planning discussion only.",
+    bestFor:
+      "You want clear understanding of sun zones, shade zones, and plant watering needs before a licensed irrigation professional designs the system.",
+    youSend:
+      "Approved plan, planting direction, and any known notes about shade, sun exposure, or difficult areas.",
+    youGet:
+      "Sun and shade zone notes, watering logic by area, and general recommendations such as drip or other basic approach where appropriate.",
+    notIncluded:
+      "Pipe sizing, head layout, irrigation specifications, hydraulic design, installation diagrams, or replacement of a licensed irrigator's work.",
+    sampleLabel: "See sample",
+    softDependency: ["master-plan"],
+    allowWithoutDependency: true,
+  },
+] = [
   {
     id: "irrigation-drafting",
     title: "Irrigation Drafting Cleanup from Your Markups",
@@ -1758,6 +1738,33 @@ const IRRIGATION_SERVICES: Service[] = [
     sampleLabel: "See sample",
   },
 ];
+
+const ARTISTIC_RENDERING_SERVICES: Service[] = [
+  {
+    id: "artistic-sheet",
+    title: "Artistic Rendered Sheet",
+    category: "After layout",
+    icon: Trees,
+    pricingType: "unit",
+    unitPrice: 100,
+    stripePriceId: "price_artisticsheet_100",
+    quantityEnabled: true,
+    quantityLabel: "sheets",
+    short:
+      "Artistic presentation sheet from a CAD plan, master plan, or render base.",
+    bestFor:
+      "You already have a plan or view and want an artistic sheet that looks better in front of the client.",
+    youSend:
+      "Provided CAD plan, master plan, or base render. You can also show the style you want, such as watercolor or ink sketch.",
+    youGet:
+      "One high-resolution artistic sheet in the selected style, such as watercolor or ink sketch. Price is per sheet, not for the whole project.",
+    notIncluded: "Design revisions or new CAD work.",
+    helper:
+      "This can be a master plan sheet or an artistic treatment of rendered views.",
+    sampleLabel: "See sample",
+  },
+];
+
 
 const SUPPORT_SERVICES: Service[] = [
   {
@@ -2499,11 +2506,12 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
   "takeoff": {
     title: "Cantidades de materiales / take-off",
     category: "Después del layout",
-    short: "Estimado de cantidades y dimensiones de materiales desde un diseño 3D o 2D aprobado.",
-    bestFor: "Cuando el alcance está claro y estás listo para poner precio al trabajo.",
-    youSend: "Plano o modelo aprobado si viene de tu lado. Si lo construimos nosotros, no hacen falta archivos extra.",
-    youGet: "Cantidades y dimensiones estimadas basadas en el alcance aprobado, entregadas en Google Sheets. Dinos qué formato le funciona mejor a tu equipo.",
-    notIncluded: "Compras, seguimiento con proveedores, verificación en campo, waste factors o garantía de que las cantidades coinciden con la instalación final.",
+    short: "Apoyo de takeoff desde planos de licitación/tender, archivos CAD grandes, PDFs o planos aprobados.",
+    bestFor: "Builders y crews que intentan poner precio desde planos de tender o sets grandes de AutoCAD/PDF donde símbolos, hatches y layers hacen difícil leer cantidades.",
+    youSend: "Planos de tender, set CAD/PDF, plano aprobado, leyenda de materiales si existe, y notas sobre qué necesitas contar: césped, mulch, grava, steel edging, pavers, áreas de plantación, concreto, luces u otros items.",
+    youGet: "Una hoja clara de takeoff con cantidades estimadas, áreas, longitudes y notas organizadas en Google Sheets para que tu equipo pueda presupuestar más rápido.",
+    notIncluded: "Compras, seguimiento con proveedores, verificación en campo, waste factors, estimado de construcción completo o garantía de que las cantidades coinciden con la instalación final.",
+    helper: "Esto es para sacar cantidades útiles del caos de planos — no para rediseñar el proyecto.",
     sampleLabel: "Ver ejemplo",
   },
   "artistic-sheet": {
@@ -6860,6 +6868,23 @@ function App() {
               title={t.supportSection}
               description={t.supportSectionDesc}
               services={SUPPORT_SERVICES}
+              selectedSize={selectedSize}
+              cart={cart}
+              lang={lang}
+              getNotice={getNotice}
+              onToggle={toggleService}
+              onQty={updateQty}
+              onDiscuss={openHelpWithService}
+              onSample={openSample}
+            />
+            <ServiceSection
+              title={lang === "es" ? "Servicio raro / presentación" : "Rare / presentation-only service"}
+              description={
+                lang === "es"
+                  ? "Úsalo solo cuando necesitas una lámina artística separada desde un plano o vista ya existente."
+                  : "Use this only when you need a separate artistic sheet from an existing plan or view."
+              }
+              services={ARTISTIC_RENDERING_SERVICES}
               selectedSize={selectedSize}
               cart={cart}
               lang={lang}
