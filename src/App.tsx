@@ -148,6 +148,7 @@ interface OrderContact {
   measurementHeight: string;
   measurementsNotes: string;
   referenceLinks: string;
+  largeFileLinks: string;
   yardDesignFocus: string[];
   yardDesignNotes: string;
   structurePreferences: StructurePreferences;
@@ -214,6 +215,9 @@ interface SummaryLine {
 
 const DEMO_MODE = false;
 const NOTES_LIMIT = 2000;
+const DIRECT_UPLOAD_MAX_FILE_MB = 6;
+const DIRECT_UPLOAD_MAX_PICKER_MB = 18;
+const SITEFORM_FORM_KEY = "sf_intake_2026_06_v1_ecZysAlnC9ODx872Q1PyxA";
 const WHATSAPP_NUMBER = "15551234567";
 const ORDER_REVIEW_ENDPOINT = "https://script.google.com/macros/s/AKfycbxNhc22ZYQ007ljInzF9vxQXL23qfL_r59GqtTjYhucEUBSd-EUBr33Tz8PRC892VoR/exec";
 const SOCIAL_LINKS = {
@@ -497,9 +501,9 @@ const T = {
       "Remote orders must include usable dimensions before work starts. Send a survey, site plan, measured sketch, or marked-up plan/photo with width, depth, height, roof/eave-to-ground height, house-to-fence distances, slopes, steps, walls, and level changes where relevant.",
     projectFilesTitle: "Project files for this order",
     projectFilesHelp:
-      "Upload files for this one client/project. References/markups/measurement notes are required. A survey/site plan/measured base is required for all services except Quick Photo Concept. Project photos are required for Quick Photo Concept and helpful for other orders. Keep each file under 12 MB for this first-version uploader; if a phone photo or PDF is larger, upload a reduced/compressed copy and mention that high-resolution files are available. For a different client, start a separate order.",
+      "Use direct upload for previews and a few lightweight files only. For full phone-photo sets, large PDFs, DWG/DXF, or files from the office, paste a Google Drive / Dropbox / WeTransfer / shared folder link in the large-files field above. Do not upload heavy phone-photo batches through this form. For a different client, start a separate order.",
     uploadPhotosHelp:
-      "Required for Quick Photo Concept; optional but helpful for other services. You may upload up to 10 photos for context, but Quick Photo Concept includes work on one selected photo only. Clear photos of the project area, facade, patio, yard, problem spots, slope, roof/eaves, fence lines, or existing conditions.",
+      "Upload a few key lightweight photos here. For full photo sets or large phone photos, paste a shared folder link instead. Quick Photo Concept still includes work on one selected photo only.",
     uploadSurveyHelp:
       "Required for all services except Quick Photo Concept. Upload a survey, site plan, measured sketch, marked base plan, PDF, or drawing that gives us the project geometry. Up to 10 files per upload.",
     titleBlockOption: "Title block / sheet template",
@@ -1780,6 +1784,7 @@ function emptyContact(): OrderContact {
     measurementHeight: "",
     measurementsNotes: "",
     referenceLinks: "",
+    largeFileLinks: "",
     yardDesignFocus: [],
     yardDesignNotes: "",
     structurePreferences: {},
@@ -1823,6 +1828,7 @@ function getInitialContact(): OrderContact {
       measurementHeight: "",
       measurementsNotes: "",
       referenceLinks: "",
+      largeFileLinks: "",
       yardDesignFocus: [],
       yardDesignNotes: "",
       structurePreferences: {},
@@ -1985,14 +1991,14 @@ function fileToDataUrl(file: File): Promise<string> {
 
 async function serializeFileList(files: FileList | null) {
   if (!files?.length) return [];
-  const maxFileSize = 12 * 1024 * 1024;
+  const maxFileSize = DIRECT_UPLOAD_MAX_FILE_MB * 1024 * 1024;
   const safeFiles = Array.from(files).slice(0, 10);
 
   return Promise.all(
     safeFiles.map(async (file) => {
       if (file.size > maxFileSize) {
         throw new Error(
-          `${file.name} is too large for this first-version uploader. Please reduce/compress the file and try again. For phone photos, export or send a smaller JPG version. You can note in Project details if high-resolution files are available. Current upload limit: 12 MB per file.`
+          `${file.name} is too large for this first-version uploader. Please reduce/compress the file and try again. For phone photos, export or send a smaller JPG version. You can note in Project details if high-resolution files are available. Current direct-upload limit: 6 MB per file.`
         );
       }
 
@@ -2055,6 +2061,7 @@ async function submitOrderForReview(order: Record<string, unknown>, files: Proje
       "Content-Type": "text/plain;charset=utf-8",
     },
     body: JSON.stringify({
+      form_key: SITEFORM_FORM_KEY,
       order,
       files: filePayload,
     }),
@@ -3473,6 +3480,10 @@ function FilePicker({
       ? `Máximo ${maxFiles} archivos por carga.`
       : `Up to ${maxFiles} files per upload.`
     : null;
+  const uploadLimitHelp =
+    lang === "es"
+      ? `Upload directo: máximo ${DIRECT_UPLOAD_MAX_FILE_MB} MB por archivo y aprox. ${DIRECT_UPLOAD_MAX_PICKER_MB} MB por bloque. Para más, usa link de carpeta compartida.`
+      : `Direct upload: max ${DIRECT_UPLOAD_MAX_FILE_MB} MB per file and about ${DIRECT_UPLOAD_MAX_PICKER_MB} MB per upload block. For more, use a shared folder link.`;
 
   return (
     <label className={`grid gap-2 rounded-3xl border p-4 ${missing ? "border-rose-300 bg-rose-50" : "border-slate-200 bg-white"}`}>
@@ -3487,6 +3498,7 @@ function FilePicker({
       <span className="text-xs leading-5 text-slate-500">
         {help}
         {maxHelp ? <span className="mt-1 block font-semibold text-slate-600">{maxHelp}</span> : null}
+        <span className="mt-1 block font-semibold text-amber-700">{uploadLimitHelp}</span>
       </span>
       <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-slate-500">
         <Upload className="mb-3 h-5 w-5" />
@@ -3506,6 +3518,37 @@ function FilePicker({
               onChange(null);
               return;
             }
+
+            if (nextFiles?.length) {
+              const selectedFiles = Array.from(nextFiles);
+              const maxFileBytes = DIRECT_UPLOAD_MAX_FILE_MB * 1024 * 1024;
+              const maxPickerBytes = DIRECT_UPLOAD_MAX_PICKER_MB * 1024 * 1024;
+              const oversized = selectedFiles.find((file) => file.size > maxFileBytes);
+              const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+
+              if (oversized) {
+                setError(
+                  lang === "es"
+                    ? `${oversized.name} es demasiado grande para upload directo. Usa una versión reducida o pega un link de carpeta compartida.`
+                    : `${oversized.name} is too large for direct upload. Use a reduced file or paste a shared folder link.`
+                );
+                e.currentTarget.value = "";
+                onChange(null);
+                return;
+              }
+
+              if (totalSize > maxPickerBytes) {
+                setError(
+                  lang === "es"
+                    ? "Este grupo de archivos es demasiado pesado para upload directo. Sube menos archivos o pega un link de carpeta compartida."
+                    : "This group of files is too heavy for direct upload. Upload fewer files or paste a shared folder link."
+                );
+                e.currentTarget.value = "";
+                onChange(null);
+                return;
+              }
+            }
+
             setError(null);
             onChange(nextFiles);
           }}
@@ -4230,7 +4273,7 @@ function StructurePreferenceCard({
             files={referenceFiles}
             onChange={onReferenceFilesChange}
             lang={lang}
-            maxFiles={10}
+            maxFiles={5}
           />
         </div>
 
@@ -4246,7 +4289,7 @@ function StructurePreferenceCard({
             files={files}
             onChange={onFilesChange}
             lang={lang}
-            maxFiles={10}
+            maxFiles={5}
             requiredField
             missing={missingFiles}
           />
@@ -4499,10 +4542,20 @@ function ProjectInfoCard({
             </div>
 
 
-            <div className="mt-5 rounded-2xl border border-slate-200 bg-white p-4">
-              <div className="text-sm font-semibold text-slate-700">
-                {t.logoOption}
-              </div>
+            <details className="mt-5 rounded-[1.5rem] border border-slate-200 bg-white p-4">
+              <summary className="cursor-pointer text-sm font-black text-slate-900">
+                {lang === "es" ? "Opcional: logo, title block y branding" : "Optional: logo, title block & branding"}
+              </summary>
+              <p className="mt-2 text-xs leading-5 text-slate-500">
+                {lang === "es"
+                  ? "Puedes enviar esto después. Para el primer pedido podemos usar company name y title block estándar."
+                  : "You can send this later. For the first order we can use the company name and standard title block."}
+              </p>
+              <div className="mt-4">
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="text-sm font-semibold text-slate-700">
+                    {t.logoOption}
+                  </div>
               <div className="mt-3 grid gap-2 text-sm">
                 <label className="flex cursor-pointer items-center gap-2">
                   <input
@@ -4611,6 +4664,9 @@ function ProjectInfoCard({
               />
             </label>
 
+              </div>
+            </details>
+
             <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 text-sm">
               <input
                 type="checkbox"
@@ -4709,6 +4765,28 @@ function ProjectInfoCard({
               {contact.notes.length} / {NOTES_LIMIT}
             </div>
             <div className="text-xs text-slate-500">{t.notesHelp}</div>
+          </label>
+
+          <label className="grid gap-2 md:col-span-2">
+            <span className="text-sm font-semibold text-slate-700">
+              {lang === "es" ? "Large files / shared folder link" : "Large files / shared folder link"}
+            </span>
+            <textarea
+              value={contact.largeFileLinks}
+              onChange={(e) => onChange({ largeFileLinks: e.target.value })}
+              rows={3}
+              placeholder={
+                lang === "es"
+                  ? "Google Drive, Dropbox, WeTransfer, shared photo folder, DWG/PDF folder..."
+                  : "Google Drive, Dropbox, WeTransfer, shared photo folder, DWG/PDF folder..."
+              }
+              className="rounded-3xl border border-slate-200 bg-white p-4 text-sm text-slate-900 outline-none focus:border-slate-400"
+            />
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
+              {lang === "es"
+                ? "Usa este campo para sets completos de fotos, PDFs grandes, DWG/DXF o archivos high-resolution. El upload directo de la forma es solo para pocos archivos ligeros."
+                : "Use this for full photo sets, large PDFs, DWG/DXF, or high-resolution files. The form uploader is only for a few lightweight files."}
+            </div>
           </label>
 
           {pathId === "full-design" ? (
@@ -5004,15 +5082,15 @@ function ProjectInfoCard({
               help={
                 pathId === "full-design"
                   ? lang === "es"
-                    ? "Requerido para Yard Design Package. Sube tantas fotos claras como puedas: todo el objeto, vistas generales, bordes, fences, house edges, slopes, problem areas, existing plants, utilities, patios, walkways, and anything the client cares about."
-                    : "Required for Yard Design Package. Upload as many clear photos as possible: the whole property/design area, overall views, edges, fences, house edges, slopes, problem areas, existing plants, utilities, patios, walkways, and anything the client cares about."
+                    ? "Requerido para Yard Design Package. Sube 3–5 fotos clave y ligeras aquí: vistas generales, bordes, house edges, slopes, problem areas. Pega el set completo de fotos en Large files / shared folder link."
+                    : "Required for Yard Design Package. Upload 3–5 key lightweight photos here: overall views, edges, house edges, slopes, problem areas. Paste the full photo set in Large files / shared folder link."
                   : t.uploadPhotosHelp
               }
               accept="image/*"
               files={projectFiles.photos}
               onChange={(files) => onFilesChange({ photos: files })}
               lang={lang}
-              maxFiles={pathId === "full-design" ? 20 : 10}
+              maxFiles={pathId === "full-design" ? 5 : 10}
               requiredField={pathId === "quick-sale" || pathId === "full-design"}
               missing={isMissing("projectPhotos")}
             />
@@ -5354,7 +5432,12 @@ function QuickHelpModal({
             <button
               type="button"
               onClick={onSend}
-              className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-black text-white hover:bg-slate-800"
+              disabled={sending}
+              className={`rounded-2xl px-5 py-3 text-sm font-black text-white ${
+                sending
+                  ? "cursor-not-allowed bg-slate-400"
+                  : "bg-slate-900 hover:bg-slate-800"
+              }`}
             >
               {sending ? t.helpSending : t.helpSend}
             </button>
@@ -5760,6 +5843,7 @@ function App() {
 
 
   function openHelpWithService(service: Service) {
+    setHelpSent(false);
     setHelpForm((prev) => ({
       ...prev,
       question: `${lang === "es" ? "Pregunta sobre" : "Question about"} ${translateServiceTitle(service, lang)}: `,
@@ -5875,22 +5959,60 @@ function App() {
       contact: sanitizeText(helpForm.contact),
       question: sanitizeText(helpForm.question),
       budgetTimeline: sanitizeText(helpForm.budgetTimeline),
+      sourcePath: selectedPathTitle,
+      currentUrl: typeof window !== "undefined" ? window.location.href : "",
     };
-    if (!payload.contact || !payload.question) return;
+    if (!payload.contact || !payload.question || sendingHelp) return;
+
     setSendingHelp(true);
+    setHelpSent(false);
+
     try {
-      await fetch("/api/quick-help", {
+      const response = await fetch(ORDER_REVIEW_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }).catch(() => undefined);
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify({
+          form_key: SITEFORM_FORM_KEY,
+          mode: "quick_help",
+          quick_help: payload,
+        }),
+      });
+
+      const responseText = await response.text();
+      let data: { ok?: boolean; error?: string } = {};
+
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        throw new Error("The help endpoint responded, but the response was not valid JSON.");
+      }
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || "The help request could not be saved. Please try again.");
+      }
+
       setHelpSent(true);
+      setShowHelp(false);
+      setHelpForm({
+        contact: "",
+        question: "",
+        budgetTimeline: "",
+      });
+    } catch (error) {
+      window.alert(
+        error instanceof Error
+          ? error.message
+          : "The help request could not be saved. Please try again."
+      );
     } finally {
       setSendingHelp(false);
     }
   }
 
   async function createCheckout() {
+    if (creatingCheckout) return;
     if (!canProceed) {
       setCheckoutNotice(t.fillRequired);
       return;
@@ -5926,6 +6048,7 @@ function App() {
       measurement_height: sanitizeText(contact.measurementHeight),
       measurements_site_notes: sanitizeText(contact.measurementsNotes),
       reference_links: sanitizeText(contact.referenceLinks),
+      large_file_links: sanitizeText(contact.largeFileLinks),
       yard_design_focus: contact.yardDesignFocus,
       yard_design_notes: sanitizeText(contact.yardDesignNotes),
       structure_preferences: sanitizeStructurePreferences(
@@ -6223,7 +6346,10 @@ function App() {
           else if (view === "CONFIG") navigateTo("MENU", activePath, "replace");
           else navigateTo("LANDING", activePath, "replace");
         }}
-        onOpenHelp={() => setShowHelp(true)}
+        onOpenHelp={() => {
+          setHelpSent(false);
+          setShowHelp(true);
+        }}
       />
       <main className="mx-auto max-w-7xl px-4 pt-4 md:px-10 md:pt-8">
         {view === "LANDING" ? (
