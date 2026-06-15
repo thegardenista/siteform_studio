@@ -32,6 +32,25 @@ type SiteVisitScheduleMode = "" | "friday" | "other";
 
 interface StructurePreference {
   material: string;
+  boardLumber: string;
+  framingLumber: string;
+  deckWidth: string;
+  deckDepth: string;
+  deckHeight: string;
+  structureWidth: string;
+  structureDepth: string;
+  structureHeight: string;
+  structureShape: string;
+  roofShape: string;
+  postSize: string;
+  beamSize: string;
+  rafterSize: string;
+  latticeSpacing: string;
+  attachmentType: string;
+  stairCount: string;
+  stairWidth: string;
+  stairLanding: string;
+  railingType: string;
   roofType: string;
   roofMaterial: string;
   finish: string;
@@ -298,6 +317,25 @@ function hasSiteVisitSelected(serviceIds: string[]) {
 function emptyStructurePreference(): StructurePreference {
   return {
     material: "",
+    boardLumber: "",
+    framingLumber: "",
+    deckWidth: "",
+    deckDepth: "",
+    deckHeight: "",
+    structureWidth: "",
+    structureDepth: "",
+    structureHeight: "",
+    structureShape: "",
+    roofShape: "",
+    postSize: "",
+    beamSize: "",
+    rafterSize: "",
+    latticeSpacing: "",
+    attachmentType: "",
+    stairCount: "",
+    stairWidth: "",
+    stairLanding: "",
+    railingType: "",
     roofType: "",
     roofMaterial: "",
     finish: "",
@@ -331,11 +369,27 @@ function hasMeaningfulStructurePreference(serviceId: string, preference?: Struct
   }
 
   if (serviceId === "pergola-small" || serviceId === "shade-large") {
-    return Boolean(preference.material || preference.roofType || preference.roofMaterial || preference.notes);
+    return Boolean(
+      preference.structureWidth &&
+        preference.structureDepth &&
+        preference.structureHeight &&
+        preference.attachmentType &&
+        preference.material &&
+        preference.roofType
+    );
   }
 
   if (serviceId === "carport-small" || serviceId === "carport-large") {
     return Boolean(preference.material || preference.roofMaterial || preference.size || preference.notes);
+  }
+
+  if (serviceId === "deck-small" || serviceId === "deck-large") {
+    return Boolean(
+      preference.deckWidth &&
+        preference.deckDepth &&
+        preference.deckHeight &&
+        preference.attachmentType
+    );
   }
 
   return Boolean(preference.material || preference.finish || preference.size || preference.notes);
@@ -3346,23 +3400,109 @@ function StructurePreferenceCard({
 
       {type === "deck" ? (
         <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <div className="md:col-span-2 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs leading-5 text-blue-950">
+            {lang === "es"
+              ? "Sube un sketch, markup o site plan en References/markups abajo. Puede ser dibujado a mano: ubicación del deck, forma, stairs/landing, relación con la casa/fence."
+              : "Upload a sketch, markup, or site plan in References/markups below. A hand sketch is fine: deck location, shape, stairs/landing, and relationship to house/fence."}
+          </div>
+
           <label className={labelClass}>
-            <span className={labelTextClass}>{lang === "es" ? "Material del deck" : "Decking / visible material"}</span>
+            <span className={labelTextClass}>{lang === "es" ? "Ancho del deck" : "Deck width"}</span>
+            <input
+              value={preference.deckWidth}
+              onChange={(e) => onChange({ deckWidth: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 12 ft" : "Ex: 12 ft"}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Profundidad del deck" : "Deck depth"}</span>
+            <input
+              value={preference.deckDepth}
+              onChange={(e) => onChange({ deckDepth: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 16 ft" : "Ex: 16 ft"}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Altura del deck" : "Deck height above grade"}</span>
+            <input
+              value={preference.deckHeight}
+              onChange={(e) => onChange({ deckHeight: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 24 in / 3 ft / 6 ft" : "Ex: 24 in / 3 ft / 6 ft"}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Conexión a estructura" : "Attachment type"}</span>
+            <select
+              value={preference.attachmentType}
+              onChange={(e) => onChange({ attachmentType: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("freestanding", "Freestanding deck")}
+              {option("attached", "Attached to house / structure")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+
+          {preference.attachmentType === "attached" ? (
+            <div className="md:col-span-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold leading-5 text-amber-950">
+              {lang === "es"
+                ? "Attached deck: normalmente requiere revisión/planos estructurales por ingeniero sin importar el tamaño. ScopeBuilder no provee ingeniería ni stamped drawings."
+                : "Attached deck: structural engineer drawings/review are usually needed regardless of deck size. ScopeBuilder does not provide engineering or stamped drawings."}
+            </div>
+          ) : null}
+
+          {preference.attachmentType === "freestanding" ? (
+            <div className="md:col-span-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs font-semibold leading-5 text-emerald-950">
+              {lang === "es"
+                ? "Freestanding deck: puede ser más simple, pero HOA, city, height, span, footings y code todavía pueden requerir revisión local."
+                : "Freestanding deck: may be simpler, but HOA, city, height, spans, footings, and code can still require local review."}
+            </div>
+          ) : null}
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Deck boards / superficie" : "Deck boards / surface material"}</span>
             <select
               value={preference.material}
               onChange={(e) => onChange({ material: e.target.value })}
               className={selectClass}
             >
               <option value="">{selectPlaceholder}</option>
+              {option("trex-composite", "Trex / composite decking")}
               {option("ipe", "Ipe / tropical hardwood")}
               {option("cedar", "Cedar")}
               {option("treated-wood", "Pressure-treated wood")}
-              {option("composite", "Composite decking")}
               {option("larch", "Larch / similar wood")}
               {option("not-sure", notSure)}
               {option("other", other)}
             </select>
           </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Framing lumber, si se sabe" : "Framing lumber, if known"}</span>
+            <select
+              value={preference.framingLumber}
+              onChange={(e) => onChange({ framingLumber: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("sp", "SP / spruce-pine")}
+              {option("df", "DF / Douglas fir")}
+              {option("hf", "HF / hem-fir")}
+              {option("spf", "SPF / spruce-pine-fir")}
+              {option("syp", "SYP / southern yellow pine")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+
           <label className={labelClass}>
             <span className={labelTextClass}>{lang === "es" ? "Color / acabado" : "Color / finish preference"}</span>
             <input
@@ -3372,13 +3512,68 @@ function StructurePreferenceCard({
               className={inputClass}
             />
           </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Railings" : "Railings"}</span>
+            <select
+              value={preference.railingType}
+              onChange={(e) => onChange({ railingType: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("none", "No railing")}
+              {option("metal", "Metal railing")}
+              {option("wood", "Wood railing")}
+              {option("cable", "Cable railing")}
+              {option("glass", "Glass railing")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Stairs / cantidad" : "Stairs / number of steps"}</span>
+            <input
+              value={preference.stairCount}
+              onChange={(e) => onChange({ stairCount: e.target.value })}
+              placeholder={lang === "es" ? "Ej: no stairs / 3 steps / 8 risers" : "Ex: no stairs / 3 steps / 8 risers"}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Ancho de stairs" : "Stair width"}</span>
+            <input
+              value={preference.stairWidth}
+              onChange={(e) => onChange({ stairWidth: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 4 ft wide" : "Ex: 4 ft wide"}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Landing" : "Landing"}</span>
+            <select
+              value={preference.stairLanding}
+              onChange={(e) => onChange({ stairLanding: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("no-landing", "No landing")}
+              {option("landing-needed", "Landing needed")}
+              {option("existing-landing", "Connect to existing landing")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+
           <label className={`${labelClass} md:col-span-2`}>
-            <span className={labelTextClass}>{lang === "es" ? "Tamaño / notas del deck" : "Approx. deck size / notes"}</span>
+            <span className={labelTextClass}>{lang === "es" ? "Forma / ubicación / notas del deck" : "Deck shape / location / notes"}</span>
             <textarea
               value={preference.notes}
               onChange={(e) => onChange({ notes: e.target.value })}
               rows={3}
-              placeholder={lang === "es" ? "Altura, railings, escalones, skirting, referencias..." : "Height, railings, steps, skirting, references..."}
+              placeholder={lang === "es" ? "Forma L, junto a back door, stairs hacia lawn, skirting, referencias..." : "L-shape, next to back door, stairs to lawn, skirting, references..."}
               className={textareaClass}
             />
           </label>
@@ -3387,6 +3582,83 @@ function StructurePreferenceCard({
 
       {type === "cover" ? (
         <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <div className="md:col-span-2 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs leading-5 text-blue-950">
+            {lang === "es"
+              ? "Sube sketch, markup o site plan en References/markups abajo. Puede ser a mano: ubicación, forma, posts, roof direction, relación con casa/fence/patio."
+              : "Upload a sketch, markup, or site plan in References/markups below. A hand sketch is fine: location, shape, posts, roof direction, and relationship to house/fence/patio."}
+          </div>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Ancho de pergola / cover" : "Pergola / cover width"}</span>
+            <input
+              value={preference.structureWidth}
+              onChange={(e) => onChange({ structureWidth: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 12 ft" : "Ex: 12 ft"}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Profundidad de pergola / cover" : "Pergola / cover depth"}</span>
+            <input
+              value={preference.structureDepth}
+              onChange={(e) => onChange({ structureDepth: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 16 ft" : "Ex: 16 ft"}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Altura aproximada" : "Approx. height"}</span>
+            <input
+              value={preference.structureHeight}
+              onChange={(e) => onChange({ structureHeight: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 9 ft posts / 10 ft roof" : "Ex: 9 ft posts / 10 ft roof"}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Forma / layout" : "Shape / layout"}</span>
+            <select
+              value={preference.structureShape}
+              onChange={(e) => onChange({ structureShape: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("rectangle", "Rectangle")}
+              {option("l-shape", "L-shape")}
+              {option("u-shape", "U-shape")}
+              {option("pavilion", "Pavilion / free-standing roofed structure")}
+              {option("linear-attached", "Linear attached cover")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Conexión a casa / estructura" : "Attachment type"}</span>
+            <select
+              value={preference.attachmentType}
+              onChange={(e) => onChange({ attachmentType: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("freestanding", "Freestanding")}
+              {option("attached", "Attached to house / structure")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+
+          {preference.attachmentType === "attached" ? (
+            <div className="md:col-span-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold leading-5 text-amber-950">
+              {lang === "es"
+                ? "Attached pergola / patio cover: normalmente requiere revisión/planos estructurales por ingeniero sin importar el tamaño. ScopeBuilder no provee ingeniería ni stamped drawings."
+                : "Attached pergola / patio cover: structural engineer drawings/review are usually needed regardless of size. ScopeBuilder does not provide engineering or stamped drawings."}
+            </div>
+          ) : null}
+
           <label className={labelClass}>
             <span className={labelTextClass}>{lang === "es" ? "Material de estructura" : "Structure material"}</span>
             <select
@@ -3398,12 +3670,14 @@ function StructurePreferenceCard({
               {option("wood", "Wood")}
               {option("steel", "Steel")}
               {option("aluminum", "Aluminum")}
+              {option("cedar", "Cedar")}
               {option("not-sure", notSure)}
               {option("other", other)}
             </select>
           </label>
+
           <label className={labelClass}>
-            <span className={labelTextClass}>{lang === "es" ? "Tipo de techo / sombra" : "Roof / shade type"}</span>
+            <span className={labelTextClass}>{lang === "es" ? "Tipo крыши / sombra" : "Roof / shade type"}</span>
             <select
               value={preference.roofType}
               onChange={(e) => onChange({ roofType: e.target.value })}
@@ -3411,13 +3685,33 @@ function StructurePreferenceCard({
             >
               <option value="">{selectPlaceholder}</option>
               {option("open-slats", "Open slats / permeable shade")}
-              {option("solid-roof", "Solid / non-permeable roof")}
+              {option("lattice", "Lattice / partial shade")}
+              {option("solid-roof", "Solid roof / non-permeable")}
               {option("transparent-polycarbonate", "Transparent polycarbonate")}
               {option("metal-roof", "Metal roof")}
+              {option("pavilion-roof", "Pavilion roof")}
               {option("not-sure", notSure)}
               {option("other", other)}
             </select>
           </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Forma / pendiente de крыши" : "Roof form / slope"}</span>
+            <select
+              value={preference.roofShape}
+              onChange={(e) => onChange({ roofShape: e.target.value })}
+              className={selectClass}
+            >
+              <option value="">{selectPlaceholder}</option>
+              {option("flat", "Flat / low slope")}
+              {option("single-slope", "Single-slope / shed roof")}
+              {option("gable", "Gable")}
+              {option("hip", "Hip roof")}
+              {option("not-sure", notSure)}
+              {option("other", other)}
+            </select>
+          </label>
+
           <label className={labelClass}>
             <span className={labelTextClass}>{lang === "es" ? "Material del techo" : "Roof material, if known"}</span>
             <select
@@ -3427,6 +3721,7 @@ function StructurePreferenceCard({
             >
               <option value="">{selectPlaceholder}</option>
               {option("slats-only", "Slats only / no solid roof")}
+              {option("lattice", "Lattice")}
               {option("polycarbonate", "Polycarbonate")}
               {option("metal", "Metal panels")}
               {option("solid-panel", "Solid panel / waterproof cover")}
@@ -3434,6 +3729,47 @@ function StructurePreferenceCard({
               {option("other", other)}
             </select>
           </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Post size, si se sabe" : "Post size, if known"}</span>
+            <input
+              value={preference.postSize}
+              onChange={(e) => onChange({ postSize: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 6x6, steel posts..." : "Ex: 6x6, steel posts..."}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Beam size, si se sabe" : "Beam size, if known"}</span>
+            <input
+              value={preference.beamSize}
+              onChange={(e) => onChange({ beamSize: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 4x12, steel beam..." : "Ex: 4x12, steel beam..."}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Rafter size / spacing" : "Rafter size / spacing"}</span>
+            <input
+              value={preference.rafterSize}
+              onChange={(e) => onChange({ rafterSize: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 4x12 @ 3 ft 4 in" : "Ex: 4x12 @ 3 ft 4 in"}
+              className={inputClass}
+            />
+          </label>
+
+          <label className={labelClass}>
+            <span className={labelTextClass}>{lang === "es" ? "Lattice / slat spacing" : "Lattice / slat spacing"}</span>
+            <input
+              value={preference.latticeSpacing}
+              onChange={(e) => onChange({ latticeSpacing: e.target.value })}
+              placeholder={lang === "es" ? "Ej: 2x2 @ 6 in" : "Ex: 2x2 @ 6 in"}
+              className={inputClass}
+            />
+          </label>
+
           <label className={labelClass}>
             <span className={labelTextClass}>{lang === "es" ? "Color / acabado" : "Color / finish preference"}</span>
             <input
@@ -3443,13 +3779,14 @@ function StructurePreferenceCard({
               className={inputClass}
             />
           </label>
+
           <label className={`${labelClass} md:col-span-2`}>
-            <span className={labelTextClass}>{lang === "es" ? "Notas" : "Notes"}</span>
+            <span className={labelTextClass}>{lang === "es" ? "Notas de pergola / cover" : "Pergola / cover notes"}</span>
             <textarea
               value={preference.notes}
               onChange={(e) => onChange({ notes: e.target.value })}
               rows={3}
-              placeholder={lang === "es" ? "Adjunta a la casa, free-standing, referencias, dimensiones..." : "Attached to house, free-standing, references, dimensions..."}
+              placeholder={lang === "es" ? "Attached/free-standing, slope direction, posts, beams, lighting/fan, gutters, referencias..." : "Attached/free-standing, slope direction, posts, beams, lighting/fan, gutters, references..."}
               className={textareaClass}
             />
           </label>
