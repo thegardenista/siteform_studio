@@ -221,6 +221,9 @@ const SOCIAL_LINKS = {
   email: "mailto:start@siteform.studio",
 };
 
+const SITEFORM_URL = "https://siteform.studio";
+const SITEFORM_QR_CODE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAIAAAAgbqG5AAADL0lEQVR4nO3dwW3sNhRA0f+DFJBlekj/pfweskwHzubuBASE/EjJzjlre2Y8uCBESyR/fnx8/IAfP357+gPwFlIgUiBSIFIgUiBSIFIgUiBSIFIgv6/80B9//rX7c/yHf/7+NfI69/6KZ999yspfYVQgUiBSIFIgUiBLM4irqevqq5Ur7evPXD/Ps1fsK579Dq+MCkQKRApECkQK5OYM4urZ//CvvPLKJ1z5rXs/s+LZ79CoQKRApECkQKRAxmYQb3NyvvA9GBWIFIgUiBSIFMiXnEFMXfmfvL/wfkYFIgUiBSIFIgUyNoN4/3X1vrsJU7OMZ79DowKRApECkQKRArk5g3j2SZ7vce/gbU9DGRWIFIgUiBSIFMjPr3ii3NS1976dWt82W1lhVCBSIFIgUiBSIDfPgzi5E+nJJ4Lurb+e2vfp3ue598pXRgUiBSIFIgUiBTJ2D+LkfYGpHZOmZhkn925dYQbBp0iBSIFIgUiBjJ1JPbVO+d71+b5dWN+2WmFqj6krowKRApECkQKRAhk7k3rflf89U2db73v3qaeYpuZKRgUiBSIFIgUiBbI0gzh58tq+dRBTawpOXtWfXJFtVCBSIFIgUiBSIGNPMV3tu/Y+uephxb6/6967WwfBp0iBSIFIgUiBLK2kPnmtu+9/9SfvHeyzb/ZkVCBSIFIgUiBSIGNnUq/MDk4+DbVi6q7EyfnLvm/MqECkQKRApECkQMZmEFOmVmRPvfvVvjnOs89rGRWIFIgUiBSIFMj/6Ezqk+e+Pbui4R6jApECkQKRApEC2biSesrK01BXU8//fMXZgfMg+BQpECkQKRApkLHzIKbsO/dtahXG2/ZltRcTw6RApECkQKRANq6kXrHvunrqTsE9++7a7Dspz6hApECkQKRApEBet5L6pJMrI+69zspvTc1WjApECkQKRApECuTbziDetnbjnpN7QxkViBSIFIgUiBTI2Azi5K5B99593z6x7z+xYoVRgUiBSIFIgUiB3JxBPPsf/nsroJ89q25q/rJvTmFUIFIgUiBSIFIgX/I8CHYwKhApECkQKRApECkQKRApECkQKRApkH8BXT5pFpkbqgEAAAAASUVORK5CYII=";
+
 type SampleImages = {
   before: string;
   after: string;
@@ -439,7 +442,7 @@ function getStructureServiceType(serviceId: string) {
 const T = {
   en: {
     header: "Scope Builder",
-    subheader: "White-label drafting and visuals for outdoor pros",
+    subheader: "by SiteForm.Studio — white-label drafting and visuals for outdoor pros",
     selectPath: "What do you need help with?",
     selectPathHelp:
       "Start with the option closest to your project. You can add site visits, extra sheets, or more detail later.",
@@ -668,7 +671,7 @@ const T = {
     uploadWidgetNote:
       "Files are intended to be collected inside this SiteForm intake. Connect this section to your upload storage before launch.",
     showcaseBadge: "Try it on a real job",
-    showcaseTitle: "White-label support for outdoor pros.",
+    showcaseTitle: "Scope Builder by SiteForm.Studio",
     showcaseDesc:
       "SiteForm Studio helps builders, landscape crews, deck builders, designers, and outdoor contractors turn rough site info into clear client-facing design support — under your brand.",
     showcaseWhiteTitle: "What white-label means",
@@ -695,7 +698,7 @@ const T = {
   },
   es: {
     header: "Scope Builder",
-    subheader: "Dibujo y visuales white-label para profesionales de exterior",
+    subheader: "by SiteForm.Studio — dibujo y visuales white-label para profesionales de exterior",
     selectPath: "¿En qué necesitas ayuda?",
     selectPathHelp:
       "Empieza con la opción más cercana a tu proyecto. Después puedes agregar visitas, láminas extra o más detalle.",
@@ -924,7 +927,7 @@ const T = {
     uploadWidgetNote:
       "Los archivos deben recogerse dentro de este intake de SiteForm. Conecta esta sección al storage de uploads antes de lanzar.",
     showcaseBadge: "Pruébalo en un trabajo real",
-    showcaseTitle: "Apoyo white-label para profesionales de exterior.",
+    showcaseTitle: "Scope Builder by SiteForm.Studio",
     showcaseDesc:
       "SiteForm Studio ayuda a builders, equipos de landscape, deck builders, diseñadores y contratistas de exterior a convertir información básica del sitio en apoyo claro para presentar al cliente — bajo tu marca.",
     showcaseWhiteTitle: "Qué significa white-label",
@@ -2809,6 +2812,51 @@ function SocialIconLink({
   );
 }
 
+
+function SiteFormMark({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#0d2b3e] text-sm font-black tracking-tight text-white shadow-sm">
+        SF
+      </div>
+      {!compact ? (
+        <div>
+          <div className="text-xs font-black uppercase tracking-[0.2em] text-emerald-700">
+            SiteForm.Studio
+          </div>
+          <div className="text-sm font-semibold text-slate-600">
+            White-label outdoor design support
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function ShareQrCard({ lang }: { lang: Lang }) {
+  return (
+    <div className="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-4 text-center shadow-sm">
+      <div className="mx-auto w-fit rounded-3xl border border-slate-200 bg-white p-3">
+        <img
+          src={SITEFORM_QR_CODE}
+          alt={lang === "es" ? "QR code para SiteForm Studio" : "QR code for SiteForm Studio"}
+          className="h-32 w-32"
+        />
+      </div>
+      <div className="mt-3 text-sm font-black text-slate-900">
+        {lang === "es" ? "Escanea para abrir" : "Scan to open"}
+      </div>
+      <div className="mt-1 break-all text-xs text-slate-500">{SITEFORM_URL}</div>
+      <p className="mt-3 text-xs leading-5 text-slate-600">
+        {lang === "es"
+          ? "Úsalo para compartir Scope Builder de teléfono a teléfono."
+          : "Use this to share Scope Builder phone-to-phone."}
+      </p>
+    </div>
+  );
+}
+
+
 function LandingShowcase({
   lang,
   onOpenServices,
@@ -2819,55 +2867,77 @@ function LandingShowcase({
   const t = T[lang];
   return (
     <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm md:rounded-[2rem] md:p-8">
-      <div className="mx-auto max-w-4xl">
-        <h2 className="text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-6xl">
-          {t.showcaseTitle}
-        </h2>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 md:text-lg md:leading-8">
-          {t.showcaseDesc}
-        </p>
-        <div className="mt-5 space-y-4 border-l-4 border-emerald-200 pl-4 text-sm leading-6 text-slate-700 md:mt-6 md:max-w-3xl md:text-base md:leading-7">
-          <p>
-            <span className="font-black text-slate-900">{t.showcaseWhiteTitle}: </span>
-            {t.showcaseWhiteText}
+      <div className="grid gap-8 lg:grid-cols-[1fr_260px] lg:items-start">
+        <div className="min-w-0">
+          <div className="mb-6 flex flex-wrap items-center gap-3">
+            <SiteFormMark />
+            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-emerald-800">
+              Scope Builder
+            </span>
+          </div>
+
+          <h2 className="max-w-4xl text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-6xl">
+            {t.showcaseTitle}
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 md:text-lg md:leading-8">
+            {t.showcaseDesc}
           </p>
-          <p>
-            <span className="font-black text-slate-900">{t.showcaseHowTitle}: </span>
-            {t.showcaseHowText}
-          </p>
-          <p>
-            <span className="font-black text-slate-900">{t.showcaseSafeTitle}: </span>
-            {t.showcaseSafeText}
-          </p>
-        </div>
-        <div className="mt-5 flex md:mt-8">
-          <button
-            type="button"
-            onClick={onOpenServices}
-            className="inline-flex w-full items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white shadow-lg transition hover:bg-emerald-700 sm:w-auto md:px-6 md:py-4 md:text-base"
-          >
-            {t.showcaseCta}
-          </button>
-        </div>
-        <div className="mt-5 border-t border-slate-100 pt-4 md:mt-6">
-          <div className="flex items-center justify-center gap-3">
-            <SocialIconLink href={SOCIAL_LINKS.instagram} label={t.socialInstagram}>
-              <InstagramIcon />
-            </SocialIconLink>
-            <SocialIconLink href={SOCIAL_LINKS.facebook} label={t.socialFacebook}>
-              <FacebookIcon />
-            </SocialIconLink>
-            <SocialIconLink href={SOCIAL_LINKS.tiktok} label={t.socialTikTok}>
-              <TikTokIcon />
-            </SocialIconLink>
-            <SocialIconLink href={SOCIAL_LINKS.youtube} label={t.socialYouTube}>
-              <YouTubeIcon />
-            </SocialIconLink>
-            <SocialIconLink href={SOCIAL_LINKS.email} label={t.socialEmail}>
-              <EmailIcon />
-            </SocialIconLink>
+
+          <div className="mt-5 grid gap-3 text-sm leading-6 text-slate-700 md:mt-6 md:max-w-4xl md:grid-cols-3 md:text-base md:leading-7">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <span className="font-black text-slate-900">{t.showcaseWhiteTitle}</span>
+              <p className="mt-2 text-sm leading-6">{t.showcaseWhiteText}</p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <span className="font-black text-slate-900">{t.showcaseHowTitle}</span>
+              <p className="mt-2 text-sm leading-6">{t.showcaseHowText}</p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <span className="font-black text-slate-900">{t.showcaseSafeTitle}</span>
+              <p className="mt-2 text-sm leading-6">{t.showcaseSafeText}</p>
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-8">
+            <button
+              type="button"
+              onClick={onOpenServices}
+              className="inline-flex w-full items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white shadow-lg transition hover:bg-emerald-700 sm:w-auto md:px-6 md:py-4 md:text-base"
+            >
+              {t.showcaseCta}
+            </button>
+            <a
+              href={SITEFORM_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-900 hover:border-slate-900 sm:w-auto md:px-6 md:py-4 md:text-base"
+            >
+              siteform.studio
+            </a>
+          </div>
+
+          <div className="mt-5 border-t border-slate-100 pt-4 md:mt-6">
+            <div className="flex items-center justify-center gap-3 md:justify-start">
+              <SocialIconLink href={SOCIAL_LINKS.instagram} label={t.socialInstagram}>
+                <InstagramIcon />
+              </SocialIconLink>
+              <SocialIconLink href={SOCIAL_LINKS.facebook} label={t.socialFacebook}>
+                <FacebookIcon />
+              </SocialIconLink>
+              <SocialIconLink href={SOCIAL_LINKS.tiktok} label={t.socialTikTok}>
+                <TikTokIcon />
+              </SocialIconLink>
+              <SocialIconLink href={SOCIAL_LINKS.youtube} label={t.socialYouTube}>
+                <YouTubeIcon />
+              </SocialIconLink>
+              <SocialIconLink href={SOCIAL_LINKS.email} label={t.socialEmail}>
+                <EmailIcon />
+              </SocialIconLink>
+            </div>
           </div>
         </div>
+
+        <ShareQrCard lang={lang} />
       </div>
     </section>
   );
@@ -2926,11 +2996,19 @@ function Header({
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 px-4 py-3 backdrop-blur md:px-10 md:py-4">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-2">
-        <div>
-          <h1 className="whitespace-nowrap text-xl font-black md:text-2xl">{t.header}</h1>
-          <p className="hidden text-xs text-slate-500 md:block">
-            {t.subheader}
-          </p>
+        <div className="flex min-w-0 items-center gap-3">
+          <SiteFormMark compact />
+          <div className="min-w-0">
+            <h1 className="whitespace-nowrap text-xl font-black md:text-2xl">
+              {t.header}
+              <span className="ml-2 hidden text-sm font-black text-emerald-700 md:inline">
+                by SiteForm.Studio
+              </span>
+            </h1>
+            <p className="hidden truncate text-xs text-slate-500 md:block">
+              {t.subheader}
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           {view !== "SUCCESS" ? (
