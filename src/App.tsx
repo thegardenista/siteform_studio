@@ -37,6 +37,9 @@ interface StructurePreference {
   deckWidth: string;
   deckDepth: string;
   deckHeight: string;
+  coverOverDeck: string;
+  coverOverDeckType: string;
+  coverOverDeckNotes: string;
   structureWidth: string;
   structureDepth: string;
   structureHeight: string;
@@ -170,6 +173,7 @@ interface ProjectFileUploads {
   titleBlockFiles: FileList | null;
   logoFiles: FileList | null;
   references: FileList | null;
+  structureFiles: Record<string, FileList | null>;
 }
 
 interface QuickHelpForm {
@@ -322,6 +326,9 @@ function emptyStructurePreference(): StructurePreference {
     deckWidth: "",
     deckDepth: "",
     deckHeight: "",
+    coverOverDeck: "",
+    coverOverDeckType: "",
+    coverOverDeckNotes: "",
     structureWidth: "",
     structureDepth: "",
     structureHeight: "",
@@ -388,7 +395,8 @@ function hasMeaningfulStructurePreference(serviceId: string, preference?: Struct
       preference.deckWidth &&
         preference.deckDepth &&
         preference.deckHeight &&
-        preference.attachmentType
+        preference.attachmentType &&
+        (preference.coverOverDeck !== "yes" || preference.coverOverDeckType)
     );
   }
 
@@ -1865,6 +1873,7 @@ function emptyProjectFiles(): ProjectFileUploads {
     titleBlockFiles: null,
     logoFiles: null,
     references: null,
+    structureFiles: {},
   };
 }
 
@@ -1874,7 +1883,8 @@ function hasAnyProjectFile(files: ProjectFileUploads) {
       files.surveyDocs?.length ||
       files.titleBlockFiles?.length ||
       files.logoFiles?.length ||
-      files.references?.length
+      files.references?.length ||
+      Object.values(files.structureFiles || {}).some((fileList) => Boolean(fileList?.length))
   );
 }
 
@@ -1894,6 +1904,17 @@ function summarizeFileList(files: FileList | null) {
   }));
 }
 
+function summarizeStructureFiles(files: ProjectFileUploads) {
+  return Object.entries(files.structureFiles || {}).reduce<Record<string, ReturnType<typeof summarizeFileList>>>(
+    (acc, [serviceId, fileList]) => {
+      const summary = summarizeFileList(fileList);
+      if (summary.length) acc[serviceId] = summary;
+      return acc;
+    },
+    {}
+  );
+}
+
 function buildFileSummary(files: ProjectFileUploads) {
   return {
     photos: summarizeFileList(files.photos),
@@ -1901,6 +1922,7 @@ function buildFileSummary(files: ProjectFileUploads) {
     title_block_files: summarizeFileList(files.titleBlockFiles),
     logo_files: summarizeFileList(files.logoFiles),
     references: summarizeFileList(files.references),
+    structure_files: summarizeStructureFiles(files),
   };
 }
 
@@ -1949,6 +1971,20 @@ async function serializeFileList(files: FileList | null) {
   );
 }
 
+async function serializeStructureFileMap(files: ProjectFileUploads) {
+  const entries = await Promise.all(
+    Object.entries(files.structureFiles || {}).map(async ([serviceId, fileList]) => {
+      const serialized = await serializeFileList(fileList);
+      return [serviceId, serialized] as const;
+    })
+  );
+
+  return entries.reduce<Record<string, Awaited<ReturnType<typeof serializeFileList>>>>((acc, [serviceId, serialized]) => {
+    if (serialized.length) acc[serviceId] = serialized;
+    return acc;
+  }, {});
+}
+
 async function buildProjectFilePayload(files: ProjectFileUploads) {
   return {
     photos: await serializeFileList(files.photos),
@@ -1956,6 +1992,7 @@ async function buildProjectFilePayload(files: ProjectFileUploads) {
     title_block_files: await serializeFileList(files.titleBlockFiles),
     logo_files: await serializeFileList(files.logoFiles),
     references: await serializeFileList(files.references),
+    structure_files: await serializeStructureFileMap(files),
   };
 }
 
@@ -3024,8 +3061,10 @@ function ServiceSection({
   onDiscuss,
   onSample,
   structurePreferences,
+  structureFiles,
   missingStructureDetails = false,
   onStructurePreferenceChange,
+  onStructureFilesChange,
 }: {
   title: string;
   description: string;
@@ -3039,8 +3078,10 @@ function ServiceSection({
   onDiscuss: (service: Service) => void;
   onSample: (service: Service) => void;
   structurePreferences?: StructurePreferences;
+  structureFiles?: Record<string, FileList | null>;
   missingStructureDetails?: boolean;
   onStructurePreferenceChange?: (serviceId: string, patch: Partial<StructurePreference>) => void;
+  onStructureFilesChange?: (serviceId: string, files: FileList | null) => void;
 }) {
   const t = T[lang];
   return (
@@ -3063,10 +3104,14 @@ function ServiceSection({
             ...emptyStructurePreference(),
             ...(structurePreferences?.[service.id] ?? {}),
           };
+          const structureFileList = structureFiles?.[service.id] ?? null;
           const showStructurePreferences =
             selected &&
             isStructureDetailService &&
-            Boolean(structurePreferences && onStructurePreferenceChange);
+            Boolean(structurePreferences && onStructurePreferenceChange && onStructureFilesChange);
+          const missingThisStructure =
+            missingStructureDetails &&
+            (!hasMeaningfulStructurePreference(service.id, preference) || !structureFileList?.length);
           const priceLabel =
             service.pricingType === "percentage"
               ? service.displayPriceLabel ?? "+25%"
@@ -3180,11 +3225,11 @@ function ServiceSection({
                     service={service}
                     preference={preference}
                     lang={lang}
-                    missing={
-                      missingStructureDetails &&
-                      !hasMeaningfulStructurePreference(service.id, preference)
-                    }
+                    files={structureFileList}
+                    missing={missingThisStructure}
+                    missingFiles={missingStructureDetails && !structureFileList?.length}
                     onChange={(patch) => onStructurePreferenceChange(service.id, patch)}
+                    onFilesChange={(files) => onStructureFilesChange(service.id, files)}
                   />
                 </div>
               ) : null}
@@ -3347,24 +3392,30 @@ function FilePicker({
 function StructurePreferenceCard({
   service,
   preference,
+  files,
   onChange,
+  onFilesChange,
   lang,
   missing,
+  missingFiles,
 }: {
   service: Service;
   preference: StructurePreference;
+  files: FileList | null;
   onChange: (patch: Partial<StructurePreference>) => void;
+  onFilesChange: (files: FileList | null) => void;
   lang: Lang;
   missing: boolean;
+  missingFiles: boolean;
 }) {
   const type = getStructureServiceType(service.id);
   const title = translateServiceTitle(service, lang);
   const labelClass = "grid gap-2";
   const labelTextClass = "text-xs font-black uppercase tracking-wide text-slate-600";
   const inputClass =
-    "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-slate-400";
+    "rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-400";
   const textareaClass =
-    "rounded-3xl border border-slate-200 bg-white p-4 text-sm outline-none focus:border-slate-400";
+    "rounded-3xl border border-slate-200 bg-white p-4 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-400";
   const selectClass = inputClass;
 
   const selectPlaceholder = lang === "es" ? "Selecciona una opción" : "Select one";
@@ -3389,14 +3440,6 @@ function StructurePreferenceCard({
             : "Choose what you know now. If the exact option is not listed, choose Other and describe it below."}
         </div>
       </div>
-
-      {missing ? (
-        <div className="mt-3 rounded-2xl border border-rose-200 bg-white px-3 py-2 text-xs font-semibold text-rose-700">
-          {lang === "es"
-            ? "Agrega al menos una preferencia para esta estructura antes de submit."
-            : "Add at least one preference for this structure before submitting."}
-        </div>
-      ) : null}
 
       {type === "deck" ? (
         <div className="mt-4 grid gap-4 md:grid-cols-2">
@@ -3467,6 +3510,79 @@ function StructurePreferenceCard({
             </div>
           ) : null}
 
+          <div className="md:col-span-2 rounded-2xl border border-slate-200 bg-white px-4 py-4">
+            <label className="flex cursor-pointer items-start gap-3 text-sm text-slate-800">
+              <input
+                type="checkbox"
+                checked={preference.coverOverDeck === "yes"}
+                onChange={(e) =>
+                  onChange({
+                    coverOverDeck: e.target.checked ? "yes" : "no",
+                    coverOverDeckType: e.target.checked ? preference.coverOverDeckType : "",
+                    coverOverDeckNotes: e.target.checked ? preference.coverOverDeckNotes : "",
+                  })
+                }
+                className="mt-1"
+              />
+              <span>
+                <span className="font-black">
+                  {lang === "es" ? "Hay / habrá estructura sobre este deck" : "There is / will be a structure over this deck"}
+                </span>
+                <span className="mt-1 block text-xs leading-5 text-slate-500">
+                  {lang === "es"
+                    ? "Si también necesitas pergola, patio cover o pavilion, marca esto y elige el tipo. También selecciona el servicio correspondiente en la lista para que esté incluido en el scope."
+                    : "If this deck also needs a pergola, patio cover, or pavilion, check this and choose the type. Also select the matching service in the list so it is included in the scope."}
+                </span>
+              </span>
+            </label>
+
+            {preference.coverOverDeck === "yes" ? (
+              <div className="mt-4 grid gap-4 md:grid-cols-2">
+                <label className={labelClass}>
+                  <span className={labelTextClass}>
+                    {lang === "es" ? "Tipo de estructura sobre deck" : "Structure over deck type"}
+                  </span>
+                  <select
+                    value={preference.coverOverDeckType}
+                    onChange={(e) => onChange({ coverOverDeckType: e.target.value })}
+                    className={selectClass}
+                  >
+                    <option value="">{selectPlaceholder}</option>
+                    {option("pergola-open-slats", "Pergola / open slats")}
+                    {option("patio-cover-solid", "Patio cover / solid roof")}
+                    {option("pavilion", "Pavilion / roofed structure")}
+                    {option("polycarbonate-cover", "Transparent polycarbonate cover")}
+                    {option("shade-sail", "Shade sail")}
+                    {option("not-sure", notSure)}
+                    {option("other", other)}
+                  </select>
+                </label>
+
+                <label className={labelClass}>
+                  <span className={labelTextClass}>
+                    {lang === "es" ? "Notas sobre estructura sobre deck" : "Notes about structure over deck"}
+                  </span>
+                  <input
+                    value={preference.coverOverDeckNotes}
+                    onChange={(e) => onChange({ coverOverDeckNotes: e.target.value })}
+                    placeholder={
+                      lang === "es"
+                        ? "Attached/free-standing, roof, slats, posts, material..."
+                        : "Attached/free-standing, roof, slats, posts, material..."
+                    }
+                    className={inputClass}
+                  />
+                </label>
+
+                <div className="md:col-span-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold leading-5 text-amber-950">
+                  {lang === "es"
+                    ? "Si la estructura va attached a la casa o tiene roof sólido, normalmente necesitará revisión/planos por ingeniero. ScopeBuilder no provee ingeniería ni stamped drawings."
+                    : "If the structure is attached to the house or has a solid roof, it will usually need structural engineer review/drawings. ScopeBuilder does not provide engineering or stamped drawings."}
+                </div>
+              </div>
+            ) : null}
+          </div>
+
           <label className={labelClass}>
             <span className={labelTextClass}>{lang === "es" ? "Deck boards / superficie" : "Deck boards / surface material"}</span>
             <select
@@ -3501,16 +3617,6 @@ function StructurePreferenceCard({
               {option("not-sure", notSure)}
               {option("other", other)}
             </select>
-          </label>
-
-          <label className={labelClass}>
-            <span className={labelTextClass}>{lang === "es" ? "Color / acabado" : "Color / finish preference"}</span>
-            <input
-              value={preference.finish}
-              onChange={(e) => onChange({ finish: e.target.value })}
-              placeholder={lang === "es" ? "Natural, stain oscuro, gris composite..." : "Natural wood, dark stain, gray composite..."}
-              className={inputClass}
-            />
           </label>
 
           <label className={labelClass}>
@@ -3770,16 +3876,6 @@ function StructurePreferenceCard({
             />
           </label>
 
-          <label className={labelClass}>
-            <span className={labelTextClass}>{lang === "es" ? "Color / acabado" : "Color / finish preference"}</span>
-            <input
-              value={preference.finish}
-              onChange={(e) => onChange({ finish: e.target.value })}
-              placeholder={lang === "es" ? "Cedar natural, negro, blanco, steel..." : "Natural cedar, black, white, steel..."}
-              className={inputClass}
-            />
-          </label>
-
           <label className={`${labelClass} md:col-span-2`}>
             <span className={labelTextClass}>{lang === "es" ? "Notas de pergola / cover" : "Pergola / cover notes"}</span>
             <textarea
@@ -4002,6 +4098,24 @@ function StructurePreferenceCard({
           </label>
         </div>
       ) : null}
+
+      <div className="mt-5 rounded-[1.25rem] border border-slate-200 bg-white p-4">
+        <FilePicker
+          title={lang === "es" ? "Archivos para esta estructura" : "Files for this structure"}
+          help={
+            lang === "es"
+              ? "Sube solo archivos de esta parte: sketch, markup, dimensiones, screenshot, referencia de producto o PDF. Esto evita mezclar deck, pergola y kitchen."
+              : "Upload files for this specific part only: sketch, markup, dimensions, screenshot, product reference, or PDF. This keeps deck, pergola, and kitchen files separated."
+          }
+          accept="image/*,.pdf,.txt,.doc,.docx,.dwg,.dxf"
+          files={files}
+          onChange={onFilesChange}
+          lang={lang}
+          maxFiles={10}
+          requiredField
+          missing={missingFiles}
+        />
+      </div>
     </div>
   );
 }
@@ -5124,7 +5238,9 @@ function getMissingRequirementKeys(
     pathId === "build-one" &&
     selectedStructureIds.length > 0 &&
     selectedStructureIds.some(
-      (id) => !hasMeaningfulStructurePreference(id, contact.structurePreferences[id])
+      (id) =>
+        !hasMeaningfulStructurePreference(id, contact.structurePreferences[id]) ||
+        !files.structureFiles?.[id]?.length
     )
   ) {
     missing.push("structureDetails");
@@ -5158,7 +5274,7 @@ function getMissingRequirementLabel(key: MissingRequirementKey, lang: Lang) {
     surveyDocs: { en: "Survey / site plan / measured base", es: "Survey / plano del sitio / base medida" },
     references: { en: "References / markups / measurements", es: "Referencias / markups / medidas" },
     sameProject: { en: "Confirm one client/project for this order", es: "Confirma un cliente/proyecto para este pedido" },
-    structureDetails: { en: "Add structure preferences for the selected outdoor structure", es: "Agrega preferencias de estructura para el elemento exterior seleccionado" },
+    structureDetails: { en: "Add required structure details and files for the selected outdoor structure", es: "Agrega detalles y archivos de la estructura exterior seleccionada" },
     siteVisitScheduling: { en: "Choose a Friday site visit or request other dates", es: "Elige visita en viernes o pide otras fechas" },
   };
   return labels[key][lang];
@@ -5466,6 +5582,16 @@ function App() {
     }));
   }
 
+  function updateStructureFiles(serviceId: string, files: FileList | null) {
+    setProjectFiles((prev) => ({
+      ...prev,
+      structureFiles: {
+        ...prev.structureFiles,
+        [serviceId]: files,
+      },
+    }));
+  }
+
   function resetCart() {
     if (!window.confirm(t.confirmReset)) return;
     setCart({});
@@ -5633,8 +5759,10 @@ function App() {
               onDiscuss={openHelpWithService}
               onSample={openSample}
               structurePreferences={contact.structurePreferences}
+              structureFiles={projectFiles.structureFiles}
               missingStructureDetails={missingRequirementKeys.includes("structureDetails")}
               onStructurePreferenceChange={updateStructurePreference}
+              onStructureFilesChange={updateStructureFiles}
             />
             <ServiceSection
               title={t.supportSection}
