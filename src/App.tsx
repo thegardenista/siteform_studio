@@ -2910,13 +2910,6 @@ function LandingShowcase({
     <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm md:rounded-[2rem] md:p-8">
       <div className="grid gap-8 lg:grid-cols-[1fr_260px] lg:items-start">
         <div className="min-w-0">
-          <div className="mb-6 flex flex-wrap items-center gap-3">
-            <SiteFormMark />
-            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-emerald-800">
-              Scope Builder
-            </span>
-          </div>
-
           <h2 className="max-w-4xl text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-6xl">
             {t.showcaseTitle}
           </h2>
@@ -2952,14 +2945,6 @@ function LandingShowcase({
             >
               {t.showcaseCta}
             </button>
-            <a
-              href={SITEFORM_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-900 hover:border-slate-900 sm:w-auto md:px-6 md:py-4 md:text-base"
-            >
-              siteform.studio
-            </a>
           </div>
 
           <div className="mt-5 border-t border-slate-100 pt-4 md:mt-6">
