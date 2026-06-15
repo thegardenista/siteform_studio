@@ -445,8 +445,8 @@ function getStructureServiceType(serviceId: string) {
 
 const T = {
   en: {
-    header: "Scope Builder",
-    subheader: "by SiteForm.Studio — white-label drafting and visuals for outdoor pros",
+    header: "SiteForm Studio",
+    subheader: "White-label outdoor design support for outdoor pros",
     selectPath: "What do you need help with?",
     selectPathHelp:
       "Start with the option closest to your project. You can add site visits, extra sheets, or more detail later.",
@@ -675,7 +675,7 @@ const T = {
     uploadWidgetNote:
       "Files are intended to be collected inside this SiteForm intake. Connect this section to your upload storage before launch.",
     showcaseBadge: "Try it on a real job",
-    showcaseTitle: "Scope Builder by SiteForm.Studio",
+    showcaseTitle: "White-label outdoor design support",
     showcaseDesc:
       "SiteForm Studio helps builders, landscape crews, deck builders, designers, and outdoor contractors turn rough site info into clear client-facing design support — under your brand.",
     showcaseWhiteTitle: "What white-label means",
@@ -686,7 +686,7 @@ const T = {
       "Choose a service, upload photos, measurements, survey files, references, and white-label details. For most services, the price and typical timing are visible before you submit — no waiting for a manager just to know what it may cost.",
     showcasePricingTitle: "Clear price before the back-and-forth",
     showcasePricingText:
-      "In most cases you can see what your client-facing support will cost and when you can expect it. Complex or custom work may need a short written review before invoicing, but you still see the starting price, such as from $1,000+.",
+      "In most cases you can see what your client-facing support will cost and when you can expect it. Complex or custom work may need a short written review before invoicing, but you will still see a starting price range before you submit.",
     showcaseSafeTitle: "Design-intent support",
     showcaseSafeText:
       "Deliverables are for concept, presentation, coordination, and pricing support. We do not provide engineering, permit filing, stamped drawings, or approval guarantees.",
@@ -704,8 +704,8 @@ const T = {
     showcaseNote: "",
   },
   es: {
-    header: "Scope Builder",
-    subheader: "by SiteForm.Studio — dibujo y visuales white-label para profesionales de exterior",
+    header: "SiteForm Studio",
+    subheader: "Apoyo white-label de diseño exterior para profesionales",
     selectPath: "¿En qué necesitas ayuda?",
     selectPathHelp:
       "Empieza con la opción más cercana a tu proyecto. Después puedes agregar visitas, láminas extra o más detalle.",
@@ -934,7 +934,7 @@ const T = {
     uploadWidgetNote:
       "Los archivos deben recogerse dentro de este intake de SiteForm. Conecta esta sección al storage de uploads antes de lanzar.",
     showcaseBadge: "Pruébalo en un trabajo real",
-    showcaseTitle: "Scope Builder by SiteForm.Studio",
+    showcaseTitle: "Apoyo white-label para proyectos exteriores",
     showcaseDesc:
       "SiteForm Studio ayuda a builders, equipos de landscape, deck builders, diseñadores y contratistas de exterior a convertir información básica del sitio en apoyo claro para presentar al cliente — bajo tu marca.",
     showcaseWhiteTitle: "Qué significa white-label",
@@ -945,7 +945,7 @@ const T = {
       "Elige un servicio, sube fotos, medidas, survey, referencias y datos white-label. Para la mayoría de servicios, el precio y tiempo típico están visibles antes de enviar — sin esperar a hablar con un manager solo para saber cuánto puede costar.",
     showcasePricingTitle: "Precio claro antes del intercambio",
     showcasePricingText:
-      "En la mayoría de casos puedes ver cuánto costará el apoyo para tu cliente y cuándo puedes esperarlo. Trabajos complejos o custom pueden necesitar una revisión breve por escrito antes de facturar, pero todavía ves el precio inicial, por ejemplo desde $1,000+.",
+      "En la mayoría de casos puedes ver cuánto costará el apoyo para tu cliente y cuándo puedes esperarlo. Trabajos complejos o custom pueden necesitar una revisión breve por escrito antes de facturar, pero todavía ves un rango de precio inicial antes de enviar.",
     showcaseSafeTitle: "Apoyo de intención de diseño",
     showcaseSafeText:
       "Los entregables son para concepto, presentación, coordinación y apoyo de presupuesto. No hacemos ingeniería, permisos, dibujos sellados/stamped ni garantizamos aprobaciones.",
@@ -2890,8 +2890,8 @@ function ShareQrCard({ lang }: { lang: Lang }) {
       <div className="mt-1 break-all text-xs text-slate-500">{SITEFORM_URL}</div>
       <p className="mt-3 text-xs leading-5 text-slate-600">
         {lang === "es"
-          ? "Úsalo para compartir Scope Builder de teléfono a teléfono."
-          : "Use this to share Scope Builder phone-to-phone."}
+          ? "Úsalo para compartir este formulario de pedido de teléfono a teléfono."
+          : "Use this to share this order form phone-to-phone."}
       </p>
     </div>
   );
@@ -3032,9 +3032,7 @@ function Header({
           <div className="min-w-0">
             <h1 className="whitespace-nowrap text-xl font-black md:text-2xl">
               {t.header}
-              <span className="ml-2 hidden text-sm font-black text-emerald-700 md:inline">
-                by SiteForm.Studio
-              </span>
+
             </h1>
             <p className="hidden truncate text-xs text-slate-500 md:block">
               {t.subheader}
@@ -3636,8 +3634,8 @@ function StructurePreferenceCard({
           {preference.attachmentType === "attached" ? (
             <div className="md:col-span-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold leading-5 text-amber-950">
               {lang === "es"
-                ? "Attached deck: normalmente requiere revisión/planos estructurales por ingeniero sin importar el tamaño. ScopeBuilder no provee ingeniería ni stamped drawings."
-                : "Attached deck: structural engineer drawings/review are usually needed regardless of deck size. ScopeBuilder does not provide engineering or stamped drawings."}
+                ? "Attached deck: normalmente requiere revisión/planos estructurales por ingeniero sin importar el tamaño. SiteForm Studio no provee ingeniería ni stamped drawings."
+                : "Attached deck: structural engineer drawings/review are usually needed regardless of deck size. SiteForm Studio does not provide engineering or stamped drawings."}
             </div>
           ) : null}
 
@@ -3855,8 +3853,8 @@ function StructurePreferenceCard({
           {preference.attachmentType === "attached" ? (
             <div className="md:col-span-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold leading-5 text-amber-950">
               {lang === "es"
-                ? "Attached pergola / patio cover: normalmente requiere revisión/planos estructurales por ingeniero sin importar el tamaño. ScopeBuilder no provee ingeniería ni stamped drawings."
-                : "Attached pergola / patio cover: structural engineer drawings/review are usually needed regardless of size. ScopeBuilder does not provide engineering or stamped drawings."}
+                ? "Attached pergola / patio cover: normalmente requiere revisión/planos estructurales por ingeniero sin importar el tamaño. SiteForm Studio no provee ingeniería ni stamped drawings."
+                : "Attached pergola / patio cover: structural engineer drawings/review are usually needed regardless of size. SiteForm Studio does not provide engineering or stamped drawings."}
             </div>
           ) : null}
 
@@ -6240,8 +6238,8 @@ function App() {
             </h3>
             <p className="mt-2 text-sm leading-6 text-slate-600">
               {lang === "es"
-                ? "No cierres esta página. Estamos subiendo los archivos y guardando la solicitud en ScopeBuilder Orders."
-                : "Please do not close this page. We are uploading the files and saving the request to ScopeBuilder Orders."}
+                ? "No cierres esta página. Estamos subiendo los archivos y guardando la solicitud en the SiteForm order log."
+                : "Please do not close this page. We are uploading the files and saving the request to the SiteForm order log."}
             </p>
             <p className="mt-3 rounded-2xl bg-amber-50 px-3 py-2 text-xs font-semibold leading-5 text-amber-900">
               {lang === "es"
