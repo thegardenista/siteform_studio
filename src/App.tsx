@@ -548,7 +548,7 @@ function getStructureServiceType(serviceId: string) {
 const T = {
   en: {
     header: "SiteForm Studio",
-    subheader: "White-label deck, pergola, outdoor structure, 3D production, and preconstruction support for outdoor pros — from hands-on crews to designers.",
+    subheader: "Decks, pergolas, patio covers, 3D, HOA sheets, CRZ overlays, and takeoffs — white-label.",
     selectPath: "What do you need help with?",
     selectPathHelp:
       "Start with the option closest to your project. You can add site visits, extra sheets, or more detail later.",
@@ -777,12 +777,12 @@ const T = {
     uploadWidgetNote:
       "Files are intended to be collected inside this SiteForm intake. Connect this section to your upload storage before launch.",
     showcaseBadge: "Try it on a real job",
-    showcaseTitle: "White-label outdoor design support",
+    showcaseTitle: "White-label support for decks, pergolas, 3D & plans",
     showcaseDesc:
-      "SiteForm Studio helps deck builders, pergola crews, patio-cover installers, landscape crews, handymen, designers, and outdoor contractors turn rough site info into clear client-facing drawings, visuals, and scope support — under your brand.",
-    showcaseCrewTitle: "Decks, Pergolas & Hands-On Crews",
+      "SiteForm Studio helps hands-on deck, pergola, patio-cover, carport, outdoor-kitchen, and landscape crews turn rough site photos, sketches, and measurements into clear client-facing drawings, visuals, and scope support — under your brand.",
+    showcaseCrewTitle: "Decks, Pergolas, Covers & Carports",
     showcaseCrewText:
-      "For the guys who can build but do not want to fight with drawings, layout sheets, client visuals, or confusing site notes. Send rough dimensions, photos, sketches, or a marked survey, and we turn it into clean white-label support your client can understand.",
+      "For hands-on crews who can build the deck, pergola, patio cover, carport, or outdoor kitchen — but need clean drawings, layout sheets, client visuals, material direction, or HOA-ready support before the job moves forward.",
     showcaseWhiteTitle: "Premium 3D for Designers",
     showcaseWhiteText:
       "Get high-end Lumion or D5 presentation renders without investing thousands in expensive software licenses or heavy graphics hardware overhead. We build your 3D base models, trace surveys, and handle the production heavy lifting under your brand.",
@@ -810,7 +810,7 @@ const T = {
   },
   es: {
     header: "SiteForm Studio",
-    subheader: "Apoyo white-label para decks, pérgolas, estructuras exteriores, producción 3D y preconstrucción — desde crews que trabajan con las manos hasta diseñadores.",
+    subheader: "Decks, pérgolas, patio covers, 3D, HOA, CRZ y takeoffs — white-label.",
     selectPath: "¿En qué necesitas ayuda?",
     selectPathHelp:
       "Empieza con la opción más cercana a tu proyecto. Después puedes agregar visitas, láminas extra o más detalle.",
@@ -1039,12 +1039,12 @@ const T = {
     uploadWidgetNote:
       "Los archivos deben recogerse dentro de este intake de SiteForm. Conecta esta sección al storage de uploads antes de lanzar.",
     showcaseBadge: "Pruébalo en un trabajo real",
-    showcaseTitle: "Apoyo white-label para proyectos exteriores",
+    showcaseTitle: "Apoyo white-label para decks, pérgolas, 3D y planos",
     showcaseDesc:
-      "SiteForm Studio ayuda a deck builders, crews de pérgolas, instaladores de patio covers, equipos de landscape, handymen, diseñadores y contratistas exteriores a convertir información básica del sitio en planos, visuals y apoyo de scope claros para el cliente — bajo tu marca.",
-    showcaseCrewTitle: "Decks, Pérgolas y Crews de Trabajo Manual",
+      "SiteForm Studio ayuda a crews de decks, pérgolas, patio covers, carports, outdoor kitchens y landscape a convertir fotos, sketches y medidas básicas en planos, visuals y apoyo de scope claros para el cliente — bajo tu marca.",
+    showcaseCrewTitle: "Decks, Pérgolas, Cubiertas y Carports",
     showcaseCrewText:
-      "Para los que saben construir con las manos, pero no quieren pelear con dibujos, láminas de layout, visuals para el cliente o notas confusas del sitio. Manda medidas aproximadas, fotos, sketches o un survey marcado, y lo convertimos en apoyo white-label claro para tu cliente.",
+      "Para crews que pueden construir el deck, pérgola, patio cover, carport u outdoor kitchen, pero necesitan planos limpios, layout sheets, visuals para el cliente, dirección de materiales o apoyo HOA antes de avanzar.",
     showcaseWhiteTitle: "3D Premium para Diseñadores",
     showcaseWhiteText:
       "Obtén renders de presentación de alta gama en Lumion o D5 sin invertir miles en licencias de software o computadoras costosas. Construimos tus modelos base 3D, calcamos surveys y nos encargamos del trabajo pesado bajo tu marca.",
