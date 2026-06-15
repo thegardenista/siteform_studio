@@ -548,7 +548,7 @@ function getStructureServiceType(serviceId: string) {
 const T = {
   en: {
     header: "SiteForm Studio",
-    subheader: "Decks, pergolas, patio covers, 3D, HOA sheets, CRZ overlays, and takeoffs — white-label.",
+    subheader: "Design support, renders, plan sheets, and takeoffs for outdoor pros — delivered behind your brand.",
     selectPath: "What do you need help with?",
     selectPathHelp:
       "Start with the option closest to your project. You can add site visits, extra sheets, or more detail later.",
@@ -777,24 +777,24 @@ const T = {
     uploadWidgetNote:
       "Files are intended to be collected inside this SiteForm intake. Connect this section to your upload storage before launch.",
     showcaseBadge: "Try it on a real job",
-    showcaseTitle: "White-label support for decks, pergolas, 3D & plans",
+    showcaseTitle: "Outdoor design support for busy pros",
     showcaseDesc:
-      "SiteForm Studio helps hands-on deck, pergola, patio-cover, carport, outdoor-kitchen, and landscape crews turn rough site photos, sketches, and measurements into clear client-facing drawings, visuals, and scope support — under your brand.",
-    showcaseCrewTitle: "Decks, Pergolas, Covers & Carports",
+      "When clients need drawings, visuals, or plan sheets now — and you do not have time to draft, render, or rebuild the model — SiteForm Studio turns rough photos, sketches, surveys, and notes into clear client-facing design support.",
+    showcaseCrewTitle: "For builders and hands-on crews",
     showcaseCrewText:
-      "For hands-on crews who can build the deck, pergola, patio cover, carport, or outdoor kitchen — but need clean drawings, layout sheets, client visuals, material direction, or HOA-ready support before the job moves forward.",
-    showcaseWhiteTitle: "Premium 3D for Designers",
+      "Decks, pergolas, patio covers, carports, outdoor kitchens, hardscape, and landscape crews: send photos, rough dimensions, sketches, or a marked plan. We help turn them into clean visual and scope support before the job stalls.",
+    showcaseWhiteTitle: "3D and renders without the overhead",
     showcaseWhiteText:
-      "Get high-end Lumion or D5 presentation renders without investing thousands in expensive software licenses or heavy graphics hardware overhead. We build your 3D base models, trace surveys, and handle the production heavy lifting under your brand.",
-    showcaseHowTitle: "Preconstruction & Site Logistics",
+      "Need Lumion/D5-style presentation views or a clean 3D base model, but not another workstation, software license, or full-time designer? We handle the production heavy lifting when it makes more sense to outsource it.",
+    showcaseHowTitle: "Plans, sheets, and preconstruction support",
     showcaseHowText:
-      "Need technical compliance sheets? We produce exact site setup layouts, material staging plans, restroom/dumpster placements, detailed Impervious Cover estimates, and critical Root Zone (CRZ) tree overlays to clear HOA and jurisdiction reviews fast.",
-    showcasePricingTitle: "Clear price before the back-and-forth",
+      "HOA sheets, CRZ overlays, impervious cover exhibits, material takeoffs, planting / hardscape / lighting sheets, and site logistics — organized for client decisions, pricing, and crew discussion.",
+    showcasePricingTitle: "Clear scope before we invoice",
     showcasePricingText:
-      "In most cases you can see what your client-facing support will cost and when you can expect it. Complex or custom work may need a short written review before invoicing, but you will still see a starting price range before you submit.",
-    showcaseSafeTitle: "100% Behind the Scenes",
+      "You see starting prices before you submit. Complex or custom work may need a short written review, but we check the scope and files first, then send the invoice/payment link.",
+    showcaseSafeTitle: "Behind your brand",
     showcaseSafeText:
-      "We stay completely invisible to your clients. Your company name, logo, title block, and project labels go directly on the drawings. Whether it is a fast sales-closing photo concept or a complete sheet package, it looks like your in-house team built it.",
+      "We stay invisible to your clients. Your company name, logo, title block, and project labels go on the drawings. Your client sees your service — not ours.",
     showcaseStep1: "Quick photo concepts",
     showcaseStep2: "Drafting + 3D support",
     showcaseStep3: "HOA, takeoffs, planting, hardscape, lighting",
@@ -810,7 +810,7 @@ const T = {
   },
   es: {
     header: "SiteForm Studio",
-    subheader: "Decks, pérgolas, patio covers, 3D, HOA, CRZ y takeoffs — white-label.",
+    subheader: "Apoyo de diseño, renders, láminas y takeoffs para profesionales exteriores — bajo tu marca.",
     selectPath: "¿En qué necesitas ayuda?",
     selectPathHelp:
       "Empieza con la opción más cercana a tu proyecto. Después puedes agregar visitas, láminas extra o más detalle.",
@@ -1039,24 +1039,24 @@ const T = {
     uploadWidgetNote:
       "Los archivos deben recogerse dentro de este intake de SiteForm. Conecta esta sección al storage de uploads antes de lanzar.",
     showcaseBadge: "Pruébalo en un trabajo real",
-    showcaseTitle: "Apoyo white-label para decks, pérgolas, 3D y planos",
+    showcaseTitle: "Apoyo de diseño para pros ocupados",
     showcaseDesc:
-      "SiteForm Studio ayuda a crews de decks, pérgolas, patio covers, carports, outdoor kitchens y landscape a convertir fotos, sketches y medidas básicas en planos, visuals y apoyo de scope claros para el cliente — bajo tu marca.",
-    showcaseCrewTitle: "Decks, Pérgolas, Cubiertas y Carports",
+      "Cuando el cliente necesita dibujos, visuals o láminas ya — y no tienes tiempo para dibujar, renderizar o reconstruir el modelo — SiteForm Studio convierte fotos, sketches, surveys y notas en apoyo claro para presentar al cliente.",
+    showcaseCrewTitle: "Para builders y crews de trabajo manual",
     showcaseCrewText:
-      "Para crews que pueden construir el deck, pérgola, patio cover, carport u outdoor kitchen, pero necesitan planos limpios, layout sheets, visuals para el cliente, dirección de materiales o apoyo HOA antes de avanzar.",
-    showcaseWhiteTitle: "3D Premium para Diseñadores",
+      "Decks, pérgolas, patio covers, carports, outdoor kitchens, hardscape y landscape crews: manda fotos, medidas aproximadas, sketches o un plano marcado. Lo convertimos en apoyo visual y de scope antes de que el trabajo se frene.",
+    showcaseWhiteTitle: "3D y renders sin overhead",
     showcaseWhiteText:
-      "Obtén renders de presentación de alta gama en Lumion o D5 sin invertir miles en licencias de software o computadoras costosas. Construimos tus modelos base 3D, calcamos surveys y nos encargamos del trabajo pesado bajo tu marca.",
-    showcaseHowTitle: "Preconstrucción y Logística de Sitio",
+      "¿Necesitas vistas tipo Lumion/D5 o un modelo base 3D limpio, pero no otra computadora potente, licencia de software o diseñador full-time? Hacemos el trabajo pesado de producción cuando conviene subcontratarlo.",
+    showcaseHowTitle: "Planos, láminas y preconstrucción",
     showcaseHowText:
-      "¿Necesitas láminas de cumplimiento técnico? Producimos layouts de organización de sitio, zonas de materiales, ubicación de baños/dumpsters, estimados de cobertura impermeable (Impervious Cover) y overlays de CRZ para aprobar HOA y revisiones rápido.",
-    showcasePricingTitle: "Precio claro antes del intercambio",
+      "Láminas HOA, overlays de CRZ, exhibits de Impervious Cover, takeoffs de materiales, planting / hardscape / lighting sheets y logística de sitio — organizado para decisiones del cliente, pricing y conversación con crew.",
+    showcasePricingTitle: "Scope claro antes de facturar",
     showcasePricingText:
-      "En la mayoría de casos puedes ver cuánto costará el apoyo para tu cliente y cuándo puedes esperarlo. Trabajos complejos o custom pueden necesitar una revisión breve por escrito antes de facturar, pero todavía ves un rango de precio inicial antes de enviar.",
-    showcaseSafeTitle: "100% Detrás de Escena",
+      "Ves precios iniciales antes de enviar. El trabajo complejo o custom puede necesitar una breve revisión por escrito, pero primero revisamos scope y archivos, y después enviamos invoice/payment link.",
+    showcaseSafeTitle: "Bajo tu marca",
     showcaseSafeText:
-      "Permanecemos invisibles para tus clientes. Tu nombre de compañía, logo, title block y etiquetas van directo en los planos. Ya sea un concepto rápido en foto para cerrar una venta o un paquete completo de láminas, parecerá hecho por tu propio equipo.",
+      "Permanecemos invisibles para tus clientes. Tu nombre de compañía, logo, title block y etiquetas del proyecto van en los planos. Tu cliente ve tu servicio — no el nuestro.",
     showcaseStep1: "Conceptos rápidos desde foto",
     showcaseStep2: "Dibujo + apoyo 3D",
     showcaseStep3: "HOA, cómputos, plantación, hardscape, iluminación",
