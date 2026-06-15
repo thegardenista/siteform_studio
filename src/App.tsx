@@ -38,8 +38,7 @@ interface StructurePreference {
   deckDepth: string;
   deckHeight: string;
   coverOverDeck: string;
-  coverOverDeckType: string;
-  coverOverDeckNotes: string;
+  referenceLinks: string;
   structureWidth: string;
   structureDepth: string;
   structureHeight: string;
@@ -174,6 +173,7 @@ interface ProjectFileUploads {
   logoFiles: FileList | null;
   references: FileList | null;
   structureFiles: Record<string, FileList | null>;
+  structureReferenceFiles: Record<string, FileList | null>;
 }
 
 interface QuickHelpForm {
@@ -223,6 +223,8 @@ const SOCIAL_LINKS = {
 
 const SITEFORM_URL = "https://siteform.studio";
 const SITEFORM_QR_CODE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAIAAAAgbqG5AAADL0lEQVR4nO3dwW3sNhRA0f+DFJBlekj/pfweskwHzubuBASE/EjJzjlre2Y8uCBESyR/fnx8/IAfP357+gPwFlIgUiBSIFIgUiBSIFIgUiBSIFIgv6/80B9//rX7c/yHf/7+NfI69/6KZ999yspfYVQgUiBSIFIgUiBLM4irqevqq5Ur7evPXD/Ps1fsK579Dq+MCkQKRApECkQK5OYM4urZ//CvvPLKJ1z5rXs/s+LZ79CoQKRApECkQKRAxmYQb3NyvvA9GBWIFIgUiBSIFMiXnEFMXfmfvL/wfkYFIgUiBSIFIgUyNoN4/3X1vrsJU7OMZ79DowKRApECkQKRArk5g3j2SZ7vce/gbU9DGRWIFIgUiBSIFMjPr3ii3NS1976dWt82W1lhVCBSIFIgUiBSIDfPgzi5E+nJJ4Lurb+e2vfp3ue598pXRgUiBSIFIgUiBTJ2D+LkfYGpHZOmZhkn925dYQbBp0iBSIFIgUiBjJ1JPbVO+d71+b5dWN+2WmFqj6krowKRApECkQKRAhk7k3rflf89U2db73v3qaeYpuZKRgUiBSIFIgUiBbI0gzh58tq+dRBTawpOXtWfXJFtVCBSIFIgUiBSIGNPMV3tu/Y+uephxb6/6967WwfBp0iBSIFIgUiBLK2kPnmtu+9/9SfvHeyzb/ZkVCBSIFIgUiBSIGNnUq/MDk4+DbVi6q7EyfnLvm/MqECkQKRApECkQMZmEFOmVmRPvfvVvjnOs89rGRWIFIgUiBSIFMj/6Ezqk+e+Pbui4R6jApECkQKRApEC2biSesrK01BXU8//fMXZgfMg+BQpECkQKRApkLHzIKbsO/dtahXG2/ZltRcTw6RApECkQKRANq6kXrHvunrqTsE9++7a7Dspz6hApECkQKRApEBet5L6pJMrI+69zspvTc1WjApECkQKRApECuTbziDetnbjnpN7QxkViBSIFIgUiBTI2Azi5K5B99593z6x7z+xYoVRgUiBSIFIgUiB3JxBPPsf/nsroJ89q25q/rJvTmFUIFIgUiBSIFIgX/I8CHYwKhApECkQKRApECkQKRApECkQKRApkH8BXT5pFpkbqgEAAAAASUVORK5CYII=";
+
+const SITEFORM_LOGO_MARK = "data:image/jpeg;base64,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";
 
 type SampleImages = {
   before: string;
@@ -321,6 +323,10 @@ function hasSiteVisitSelected(serviceIds: string[]) {
   return serviceIds.some((id) => SITE_VISIT_SERVICE_IDS.includes(id));
 }
 
+function hasDeckCoverSelected(serviceIds: string[]) {
+  return serviceIds.some((id) => STRUCTURE_COVER_IDS.includes(id) || id === "custom-feature");
+}
+
 function emptyStructurePreference(): StructurePreference {
   return {
     material: "",
@@ -330,8 +336,7 @@ function emptyStructurePreference(): StructurePreference {
     deckDepth: "",
     deckHeight: "",
     coverOverDeck: "",
-    coverOverDeckType: "",
-    coverOverDeckNotes: "",
+    referenceLinks: "",
     structureWidth: "",
     structureDepth: "",
     structureHeight: "",
@@ -398,8 +403,7 @@ function hasMeaningfulStructurePreference(serviceId: string, preference?: Struct
       preference.deckWidth &&
         preference.deckDepth &&
         preference.deckHeight &&
-        preference.attachmentType &&
-        (preference.coverOverDeck !== "yes" || preference.coverOverDeckType)
+        preference.attachmentType
     );
   }
 
@@ -679,7 +683,10 @@ const T = {
       "We stay behind the scenes. Your company name, logo, sheet style, and project label can appear on the PDF, so your client sees your brand — not another design company.",
     showcaseHowTitle: "How it works",
     showcaseHowText:
-      "Choose a service, upload photos, measurements, survey files, references, and white-label details. We review the scope, confirm the estimate, and then you receive an invoice/payment link before work starts.",
+      "Choose a service, upload photos, measurements, survey files, references, and white-label details. For most services, the price and typical timing are visible before you submit — no waiting for a manager just to know what it may cost.",
+    showcasePricingTitle: "Clear price before the back-and-forth",
+    showcasePricingText:
+      "In most cases you can see what your client-facing support will cost and when you can expect it. Complex or custom work may need a short written review before invoicing, but you still see the starting price, such as from $1,000+.",
     showcaseSafeTitle: "Design-intent support",
     showcaseSafeText:
       "Deliverables are for concept, presentation, coordination, and pricing support. We do not provide engineering, permit filing, stamped drawings, or approval guarantees.",
@@ -935,7 +942,10 @@ const T = {
       "Trabajamos detrás de escena. Tu nombre de compañía, logo, estilo de lámina y etiqueta del proyecto pueden aparecer en el PDF, para que tu cliente vea tu marca — no otra compañía de diseño.",
     showcaseHowTitle: "Cómo funciona",
     showcaseHowText:
-      "Elige un servicio, sube fotos, medidas, survey, referencias y datos white-label. Revisamos el alcance, confirmamos el estimate y después recibes una factura/link de pago antes de empezar el trabajo.",
+      "Elige un servicio, sube fotos, medidas, survey, referencias y datos white-label. Para la mayoría de servicios, el precio y tiempo típico están visibles antes de enviar — sin esperar a hablar con un manager solo para saber cuánto puede costar.",
+    showcasePricingTitle: "Precio claro antes del intercambio",
+    showcasePricingText:
+      "En la mayoría de casos puedes ver cuánto costará el apoyo para tu cliente y cuándo puedes esperarlo. Trabajos complejos o custom pueden necesitar una revisión breve por escrito antes de facturar, pero todavía ves el precio inicial, por ejemplo desde $1,000+.",
     showcaseSafeTitle: "Apoyo de intención de diseño",
     showcaseSafeText:
       "Los entregables son para concepto, presentación, coordinación y apoyo de presupuesto. No hacemos ingeniería, permisos, dibujos sellados/stamped ni garantizamos aprobaciones.",
@@ -1877,6 +1887,7 @@ function emptyProjectFiles(): ProjectFileUploads {
     logoFiles: null,
     references: null,
     structureFiles: {},
+    structureReferenceFiles: {},
   };
 }
 
@@ -1887,7 +1898,8 @@ function hasAnyProjectFile(files: ProjectFileUploads) {
       files.titleBlockFiles?.length ||
       files.logoFiles?.length ||
       files.references?.length ||
-      Object.values(files.structureFiles || {}).some((fileList) => Boolean(fileList?.length))
+      Object.values(files.structureFiles || {}).some((fileList) => Boolean(fileList?.length)) ||
+      Object.values(files.structureReferenceFiles || {}).some((fileList) => Boolean(fileList?.length))
   );
 }
 
@@ -1918,6 +1930,17 @@ function summarizeStructureFiles(files: ProjectFileUploads) {
   );
 }
 
+function summarizeStructureReferenceFiles(files: ProjectFileUploads) {
+  return Object.entries(files.structureReferenceFiles || {}).reduce<Record<string, ReturnType<typeof summarizeFileList>>>(
+    (acc, [serviceId, fileList]) => {
+      const summary = summarizeFileList(fileList);
+      if (summary.length) acc[serviceId] = summary;
+      return acc;
+    },
+    {}
+  );
+}
+
 function buildFileSummary(files: ProjectFileUploads) {
   return {
     photos: summarizeFileList(files.photos),
@@ -1926,6 +1949,7 @@ function buildFileSummary(files: ProjectFileUploads) {
     logo_files: summarizeFileList(files.logoFiles),
     references: summarizeFileList(files.references),
     structure_files: summarizeStructureFiles(files),
+    structure_reference_files: summarizeStructureReferenceFiles(files),
   };
 }
 
@@ -1988,6 +2012,20 @@ async function serializeStructureFileMap(files: ProjectFileUploads) {
   }, {});
 }
 
+async function serializeStructureReferenceFileMap(files: ProjectFileUploads) {
+  const entries = await Promise.all(
+    Object.entries(files.structureReferenceFiles || {}).map(async ([serviceId, fileList]) => {
+      const serialized = await serializeFileList(fileList);
+      return [serviceId, serialized] as const;
+    })
+  );
+
+  return entries.reduce<Record<string, Awaited<ReturnType<typeof serializeFileList>>>>((acc, [serviceId, serialized]) => {
+    if (serialized.length) acc[serviceId] = serialized;
+    return acc;
+  }, {});
+}
+
 async function buildProjectFilePayload(files: ProjectFileUploads) {
   return {
     photos: await serializeFileList(files.photos),
@@ -1996,6 +2034,7 @@ async function buildProjectFilePayload(files: ProjectFileUploads) {
     logo_files: await serializeFileList(files.logoFiles),
     references: await serializeFileList(files.references),
     structure_files: await serializeStructureFileMap(files),
+    structure_reference_files: await serializeStructureReferenceFileMap(files),
   };
 }
 
@@ -2816,9 +2855,11 @@ function SocialIconLink({
 function SiteFormMark({ compact = false }: { compact?: boolean }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#0d2b3e] text-sm font-black tracking-tight text-white shadow-sm">
-        SF
-      </div>
+      <img
+        src={SITEFORM_LOGO_MARK}
+        alt="SiteForm Studio"
+        className="h-11 w-11 shrink-0 rounded-2xl object-cover shadow-sm"
+      />
       {!compact ? (
         <div>
           <div className="text-xs font-black uppercase tracking-[0.2em] text-emerald-700">
@@ -2896,6 +2937,11 @@ function LandingShowcase({
               <span className="font-black text-slate-900">{t.showcaseSafeTitle}</span>
               <p className="mt-2 text-sm leading-6">{t.showcaseSafeText}</p>
             </div>
+          </div>
+
+          <div className="mt-4 rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-950 md:mt-5 md:max-w-4xl">
+            <div className="text-sm font-black text-emerald-950">{t.showcasePricingTitle}</div>
+            <p className="mt-2 text-sm leading-6 text-emerald-900">{t.showcasePricingText}</p>
           </div>
 
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-8">
@@ -3140,9 +3186,12 @@ function ServiceSection({
   onSample,
   structurePreferences,
   structureFiles,
+  structureReferenceFiles,
+  selectedServiceIds = [],
   missingStructureDetails = false,
   onStructurePreferenceChange,
   onStructureFilesChange,
+  onStructureReferenceFilesChange,
 }: {
   title: string;
   description: string;
@@ -3157,9 +3206,12 @@ function ServiceSection({
   onSample: (service: Service) => void;
   structurePreferences?: StructurePreferences;
   structureFiles?: Record<string, FileList | null>;
+  structureReferenceFiles?: Record<string, FileList | null>;
+  selectedServiceIds?: string[];
   missingStructureDetails?: boolean;
   onStructurePreferenceChange?: (serviceId: string, patch: Partial<StructurePreference>) => void;
   onStructureFilesChange?: (serviceId: string, files: FileList | null) => void;
+  onStructureReferenceFilesChange?: (serviceId: string, files: FileList | null) => void;
 }) {
   const t = T[lang];
   return (
@@ -3183,13 +3235,25 @@ function ServiceSection({
             ...(structurePreferences?.[service.id] ?? {}),
           };
           const structureFileList = structureFiles?.[service.id] ?? null;
+          const structureReferenceFileList = structureReferenceFiles?.[service.id] ?? null;
+          const deckCoverMissing =
+            (service.id === "deck-small" || service.id === "deck-large") &&
+            preference.coverOverDeck === "yes" &&
+            !hasDeckCoverSelected(selectedServiceIds);
           const showStructurePreferences =
             selected &&
             isStructureDetailService &&
-            Boolean(structurePreferences && onStructurePreferenceChange && onStructureFilesChange);
+            Boolean(
+              structurePreferences &&
+                onStructurePreferenceChange &&
+                onStructureFilesChange &&
+                onStructureReferenceFilesChange
+            );
           const missingThisStructure =
             missingStructureDetails &&
-            (!hasMeaningfulStructurePreference(service.id, preference) || !structureFileList?.length);
+            (!hasMeaningfulStructurePreference(service.id, preference) ||
+              !structureFileList?.length ||
+              deckCoverMissing);
           const priceLabel =
             service.pricingType === "percentage"
               ? service.displayPriceLabel ?? "+25%"
@@ -3304,10 +3368,14 @@ function ServiceSection({
                     preference={preference}
                     lang={lang}
                     files={structureFileList}
+                    referenceFiles={structureReferenceFileList}
+                    selectedServiceIds={selectedServiceIds}
                     missing={missingThisStructure}
                     missingFiles={missingStructureDetails && !structureFileList?.length}
+                    missingCoverService={missingStructureDetails && deckCoverMissing}
                     onChange={(patch) => onStructurePreferenceChange(service.id, patch)}
                     onFilesChange={(files) => onStructureFilesChange(service.id, files)}
+                    onReferenceFilesChange={(files) => onStructureReferenceFilesChange(service.id, files)}
                   />
                 </div>
               ) : null}
@@ -3471,20 +3539,28 @@ function StructurePreferenceCard({
   service,
   preference,
   files,
+  referenceFiles,
+  selectedServiceIds,
   onChange,
   onFilesChange,
+  onReferenceFilesChange,
   lang,
   missing,
   missingFiles,
+  missingCoverService,
 }: {
   service: Service;
   preference: StructurePreference;
   files: FileList | null;
+  referenceFiles: FileList | null;
+  selectedServiceIds: string[];
   onChange: (patch: Partial<StructurePreference>) => void;
   onFilesChange: (files: FileList | null) => void;
+  onReferenceFilesChange: (files: FileList | null) => void;
   lang: Lang;
   missing: boolean;
   missingFiles: boolean;
+  missingCoverService: boolean;
 }) {
   const type = getStructureServiceType(service.id);
   const title = translateServiceTitle(service, lang);
@@ -3523,8 +3599,8 @@ function StructurePreferenceCard({
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <div className="md:col-span-2 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs leading-5 text-blue-950">
             {lang === "es"
-              ? "Sube un sketch, markup o site plan en References/markups abajo. Puede ser dibujado a mano: ubicación del deck, forma, stairs/landing, relación con la casa/fence."
-              : "Upload a sketch, markup, or site plan in References/markups below. A hand sketch is fine: deck location, shape, stairs/landing, and relationship to house/fence."}
+              ? "Sube un sketch, markup o site plan en Working / site files dentro de esta estructura. Puede ser dibujado a mano: ubicación del deck, forma, stairs/landing, relación con la casa/fence."
+              : "Upload a sketch, markup, or site plan in Working / site files inside this structure card. A hand sketch is fine: deck location, shape, stairs/landing, and relationship to house/fence."}
           </div>
 
           <label className={labelClass}>
@@ -3593,13 +3669,7 @@ function StructurePreferenceCard({
               <input
                 type="checkbox"
                 checked={preference.coverOverDeck === "yes"}
-                onChange={(e) =>
-                  onChange({
-                    coverOverDeck: e.target.checked ? "yes" : "no",
-                    coverOverDeckType: e.target.checked ? preference.coverOverDeckType : "",
-                    coverOverDeckNotes: e.target.checked ? preference.coverOverDeckNotes : "",
-                  })
-                }
+                onChange={(e) => onChange({ coverOverDeck: e.target.checked ? "yes" : "no" })}
                 className="mt-1"
               />
               <span>
@@ -3608,55 +3678,17 @@ function StructurePreferenceCard({
                 </span>
                 <span className="mt-1 block text-xs leading-5 text-slate-500">
                   {lang === "es"
-                    ? "Si también necesitas pergola, patio cover o pavilion, marca esto y elige el tipo. También selecciona el servicio correspondiente en la lista para que esté incluido en el scope."
-                    : "If this deck also needs a pergola, patio cover, or pavilion, check this and choose the type. Also select the matching service in the list so it is included in the scope."}
+                    ? "Si marcas esto, también selecciona abajo el servicio correspondiente: Pergola / Patio Cover / Pavilion / Custom Feature. No preguntamos dos veces por el tipo aquí."
+                    : "If checked, also select the matching service below: Pergola / Patio Cover / Pavilion / Custom Feature. We do not ask for the type here a second time."}
                 </span>
               </span>
             </label>
 
-            {preference.coverOverDeck === "yes" ? (
-              <div className="mt-4 grid gap-4 md:grid-cols-2">
-                <label className={labelClass}>
-                  <span className={labelTextClass}>
-                    {lang === "es" ? "Tipo de estructura sobre deck" : "Structure over deck type"}
-                  </span>
-                  <select
-                    value={preference.coverOverDeckType}
-                    onChange={(e) => onChange({ coverOverDeckType: e.target.value })}
-                    className={selectClass}
-                  >
-                    <option value="">{selectPlaceholder}</option>
-                    {option("pergola-open-slats", "Pergola / open slats")}
-                    {option("patio-cover-solid", "Patio cover / solid roof")}
-                    {option("pavilion", "Pavilion / roofed structure")}
-                    {option("polycarbonate-cover", "Transparent polycarbonate cover")}
-                    {option("shade-sail", "Shade sail")}
-                    {option("not-sure", notSure)}
-                    {option("other", other)}
-                  </select>
-                </label>
-
-                <label className={labelClass}>
-                  <span className={labelTextClass}>
-                    {lang === "es" ? "Notas sobre estructura sobre deck" : "Notes about structure over deck"}
-                  </span>
-                  <input
-                    value={preference.coverOverDeckNotes}
-                    onChange={(e) => onChange({ coverOverDeckNotes: e.target.value })}
-                    placeholder={
-                      lang === "es"
-                        ? "Attached/free-standing, roof, slats, posts, material..."
-                        : "Attached/free-standing, roof, slats, posts, material..."
-                    }
-                    className={inputClass}
-                  />
-                </label>
-
-                <div className="md:col-span-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold leading-5 text-amber-950">
-                  {lang === "es"
-                    ? "Si la estructura va attached a la casa o tiene roof sólido, normalmente necesitará revisión/planos por ingeniero. ScopeBuilder no provee ingeniería ni stamped drawings."
-                    : "If the structure is attached to the house or has a solid roof, it will usually need structural engineer review/drawings. ScopeBuilder does not provide engineering or stamped drawings."}
-                </div>
+            {preference.coverOverDeck === "yes" && !hasDeckCoverSelected(selectedServiceIds) ? (
+              <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-semibold leading-5 text-amber-950">
+                {lang === "es"
+                  ? "Selecciona también Pergola / Patio Cover / Pavilion / Custom Feature en la lista de estructuras para poder enviar este pedido."
+                  : "Also select Pergola / Patio Cover / Pavilion / Custom Feature in the structure list before submitting this order."}
               </div>
             ) : null}
           </div>
@@ -3768,8 +3800,8 @@ function StructurePreferenceCard({
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <div className="md:col-span-2 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-xs leading-5 text-blue-950">
             {lang === "es"
-              ? "Sube sketch, markup o site plan en References/markups abajo. Puede ser a mano: ubicación, forma, posts, roof direction, relación con casa/fence/patio."
-              : "Upload a sketch, markup, or site plan in References/markups below. A hand sketch is fine: location, shape, posts, roof direction, and relationship to house/fence/patio."}
+              ? "Sube sketch, markup o site plan en Working / site files dentro de esta estructura. Puede ser a mano: ubicación, forma, posts, roof direction, relación con casa/fence/patio."
+              : "Upload a sketch, markup, or site plan in Working / site files inside this structure card. A hand sketch is fine: location, shape, posts, roof direction, and relationship to house/fence/patio."}
           </div>
 
           <label className={labelClass}>
@@ -4177,22 +4209,57 @@ function StructurePreferenceCard({
         </div>
       ) : null}
 
-      <div className="mt-5 rounded-[1.25rem] border border-slate-200 bg-white p-4">
-        <FilePicker
-          title={lang === "es" ? "Archivos para esta estructura" : "Files for this structure"}
-          help={
-            lang === "es"
-              ? "Sube solo archivos de esta parte: sketch, markup, dimensiones, screenshot, referencia de producto o PDF. Esto evita mezclar deck, pergola y kitchen."
-              : "Upload files for this specific part only: sketch, markup, dimensions, screenshot, product reference, or PDF. This keeps deck, pergola, and kitchen files separated."
-          }
-          accept="image/*,.pdf,.txt,.doc,.docx,.dwg,.dxf"
-          files={files}
-          onChange={onFilesChange}
-          lang={lang}
-          maxFiles={10}
-          requiredField
-          missing={missingFiles}
-        />
+      <div className="mt-5 grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2 md:col-span-2">
+          <span className={labelTextClass}>
+            {lang === "es" ? "Reference links for this structure" : "Reference links for this structure"}
+          </span>
+          <textarea
+            value={preference.referenceLinks}
+            onChange={(e) => onChange({ referenceLinks: e.target.value })}
+            rows={2}
+            placeholder={
+              lang === "es"
+                ? "Pinterest, producto, web del fabricante, inspiración..."
+                : "Pinterest, product link, manufacturer site, inspiration..."
+            }
+            className={textareaClass}
+          />
+        </label>
+
+        <div className="rounded-[1.25rem] border border-slate-200 bg-white p-4">
+          <FilePicker
+            title={lang === "es" ? "Reference files for this structure" : "Reference files for this structure"}
+            help={
+              lang === "es"
+                ? "Opcional: imágenes de inspiración, product screenshots, Pinterest exports, PDFs de fabricante. Estos se guardan como referencias."
+                : "Optional: inspiration images, product screenshots, Pinterest exports, manufacturer PDFs. These are saved as references."
+            }
+            accept="image/*,.pdf,.txt,.doc,.docx"
+            files={referenceFiles}
+            onChange={onReferenceFilesChange}
+            lang={lang}
+            maxFiles={10}
+          />
+        </div>
+
+        <div className="rounded-[1.25rem] border border-slate-200 bg-white p-4">
+          <FilePicker
+            title={lang === "es" ? "Working / site files for this structure" : "Working / site files for this structure"}
+            help={
+              lang === "es"
+                ? "Obligatorio: archivos del sitio donde se construye esta parte — survey, site plan, sketch, markup, dimensiones, fotos del lugar."
+                : "Required: site files for where this part will be built — survey, site plan, sketch, markup, dimensions, and site photos."
+            }
+            accept="image/*,.pdf,.txt,.doc,.docx,.dwg,.dxf"
+            files={files}
+            onChange={onFilesChange}
+            lang={lang}
+            maxFiles={10}
+            requiredField
+            missing={missingFiles}
+          />
+        </div>
       </div>
     </div>
   );
@@ -4637,7 +4704,9 @@ function ProjectInfoCard({
             <div className="text-xs text-slate-500">{t.notesHelp}</div>
           </label>
 
-          <div className="grid gap-4 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4 md:col-span-2 md:grid-cols-4">
+          {pathId !== "build-one" ? (
+            <>
+<div className="grid gap-4 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4 md:col-span-2 md:grid-cols-4">
             <label className="grid gap-2 md:col-span-4">
               <span className="text-sm font-semibold text-slate-700">{t.measurementObject}</span>
               <input
@@ -4699,6 +4768,9 @@ function ProjectInfoCard({
               className="rounded-3xl border border-slate-200 bg-white p-4 text-sm outline-none focus:border-slate-400"
             />
           </label>
+
+                      </>
+          ) : null}
 
           {pathId === "quick-sale" ? (
             <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-950 md:col-span-2">
@@ -4849,6 +4921,7 @@ function ProjectInfoCard({
           </div>
         ) : null}
 
+        {pathId !== "build-one" ? (
         <div className="mt-5 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
           <h5 className="text-base font-black text-slate-900">{t.projectFilesTitle}</h5>
           <p className="mt-2 text-sm leading-6 text-slate-600">{t.projectFilesHelp}</p>
@@ -4888,6 +4961,8 @@ function ProjectInfoCard({
             />
           </div>
         </div>
+
+                ) : null}
 
         <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
           <div className="font-black text-slate-900">{t.safetyTitle}</div>
@@ -5295,7 +5370,7 @@ function getMissingRequirementKeys(
   selectedServiceIds: string[] = []
 ): MissingRequirementKey[] {
   const missing: MissingRequirementKey[] = [];
-  const requiresSurveyFiles = pathId !== "quick-sale";
+  const requiresSurveyFiles = pathId !== "quick-sale" && pathId !== "build-one";
   const requiresPhotoFiles = pathId === "quick-sale";
 
   if (selectedItemCount <= 0) missing.push("selectedService");
@@ -5307,7 +5382,7 @@ function getMissingRequirementKeys(
   if (!contact.notes.trim()) missing.push("projectDetails");
   if (requiresPhotoFiles && !files.photos?.length) missing.push("projectPhotos");
   if (requiresSurveyFiles && !files.surveyDocs?.length) missing.push("surveyDocs");
-  if (!files.references?.length) missing.push("references");
+  if (pathId !== "build-one" && !files.references?.length) missing.push("references");
 
   const selectedStructureIds = selectedServiceIds.filter((id) =>
     STRUCTURE_DETAIL_SERVICE_IDS.includes(id)
@@ -5316,9 +5391,19 @@ function getMissingRequirementKeys(
     pathId === "build-one" &&
     selectedStructureIds.length > 0 &&
     selectedStructureIds.some(
-      (id) =>
-        !hasMeaningfulStructurePreference(id, contact.structurePreferences[id]) ||
-        !files.structureFiles?.[id]?.length
+      (id) => {
+        const pref = contact.structurePreferences[id];
+        const deckCoverMissing =
+          (id === "deck-small" || id === "deck-large") &&
+          pref?.coverOverDeck === "yes" &&
+          !hasDeckCoverSelected(selectedServiceIds);
+
+        return (
+          !hasMeaningfulStructurePreference(id, pref) ||
+          !files.structureFiles?.[id]?.length ||
+          deckCoverMissing
+        );
+      }
     )
   ) {
     missing.push("structureDetails");
@@ -5670,6 +5755,16 @@ function App() {
     }));
   }
 
+  function updateStructureReferenceFiles(serviceId: string, files: FileList | null) {
+    setProjectFiles((prev) => ({
+      ...prev,
+      structureReferenceFiles: {
+        ...prev.structureReferenceFiles,
+        [serviceId]: files,
+      },
+    }));
+  }
+
   function resetCart() {
     if (!window.confirm(t.confirmReset)) return;
     setCart({});
@@ -5838,9 +5933,12 @@ function App() {
               onSample={openSample}
               structurePreferences={contact.structurePreferences}
               structureFiles={projectFiles.structureFiles}
+              structureReferenceFiles={projectFiles.structureReferenceFiles}
+              selectedServiceIds={selectedServiceIds}
               missingStructureDetails={missingRequirementKeys.includes("structureDetails")}
               onStructurePreferenceChange={updateStructurePreference}
               onStructureFilesChange={updateStructureFiles}
+              onStructureReferenceFilesChange={updateStructureReferenceFiles}
             />
             <ServiceSection
               title={t.supportSection}
