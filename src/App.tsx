@@ -86,6 +86,7 @@ type MissingRequirementKey =
   | "surveyDocs"
   | "references"
   | "referenceLinks"
+  | "largeFileLinks"
   | "yardDesignNotes"
   | "sameProject"
   | "structureDetails"
@@ -623,7 +624,7 @@ const T = {
     invoiceNext:
       "Next: we review the scope, check the uploaded files, and send an invoice/payment link if everything matches. Quick Photo Concept is paid right away before the 1-business-day turnaround. Other approved services start after the 50% deposit invoice is paid; the remaining 50% is invoiced after drawings/deliverables are provided. Wave handles the invoice due date and reminders. If the scope is different, we will adjust it before invoicing.",
     tbdOnReview: "Some items are TBD and will be priced after review.",
-    writtenOnlyNote: "Written communication only. No phone support for production questions.",
+    writtenOnlyNote: "To avoid misunderstandings, misinterpretations, or missing details, all production communication is handled in writing only so both sides have a clear written record. No phone support for production questions. Thank you for understanding.",
     partnerProfileTitle: "Company / white-label information",
     partnerProfileHelp:
       "Tell us how your company information should appear on white-label PDFs and sheets. Repeat partners can ask us to use details already on file.",
@@ -749,9 +750,9 @@ const T = {
     citySection: "HOA / jurisdiction review support",
     citySectionDesc:
       "These use an existing base, usually a clean master plan. They are support exhibits only: we do not file permits, guarantee approvals, or replace licensed professionals.",
-    irrigationSection: "Licensed irrigator drafting",
+    irrigationSection: "Watering logic / irrigation drafting",
     irrigationSectionDesc:
-      "Drafting cleanup only from a licensed irrigator's markups. We do not design irrigation systems, calculate hydraulics, or issue installation specifications.",
+      "Two different services: Basic Watering Strategy is non-technical sun/shade and plant-need guidance. Irrigation Drafting Cleanup is only for licensed irrigators who send their own zone/equipment markups for computer drafting.",
     softDependencyMasterPlan:
       "Price assumes there is already a clean master plan or other usable base. If not, extra setup may be needed.",
     softDependencyLayout:
@@ -770,7 +771,7 @@ const T = {
     intakeSaved: "Intake saved",
     openProjectChat: "Open project chat",
     successNote:
-      "Written project communication only. Please use the project message/update form when it is connected; no phone support is offered for production questions.",
+      "To avoid misunderstandings, misinterpretations, or missing details, all project communication is handled in writing only so both sides have a clear written record. Please use the project message/update form when it is connected; no phone support is offered for production questions. Thank you for understanding.",
     verifyingPayment: "Checking project status...",
     previewMode:
       "Preview mode: the order review endpoint is not connected yet. No payment was requested and no invoice was created automatically.",
@@ -885,7 +886,7 @@ const T = {
     invoiceNext:
       "Siguiente: revisamos el alcance, los archivos subidos y mandamos una factura/link de pago si todo coincide. Quick Photo Concept se paga de inmediato antes del tiempo de entrega de 1 día hábil. Otros servicios aprobados empiezan después del pago del depósito del 50%; el 50% restante se factura después de entregar los dibujos/entregables. Wave maneja la fecha de vencimiento y los recordatorios de la factura. Si el alcance es diferente, lo ajustamos antes de facturar.",
     tbdOnReview: "Algunas partidas son TBD y se cotizarán después de la revisión.",
-    writtenOnlyNote: "Comunicación solo por escrito. No hay soporte telefónico para preguntas de producción.",
+    writtenOnlyNote: "Para evitar malentendidos, interpretaciones incorrectas o detalles perdidos, toda la comunicación de producción se maneja solo por escrito para que ambas partes tengan un registro claro. No hay soporte telefónico para preguntas de producción. Gracias por su comprensión.",
     partnerProfileTitle: "Información de compañía / white-label",
     partnerProfileHelp:
       "Dinos cómo debe aparecer la información de tu compañía en PDFs y láminas white-label. Partners repetidos pueden pedir que usemos los datos ya guardados.",
@@ -1011,9 +1012,9 @@ const T = {
     citySection: "Apoyo para revisión HOA / jurisdicción",
     citySectionDesc:
       "Usan una base existente, normalmente un master plan limpio. Son exhibits de apoyo solamente: no tramitamos permisos, no garantizamos aprobaciones y no reemplazamos profesionales licenciados.",
-    irrigationSection: "Dibujo para irrigadores licenciados",
+    irrigationSection: "Lógica de riego / drafting de irrigación",
     irrigationSectionDesc:
-      "Cleanup de drafting solo desde markups de un irrigador licenciado. No diseñamos sistemas de irrigación, no calculamos hidráulica y no emitimos especificaciones de instalación.",
+      "Dos servicios distintos: Estrategia básica de riego es guía no técnica por sol/sombra y necesidades de plantas. Cleanup de drafting es solo para irrigadores licenciados que mandan sus propios markups de zonas/equipo para dibujarlos en computadora.",
     softDependencyMasterPlan:
       "El precio asume que ya existe un master plan limpio u otra base utilizable. Si no, puede hacer falta trabajo extra.",
     softDependencyLayout:
@@ -1032,7 +1033,7 @@ const T = {
     intakeSaved: "Intake guardado",
     openProjectChat: "Abrir chat del proyecto",
     successNote:
-      "Comunicación del proyecto solo por escrito. Usa el formulario de mensajes/updates cuando esté conectado; no ofrecemos soporte por teléfono para preguntas de producción.",
+      "Para evitar malentendidos, interpretaciones incorrectas o detalles perdidos, toda la comunicación del proyecto se maneja solo por escrito para que ambas partes tengan un registro claro. Usa el formulario de mensajes/updates cuando esté conectado; no ofrecemos soporte por teléfono para preguntas de producción. Gracias por su comprensión.",
     verifyingPayment: "Verificando el estado del proyecto...",
     previewMode:
       "Modo de vista previa: el endpoint de revisión no está conectado todavía. No se pidió pago y no se creó factura automáticamente.",
@@ -1618,17 +1619,17 @@ const NEXT_PHASE_SERVICES: Service[] = [
     prices: { small: 200, medium: 350, large: 700, estate: null },
     stripePriceId: null,
     short:
-      "Quantity takeoff support from bid/tender drawings, large CAD files, PDFs, or approved plans.",
+      "Take-off support when you receive drawings and need specific quantities pulled out for your scope.",
     bestFor:
-      "Builders and crews trying to price a job from messy tender drawings or big AutoCAD/PDF sets where symbols, hatches, and layers make quantities hard to read.",
+      "Builders and crews who receive city, bid, or tender plan sets and need to check exactly how much of something is shown: mulch, stone, gravel, steel edging, lawn, planting areas, pavers, concrete, lighting counts, or other requested items.",
     youSend:
-      "Tender drawings, CAD/PDF plan set, approved plan, material legend if available, and notes about what you need counted: lawn, mulch, gravel, steel edging, pavers, planting areas, concrete, lighting counts, or other scope items.",
+      "The plan set, CAD/PDF files, legends, schedules, markups, and a clear list of what you want counted or checked. Large AutoCAD files and tender drawings should come through the shared folder link.",
     youGet:
-      "A clear takeoff worksheet with estimated quantities, areas, lengths, and item notes organized in Google Sheets so your team can price the job faster.",
+      "A focused take-off worksheet based on your request, with estimated areas, lengths, counts, and notes organized so your team can price or verify the scope faster.",
     notIncluded:
-      "Purchasing, vendor follow-up, field verification, waste factors, construction estimating, or a guarantee that quantities match final field installation.",
+      "Full construction estimating, bidding strategy, purchasing, vendor follow-up, field verification, waste factors, or a guarantee that quantities match final field installation.",
     helper:
-      "This is for extracting usable quantities from drawing chaos — not for redesigning the project.",
+      "This is for extracting and checking specific quantities from complicated plan sets — especially city/tender CAD drawings where the legend exists but the useful information still has to be dug out.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
@@ -1703,43 +1704,49 @@ const IRRIGATION_SERVICES: Service[] = [
   {
     id: "watering-strategy",
     title: "Basic Watering Strategy",
-    category: "After layout",
+    category: "Watering logic",
     icon: Droplets,
     pricingType: "size",
     prices: { small: 200, medium: 250, large: 300, estate: null },
     stripePriceId: null,
     short:
-      "A simple plant watering approach for approved planting areas, for planning discussion only.",
+      "Watering logic by sun/shade exposure, plant type, and lawn areas — for planning discussion only.",
     bestFor:
-      "You want clear understanding of sun zones, shade zones, and plant watering needs before a licensed irrigation professional designs the system.",
+      "You need a non-technical watering strategy before a licensed irrigation professional lays out the actual system.",
     youSend:
-      "Approved plan, planting direction, and any known notes about shade, sun exposure, or difficult areas.",
+      "Approved planting or yard plan, plant direction, lawn areas, and notes/photos showing sun, shade, house shadow, trees, slopes, or difficult dry/wet spots.",
     youGet:
-      "Sun and shade zone notes, watering logic by area, and general recommendations such as drip or other basic approach where appropriate.",
+      "A simple watering strategy sheet: sunny planting areas, shaded planting areas, possible drip zones to discuss, lawn areas that may need different watering behavior, and notes such as shaded lawn near the house needing a different schedule.",
     notIncluded:
-      "Pipe sizing, head layout, irrigation specifications, hydraulic design, installation diagrams, or replacement of a licensed irrigator's work.",
+      "Irrigation design, pipe sizing, head layout, valve layout, equipment specifications, hydraulics, controller programming, installation diagrams, or replacement of a licensed irrigator's work.",
+    helper:
+      "This is a plant/light-exposure strategy, not an irrigation construction plan.",
     sampleLabel: "See sample",
     softDependency: ["master-plan"],
     allowWithoutDependency: true,
   },
   {
     id: "irrigation-drafting",
-    title: "Irrigation Drafting Cleanup from Your Markups",
-    category: "Irrigation",
+    title: "Irrigation Drafting Cleanup for Licensed Irrigators",
+    category: "Licensed irrigator drafting",
     icon: Droplets,
     pricingType: "size",
     prices: { small: 100, medium: 200, large: 400, estate: null },
     stripePriceId: null,
     quantityEnabled: true,
     quantityLabel: "sheets",
-    short: "Drafting cleanup only from irrigation markups or paper layout provided by a licensed irrigator.",
+    short:
+      "Computer drafting only from zone/equipment markups provided by a licensed irrigator.",
     bestFor:
-      "Licensed irrigators who already know the irrigation layout and just need it cleaned up on screen.",
-    youSend: "Field markups, hand sketches, redlines, and any base files.",
+      "Licensed irrigators who already designed the system and need their zone layout, valves, heads/drip areas, equipment notes, and redlines cleaned up on a professional sheet.",
+    youSend:
+      "Your irrigation layout, zone notes, equipment callouts, valve/head/drip markups, redlines, base plan, and licensed irrigator title block if you want it used.",
     youGet:
-      "Clean computer-drafted irrigation sheets from your markups, ready to share for coordination.",
+      "Clean computer-drafted irrigation sheets based on your licensed irrigator markups, ready to return on your title block for coordination or client communication.",
     notIncluded:
-      "Irrigation design, engineering, hydraulic calculations, code review, installation specifications, or replacement of a licensed irrigator's design work.",
+      "Irrigation design by us, changing the irrigator's layout, engineering, hydraulic calculations, code review, installation specifications, permitting, or replacing the licensed irrigator's professional responsibility.",
+    helper:
+      "This service starts after the licensed irrigator has already made the irrigation decisions.",
     sampleLabel: "See sample",
   },
 ];
@@ -2490,12 +2497,13 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
   },
   "watering-strategy": {
     title: "Estrategia básica de riego",
-    category: "Después del layout",
-    short: "Enfoque básico de riego de plantas para áreas de plantación aprobadas, solo para discusión de planificación.",
-    bestFor: "Cuando quieres entender zonas de sol, sombra y necesidades de agua antes de que un profesional licenciado de irrigación diseñe el sistema.",
-    youSend: "Plano aprobado, dirección de plantación y notas conocidas sobre sombra, sol o áreas difíciles.",
-    youGet: "Notas de zonas de sol y sombra, lógica general de riego por área y recomendaciones generales como drip u otro enfoque básico donde aplique.",
-    notIncluded: "Dimensionamiento de tubería, layout de heads, specs de irrigación, diseño hidráulico, diagramas de instalación o reemplazo del trabajo de un irrigador licenciado.",
+    category: "Lógica de riego",
+    short: "Lógica de riego según sol/sombra, tipo de plantas y áreas de lawn — solo para discusión de planificación.",
+    bestFor: "Cuando necesitas una estrategia no técnica antes de que un profesional licenciado de irrigación diseñe el sistema real.",
+    youSend: "Plano aprobado de planting o yard, dirección de plantas, áreas de lawn y notas/fotos de sol, sombra, sombra de la casa, árboles, pendientes o puntos secos/húmedos.",
+    youGet: "Una lámina simple de estrategia: áreas de planting con sol, áreas con sombra, posibles zonas drip para discutir, áreas de lawn que pueden necesitar comportamiento diferente y notas como lawn en sombra de la casa con otro horario.",
+    notIncluded: "Diseño de irrigación, sizing de tubería, layout de heads, layout de válvulas, especificaciones de equipo, hidráulica, programación de controller, diagramas de instalación o reemplazo del trabajo de un irrigador licenciado.",
+    helper: "Esto es estrategia por plantas y luz/sombra, no un plano constructivo de irrigación.",
     sampleLabel: "Ver ejemplo",
   },
   "lighting": {
@@ -2511,12 +2519,12 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
   "takeoff": {
     title: "Cantidades de materiales / take-off",
     category: "Después del layout",
-    short: "Apoyo de takeoff desde planos de licitación/tender, archivos CAD grandes, PDFs o planos aprobados.",
-    bestFor: "Builders y crews que intentan poner precio desde planos de tender o sets grandes de AutoCAD/PDF donde símbolos, hatches y layers hacen difícil leer cantidades.",
-    youSend: "Planos de tender, set CAD/PDF, plano aprobado, leyenda de materiales si existe, y notas sobre qué necesitas contar: césped, mulch, grava, steel edging, pavers, áreas de plantación, concreto, luces u otros items.",
-    youGet: "Una hoja clara de takeoff con cantidades estimadas, áreas, longitudes y notas organizadas en Google Sheets para que tu equipo pueda presupuestar más rápido.",
-    notIncluded: "Compras, seguimiento con proveedores, verificación en campo, waste factors, estimado de construcción completo o garantía de que las cantidades coinciden con la instalación final.",
-    helper: "Esto es para sacar cantidades útiles del caos de planos — no para rediseñar el proyecto.",
+    short: "Apoyo de takeoff cuando recibes planos y necesitas sacar cantidades específicas para tu scope.",
+    bestFor: "Builders y crews que reciben planos de ciudad, bid o tender y necesitan revisar cuánto hay exactamente de algo: mulch, piedra, grava, steel edging, lawn, planting areas, pavers, concreto, luces u otros items pedidos.",
+    youSend: "El set de planos, archivos CAD/PDF, leyendas, schedules, markups y una lista clara de qué necesitas contar o revisar. Archivos AutoCAD grandes y planos de tender deben venir por shared folder link.",
+    youGet: "Una hoja enfocada de takeoff según tu pedido, con áreas, longitudes, conteos y notas estimadas para que tu equipo pueda presupuestar o verificar el scope más rápido.",
+    notIncluded: "Estimado completo de construcción, estrategia de bid, compras, seguimiento con proveedores, verificación en campo, waste factors o garantía de que las cantidades coinciden con la instalación final.",
+    helper: "Esto es para extraer y revisar cantidades específicas desde sets de planos complicados — especialmente CAD de ciudad/tender donde hay leyenda, pero igual hay que sacar la información útil.",
     sampleLabel: "Ver ejemplo",
   },
   "artistic-sheet": {
@@ -2562,14 +2570,15 @@ const SERVICE_ES: Record<string, Partial<Record<ServiceCopyField, string>>> = {
     sampleLabel: "Ver ejemplo",
   },
   "irrigation-drafting": {
-    title: "Cleanup de drafting de irrigación desde tus markups",
-    category: "Irrigación",
+    title: "Cleanup de drafting de irrigación para irrigadores licenciados",
+    category: "Drafting para irrigador licenciado",
     quantityLabel: "láminas",
-    short: "Cleanup de drafting solo desde markups de irrigación o layout en papel proporcionado por un irrigador licenciado.",
-    bestFor: "Irrigadores licenciados que ya conocen el layout de irrigación y solo necesitan limpiarlo en pantalla.",
-    youSend: "Markups de campo, sketches hechos a mano, redlines y cualquier archivo base.",
-    youGet: "Láminas de irrigación limpias dibujadas en computadora desde tus markups, listas para compartir para coordinación.",
-    notIncluded: "Diseño de irrigación, ingeniería, cálculos hidráulicos, revisión de código, especificaciones de instalación o reemplazo del trabajo de diseño de un irrigador licenciado.",
+    short: "Dibujo en computadora solamente desde markups de zonas/equipo proporcionados por un irrigador licenciado.",
+    bestFor: "Irrigadores licenciados que ya diseñaron el sistema y necesitan limpiar en plano sus zonas, válvulas, heads/drip areas, notas de equipo y redlines.",
+    youSend: "Tu layout de irrigación, notas de zonas, equipment callouts, markups de válvulas/heads/drip, redlines, plano base y title block del irrigador licenciado si quieres usarlo.",
+    youGet: "Láminas de irrigación limpias dibujadas en computadora desde tus markups de irrigador licenciado, listas para devolver en tu title block para coordinación o comunicación con cliente.",
+    notIncluded: "Diseño de irrigación por nuestra parte, cambiar el layout del irrigador, ingeniería, cálculos hidráulicos, revisión de código, especificaciones de instalación, permisos o reemplazar la responsabilidad profesional del irrigador licenciado.",
+    helper: "Este servicio empieza después de que el irrigador licenciado ya tomó las decisiones de irrigación.",
     sampleLabel: "Ver ejemplo",
   },
   "site-visit-addon": {
@@ -3070,74 +3079,174 @@ function LandingShowcase({
   lang: Lang;
   onOpenServices: () => void;
 }) {
-  const t = T[lang];
+  const copy =
+    lang === "es"
+      ? {
+          eyebrow: "Production support para outdoor pros",
+          title: "Planos, renders y takeoffs para equipos ocupados",
+          intro:
+            "Envía fotos, un sketch, survey o set CAD/PDF. Recibe soporte claro para presentar, cotizar y coordinar el proyecto bajo tu marca.",
+          primary: "Ver servicios",
+          secondary: "Ver ejemplos",
+          cards: [
+            {
+              title: "Decks, pérgolas y estructuras",
+              text: "Layouts, dimensiones, hojas de presentación y soporte visual para conversar con el cliente antes de construir.",
+            },
+            {
+              title: "Renders 3D y visuales",
+              text: "Cuando el cliente necesita ver la idea antes de aprobarla, sin que tu equipo mantenga software pesado o un diseñador interno.",
+            },
+            {
+              title: "Planos, sheets y takeoffs",
+              text: "HOA, CRZ, impervious cover, quantities y hojas claras desde tus fotos, markups o sets CAD/PDF.",
+            },
+          ],
+          white: "White-label: tu logo, title block y project labels se quedan en los entregables.",
+          review: "Revisamos scope y archivos antes de enviar la invoice.",
+          qr: "Escanea para abrir en tu teléfono",
+        }
+      : {
+          eyebrow: "White-label production support for outdoor pros",
+          title: "Drawings, renders, and takeoffs for busy crews",
+          intro:
+            "Send photos, a sketch, survey, or CAD/PDF set. Get clear support for presenting, pricing, and coordinating the project under your brand.",
+          primary: "Browse services",
+          secondary: "View examples",
+          cards: [
+            {
+              title: "Decks, pergolas & structures",
+              text: "Layouts, dimensions, presentation sheets, and visual support for client conversations before the crew builds.",
+            },
+            {
+              title: "3D renders & client visuals",
+              text: "When a client needs to see the idea before approving it, without another workstation, heavy software, or a full-time designer.",
+            },
+            {
+              title: "Plans, sheets & takeoffs",
+              text: "HOA, CRZ, impervious cover, quantities, and clean sheets from your photos, markups, or CAD/PDF plan sets.",
+            },
+          ],
+          white: "White-label delivery: your logo, title block, and project labels stay on the deliverables.",
+          review: "We review scope and files before sending the invoice.",
+          qr: "Scan to open on your phone",
+        };
+
+  const openExamples = () => {
+    document.getElementById("landing-examples")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
-    <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm md:rounded-[2rem] md:p-8">
-      <div className="grid gap-8 lg:grid-cols-[1fr_260px] lg:items-start">
-        <div className="min-w-0">
-          <h2 className="max-w-4xl text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-6xl">
-            {t.showcaseTitle}
-          </h2>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 md:text-lg md:leading-8">
-            {t.showcaseDesc}
-          </p>
-
-          <div className="mt-5 grid gap-3 text-sm leading-6 text-slate-700 md:mt-6 md:max-w-5xl md:grid-cols-2 xl:grid-cols-4 md:text-base md:leading-7">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <span className="font-black text-slate-900">{t.showcaseCrewTitle}</span>
-              <p className="mt-2 text-sm leading-6">{t.showcaseCrewText}</p>
+    <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
+      <div className="relative min-h-[330px] overflow-hidden bg-slate-900 sm:min-h-[430px]">
+        <img
+          src="/samples/siteform-cad-hero.png"
+          alt="CAD plan drawing preview"
+          className="absolute inset-0 h-full w-full object-cover object-center opacity-95"
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-slate-950/25 to-slate-950/70" />
+        <div
+          className="absolute inset-0 opacity-50"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
+          }}
+        />
+        <div className="relative flex min-h-[330px] items-end p-5 sm:min-h-[430px] sm:p-8 lg:p-10">
+          <div className="max-w-2xl text-white">
+            <div className="inline-flex rounded-full border border-white/30 bg-slate-950/40 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-white/90 backdrop-blur">
+              {copy.eyebrow}
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <span className="font-black text-slate-900">{t.showcaseWhiteTitle}</span>
-              <p className="mt-2 text-sm leading-6">{t.showcaseWhiteText}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <span className="font-black text-slate-900">{t.showcaseHowTitle}</span>
-              <p className="mt-2 text-sm leading-6">{t.showcaseHowText}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <span className="font-black text-slate-900">{t.showcaseSafeTitle}</span>
-              <p className="mt-2 text-sm leading-6">{t.showcaseSafeText}</p>
-            </div>
-          </div>
-
-          <div className="mt-4 rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-950 md:mt-5 md:max-w-5xl">
-            <div className="text-sm font-black text-emerald-950">{t.showcasePricingTitle}</div>
-            <p className="mt-2 text-sm leading-6 text-emerald-900">{t.showcasePricingText}</p>
-          </div>
-
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-8">
-            <button
-              type="button"
-              onClick={onOpenServices}
-              className="inline-flex w-full items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white shadow-lg transition hover:bg-emerald-700 sm:w-auto md:px-6 md:py-4 md:text-base"
-            >
-              {t.showcaseCta}
-            </button>
-          </div>
-
-          <div className="mt-5 border-t border-slate-100 pt-4 md:mt-6">
-            <div className="flex items-center justify-center gap-3 md:justify-start">
-              <SocialIconLink href={SOCIAL_LINKS.instagram} label={t.socialInstagram}>
-                <InstagramIcon />
-              </SocialIconLink>
-              <SocialIconLink href={SOCIAL_LINKS.facebook} label={t.socialFacebook}>
-                <FacebookIcon />
-              </SocialIconLink>
-              <SocialIconLink href={SOCIAL_LINKS.tiktok} label={t.socialTikTok}>
-                <TikTokIcon />
-              </SocialIconLink>
-              <SocialIconLink href={SOCIAL_LINKS.youtube} label={t.socialYouTube}>
-                <YouTubeIcon />
-              </SocialIconLink>
-              <SocialIconLink href={SOCIAL_LINKS.email} label={t.socialEmail}>
-                <EmailIcon />
-              </SocialIconLink>
+            <h1 className="mt-4 text-4xl font-black leading-[0.98] tracking-tight sm:text-5xl lg:text-6xl">
+              {copy.title}
+            </h1>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-slate-100 sm:text-base sm:leading-7">
+              {copy.intro}
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={onOpenServices}
+                className="inline-flex min-h-12 items-center justify-center rounded-2xl border-2 border-emerald-300 bg-emerald-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_5px_0_0_rgba(167,243,208,.9)] transition-all hover:-translate-y-0.5 hover:bg-emerald-400 hover:shadow-[0_7px_0_0_rgba(167,243,208,.9)] active:translate-y-[3px] active:shadow-[0_2px_0_0_rgba(167,243,208,.9)]"
+              >
+                {copy.primary}
+              </button>
+              <button
+                type="button"
+                onClick={openExamples}
+                className="inline-flex min-h-12 items-center justify-center rounded-2xl border-2 border-white/70 bg-white/10 px-5 py-3 text-sm font-black text-white shadow-[0_5px_0_0_rgba(15,23,42,.55)] backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-white/20 active:translate-y-[3px] active:shadow-[0_2px_0_0_rgba(15,23,42,.55)]"
+              >
+                {copy.secondary}
+              </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <ShareQrCard lang={lang} />
+      <div className="p-5 sm:p-8 lg:p-10">
+        <div id="landing-examples" className="grid gap-4 md:grid-cols-3">
+          {copy.cards.map((card) => (
+            <article
+              key={card.title}
+              className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5 shadow-[0_2px_0_0_rgba(226,232,240,.9)]"
+            >
+              <div className="mb-4 h-1.5 w-12 rounded-full bg-emerald-500" />
+              <h2 className="text-base font-black leading-5 text-slate-900">{card.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{card.text}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-5 grid gap-3 lg:grid-cols-2">
+          <div className="rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-5 text-sm leading-6 text-emerald-950">
+            <div className="font-black">{copy.white}</div>
+          </div>
+          <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-700">
+            <div className="font-black text-slate-900">{copy.review}</div>
+          </div>
+        </div>
+
+        <div className="mt-6 flex flex-col gap-4 border-t border-slate-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <button
+            type="button"
+            onClick={onOpenServices}
+            className="inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-black text-white shadow-[0_5px_0_0_rgba(6,78,59,1)] transition-all hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-[0_7px_0_0_rgba(6,78,59,1)] active:translate-y-[3px] active:shadow-[0_2px_0_0_rgba(6,78,59,1)] sm:w-auto"
+          >
+            {copy.primary}
+          </button>
+
+          <div className="flex items-center justify-center gap-3">
+            <SocialIconLink href={SOCIAL_LINKS.instagram} label={t.socialInstagram}>
+              <InstagramIcon />
+            </SocialIconLink>
+            <SocialIconLink href={SOCIAL_LINKS.facebook} label={t.socialFacebook}>
+              <FacebookIcon />
+            </SocialIconLink>
+            <SocialIconLink href={SOCIAL_LINKS.tiktok} label={t.socialTikTok}>
+              <TikTokIcon />
+            </SocialIconLink>
+            <SocialIconLink href={SOCIAL_LINKS.youtube} label={t.socialYouTube}>
+              <YouTubeIcon />
+            </SocialIconLink>
+            <SocialIconLink href={SOCIAL_LINKS.email} label={t.socialEmail}>
+              <EmailIcon />
+            </SocialIconLink>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 text-center">
+          <img
+            src={SITEFORM_QR_CODE}
+            alt={copy.qr}
+            className="mx-auto h-36 w-36 rounded-[1.4rem] bg-white p-3 shadow-sm"
+          />
+          <div className="mt-3 text-sm font-black text-slate-900">{copy.qr}</div>
+          <div className="mt-1 text-xs text-slate-500">{SITEFORM_URL}</div>
+        </div>
       </div>
     </section>
   );
@@ -3422,24 +3531,9 @@ function ServiceSection({
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3">
                   <div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h4 className="text-lg font-black leading-tight">
-                        {translateServiceTitle(service, lang)}
-                      </h4>
-                      {translateServiceField(service, "sampleLabel", lang) ? (
-                        <button
-                          type="button"
-                          onClick={() => onSample(service)}
-                          className={`rounded-full border px-3 py-1 text-xs font-black transition ${
-                            selected
-                              ? "border-emerald-100 bg-emerald-50 text-emerald-900 hover:bg-emerald-100"
-                              : "border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
-                          }`}
-                        >
-                          {translateServiceField(service, "sampleLabel", lang)}
-                        </button>
-                      ) : null}
-                    </div>
+                    <h4 className="text-lg font-black leading-tight">
+                      {translateServiceTitle(service, lang)}
+                    </h4>
                     <p
                       className={`mt-2 text-sm leading-6 ${
                         selected ? "text-slate-200" : "text-slate-600"
@@ -3447,6 +3541,20 @@ function ServiceSection({
                     >
                       {translateServiceField(service, "short", lang)}
                     </p>
+                    {translateServiceField(service, "sampleLabel", lang) ? (
+                      <button
+                        type="button"
+                        onClick={() => onSample(service)}
+                        className={`mt-4 inline-flex min-h-11 items-center gap-2 rounded-2xl border-2 px-4 py-2.5 text-sm font-black transition-all ${
+                          selected
+                            ? "border-emerald-100 bg-emerald-300 text-slate-950 shadow-[0_5px_0_0_rgba(209,250,229,0.95)] hover:-translate-y-0.5 hover:bg-emerald-200 hover:shadow-[0_7px_0_0_rgba(209,250,229,0.95)] active:translate-y-[3px] active:shadow-[0_2px_0_0_rgba(209,250,229,0.95)]"
+                            : "border-emerald-700 bg-emerald-600 text-white shadow-[0_5px_0_0_rgba(6,78,59,1)] hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-[0_7px_0_0_rgba(6,78,59,1)] active:translate-y-[3px] active:shadow-[0_2px_0_0_rgba(6,78,59,1)]"
+                        }`}
+                      >
+                        <Sparkles className="h-4 w-4" aria-hidden="true" />
+                        {lang === "es" ? "Ver ejemplo" : "View example"}
+                      </button>
+                    ) : null}
                   </div>
                 </div>
                 <div className="text-right">
@@ -4553,21 +4661,36 @@ function PlanSheetDetailCard({
           />
         </label>
 
-        <FilePicker
-          title={lang === "es" ? "Survey / base file for this sheet" : "Survey / base file for this sheet"}
-          help={
-            lang === "es"
-              ? "Required. Clean survey, site plan, base CAD/PDF, approved plan, or model export that gives geometry for this specific sheet."
-              : "Required. Clean survey, site plan, base CAD/PDF, approved plan, or model export that gives geometry for this specific sheet."
-          }
-          accept=".pdf,image/*,.dwg,.dxf,.skp"
-          files={surveyFiles}
-          onChange={onSurveyFilesChange}
-          lang={lang}
-          maxFiles={5}
-          requiredField
-          missing={missing && !surveyFiles?.length}
-        />
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-950">
+          <div className="font-black">
+            {lang === "es" ? "Survey / base común del proyecto" : "Common project survey / base file"}
+          </div>
+          <p className="mt-1">
+            {lang === "es"
+              ? "No hace falta subir el mismo survey aquí otra vez. Esta lámina usará el survey/base común que subiste arriba para el proyecto."
+              : "No need to upload the same survey here again. This sheet uses the common project survey/base uploaded above."}
+          </p>
+          <details className="mt-3">
+            <summary className="cursor-pointer text-xs font-black uppercase tracking-wide text-emerald-800">
+              {lang === "es" ? "Opcional: usar base diferente solo para esta lámina" : "Optional: use a different base just for this sheet"}
+            </summary>
+            <div className="mt-3">
+              <FilePicker
+                title={lang === "es" ? "Different base for this sheet" : "Different base for this sheet"}
+                help={
+                  lang === "es"
+                    ? "Opcional. Usa esto solo si esta lámina necesita otra base, otro PDF, otro CAD o un survey diferente."
+                    : "Optional. Use this only if this sheet needs a different base, PDF, CAD file, or survey than the common project base."
+                }
+                accept=".pdf,image/*,.dwg,.dxf,.skp"
+                files={surveyFiles}
+                onChange={onSurveyFilesChange}
+                lang={lang}
+                maxFiles={5}
+              />
+            </div>
+          </details>
+        </div>
 
         <FilePicker
           title={lang === "es" ? "Marked plan / instructions for this sheet" : "Marked plan / instructions for this sheet"}
@@ -4667,6 +4790,7 @@ function ProjectInfoCard({
   const logoRequired = false;
   const isQuickPhoto = pathId === "quick-sale";
   const hasSelectedSiteVisit = hasSiteVisitSelected(selectedServiceIds);
+  const needsLargeModelSource = selectedServiceIds.includes("client-model-start");
   const [unavailableSiteVisitSlots, setUnavailableSiteVisitSlots] = useState<string[]>([]);
   const fridayOptions = getUpcomingFridayOptions(10);
   const siteVisitTimeOptions = [
@@ -4682,6 +4806,7 @@ function ProjectInfoCard({
     ...NEXT_PHASE_SERVICES,
     ...CITY_SERVICES,
     ...IRRIGATION_SERVICES,
+    ...ARTISTIC_RENDERING_SERVICES,
   ];
   const selectedPlanSheetServices =
     pathId === "special-drawings"
@@ -5157,25 +5282,57 @@ function ProjectInfoCard({
 
           <label className="grid gap-2 md:col-span-2">
             <span className="text-sm font-semibold text-slate-700">
-              {lang === "es" ? "Large files / shared folder link" : "Large files / shared folder link"}
+              {needsLargeModelSource
+                ? lang === "es"
+                  ? "3D model / DWG source files link"
+                  : "3D model / DWG source files link"
+                : lang === "es"
+                  ? "Large files / shared folder link"
+                  : "Large files / shared folder link"}
+              {needsLargeModelSource ? <span className="ml-1 text-rose-600">*</span> : null}
             </span>
             <textarea
               value={contact.largeFileLinks}
               onChange={(e) => onChange({ largeFileLinks: e.target.value })}
               rows={3}
               placeholder={
-                lang === "es"
-                  ? "Google Drive, Dropbox, WeTransfer, shared photo folder, DWG/PDF folder..."
-                  : "Google Drive, Dropbox, WeTransfer, shared photo folder, DWG/PDF folder..."
+                needsLargeModelSource
+                  ? lang === "es"
+                    ? "Google Drive / Dropbox / WeTransfer folder with SKP, DWG, D5/Lumion/Twinmotion files, textures, exports..."
+                    : "Google Drive / Dropbox / WeTransfer folder with SKP, DWG, D5/Lumion/Twinmotion files, textures, exports..."
+                  : lang === "es"
+                    ? "Google Drive, Dropbox, WeTransfer, shared photo folder, DWG/PDF folder..."
+                    : "Google Drive, Dropbox, WeTransfer, shared photo folder, DWG/PDF folder..."
               }
-              className="rounded-3xl border border-slate-200 bg-white p-4 text-sm text-slate-900 outline-none focus:border-slate-400"
+              className={inputClass(isMissing("largeFileLinks"), "rounded-3xl p-4 text-sm text-slate-900 outline-none")}
             />
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
-              {lang === "es"
-                ? "Usa este campo para sets completos de fotos, PDFs grandes, DWG/DXF o archivos high-resolution. El upload directo de la forma es solo para pocos archivos ligeros."
-                : "Use this for full photo sets, large PDFs, DWG/DXF, or high-resolution files. The form uploader is only for a few lightweight files."}
+            <div className={`rounded-2xl border px-4 py-3 text-xs leading-5 ${
+              needsLargeModelSource
+                ? "border-rose-200 bg-rose-50 text-rose-900"
+                : "border-amber-200 bg-amber-50 text-amber-900"
+            }`}>
+              {needsLargeModelSource
+                ? lang === "es"
+                  ? "Required for Your 3D Model, We Render It. Do not upload heavy model files through this form. Put SKP, DWG/DXF, D5/Lumion/Twinmotion files, texture folders, and large PDFs in a shared folder and paste the link here."
+                  : "Required for Your 3D Model, We Render It. Do not upload heavy model files through this form. Put SKP, DWG/DXF, D5/Lumion/Twinmotion files, texture folders, and large PDFs in a shared folder and paste the link here."
+                : lang === "es"
+                  ? "Usa este campo para sets completos de fotos, PDFs grandes, DWG/DXF o archivos high-resolution. El upload directo de la forma es solo para pocos archivos ligeros."
+                  : "Use this for full photo sets, large PDFs, DWG/DXF, or high-resolution files. The form uploader is only for a few lightweight files."}
             </div>
           </label>
+
+          {needsLargeModelSource ? (
+            <div className="md:col-span-2 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+              <div className="font-black text-slate-900">
+                {lang === "es" ? "Para modelos pesados" : "For heavy model files"}
+              </div>
+              <p className="mt-1">
+                {lang === "es"
+                  ? "Puedes subir screenshots ligeros o preview PDFs en los uploads normales, pero el modelo real debe venir como link de carpeta. Incluye el archivo principal, linked textures/assets, exports, y cualquier nota sobre qué cámaras/materiales/views quieres renderizar."
+                  : "You can upload lightweight screenshots or preview PDFs in the normal upload blocks, but the real model should come as a shared folder link. Include the main file, linked textures/assets, exports, and notes about which cameras/materials/views should be rendered."}
+              </p>
+            </div>
+          ) : null}
 
           {pathId === "full-design" ? (
             <div className="grid gap-4 rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-4 md:col-span-2">
@@ -5339,9 +5496,30 @@ function ProjectInfoCard({
             </h5>
             <p className="mt-2 text-sm leading-6 text-slate-600">
               {lang === "es"
-                ? "Cada lámina tiene sus propios archivos. No mezcles survey/markups de CRZ, IC, planting, lighting, HOA, deck, pergola o carport en un solo upload global."
-                : "Each sheet gets its own files. Do not mix CRZ, IC, planting, lighting, HOA, deck, pergola, or carport survey/markups into one global upload."}
+                ? "Sube el survey/base del proyecto una sola vez. Después cada lámina solo necesita su propio markup/instrucciones, referencias y notas específicas."
+                : "Upload the project survey/base once. Then each sheet only needs its own markup/instructions, references, and specific notes."}
             </p>
+
+            <div className={`mt-4 rounded-2xl border p-4 ${
+              isMissing("surveyDocs") ? "border-rose-300 bg-rose-50" : "border-white bg-white"
+            }`}>
+              <FilePicker
+                title={lang === "es" ? "Common survey / base file for this project" : "Common survey / base file for this project"}
+                help={
+                  lang === "es"
+                    ? "Required once for Plans & Sheets. Upload the clean survey, site plan, CAD/PDF base, approved plan, or model export that all selected sheets can use."
+                    : "Required once for Plans & Sheets. Upload the clean survey, site plan, CAD/PDF base, approved plan, or model export that all selected sheets can use."
+                }
+                accept=".pdf,image/*,.dwg,.dxf,.skp"
+                files={projectFiles.surveyDocs}
+                onChange={(files) => onFilesChange({ surveyDocs: files })}
+                lang={lang}
+                maxFiles={5}
+                requiredField
+                missing={isMissing("surveyDocs")}
+              />
+            </div>
+
             <div className="mt-4 grid gap-4">
               {selectedPlanSheetServices.map((service) => {
                 const pref = {
@@ -5354,7 +5532,6 @@ function ProjectInfoCard({
                 const planMissing =
                   isMissing("planDetails") &&
                   (!hasMeaningfulPlanSheetPreference(pref) ||
-                    !surveyFiles?.length ||
                     !markupFiles?.length);
 
                 return (
@@ -6056,11 +6233,11 @@ const PLAN_SHEET_SERVICE_IDS = [
   "watering-strategy",
   "lighting",
   "takeoff",
-  "artistic-sheet",
   "hoa-city",
   "impervious",
   "tree-overlay",
   "irrigation-drafting",
+  "artistic-sheet",
 ];
 
 function getPhoneDigitCount(value: string) {
@@ -6089,6 +6266,9 @@ function getMissingRequirementKeys(
   if (requiresSurveyFiles && !files.surveyDocs?.length) missing.push("surveyDocs");
   if (pathId !== "build-one" && pathId !== "special-drawings" && !files.references?.length) missing.push("references");
   if (pathId === "full-design" && !contact.referenceLinks.trim()) missing.push("referenceLinks");
+  if (selectedServiceIds.includes("client-model-start") && !contact.largeFileLinks.trim()) {
+    missing.push("largeFileLinks");
+  }
   if (pathId === "full-design" && !contact.yardDesignNotes.trim()) missing.push("yardDesignNotes");
 
   const selectedStructureIds = selectedServiceIds.filter((id) =>
@@ -6122,11 +6302,18 @@ function getMissingRequirementKeys(
   if (
     pathId === "special-drawings" &&
     selectedPlanSheetIds.length > 0 &&
+    !files.surveyDocs?.length
+  ) {
+    missing.push("surveyDocs");
+  }
+
+  if (
+    pathId === "special-drawings" &&
+    selectedPlanSheetIds.length > 0 &&
     selectedPlanSheetIds.some((id) => {
       const pref = contact.planSheetPreferences[id];
       return (
         !hasMeaningfulPlanSheetPreference(pref) ||
-        !files.planSurveyFiles?.[id]?.length ||
         !files.planMarkupFiles?.[id]?.length
       );
     })
@@ -6172,10 +6359,11 @@ function getMissingRequirementLabel(key: MissingRequirementKey, lang: Lang) {
     surveyDocs: { en: "Survey / site plan / measured base", es: "Survey / plano del sitio / base medida" },
     references: { en: "References / markups / measurements", es: "Referencias / markups / medidas" },
     referenceLinks: { en: "Reference links / Pinterest / shared boards", es: "Links de referencia / Pinterest / tableros compartidos" },
+    largeFileLinks: { en: "Shared folder link for 3D model / DWG source files", es: "Link de carpeta compartida para modelo 3D / archivos DWG" },
     yardDesignNotes: { en: "Client notes / must-haves / avoid for Yard Design Package", es: "Notas del cliente / deseos / evitar para Yard Design Package" },
     sameProject: { en: "Confirm one client/project for this order", es: "Confirma un cliente/proyecto para este pedido" },
     structureDetails: { en: "Add required structure details and files for the selected outdoor structure", es: "Agrega detalles y archivos de la estructura exterior seleccionada" },
-    planDetails: { en: "Complete notes, survey/base file, and marked plan/instructions for each selected plan or sheet", es: "Completa notas, survey/base e instrucciones/markup para cada plano o lámina seleccionada" },
+    planDetails: { en: "Complete notes and marked plan/instructions for each selected plan or sheet", es: "Completa notas e instrucciones/markup para cada plano o lámina seleccionada" },
     siteVisitScheduling: { en: "Choose a Friday site visit or request other dates", es: "Elige visita en viernes o pide otras fechas" },
   };
   return labels[key][lang];
@@ -6887,11 +7075,11 @@ function App() {
               onSample={openSample}
             />
             <ServiceSection
-              title={lang === "es" ? "Servicio raro / presentación" : "Rare / presentation-only service"}
+              title={lang === "es" ? "Servicio final / presentación artística" : "Final / artistic presentation service"}
               description={
                 lang === "es"
-                  ? "Úsalo solo cuando necesitas una lámina artística separada desde un plano o vista ya existente."
-                  : "Use this only when you need a separate artistic sheet from an existing plan or view."
+                  ? "Servicio poco frecuente. Úsalo solo cuando necesitas una lámina artística separada desde un plano o vista ya existente."
+                  : "Occasional service. Use this only when you need a separate artistic sheet from an existing plan or view."
               }
               services={ARTISTIC_RENDERING_SERVICES}
               selectedSize={selectedSize}
