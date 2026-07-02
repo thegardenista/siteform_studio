@@ -3079,6 +3079,7 @@ function LandingShowcase({
   lang: Lang;
   onOpenServices: () => void;
 }) {
+  const t = T[lang];
   const copy =
     lang === "es"
       ? {
