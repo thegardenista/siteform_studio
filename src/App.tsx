@@ -3080,173 +3080,82 @@ function LandingShowcase({
   onOpenServices: () => void;
 }) {
   const t = T[lang];
-  const copy =
-    lang === "es"
-      ? {
-          eyebrow: "Production support para outdoor pros",
-          title: "Planos, renders y takeoffs para equipos ocupados",
-          intro:
-            "Envía fotos, un sketch, survey o set CAD/PDF. Recibe soporte claro para presentar, cotizar y coordinar el proyecto bajo tu marca.",
-          primary: "Ver servicios",
-          secondary: "Ver ejemplos",
-          cards: [
-            {
-              title: "Decks, pérgolas y estructuras",
-              text: "Layouts, dimensiones, hojas de presentación y soporte visual para conversar con el cliente antes de construir.",
-            },
-            {
-              title: "Renders 3D y visuales",
-              text: "Cuando el cliente necesita ver la idea antes de aprobarla, sin que tu equipo mantenga software pesado o un diseñador interno.",
-            },
-            {
-              title: "Planos, sheets y takeoffs",
-              text: "HOA, CRZ, impervious cover, quantities y hojas claras desde tus fotos, markups o sets CAD/PDF.",
-            },
-          ],
-          white: "White-label: tu logo, title block y project labels se quedan en los entregables.",
-          review: "Revisamos scope y archivos antes de enviar la invoice.",
-          qr: "Escanea para abrir en tu teléfono",
-        }
-      : {
-          eyebrow: "White-label production support for outdoor pros",
-          title: "Drawings, renders, and takeoffs for busy crews",
-          intro:
-            "Send photos, a sketch, survey, or CAD/PDF set. Get clear support for presenting, pricing, and coordinating the project under your brand.",
-          primary: "Browse services",
-          secondary: "View examples",
-          cards: [
-            {
-              title: "Decks, pergolas & structures",
-              text: "Layouts, dimensions, presentation sheets, and visual support for client conversations before the crew builds.",
-            },
-            {
-              title: "3D renders & client visuals",
-              text: "When a client needs to see the idea before approving it, without another workstation, heavy software, or a full-time designer.",
-            },
-            {
-              title: "Plans, sheets & takeoffs",
-              text: "HOA, CRZ, impervious cover, quantities, and clean sheets from your photos, markups, or CAD/PDF plan sets.",
-            },
-          ],
-          white: "White-label delivery: your logo, title block, and project labels stay on the deliverables.",
-          review: "We review scope and files before sending the invoice.",
-          qr: "Scan to open on your phone",
-        };
-
-  const openExamples = () => {
-    document.getElementById("landing-examples")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
-      <div className="relative min-h-[330px] overflow-hidden bg-slate-900 sm:min-h-[430px]">
+    <section className="overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-sm md:rounded-[2rem]">
+      <div className="h-64 overflow-hidden bg-slate-100 sm:h-80 md:h-[25rem]">
         <img
           src="/samples/siteform-cad-hero.png"
-          alt="CAD plan drawing preview"
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-95"
-          onError={(event) => {
-            event.currentTarget.style.display = "none";
-          }}
+          alt={lang === "es" ? "Vista previa de plano CAD" : "CAD plan preview"}
+          className="h-full w-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/10 via-slate-950/25 to-slate-950/70" />
-        <div
-          className="absolute inset-0 opacity-50"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
-          }}
-        />
-        <div className="relative flex min-h-[330px] items-end p-5 sm:min-h-[430px] sm:p-8 lg:p-10">
-          <div className="max-w-2xl text-white">
-            <div className="inline-flex rounded-full border border-white/30 bg-slate-950/40 px-3 py-1 text-[11px] font-black uppercase tracking-[0.16em] text-white/90 backdrop-blur">
-              {copy.eyebrow}
-            </div>
-            <h1 className="mt-4 text-4xl font-black leading-[0.98] tracking-tight sm:text-5xl lg:text-6xl">
-              {copy.title}
-            </h1>
-            <p className="mt-4 max-w-xl text-sm leading-6 text-slate-100 sm:text-base sm:leading-7">
-              {copy.intro}
-            </p>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <button
-                type="button"
-                onClick={onOpenServices}
-                className="inline-flex min-h-12 items-center justify-center rounded-2xl border-2 border-emerald-300 bg-emerald-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_5px_0_0_rgba(167,243,208,.9)] transition-all hover:-translate-y-0.5 hover:bg-emerald-400 hover:shadow-[0_7px_0_0_rgba(167,243,208,.9)] active:translate-y-[3px] active:shadow-[0_2px_0_0_rgba(167,243,208,.9)]"
-              >
-                {copy.primary}
-              </button>
-              <button
-                type="button"
-                onClick={openExamples}
-                className="inline-flex min-h-12 items-center justify-center rounded-2xl border-2 border-white/70 bg-white/10 px-5 py-3 text-sm font-black text-white shadow-[0_5px_0_0_rgba(15,23,42,.55)] backdrop-blur transition-all hover:-translate-y-0.5 hover:bg-white/20 active:translate-y-[3px] active:shadow-[0_2px_0_0_rgba(15,23,42,.55)]"
-              >
-                {copy.secondary}
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <div className="p-5 sm:p-8 lg:p-10">
-        <div id="landing-examples" className="grid gap-4 md:grid-cols-3">
-          {copy.cards.map((card) => (
-            <article
-              key={card.title}
-              className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5 shadow-[0_2px_0_0_rgba(226,232,240,.9)]"
+      <div className="p-5 md:p-8">
+        <div className="grid gap-8 lg:grid-cols-[1fr_260px] lg:items-start">
+          <div className="min-w-0">
+            <h2 className="max-w-4xl text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-6xl">
+              {t.showcaseTitle}
+            </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 md:text-lg md:leading-8">
+            {t.showcaseDesc}
+          </p>
+
+          <div className="mt-5 grid gap-3 text-sm leading-6 text-slate-700 md:mt-6 md:max-w-5xl md:grid-cols-2 xl:grid-cols-4 md:text-base md:leading-7">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <span className="font-black text-slate-900">{t.showcaseCrewTitle}</span>
+              <p className="mt-2 text-sm leading-6">{t.showcaseCrewText}</p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <span className="font-black text-slate-900">{t.showcaseWhiteTitle}</span>
+              <p className="mt-2 text-sm leading-6">{t.showcaseWhiteText}</p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <span className="font-black text-slate-900">{t.showcaseHowTitle}</span>
+              <p className="mt-2 text-sm leading-6">{t.showcaseHowText}</p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+              <span className="font-black text-slate-900">{t.showcaseSafeTitle}</span>
+              <p className="mt-2 text-sm leading-6">{t.showcaseSafeText}</p>
+            </div>
+          </div>
+
+          <div className="mt-4 rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-950 md:mt-5 md:max-w-5xl">
+            <div className="text-sm font-black text-emerald-950">{t.showcasePricingTitle}</div>
+            <p className="mt-2 text-sm leading-6 text-emerald-900">{t.showcasePricingText}</p>
+          </div>
+
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-8">
+            <button
+              type="button"
+              onClick={onOpenServices}
+              className="inline-flex w-full items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white shadow-lg transition hover:bg-emerald-700 sm:w-auto md:px-6 md:py-4 md:text-base"
             >
-              <div className="mb-4 h-1.5 w-12 rounded-full bg-emerald-500" />
-              <h2 className="text-base font-black leading-5 text-slate-900">{card.title}</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">{card.text}</p>
-            </article>
-          ))}
-        </div>
-
-        <div className="mt-5 grid gap-3 lg:grid-cols-2">
-          <div className="rounded-[1.5rem] border border-emerald-200 bg-emerald-50 p-5 text-sm leading-6 text-emerald-950">
-            <div className="font-black">{copy.white}</div>
+              {t.showcaseCta}
+            </button>
           </div>
-          <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-700">
-            <div className="font-black text-slate-900">{copy.review}</div>
-          </div>
-        </div>
 
-        <div className="mt-6 flex flex-col gap-4 border-t border-slate-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <button
-            type="button"
-            onClick={onOpenServices}
-            className="inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-black text-white shadow-[0_5px_0_0_rgba(6,78,59,1)] transition-all hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-[0_7px_0_0_rgba(6,78,59,1)] active:translate-y-[3px] active:shadow-[0_2px_0_0_rgba(6,78,59,1)] sm:w-auto"
-          >
-            {copy.primary}
-          </button>
-
-          <div className="flex items-center justify-center gap-3">
-            <SocialIconLink href={SOCIAL_LINKS.instagram} label={t.socialInstagram}>
-              <InstagramIcon />
-            </SocialIconLink>
-            <SocialIconLink href={SOCIAL_LINKS.facebook} label={t.socialFacebook}>
-              <FacebookIcon />
-            </SocialIconLink>
-            <SocialIconLink href={SOCIAL_LINKS.tiktok} label={t.socialTikTok}>
-              <TikTokIcon />
-            </SocialIconLink>
-            <SocialIconLink href={SOCIAL_LINKS.youtube} label={t.socialYouTube}>
-              <YouTubeIcon />
-            </SocialIconLink>
-            <SocialIconLink href={SOCIAL_LINKS.email} label={t.socialEmail}>
-              <EmailIcon />
-            </SocialIconLink>
+          <div className="mt-5 border-t border-slate-100 pt-4 md:mt-6">
+            <div className="flex items-center justify-center gap-3 md:justify-start">
+              <SocialIconLink href={SOCIAL_LINKS.instagram} label={t.socialInstagram}>
+                <InstagramIcon />
+              </SocialIconLink>
+              <SocialIconLink href={SOCIAL_LINKS.facebook} label={t.socialFacebook}>
+                <FacebookIcon />
+              </SocialIconLink>
+              <SocialIconLink href={SOCIAL_LINKS.tiktok} label={t.socialTikTok}>
+                <TikTokIcon />
+              </SocialIconLink>
+              <SocialIconLink href={SOCIAL_LINKS.youtube} label={t.socialYouTube}>
+                <YouTubeIcon />
+              </SocialIconLink>
+              <SocialIconLink href={SOCIAL_LINKS.email} label={t.socialEmail}>
+                <EmailIcon />
+              </SocialIconLink>
+            </div>
           </div>
         </div>
 
-        <div className="mt-8 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 text-center">
-          <img
-            src={SITEFORM_QR_CODE}
-            alt={copy.qr}
-            className="mx-auto h-36 w-36 rounded-[1.4rem] bg-white p-3 shadow-sm"
-          />
-          <div className="mt-3 text-sm font-black text-slate-900">{copy.qr}</div>
-          <div className="mt-1 text-xs text-slate-500">{SITEFORM_URL}</div>
+          <ShareQrCard lang={lang} />
         </div>
       </div>
     </section>
